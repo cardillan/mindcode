@@ -5,14 +5,14 @@
      1 instruction eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop condition was partially rotated.
-   238 instructions added by Case Switching (4 iterations).
+   239 instructions added by Case Switching (4 iterations).
      1 case expression converted to switched jump by Case Switching.
-   281 instructions after optimizations.
+   282 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 456):
-  o Convert case at line 11:5 (segments: 7)                      size    -5, benefit      470.2, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 15)                     size    -4, benefit      525.7, efficiency   Infinity
-  * Convert case at line 11:5 (segments: 1, padded high)         size  +238, benefit      543.8, efficiency      2.285 (+238 instructions)
+  o Convert case at line 10:5 (segments: 7)                      size    -5, benefit      470.5, efficiency   Infinity
+  o Convert case at line 10:5 (segments: 15)                     size    -4, benefit      525.8, efficiency   Infinity
+  * Convert case at line 10:5 (segments: 1, padded high)         size  +239, benefit      543.9, efficiency      2.276 (+239 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -214,7 +214,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     52 print :hash
     53 assertequals 1061505871 :hash "Test selected blocks"
 
-Modifications by Convert case at line 11:5 (segments: 1, padded high) (+238 instructions):
+Modifications by Convert case at line 10:5 (segments: 1, padded high) (+239 instructions):
  
      4 label *label10
      5 lookup block :block :i
@@ -769,16 +769,18 @@ Modifications by Convert case at line 11:5 (segments: 1, padded high) (+238 inst
 +  528 jump *label11 always
 +  529 multilabel *label274 (m:*label13)
 +  530 jump *label11 always
-+  531 label *label12
-+  532 jump *label11 strictEqual *tmp9 null
-   533 label *label9
-   534 set *tmp2 true
-   535 jump *label7 always
-   536 label *label8
-+  537 label *label11
-   538 set *tmp2 false
-   539 label *label7
-   540 label *label6
++  531 multilabel *label275 (m:*label13)
++  532 jump *label11 always
++  533 label *label12
++  534 jump *label11 strictEqual *tmp9 null
+   535 label *label9
+   536 set *tmp2 true
+   537 jump *label7 always
+   538 label *label8
++  539 label *label11
+   540 set *tmp2 false
+   541 label *label7
+   542 label *label6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set :hash 0
@@ -1329,6 +1331,8 @@ jump *label11 always
 multilabel *label273
 jump *label11 always
 multilabel *label274
+jump *label11 always
+multilabel *label275
 jump *label11 always
 label *label12
 jump *label11 strictEqual *tmp4 null

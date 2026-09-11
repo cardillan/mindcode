@@ -1191,7 +1191,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void reportsInvalidMlogName2() {
-            assertGeneratesMessage("Symbol 'a#' is not a valid name for an mlog variable.",
+            assertGeneratesMessage("'a#' is not a valid name for an mlog variable.",
                     """
                             mlog("a#") var a;
                             """);
@@ -1199,9 +1199,17 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void reportsInvalidMlogName3() {
-            assertGeneratesMessage("Symbol '1E1' is not a valid name for an mlog variable.",
+            assertGeneratesMessage("'1E1' is not a valid name for an mlog variable.",
                     """
                             mlog("1E1") var a;
+                            """);
+        }
+
+        @Test
+        void reportsInvalidMlogName4() {
+            assertGeneratesMessage("'\\u0022' is not a valid name for an mlog variable.",
+                    """
+                            mlog("\\u0022") var a;
                             """);
         }
     }

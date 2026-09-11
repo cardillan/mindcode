@@ -95,7 +95,7 @@ public class CompilerOptionFactory {
                 "target processor version and type as specified in schematics definition",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.NONE, category,
-                new Target(ProcessorVersion.V7A, ProcessorType.MICRO_PROCESSOR)));
+                new Target(ProcessorVersion.V8C, ProcessorType.MICRO_PROCESSOR)));
     }
 
     private static void addEnvironmentOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
@@ -105,7 +105,7 @@ public class CompilerOptionFactory {
                 "selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.MODULE,
                 OptionAvailability.UNIVERSAL, category,
-                new Target(ProcessorVersion.V8B, ProcessorType.S)));
+                new Target(ProcessorVersion.V8C, ProcessorType.S)));
 
         list.add(new IntegerCompilerOptionValue(EnvironmentOptions.INSTRUCTION_LIMIT, "i",
                 "sets the maximal number of instructions for the speed optimizations",
@@ -199,7 +199,7 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category, List.of("")));
 
         list.add(new BooleanCompilerOptionValue(MlogFormatOptions.USE_UNICODE_ESCAPES, "",
-                "encode all unprintable characters using unicode escapes (has no effects for target lower than 8.2)",
+                "encode all unprintable characters using unicode escapes (has no effects for target '8.2' or lower)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));
@@ -392,7 +392,7 @@ public class CompilerOptionFactory {
 
         list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_TEXT_JUMP_TABLES, "",
                 "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
-                        "a single 'read' instruction to directly set the counter to the target address (target '8' or higher required)",
+                        "a single 'read' instruction to directly set the counter to the target address (target '8.0' or higher required)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));

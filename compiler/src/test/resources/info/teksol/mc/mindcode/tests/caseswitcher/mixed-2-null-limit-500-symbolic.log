@@ -5,18 +5,18 @@
      1 instruction eliminated by Condition Optimization (5 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
        1 loop condition was partially rotated.
-   200 instructions added by Case Switching (4 iterations).
+   201 instructions added by Case Switching (4 iterations).
      1 case expression converted to switched jump by Case Switching.
-   327 instructions after optimizations.
+   328 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 372):
-  o Convert case at line 11:5 (segments: 34)                     size   -26, benefit     1371.4, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 34)                     size   -25, benefit     1371.5, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 5, padded low)          size   +25, benefit     1372.2, efficiency     54.889
-  o Convert case at line 11:5 (segments: 6, padded low)          size   +38, benefit     1381.6, efficiency     36.358
-  o Convert case at line 11:5 (segments: 6, padded low)          size   +39, benefit     1381.7, efficiency     35.428
-  o Convert case at line 11:5 (segments: 1, padded low)          size  +182, benefit     1393.8, efficiency      7.658
-  * Convert case at line 11:5 (segments: 1, padded both)         size  +200, benefit     1415.2, efficiency      7.076 (+200 instructions)
+  o Convert case at line 10:5 (segments: 34)                     size   -26, benefit     1371.8, efficiency   Infinity
+  o Convert case at line 10:5 (segments: 34)                     size   -25, benefit     1371.9, efficiency   Infinity
+  o Convert case at line 10:5 (segments: 5, padded low)          size   +25, benefit     1372.7, efficiency     54.908
+  o Convert case at line 10:5 (segments: 6, padded low)          size   +38, benefit     1382.1, efficiency     36.370
+  o Convert case at line 10:5 (segments: 6, padded low)          size   +39, benefit     1382.2, efficiency     35.440
+  o Convert case at line 10:5 (segments: 1, padded low)          size  +182, benefit     1394.4, efficiency      7.661
+  * Convert case at line 10:5 (segments: 1, padded both)         size  +201, benefit     1415.6, efficiency      7.043 (+201 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -528,7 +528,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    188 label *label1
    189 assertprints *tmp0 "ABCDEFGHIJKLLMMMMNNNNOOOOPPPQRSTUVWXYZ" "Verifying output"
 
-Modifications by Convert case at line 11:5 (segments: 1, padded both) (+200 instructions):
+Modifications by Convert case at line 10:5 (segments: 1, padded both) (+201 instructions):
  
      5 label *label61
      6 lookup block *tmp1 :printAll:i
@@ -1059,178 +1059,180 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+200 inst
 +  529 jump *label62 always
 +  530 multilabel *label325 (m:*label64)
 +  531 jump *label62 always
-   532 label *label8
-   533 set *tmp3 65
-   534 jump *label6 always
-   535 label *label7
++  532 multilabel *label326 (m:*label64)
++  533 jump *label62 always
+   534 label *label8
+   535 set *tmp3 65
+   536 jump *label6 always
+   537 label *label7
 -    * jump *label10 equal *tmp1 @kiln
 -    * jump *label9 always
-   536 label *label10
-   537 set *tmp3 66
-   538 jump *label6 always
-   539 label *label9
+   538 label *label10
+   539 set *tmp3 66
+   540 jump *label6 always
+   541 label *label9
 -    * jump *label12 equal *tmp1 @plastanium-compressor
 -    * jump *label11 always
-   540 label *label12
-   541 set *tmp3 67
-   542 jump *label6 always
-   543 label *label11
+   542 label *label12
+   543 set *tmp3 67
+   544 jump *label6 always
+   545 label *label11
 -    * jump *label14 equal *tmp1 @phase-weaver
 -    * jump *label13 always
-   544 label *label14
-   545 set *tmp3 68
-   546 jump *label6 always
-   547 label *label13
+   546 label *label14
+   547 set *tmp3 68
+   548 jump *label6 always
+   549 label *label13
 -    * jump *label16 equal *tmp1 @cryofluid-mixer
 -    * jump *label15 always
-   548 label *label16
-   549 set *tmp3 69
-   550 jump *label6 always
-   551 label *label15
+   550 label *label16
+   551 set *tmp3 69
+   552 jump *label6 always
+   553 label *label15
 -    * jump *label18 equal *tmp1 @pyratite-mixer
 -    * jump *label17 always
-   552 label *label18
-   553 set *tmp3 70
-   554 jump *label6 always
-   555 label *label17
+   554 label *label18
+   555 set *tmp3 70
+   556 jump *label6 always
+   557 label *label17
 -    * jump *label20 equal *tmp1 @blast-mixer
 -    * jump *label19 always
-   556 label *label20
-   557 set *tmp3 71
-   558 jump *label6 always
-   559 label *label19
+   558 label *label20
+   559 set *tmp3 71
+   560 jump *label6 always
+   561 label *label19
 -    * jump *label22 equal *tmp1 @melter
 -    * jump *label21 always
-   560 label *label22
-   561 set *tmp3 72
-   562 jump *label6 always
-   563 label *label21
+   562 label *label22
+   563 set *tmp3 72
+   564 jump *label6 always
+   565 label *label21
 -    * jump *label24 equal *tmp1 @separator
 -    * jump *label23 always
-   564 label *label24
-   565 set *tmp3 73
-   566 jump *label6 always
-   567 label *label23
+   566 label *label24
+   567 set *tmp3 73
+   568 jump *label6 always
+   569 label *label23
 -    * jump *label26 equal *tmp1 @disassembler
 -    * jump *label25 always
-   568 label *label26
-   569 set *tmp3 74
-   570 jump *label6 always
-   571 label *label25
+   570 label *label26
+   571 set *tmp3 74
+   572 jump *label6 always
+   573 label *label25
 -    * jump *label28 equal *tmp1 @spore-press
 -    * jump *label27 always
-   572 label *label28
-   573 set *tmp3 75
-   574 jump *label6 always
-   575 label *label27
+   574 label *label28
+   575 set *tmp3 75
+   576 jump *label6 always
+   577 label *label27
 -    * jump *label30 equal *tmp1 @door
 -    * jump *label30 equal *tmp1 @door-large
 -    * jump *label29 always
-   576 label *label30
-   577 set *tmp3 76
-   578 jump *label6 always
-   579 label *label29
+   578 label *label30
+   579 set *tmp3 76
+   580 jump *label6 always
+   581 label *label29
 -    * jump *label32 equal *tmp1 @scrap-wall
 -    * jump *label32 equal *tmp1 @scrap-wall-large
 -    * jump *label32 equal *tmp1 @scrap-wall-huge
 -    * jump *label32 equal *tmp1 @scrap-wall-gigantic
 -    * jump *label31 always
-   580 label *label32
-   581 set *tmp3 77
-   582 jump *label6 always
-   583 label *label31
+   582 label *label32
+   583 set *tmp3 77
+   584 jump *label6 always
+   585 label *label31
 -    * jump *label34 equal *tmp1 @conveyor
 -    * jump *label34 equal *tmp1 @titanium-conveyor
 -    * jump *label34 equal *tmp1 @plastanium-conveyor
 -    * jump *label34 equal *tmp1 @armored-conveyor
 -    * jump *label33 always
-   584 label *label34
-   585 set *tmp3 78
-   586 jump *label6 always
-   587 label *label33
+   586 label *label34
+   587 set *tmp3 78
+   588 jump *label6 always
+   589 label *label33
 -    * jump *label36 equal *tmp1 @conduit
 -    * jump *label36 equal *tmp1 @pulse-conduit
 -    * jump *label36 equal *tmp1 @plated-conduit
 -    * jump *label36 equal *tmp1 @liquid-router
 -    * jump *label35 always
-   588 label *label36
-   589 set *tmp3 79
-   590 jump *label6 always
-   591 label *label35
+   590 label *label36
+   591 set *tmp3 79
+   592 jump *label6 always
+   593 label *label35
 -    * jump *label38 equal *tmp1 @liquid-tank
 -    * jump *label38 equal *tmp1 @liquid-junction
 -    * jump *label38 equal *tmp1 @liquid-container
 -    * jump *label37 always
-   592 label *label38
-   593 set *tmp3 80
-   594 jump *label6 always
-   595 label *label37
+   594 label *label38
+   595 set *tmp3 80
+   596 jump *label6 always
+   597 label *label37
 -    * jump *label40 equal *tmp1 @disperse
 -    * jump *label39 always
-   596 label *label40
-   597 set *tmp3 81
-   598 jump *label6 always
-   599 label *label39
+   598 label *label40
+   599 set *tmp3 81
+   600 jump *label6 always
+   601 label *label39
 -    * jump *label42 equal *tmp1 @unit-repair-tower
 -    * jump *label41 always
-   600 label *label42
-   601 set *tmp3 82
-   602 jump *label6 always
-   603 label *label41
+   602 label *label42
+   603 set *tmp3 82
+   604 jump *label6 always
+   605 label *label41
 -    * jump *label44 equal *tmp1 @diffuse
 -    * jump *label43 always
-   604 label *label44
-   605 set *tmp3 83
-   606 jump *label6 always
-   607 label *label43
+   606 label *label44
+   607 set *tmp3 83
+   608 jump *label6 always
+   609 label *label43
 -    * jump *label46 equal *tmp1 @prime-refabricator
 -    * jump *label45 always
-   608 label *label46
-   609 set *tmp3 84
-   610 jump *label6 always
-   611 label *label45
+   610 label *label46
+   611 set *tmp3 84
+   612 jump *label6 always
+   613 label *label45
 -    * jump *label48 equal *tmp1 @tank-refabricator
 -    * jump *label47 always
-   612 label *label48
-   613 set *tmp3 85
-   614 jump *label6 always
-   615 label *label47
+   614 label *label48
+   615 set *tmp3 85
+   616 jump *label6 always
+   617 label *label47
 -    * jump *label50 equal *tmp1 @mech-refabricator
 -    * jump *label49 always
-   616 label *label50
-   617 set *tmp3 86
-   618 jump *label6 always
-   619 label *label49
+   618 label *label50
+   619 set *tmp3 86
+   620 jump *label6 always
+   621 label *label49
 -    * jump *label52 equal *tmp1 @ship-refabricator
 -    * jump *label51 always
-   620 label *label52
-   621 set *tmp3 87
-   622 jump *label6 always
-   623 label *label51
+   622 label *label52
+   623 set *tmp3 87
+   624 jump *label6 always
+   625 label *label51
 -    * jump *label54 equal *tmp1 @slag-heater
 -    * jump *label53 always
-   624 label *label54
-   625 set *tmp3 88
-   626 jump *label6 always
-   627 label *label53
+   626 label *label54
+   627 set *tmp3 88
+   628 jump *label6 always
+   629 label *label53
 -    * jump *label56 equal *tmp1 @lustre
 -    * jump *label55 always
-   628 label *label56
-   629 set *tmp3 89
-   630 jump *label6 always
-   631 label *label55
+   630 label *label56
+   631 set *tmp3 89
+   632 jump *label6 always
+   633 label *label55
 -    * jump *label58 equal *tmp1 @scathe
 -    * jump *label57 always
-   632 label *label58
-   633 set *tmp3 90
-   634 jump *label6 always
-   635 label *label57
-+  636 label *label63
-+  637 jump *label8 strictEqual *tmp7 null
-+  638 label *label62
-   639 set *tmp3 48
-   640 label *label6
-   641 label *label5
+   634 label *label58
+   635 set *tmp3 90
+   636 jump *label6 always
+   637 label *label57
++  638 label *label63
++  639 jump *label8 strictEqual *tmp7 null
++  640 label *label62
+   641 set *tmp3 48
+   642 label *label6
+   643 label *label5
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1784,6 +1786,8 @@ jump *label62 always
 multilabel *label324
 jump *label62 always
 multilabel *label325
+jump *label62 always
+multilabel *label326
 jump *label62 always
 label *label8
 set *tmp2 65

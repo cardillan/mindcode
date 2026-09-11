@@ -100,7 +100,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--watcher-port {0..65535}] [--watcher-retries {0..10}] [--watcher-timeout {0..3600000}]
                 [--excerpt [EXCERPT]] [-o [OUTPUT]] [-l [LOG]] [--output-directory OUTPUT-DIRECTORY]
                 [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
-                [-t {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}] [-i {1..100000}]
+                [-t {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--processor-size-limit {1..1000000}] [--zero-wait-yields {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
@@ -129,7 +129,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [--parse-tree {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
-                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]]
+                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
@@ -188,7 +188,7 @@ Environment options:
   Options to specify the target environment for the  code  being  compiled. This includes the Mindustry version, as well
   as prescribing which specific processor features may or may not be used.
 
-  -t, --target {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}
+  -t, --target {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
@@ -227,8 +227,8 @@ Mlog formatting options:
   --program-version program_version
                          sets the program version to be stored in the compiled code
   --use-unicode-escapes {true,false}
-                         encode all unprintable characters using unicode escapes  (has  no effects for target lower than
-                         8.2)
+                         encode all unprintable characters using unicode  escapes  (has  no  effects for target '8.2' or
+                         lower)
   --encode-zero-characters [{true,false}]
                          allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
                          edited as a text or copied/pasted to/from the clipboard!)
@@ -309,7 +309,7 @@ Optimization options:
   --use-text-jump-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
                          value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target '8' or higher required)
+                         (target '8.0' or higher required)
   --use-text-translations {true,false}
                          allows using 'read' instruction to implement simple case expressions
 
@@ -397,7 +397,7 @@ Emulator options:
   Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
   the code, the default processor configuration provided by Mindcode.
 
-  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]
+  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator
@@ -462,7 +462,7 @@ usage: mindcode pm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTP
                 [--output-directory OUTPUT-DIRECTORY] [-w [{update,update-all,upgrade-all,force-update-all,extract}]]
                 [--watcher-version {v0,v1}] [--watcher-port {0..65535}] [--watcher-retries {0..10}]
                 [--watcher-timeout {0..3600000}]
-                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]]
+                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
@@ -511,7 +511,7 @@ Emulator options:
   Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
   the code, the default processor configuration provided by Mindcode.
 
-  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]
+  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator
@@ -576,7 +576,7 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--watcher-retries {0..10}] [--watcher-timeout {0..3600000}] [-o [OUTPUT]] [-l [LOG]]
                 [--output-directory OUTPUT-DIRECTORY] [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
                 [--allow-link-gaps [{true,false}]] [--allow-unsatisfied-links [{true,false}]]
-                [-t {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}] [-i {1..100000}]
+                [-t {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--processor-size-limit {1..1000000}] [--zero-wait-yields {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
@@ -605,7 +605,7 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [--parse-tree {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
-                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]]
+                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
@@ -669,7 +669,7 @@ Environment options:
   Options to specify the target environment for the  code  being  compiled. This includes the Mindustry version, as well
   as prescribing which specific processor features may or may not be used.
 
-  -t, --target {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}
+  -t, --target {6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
@@ -708,8 +708,8 @@ Mlog formatting options:
   --program-version program_version
                          sets the program version to be stored in the compiled code
   --use-unicode-escapes {true,false}
-                         encode all unprintable characters using unicode escapes  (has  no effects for target lower than
-                         8.2)
+                         encode all unprintable characters using unicode  escapes  (has  no  effects for target '8.2' or
+                         lower)
   --encode-zero-characters [{true,false}]
                          allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
                          edited as a text or copied/pasted to/from the clipboard!)
@@ -790,7 +790,7 @@ Optimization options:
   --use-text-jump-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
                          value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target '8' or higher required)
+                         (target '8.0' or higher required)
   --use-text-translations {true,false}
                          allows using 'read' instruction to implement simple case expressions
 
@@ -878,7 +878,7 @@ Emulator options:
   Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
   the code, the default processor configuration provided by Mindcode.
 
-  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]
+  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator
@@ -943,7 +943,7 @@ usage: mindcode ps [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTP
                 [--output-directory OUTPUT-DIRECTORY] [-w [{update,extract,add}]] [--watcher-version {v0,v1}]
                 [--watcher-port {0..65535}] [--watcher-retries {0..10}] [--watcher-timeout {0..3600000}] [-p] [-P] [-c]
                 [-C] [-l] [-L] [-s {original,horizontal,vertical}] [-d {rotatable,non-default,all}]
-                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]]
+                [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
@@ -1010,7 +1010,7 @@ Emulator options:
   Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
   the code, the default processor configuration provided by Mindcode.
 
-  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8,8w,8.1,8.1w,8.2,8.2w}]
+  --emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator

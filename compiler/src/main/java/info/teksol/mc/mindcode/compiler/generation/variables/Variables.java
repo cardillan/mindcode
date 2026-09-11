@@ -561,7 +561,9 @@ public class Variables extends CompilerMessageEmitter {
 
     private void verifyMlogName(LogicString mlogName) {
         if (processor.isBlockName(mlogName.getStringValue())) {
-            error(mlogName, ERR.MLOG_NAME_IS_BLOCK, mlogName.getStringValue());
+            error(mlogName, ERR.MLOG_NAME_IS_BLOCK, mlogName.getNakedLiteral());
+        } else if (!processor.isValidMlogName(mlogName.getStringValue())) {
+            error(mlogName, ERR.INVALID_MLOG_SYMBOL, mlogName.getNakedLiteral());
         }
     }
 
@@ -584,11 +586,11 @@ public class Variables extends CompilerMessageEmitter {
                     verifyMlogName(mlogName);
                     return mlogName.getStringValue();
                 }
-                case LogicKeyword kw -> {
+                case LogicKeyword _ -> {
                     error(modifiers.getNode(MLOG), ERR.INVALID_MLOG_KEYWORD);
                     return null;
                 }
-                case LogicVariable l -> { return null; }
+                //case LogicVariable _ -> { return null; }
                 default -> throw new MindcodeInternalError("Unexpected mlog name " + mlogNameList.getFirst());
             }
         } else if (modifiers.contains(MLOG)) {
@@ -713,8 +715,6 @@ public class Variables extends CompilerMessageEmitter {
             }
 
             list.add(position);
-        } else if (!(variable instanceof LogicBuiltIn)){
-            error(position, ERR.INVALID_MLOG_SYMBOL, symbol);
         }
     }
 

@@ -11,10 +11,10 @@
    138 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 84):
-  o Convert case at line 11:5 (segments: 30)                     size   -17, benefit     1096.8, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 4)                      size    +8, benefit     1097.9, efficiency    137.237
-  * Convert case at line 11:5 (segments: 4, padded low)          size   +23, benefit     1101.2, efficiency     47.880 (+23 instructions)
-  ! Convert case at line 11:5 (segments: 1, padded both)         size  +214, benefit     1119.7, efficiency      5.232
+  o Convert case at line 10:5 (segments: 30)                     size   -17, benefit     1097.0, efficiency   Infinity
+  o Convert case at line 10:5 (segments: 4)                      size    +8, benefit     1098.2, efficiency    137.273
+  * Convert case at line 10:5 (segments: 4, padded low)          size   +23, benefit     1101.5, efficiency     47.892 (+23 instructions)
+  ! Convert case at line 10:5 (segments: 1, padded both)         size  +215, benefit     1119.9, efficiency      5.209
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -469,7 +469,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    173 assertequals 0x07FFFFFB :total "Test selected blocks"
    174 label *label0
 
-Modifications by Convert case at line 11:5 (segments: 4, padded low) (+23 instructions):
+Modifications by Convert case at line 10:5 (segments: 4, padded low) (+23 instructions):
  
      5 label *label58
      6 lookup block :block :i
@@ -798,7 +798,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 261 @blockCount "Verify block count"
+assertequals 262 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label58

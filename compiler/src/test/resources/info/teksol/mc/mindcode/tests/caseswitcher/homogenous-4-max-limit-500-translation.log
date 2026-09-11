@@ -5,13 +5,13 @@
      1 instruction eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop condition was partially rotated.
-    27 instructions eliminated by Case Switching (4 iterations).
+    29 instructions eliminated by Case Switching (4 iterations).
      1 case expression converted to value translation by Case Switching.
-    19 instructions after optimizations.
+    17 instructions after optimizations.
 
 Pass 1: size optimization selection (cost limit 453):
-  * Translate case at line 11:5                                  size   -27, benefit      593.9, efficiency     27.000 (-27 instructions)
-    Convert case at line 11:5 (segments: 17)                     size    -4, benefit      570.5, efficiency      4.000
+  * Translate case at line 10:5                                  size   -29, benefit      644.0, efficiency     29.000 (-29 instructions)
+    Convert case at line 10:5 (segments: 17)                     size    -5, benefit      570.7, efficiency      5.000
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -45,7 +45,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
 -    * jump *label9 equal *tmp3 @reinforced-surge-wall-large
 -    * jump *label9 equal *tmp3 @carbide-wall
 -    * jump *label9 equal *tmp3 @carbide-wall-large
--    * jump *label9 equal *tmp3 @tile-logic-display
+-    * jump *label9 equal *tmp3 @target-dummy
 +    9 jump *label9 strictEqual :isWall:block null
 +   10 jump *label9 equal :isWall:block @graphite-press
 +   11 jump *label9 equal :isWall:block @copper-wall
@@ -72,7 +72,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
 +   32 jump *label9 equal :isWall:block @reinforced-surge-wall-large
 +   33 jump *label9 equal :isWall:block @carbide-wall
 +   34 jump *label9 equal :isWall:block @carbide-wall-large
-+   35 jump *label9 equal :isWall:block @tile-logic-display
++   35 jump *label9 equal :isWall:block @target-dummy
     36 jump *label8 always
     37 label *label9
     38 set *tmp2 true
@@ -143,7 +143,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * jump *label9 equal :isWall:block @reinforced-surge-wall-large
 -    * jump *label9 equal :isWall:block @carbide-wall
 -    * jump *label9 equal :isWall:block @carbide-wall-large
--    * jump *label9 equal :isWall:block @tile-logic-display
+-    * jump *label9 equal :isWall:block @target-dummy
 +    8 jump *label9 strictEqual :block null
 +    9 jump *label9 equal :block @graphite-press
 +   10 jump *label9 equal :block @copper-wall
@@ -170,7 +170,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   31 jump *label9 equal :block @reinforced-surge-wall-large
 +   32 jump *label9 equal :block @carbide-wall
 +   33 jump *label9 equal :block @carbide-wall-large
-+   34 jump *label9 equal :block @tile-logic-display
++   34 jump *label9 equal :block @target-dummy
     35 jump *label8 always
     36 label *label9
     37 set *tmp2 true
@@ -219,9 +219,9 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
 +   53 jump *label10 lessThan :i @blockCount
     54 label *label3
     55 print :hash
-    56 assertequals 2727247113 :hash "Test selected blocks"
+    56 assertequals 2727247115 :hash "Test selected blocks"
 
-Modifications by Translate case at line 11:5 (-27 instructions):
+Modifications by Translate case at line 10:5 (-29 instructions):
  
      5 label *label10
      6 lookup block :block :i
@@ -252,7 +252,7 @@ Modifications by Translate case at line 11:5 (-27 instructions):
 -    * jump *label9 equal :block @reinforced-surge-wall-large
 -    * jump *label9 equal :block @carbide-wall
 -    * jump *label9 equal :block @carbide-wall-large
--    * jump *label9 equal :block @tile-logic-display
+-    * jump *label9 equal :block @target-dummy
 -    * jump *label8 always
 -    * label *label9
 -    * set *tmp2 true
@@ -261,12 +261,10 @@ Modifications by Translate case at line 11:5 (-27 instructions):
 -    * set *tmp2 false
 -    * label *label7
 +    8 sensor *tmp9 :block @id
-+    9 read *tmp10 "100000000000000001111111111110011110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001101100000000000011000100000000100000000000000000000000010" *tmp9
-+   10 op sub *tmp11 *tmp10 48
-+   11 select *tmp2 strictEqual *tmp10 null false *tmp11
-    12 label *label6
-    13 jump *label4 equal *tmp2 false
-    14 op mul *tmp5 :hash 31
++    9 read *tmp2 "\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0000\u0000\u0001\u0001\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001" *tmp9
+    10 label *label6
+    11 jump *label4 equal *tmp2 false
+    12 op mul *tmp5 :hash 31
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -291,16 +289,14 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 261 @blockCount "Verify block count"
+assertequals 262 @blockCount "Verify block count"
 set :hash 0
 set :i -1
 label *label10
 lookup block :block :i
 # "Function: def isWall(in block)"
 sensor *tmp4 :block @id
-read *tmp5 "100000000000000001111111111110011110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001101100000000000011000100000000100000000000000000000000010" *tmp4
-op sub *tmp6 *tmp5 48
-select *tmp0 strictEqual *tmp5 null false *tmp6
+read *tmp0 "\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0000\u0000\u0001\u0001\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001" *tmp4
 jump *label4 equal *tmp0 false
 op mul *tmp1 :hash 31
 op add *tmp2 *tmp1 :i
@@ -312,5 +308,5 @@ label *label5
 op add :i :i 1
 jump *label10 lessThan :i @blockCount
 print :hash
-assertequals 2727247113 :hash "Test selected blocks"
+assertequals 2727247115 :hash "Test selected blocks"
 end

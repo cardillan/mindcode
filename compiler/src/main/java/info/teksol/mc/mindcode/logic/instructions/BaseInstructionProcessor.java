@@ -572,7 +572,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     public boolean isValidMlogName(String symbol) {
         for (int pos = 0; pos < symbol.length(); pos++) {
             char c = symbol.charAt(pos);
-            if (c == '\n' || c == ' ' || c == '#' || c == '\t' || c == ';') return false;
+            if (c == '\n' || c == ' ' || c == '#' || c == '\t' || c == ';' || c == '"') return false;
         }
 
         LVar var = getAssembler().var(symbol);

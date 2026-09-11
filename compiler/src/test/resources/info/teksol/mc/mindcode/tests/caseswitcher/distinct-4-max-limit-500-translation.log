@@ -6,13 +6,13 @@
      1 instruction eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop condition was partially rotated.
-   104 instructions eliminated by Case Switching (4 iterations).
+   106 instructions eliminated by Case Switching (4 iterations).
      1 case expression converted to value translation by Case Switching.
-    19 instructions after optimizations.
+    17 instructions after optimizations.
 
 Pass 1: size optimization selection (cost limit 376):
-  * Translate case at line 11:5                                  size  -104, benefit     1187.7, efficiency    104.000 (-104 instructions)
-    Convert case at line 11:5 (segments: 34)                     size   -18, benefit     1184.5, efficiency     18.000
+  * Translate case at line 10:5                                  size  -106, benefit     1238.0, efficiency    106.000 (-106 instructions)
+    Convert case at line 10:5 (segments: 34)                     size   -19, benefit     1184.8, efficiency     19.000
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -202,8 +202,8 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
    162 set *tmp2 26
    163 jump *label5 always
    164 label *label56
--    * jump *label59 equal *tmp3 @tile-logic-display
-+  165 jump *label59 equal :identifyBlock:block @tile-logic-display
+-    * jump *label59 equal *tmp3 @target-dummy
++  165 jump *label59 equal :identifyBlock:block @target-dummy
    166 jump *label58 always
    167 label *label59
    168 set *tmp2 27
@@ -443,8 +443,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    161 set *tmp2 26
    162 jump *label5 always
    163 label *label56
--    * jump *label59 equal :identifyBlock:block @tile-logic-display
-+  164 jump *label59 equal :block @tile-logic-display
+-    * jump *label59 equal :identifyBlock:block @target-dummy
++  164 jump *label59 equal :block @target-dummy
    165 jump *label58 always
    166 label *label59
    167 set *tmp2 27
@@ -495,7 +495,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    185 assertequals 0x0FFFFFFF :total "Test selected blocks"
    186 label *label0
 
-Modifications by Translate case at line 11:5 (-104 instructions):
+Modifications by Translate case at line 10:5 (-106 instructions):
  
      5 label *label62
      6 lookup block :block :i
@@ -656,7 +656,7 @@ Modifications by Translate case at line 11:5 (-104 instructions):
 -    * set *tmp2 26
 -    * jump *label5 always
 -    * label *label56
--    * jump *label59 equal :block @tile-logic-display
+-    * jump *label59 equal :block @target-dummy
 -    * jump *label58 always
 -    * label *label59
 -    * set *tmp2 27
@@ -665,13 +665,11 @@ Modifications by Translate case at line 11:5 (-104 instructions):
 -    * set *tmp2 0
 -    * label *label5
 +    8 sensor *tmp8 :block @id
-+    9 read *tmp9 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J000000000000000000000000K0" *tmp8
-+   10 op sub *tmp10 *tmp9 48
-+   11 select *tmp11 strictEqual *tmp8 null 1 *tmp10
-+   12 select *tmp2 strictEqual *tmp9 null 0 *tmp11
-    13 label *label4
-    14 op shl :bit 1 *tmp2
-    15 op and *tmp5 :total :bit
++    9 read *tmp9 "\u0002\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000b\u000c\u000d\u000e\u0000\u0000\u000f\u0010\u0011\u0012\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0013\u0014\u0000\u0015\u0016\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0017\u0018\u0000\u0000\u0000\u0019\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001b" *tmp8
++   10 select *tmp2 strictEqual *tmp8 null 1 *tmp9
+    11 label *label4
+    12 op shl :bit 1 *tmp2
+    13 op and *tmp5 :total :bit
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -696,17 +694,15 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 261 @blockCount "Verify block count"
+assertequals 262 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label62
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
 sensor *tmp2 :block @id
-read *tmp3 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J000000000000000000000000K0" *tmp2
-op sub *tmp4 *tmp3 48
-select *tmp5 strictEqual *tmp2 null 1 *tmp4
-select *tmp0 strictEqual *tmp3 null 0 *tmp5
+read *tmp3 "\u0002\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000b\u000c\u000d\u000e\u0000\u0000\u000f\u0010\u0011\u0012\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0013\u0014\u0000\u0015\u0016\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0017\u0018\u0000\u0000\u0000\u0019\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001a\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u001b" *tmp2
+select *tmp0 strictEqual *tmp2 null 1 *tmp3
 op shl :bit 1 *tmp0
 op and *tmp1 :total :bit
 jump *label60 lessThanEq *tmp1 1

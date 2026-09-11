@@ -180,8 +180,8 @@ The target versions consist of a major and minor version number. Individual targ
 |   **6.0**    | 6.0 Build 126.2     | 6.0 Build 126.2     |
 | 7.0, **7.1** | 7.0 Build 146       | 7.0 Build 146       |
 |     8.0      | v8 Build 147 - Beta | v8 Build 149 - Beta |
-|   **8.1**    | v8 Build 150 - Beta | v8 Build 159.7      |
-|    8.2       | Bleeding edge       | -                   |
+|     8.1      | v8 Build 150 - Beta | v8 Build 159.7      |
+|   **8.2**    | v8 Build 160        | -                   |
 
 The `7.0` and `7.1` targets differ in the way they map some instructions to Logic functions.
 

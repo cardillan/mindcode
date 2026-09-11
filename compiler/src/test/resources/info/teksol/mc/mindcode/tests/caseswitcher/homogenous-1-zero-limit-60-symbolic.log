@@ -10,9 +10,9 @@
     39 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 16):
-  o Convert case at line 11:5 (segments: 7)                      size    -5, benefit      470.2, efficiency   Infinity
-  * Convert case at line 11:5 (segments: 15)                     size    -4, benefit      525.7, efficiency   Infinity (-4 instructions)
-  ! Convert case at line 11:5 (segments: 1, padded high)         size  +238, benefit      543.8, efficiency      2.285
+  o Convert case at line 10:5 (segments: 7)                      size    -5, benefit      470.5, efficiency   Infinity
+  * Convert case at line 10:5 (segments: 15)                     size    -4, benefit      525.8, efficiency   Infinity (-4 instructions)
+  ! Convert case at line 10:5 (segments: 1, padded high)         size  +239, benefit      543.9, efficiency      2.276
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -214,7 +214,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     52 print :hash
     53 assertequals 1061505871 :hash "Test selected blocks"
 
-Modifications by Convert case at line 11:5 (segments: 15) (-4 instructions):
+Modifications by Convert case at line 10:5 (segments: 15) (-4 instructions):
  
      4 label *label10
      5 lookup block :block :i

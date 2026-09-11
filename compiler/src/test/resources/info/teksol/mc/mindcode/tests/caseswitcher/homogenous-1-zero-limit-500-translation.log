@@ -5,14 +5,14 @@
      1 instruction eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop condition was partially rotated.
-    24 instructions eliminated by Case Switching (4 iterations).
+    26 instructions eliminated by Case Switching (4 iterations).
      1 case expression converted to value translation by Case Switching.
-    19 instructions after optimizations.
+    17 instructions after optimizations.
 
 Pass 1: size optimization selection (cost limit 456):
-  * Translate case at line 11:5                                  size   -24, benefit      521.3, efficiency     24.000 (-24 instructions)
-    Convert case at line 11:5 (segments: 7)                      size    -5, benefit      470.2, efficiency      5.000
-    Convert case at line 11:5 (segments: 15)                     size    -4, benefit      525.7, efficiency      4.000
+  * Translate case at line 10:5                                  size   -26, benefit      571.4, efficiency     26.000 (-26 instructions)
+    Convert case at line 10:5 (segments: 7)                      size    -5, benefit      470.5, efficiency      5.000
+    Convert case at line 10:5 (segments: 15)                     size    -4, benefit      525.8, efficiency      4.000
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -214,7 +214,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     52 print :hash
     53 assertequals 1061505871 :hash "Test selected blocks"
 
-Modifications by Translate case at line 11:5 (-24 instructions):
+Modifications by Translate case at line 10:5 (-26 instructions):
  
      4 label *label10
      5 lookup block :block :i
@@ -252,13 +252,11 @@ Modifications by Translate case at line 11:5 (-24 instructions):
 -    * set *tmp2 false
 -    * label *label7
 +    7 sensor *tmp9 :block @id
-+    8 read *tmp10 "100000000000000001111111111110011110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001101100000000000011000100000000100000000000000000000000000" *tmp9
-+    9 op sub *tmp11 *tmp10 48
-+   10 select *tmp12 strictEqual *tmp9 null false *tmp11
-+   11 select *tmp2 strictEqual *tmp10 null false *tmp12
-    12 label *label6
-    13 jump *label4 equal *tmp2 false
-    14 op mul *tmp5 :hash 31
++    8 read *tmp10 "\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0000\u0000\u0001\u0001\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000" *tmp9
++    9 select *tmp2 strictEqual *tmp9 null false *tmp10
+    10 label *label6
+    11 jump *label4 equal *tmp2 false
+    12 op mul *tmp5 :hash 31
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set :hash 0
@@ -287,10 +285,8 @@ label *label10
 lookup block :block :i
 # "Function: def isWall(in block)"
 sensor *tmp4 :block @id
-read *tmp5 "100000000000000001111111111110011110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001101100000000000011000100000000100000000000000000000000000" *tmp4
-op sub *tmp6 *tmp5 48
-select *tmp7 strictEqual *tmp4 null false *tmp6
-select *tmp0 strictEqual *tmp5 null false *tmp7
+read *tmp5 "\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0000\u0000\u0001\u0001\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0001\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000" *tmp4
+select *tmp0 strictEqual *tmp4 null false *tmp5
 jump *label4 equal *tmp0 false
 op mul *tmp1 :hash 31
 op add *tmp2 *tmp1 :i

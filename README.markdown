@@ -24,7 +24,7 @@ See [Mindcode Features](FEATURES.markdown) for a more detailed list of features.
 
 Mindcode can generate code for all major Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including the `#set target` directive in the source code. See the list of [supported targets and their corresponding Mindustry versions](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target).
 
-Currently, the default target is `8.1m`, corresponding to the latest official Mindustry 8 release (v8 Build 159.7).
+Currently, the default target is `8.2m`, corresponding to the latest official Mindustry 8 release (**v8 Build 160.1**).
 
 ## Mindcode Syntax
 
@@ -45,19 +45,19 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Mindustry 8 specific features
-  * Complete support for [the latest Mindustry 8 release (v8 Build 159.7)](/doc/syntax/MINDUSTRY-8.markdown).
+  * Complete support for [the latest Mindustry 8 release (v8 Build 160.1)](/doc/syntax/MINDUSTRY-8.markdown).
   * [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities.
   * New string/character-based instructions and character literals.
 * Language/compiler features
+  * Support for escape characters in string literals, including Unicode escape sequences.
   * Support for declaring arrays in a local scope.
   * Recursive function inlining and tail call optimization.
   * Enhanced Schemacode support (block regions/block arrays, symbolic processor link names).
   * Short-circuit evaluation of boolean expressions.
   * Improved [Loop Rotation](doc/syntax/optimizations/LOOP-ROTATION.markdown) and [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimizations.
   * The [`in` operator](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#rangelist-membership-operator) for testing range or list membership.
-  * Significantly improved optimization of `case` expressions.
 * Other functionality
   * Sending built schematics directly from the web app to Mindustry via the Mlog Watcher mod.
   * Mobile-friendly [web application](https://mindcode.herokuapp.com/) with syntax highlighting.

@@ -1,4 +1,3 @@
-#set target = 8;
 #set builtin-evaluation = full;
 #set err-invalid-lookup = false;
 #set single-step-elimination = none;
@@ -14,14 +13,14 @@ def isWall(block)
              @scrap-wall, @scrap-wall-large, @scrap-wall-huge, @scrap-wall-gigantic,
              @beryllium-wall, @beryllium-wall-large, @tungsten-wall, @tungsten-wall-large,
              @reinforced-surge-wall, @reinforced-surge-wall-large, @carbide-wall, @carbide-wall-large,
-             @tile-logic-display
+             @target-dummy
         then true;
         else false;
     end;
 end;
 
 begin
-    assertEquals(261, @blockCount, "Verify block count");
+    assertEquals(262, @blockCount, "Verify block count");
 
     var hash = 0;
     for var i in -1 ... @blockCount do
@@ -32,5 +31,5 @@ begin
     end;
 
     print(hash);
-    assertEquals(2727247113, hash, "Test selected blocks");
+    assertEquals(2727247115, hash, "Test selected blocks");
 end;

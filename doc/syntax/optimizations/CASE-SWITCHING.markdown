@@ -152,7 +152,7 @@ The most complex value translations consist of up to eight instructions. When th
 volatile var value;
 case value
     when @copper      then value = @silicon;
-    when null         then value = @lead;                   // causes case 2
+    when null         then value = @lead;                   // would cause case 2 in target 8.1
     when @coal        then value = @copper;                 // causes case 3.1
     when @lead        then value = null;                    // causes case 4.1
     when @silicon     then null;                            // causes case 4.2
@@ -164,13 +164,12 @@ produces
 
 ```mlog
 sensor *tmp0 .value @id
-read *tmp1 "9:8880888;" *tmp0
-op sub *tmp2 *tmp1 48
-select *tmp3 strictEqual *tmp0 null 1 *tmp2
-select *tmp4 equal *tmp1 58 null *tmp3
-select *tmp5 strictEqual *tmp1 null 8 *tmp4
-lookup item *tmp6 *tmp5
-select .value equal *tmp1 59 .value *tmp6
+read *tmp1 "\u0009\n\u0008\u0008\u0008\u0000\u0008\u0008\u0008\u000b" *tmp0
+select *tmp2 strictEqual *tmp0 null 1 *tmp1
+select *tmp3 equal *tmp1 10 null *tmp2
+select *tmp4 strictEqual *tmp1 null 8 *tmp3
+lookup item *tmp5 *tmp4
+select .value equal *tmp1 11 .value *tmp5
 ```
 
 **Multiple value translations**

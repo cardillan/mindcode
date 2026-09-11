@@ -10,13 +10,13 @@
    166 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 102):
-  o Convert case at line 11:5 (segments: 34)                     size   -26, benefit     1371.4, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 34)                     size   -25, benefit     1371.5, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 5, padded low)          size   +25, benefit     1372.2, efficiency     54.889
-  o Convert case at line 11:5 (segments: 6, padded low)          size   +38, benefit     1381.6, efficiency     36.358
-  * Convert case at line 11:5 (segments: 6, padded low)          size   +39, benefit     1381.7, efficiency     35.428 (+39 instructions)
-  ! Convert case at line 11:5 (segments: 1, padded low)          size  +182, benefit     1393.8, efficiency      7.658
-  ! Convert case at line 11:5 (segments: 1, padded both)         size  +200, benefit     1415.2, efficiency      7.076
+  o Convert case at line 10:5 (segments: 34)                     size   -26, benefit     1371.8, efficiency   Infinity
+  o Convert case at line 10:5 (segments: 34)                     size   -25, benefit     1371.9, efficiency   Infinity
+  o Convert case at line 10:5 (segments: 5, padded low)          size   +25, benefit     1372.7, efficiency     54.908
+  o Convert case at line 10:5 (segments: 6, padded low)          size   +38, benefit     1382.1, efficiency     36.370
+  * Convert case at line 10:5 (segments: 6, padded low)          size   +39, benefit     1382.2, efficiency     35.440 (+39 instructions)
+  ! Convert case at line 10:5 (segments: 1, padded low)          size  +182, benefit     1394.4, efficiency      7.661
+  ! Convert case at line 10:5 (segments: 1, padded both)         size  +201, benefit     1415.6, efficiency      7.043
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -528,7 +528,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    188 label *label1
    189 assertprints *tmp0 "ABCDEFGHIJKLLMMMMNNNNOOOOPPPQRSTUVWXYZ" "Verifying output"
 
-Modifications by Convert case at line 11:5 (segments: 6, padded low) (+39 instructions):
+Modifications by Convert case at line 10:5 (segments: 6, padded low) (+39 instructions):
  
      5 label *label61
      6 lookup block *tmp1 :printAll:i

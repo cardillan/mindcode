@@ -196,8 +196,8 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
    162 set *tmp2 26
    163 jump *label5 always
    164 label *label56
--    * jump *label59 equal *tmp3 @tile-logic-display
-+  165 jump *label59 equal :identifyBlock:block @tile-logic-display
+-    * jump *label59 equal *tmp3 @target-dummy
++  165 jump *label59 equal :identifyBlock:block @target-dummy
    166 jump *label58 always
    167 label *label59
    168 set *tmp2 27
@@ -437,8 +437,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    161 set *tmp2 26
    162 jump *label5 always
    163 label *label56
--    * jump *label59 equal :identifyBlock:block @tile-logic-display
-+  164 jump *label59 equal :block @tile-logic-display
+-    * jump *label59 equal :identifyBlock:block @target-dummy
++  164 jump *label59 equal :block @target-dummy
    165 jump *label58 always
    166 label *label59
    167 set *tmp2 27
@@ -512,7 +512,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 261 @blockCount "Verify block count"
+assertequals 262 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label62
@@ -674,7 +674,7 @@ label *label57
 set *tmp0 26
 jump *label5 always
 label *label56
-jump *label59 equal :block @tile-logic-display
+jump *label59 equal :block @target-dummy
 jump *label58 always
 label *label59
 set *tmp0 27

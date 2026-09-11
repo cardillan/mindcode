@@ -11,9 +11,9 @@
    333 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 376):
-  o Convert case at line 11:5 (segments: 34)                     size   -18, benefit     1184.5, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 4, padded high)         size   +45, benefit     1187.2, efficiency     26.381
-  * Convert case at line 11:5 (segments: 1, padded high)         size  +210, benefit     1210.2, efficiency      5.763 (+210 instructions)
+  o Convert case at line 10:5 (segments: 34)                     size   -19, benefit     1184.8, efficiency   Infinity
+  o Convert case at line 10:5 (segments: 4)                      size   +45, benefit     1187.3, efficiency     26.385
+  * Convert case at line 10:5 (segments: 1)                      size  +210, benefit     1210.5, efficiency      5.764 (+210 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -203,8 +203,8 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
    162 set *tmp2 26
    163 jump *label5 always
    164 label *label56
--    * jump *label59 equal *tmp3 @tile-logic-display
-+  165 jump *label59 equal :identifyBlock:block @tile-logic-display
+-    * jump *label59 equal *tmp3 @target-dummy
++  165 jump *label59 equal :identifyBlock:block @target-dummy
    166 jump *label58 always
    167 label *label59
    168 set *tmp2 27
@@ -444,8 +444,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    161 set *tmp2 26
    162 jump *label5 always
    163 label *label56
--    * jump *label59 equal :identifyBlock:block @tile-logic-display
-+  164 jump *label59 equal :block @tile-logic-display
+-    * jump *label59 equal :identifyBlock:block @target-dummy
++  164 jump *label59 equal :block @target-dummy
    165 jump *label58 always
    166 label *label59
    167 set *tmp2 27
@@ -496,7 +496,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    185 assertequals 0x0FFFFFFF :total "Test selected blocks"
    186 label *label0
 
-Modifications by Convert case at line 11:5 (segments: 1, padded high) (+210 instructions):
+Modifications by Convert case at line 10:5 (segments: 1) (+210 instructions):
  
      5 label *label62
      6 lookup block :block :i
@@ -1024,175 +1024,179 @@ Modifications by Convert case at line 11:5 (segments: 1, padded high) (+210 inst
 +  526 multilabel *label324 (m:*label65)
 +  527 jump *label63 always
 +  528 multilabel *label325 (m:*label65)
-+  529 jump *label59 always
++  529 jump *label63 always
 +  530 multilabel *label326 (m:*label65)
 +  531 jump *label63 always
-   532 label *label7
-   533 set *tmp2 1
-   534 jump *label5 always
-   535 label *label6
++  532 multilabel *label327 (m:*label65)
++  533 label *label59
++  534 set *tmp2 27
++  535 jump *label5 always
+   536 label *label7
+   537 set *tmp2 1
+   538 jump *label5 always
+   539 label *label6
 -    * jump *label9 equal :block @graphite-press
 -    * jump *label8 always
-+  536 label *label64
-+  537 jump *label7 strictEqual *tmp8 null
-   538 label *label9
-   539 set *tmp2 2
-   540 jump *label5 always
-   541 label *label8
++  540 label *label64
++  541 jump *label7 strictEqual *tmp8 null
+   542 label *label9
+   543 set *tmp2 2
+   544 jump *label5 always
+   545 label *label8
 -    * jump *label11 equal :block @copper-wall
 -    * jump *label10 always
-   542 label *label11
-   543 set *tmp2 3
-   544 jump *label5 always
-   545 label *label10
+   546 label *label11
+   547 set *tmp2 3
+   548 jump *label5 always
+   549 label *label10
 -    * jump *label13 equal :block @copper-wall-large
 -    * jump *label12 always
-   546 label *label13
-   547 set *tmp2 4
-   548 jump *label5 always
-   549 label *label12
+   550 label *label13
+   551 set *tmp2 4
+   552 jump *label5 always
+   553 label *label12
 -    * jump *label15 equal :block @titanium-wall
 -    * jump *label14 always
-   550 label *label15
-   551 set *tmp2 5
-   552 jump *label5 always
-   553 label *label14
+   554 label *label15
+   555 set *tmp2 5
+   556 jump *label5 always
+   557 label *label14
 -    * jump *label17 equal :block @titanium-wall-large
 -    * jump *label16 always
-   554 label *label17
-   555 set *tmp2 6
-   556 jump *label5 always
-   557 label *label16
+   558 label *label17
+   559 set *tmp2 6
+   560 jump *label5 always
+   561 label *label16
 -    * jump *label19 equal :block @plastanium-wall
 -    * jump *label18 always
-   558 label *label19
-   559 set *tmp2 7
-   560 jump *label5 always
-   561 label *label18
+   562 label *label19
+   563 set *tmp2 7
+   564 jump *label5 always
+   565 label *label18
 -    * jump *label21 equal :block @plastanium-wall-large
 -    * jump *label20 always
-   562 label *label21
-   563 set *tmp2 8
-   564 jump *label5 always
-   565 label *label20
+   566 label *label21
+   567 set *tmp2 8
+   568 jump *label5 always
+   569 label *label20
 -    * jump *label23 equal :block @thorium-wall
 -    * jump *label22 always
-   566 label *label23
-   567 set *tmp2 9
-   568 jump *label5 always
-   569 label *label22
+   570 label *label23
+   571 set *tmp2 9
+   572 jump *label5 always
+   573 label *label22
 -    * jump *label25 equal :block @thorium-wall-large
 -    * jump *label24 always
-   570 label *label25
-   571 set *tmp2 10
-   572 jump *label5 always
-   573 label *label24
+   574 label *label25
+   575 set *tmp2 10
+   576 jump *label5 always
+   577 label *label24
 -    * jump *label27 equal :block @phase-wall
 -    * jump *label26 always
-   574 label *label27
-   575 set *tmp2 11
-   576 jump *label5 always
-   577 label *label26
+   578 label *label27
+   579 set *tmp2 11
+   580 jump *label5 always
+   581 label *label26
 -    * jump *label29 equal :block @phase-wall-large
 -    * jump *label28 always
-   578 label *label29
-   579 set *tmp2 12
-   580 jump *label5 always
-   581 label *label28
+   582 label *label29
+   583 set *tmp2 12
+   584 jump *label5 always
+   585 label *label28
 -    * jump *label31 equal :block @surge-wall
 -    * jump *label30 always
-   582 label *label31
-   583 set *tmp2 13
-   584 jump *label5 always
-   585 label *label30
+   586 label *label31
+   587 set *tmp2 13
+   588 jump *label5 always
+   589 label *label30
 -    * jump *label33 equal :block @surge-wall-large
 -    * jump *label32 always
-   586 label *label33
-   587 set *tmp2 14
-   588 jump *label5 always
-   589 label *label32
+   590 label *label33
+   591 set *tmp2 14
+   592 jump *label5 always
+   593 label *label32
 -    * jump *label35 equal :block @scrap-wall
 -    * jump *label34 always
-   590 label *label35
-   591 set *tmp2 15
-   592 jump *label5 always
-   593 label *label34
+   594 label *label35
+   595 set *tmp2 15
+   596 jump *label5 always
+   597 label *label34
 -    * jump *label37 equal :block @scrap-wall-large
 -    * jump *label36 always
-   594 label *label37
-   595 set *tmp2 16
-   596 jump *label5 always
-   597 label *label36
+   598 label *label37
+   599 set *tmp2 16
+   600 jump *label5 always
+   601 label *label36
 -    * jump *label39 equal :block @scrap-wall-huge
 -    * jump *label38 always
-   598 label *label39
-   599 set *tmp2 17
-   600 jump *label5 always
-   601 label *label38
+   602 label *label39
+   603 set *tmp2 17
+   604 jump *label5 always
+   605 label *label38
 -    * jump *label41 equal :block @scrap-wall-gigantic
 -    * jump *label40 always
-   602 label *label41
-   603 set *tmp2 18
-   604 jump *label5 always
-   605 label *label40
+   606 label *label41
+   607 set *tmp2 18
+   608 jump *label5 always
+   609 label *label40
 -    * jump *label43 equal :block @tungsten-wall
 -    * jump *label42 always
-   606 label *label43
-   607 set *tmp2 19
-   608 jump *label5 always
-   609 label *label42
+   610 label *label43
+   611 set *tmp2 19
+   612 jump *label5 always
+   613 label *label42
 -    * jump *label45 equal :block @tungsten-wall-large
 -    * jump *label44 always
-   610 label *label45
-   611 set *tmp2 20
-   612 jump *label5 always
-   613 label *label44
+   614 label *label45
+   615 set *tmp2 20
+   616 jump *label5 always
+   617 label *label44
 -    * jump *label47 equal :block @beryllium-wall
 -    * jump *label46 always
-   614 label *label47
-   615 set *tmp2 21
-   616 jump *label5 always
-   617 label *label46
+   618 label *label47
+   619 set *tmp2 21
+   620 jump *label5 always
+   621 label *label46
 -    * jump *label49 equal :block @beryllium-wall-large
 -    * jump *label48 always
-   618 label *label49
-   619 set *tmp2 22
-   620 jump *label5 always
-   621 label *label48
+   622 label *label49
+   623 set *tmp2 22
+   624 jump *label5 always
+   625 label *label48
 -    * jump *label51 equal :block @carbide-wall
 -    * jump *label50 always
-   622 label *label51
-   623 set *tmp2 23
-   624 jump *label5 always
-   625 label *label50
+   626 label *label51
+   627 set *tmp2 23
+   628 jump *label5 always
+   629 label *label50
 -    * jump *label53 equal :block @carbide-wall-large
 -    * jump *label52 always
-   626 label *label53
-   627 set *tmp2 24
-   628 jump *label5 always
-   629 label *label52
+   630 label *label53
+   631 set *tmp2 24
+   632 jump *label5 always
+   633 label *label52
 -    * jump *label55 equal :block @reinforced-surge-wall
 -    * jump *label54 always
-   630 label *label55
-   631 set *tmp2 25
-   632 jump *label5 always
-   633 label *label54
+   634 label *label55
+   635 set *tmp2 25
+   636 jump *label5 always
+   637 label *label54
 -    * jump *label57 equal :block @reinforced-surge-wall-large
 -    * jump *label56 always
-   634 label *label57
-   635 set *tmp2 26
-   636 jump *label5 always
-   637 label *label56
--    * jump *label59 equal :block @tile-logic-display
--    * jump *label58 always
-   638 label *label59
-   639 set *tmp2 27
+   638 label *label57
+   639 set *tmp2 26
    640 jump *label5 always
-   641 label *label58
-+  642 label *label63
-   643 set *tmp2 0
-   644 label *label5
-   645 label *label4
+   641 label *label56
+-    * jump *label59 equal :block @target-dummy
+-    * jump *label58 always
+-    * label *label59
+-    * set *tmp2 27
+-    * jump *label5 always
+   642 label *label58
++  643 label *label63
+   644 set *tmp2 0
+   645 label *label5
+   646 label *label4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1217,7 +1221,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 261 @blockCount "Verify block count"
+assertequals 262 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label62
@@ -1744,9 +1748,12 @@ jump *label63 always
 multilabel *label324
 jump *label63 always
 multilabel *label325
-jump *label59 always
+jump *label63 always
 multilabel *label326
 jump *label63 always
+multilabel *label327
+set *tmp0 27
+jump *label5 always
 label *label7
 set *tmp0 1
 jump *label5 always
@@ -1825,9 +1832,6 @@ set *tmp0 25
 jump *label5 always
 label *label57
 set *tmp0 26
-jump *label5 always
-label *label59
-set *tmp0 27
 jump *label5 always
 label *label63
 set *tmp0 0

@@ -11,7 +11,7 @@
     72 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 376):
-  * Convert case at line 11:5 (segments: 1, padded high)         size   -51, benefit     1235.2, efficiency   Infinity (-51 instructions)
+  * Convert case at line 10:5 (segments: 1)                      size   -51, benefit     1235.4, efficiency   Infinity (-51 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -201,8 +201,8 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
    161 set *tmp2 26
    162 jump *label5 always
    163 label *label56
--    * jump *label59 equal *tmp3 @tile-logic-display
-+  164 jump *label59 equal :identifyBlock:block @tile-logic-display
+-    * jump *label59 equal *tmp3 @target-dummy
++  164 jump *label59 equal :identifyBlock:block @target-dummy
    165 jump *label58 always
    166 label *label59
    167 set *tmp2 27
@@ -442,8 +442,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    160 set *tmp2 26
    161 jump *label5 always
    162 label *label56
--    * jump *label59 equal :identifyBlock:block @tile-logic-display
-+  163 jump *label59 equal :block @tile-logic-display
+-    * jump *label59 equal :identifyBlock:block @target-dummy
++  163 jump *label59 equal :block @target-dummy
    164 jump *label58 always
    165 label *label59
    166 set *tmp2 27
@@ -494,7 +494,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    184 assertequals 0x0FFFFFFF :total "Test selected blocks"
    185 label *label0
 
-Modifications by Convert case at line 11:5 (segments: 1, padded high) (-51 instructions):
+Modifications by Convert case at line 10:5 (segments: 1) (-51 instructions):
  
      4 jump *label3 greaterThanEq :i @blockCount
      5 label *label62
@@ -684,7 +684,7 @@ Modifications by Convert case at line 11:5 (segments: 1, padded high) (-51 instr
    137 set *tmp2 26
    138 jump *label5 always
    139 label *label56
--    * jump *label59 equal :block @tile-logic-display
+-    * jump *label59 equal :block @target-dummy
 -    * jump *label58 always
 +  140 multilabel *label92 (m:*label65)
    141 label *label59
@@ -720,7 +720,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 261 @blockCount "Verify block count"
+assertequals 262 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label62
@@ -807,10 +807,10 @@ multilabel *label91
 set *tmp0 26                            # Origin: 5, keys: 234
 jump *label5 always
 multilabel *label92
-set *tmp0 27                            # Origin: 5, keys: 259
+set *tmp0 27                            # Origin: 5, keys: 261
 jump *label5 always
 multilabel *label67
-set *tmp0 0                             # Origin: 5, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 258, 260
+set *tmp0 0                             # Origin: 5, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 260
 label *label5
 op shl :bit 1 *tmp0
 op and *tmp1 :total :bit

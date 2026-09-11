@@ -1,4 +1,3 @@
-#set target = 8;
 #set builtin-evaluation = full;
 #set err-invalid-lookup = false;
 #set single-step-elimination = none;
@@ -34,13 +33,13 @@ def identifyBlock(block)
         when @carbide-wall-large then 24;
         when @reinforced-surge-wall then 25;
         when @reinforced-surge-wall-large then 26;
-        when @tile-logic-display then 27;
+        when @target-dummy then 27;
         else 0;
     end;
 end;
 
 begin
-    assertEquals(261, @blockCount, "Verify block count");
+    assertEquals(262, @blockCount, "Verify block count");
 
     var total = 0;
     for var i in -1 ... @blockCount do
