@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.19.0 – 2026-09-12
 
+> [!NOTE]
+> To compile code for the latest Mindustry release (v8 Build 160/160.1), use target `8.2` (the default one).
+
 ### Fixed
 
 * Fixed possible wrong compile-time evaluation of the `ascii()` and `char()` functions on string literals containing a newline character (e.g., `char("\n", 0)`).   

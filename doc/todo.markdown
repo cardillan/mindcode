@@ -6,13 +6,11 @@ A broad plan for the next few releases. Everything may change, though.
 
 See [changelog in the development branch](https://github.com/cardillan/mindcode/blob/devel/CHANGELOG.markdown) for a list of features ready for the upcoming release.
 
-## 3.19.x
+## 3.20.x
 
 Changes intended for the next regular release.
 
 **Done**
-
-* Add default/max IPT to mimex.
 
 * **Doing**
 
@@ -31,6 +29,8 @@ Changes intended for the next regular release.
 * Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
 * Array code injection optimization (?)
+* Invoke properties on any expression, including arrays.
+* Allow using linked arrays in the `remote require` clause.
 
 * **Quick ideas**
 

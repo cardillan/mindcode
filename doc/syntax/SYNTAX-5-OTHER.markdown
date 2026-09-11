@@ -609,8 +609,8 @@ compiles to:
 Select the class of characters to be encoded using Unicode escapes in compiler-generated strings in target `8.2` or higher. Possible values are:
 
 * `minimal`: surrogate characters, `CR` and `NUL` will be encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. All others are used directly.
-* `non-printable` (the default value): surrogate characters, characters below `\u001F` except `LF`, and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
-* `non-ascii`: characters below `\u001F` and above `\u00FF` except `LF` and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
+* `non-printable` (the default value): surrogate characters, characters below `\u0020` except `LF`, and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
+* `non-ascii`: characters below `\u0020` and above `\u00FF` except `LF` and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
 * `all`: all characters are encoded using Unicode escapes. No simple escapes are used even when available. This makes numerical values encoded into strings and text-encoded jump tables much more readable.
 
 Using Unicode escapes makes the code more readable and precludes possible problems when processing the code in various text editors or sharing it on the web. The generated mlog size gets larger.
