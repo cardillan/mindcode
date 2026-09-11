@@ -113,7 +113,7 @@ print "{2}"
 set :formatHexNumber:digits 0
 op floor :formatHexNumber:n 0xABCDEF 0
 op mod :formatHexNumber:digit :formatHexNumber:n 16
-read @counter "uwy{}" :formatHexNumber:digit
+read @counter "uwy{}\u007f" :formatHexNumber:digit
 jump 131 always 0 0
 format "{2}A"                           # Origin: 115, keys: 10
 jump 131 always 0 0

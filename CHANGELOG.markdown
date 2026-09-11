@@ -8,12 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed possible wrong compile-time evaluation of the `ascii()` and `char()` functions on string literals containing a newline character (e.g., `"\n"`).   
+* Fixed possible wrong compile-time evaluation of the `ascii()` and `char()` functions on string literals containing a newline character (e.g., `char("\n", 0)`).   
 
 ### Added
 
 * Added support for new escapes (`\"`, `\\` and `\uXXXX`) in [string literals](/doc/syntax/SYNTAX-0-BASICS.markdown#string-literals) and formatted string literals in all targets.
-* Added compiler option [`use-unicode-escapes`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-unicode-escapes) to govern using Unicode escapes for nonprintable characters in compiler-generated strings in target `8.2`.
+* Added compiler option [`unicode-escapes`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-unicode-escapes) to govern using Unicode escapes for various character classes in compiler-generated strings in target `8.2`.
 
 ### Changed
 

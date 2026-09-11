@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
+import info.teksol.mc.util.EscapeClass;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigInteger;
@@ -296,6 +297,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     public CompilerProfile setSymbolicLabels(boolean symbolicLabels) {
         getOption(MlogFormatOptions.SYMBOLIC_LABELS).setValue(symbolicLabels);
+        return this;
+    }
+
+    public CompilerProfile setUnicodeEscapes(EscapeClass escapeClass) {
+        getOption(MlogFormatOptions.UNICODE_ESCAPES).setValue(escapeClass);
         return this;
     }
     //</editor-fold>

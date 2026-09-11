@@ -15,6 +15,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.RuntimeErrorReporting;
+import info.teksol.mc.util.EscapeClass;
 import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 
@@ -189,7 +190,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
                 }
 
                 if (value instanceof LogicLiteral lit) {
-                    sbr.append(UtfUtils.escape(globalProfile.useUnicodeEscapes(), lit.format(processor)));
+                    sbr.append(UtfUtils.escape(EscapeClass.NON_PRINTABLE, lit.format(processor)));
                 } else {
                     values.add(value);
                     sbr.append("[[").append(values.size()).append("]");

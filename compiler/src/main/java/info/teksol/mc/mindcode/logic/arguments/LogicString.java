@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstLiteralString;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.util.EscapeClass;
 import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -79,7 +80,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     /// Used to create strings that might need escapes
     public static LogicString createRaw(String string) {
-        return new LogicString(SourcePosition.EMPTY, UtfUtils.escape(false, string), string);
+        return new LogicString(SourcePosition.EMPTY, UtfUtils.escape(EscapeClass.MINIMAL, string), string);
     }
 
     /// Used to create strings using already escaped naked literal
@@ -92,7 +93,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
     }
 
     public static LogicString createRaw(SourcePosition sourcePosition, String string) {
-        return new LogicString(sourcePosition, UtfUtils.escape(false, string), string);
+        return new LogicString(sourcePosition, UtfUtils.escape(EscapeClass.MINIMAL, string), string);
     }
 
     public boolean isObject() {

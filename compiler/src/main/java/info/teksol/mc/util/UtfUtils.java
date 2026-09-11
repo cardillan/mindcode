@@ -15,32 +15,30 @@ public class UtfUtils {
         return character >= 0 && character < UTF16_END;
     }
 
-    public static String escape(boolean useUnicodeEscapes, String string) {
+    public static String escape(EscapeClass escapeClass, String string) {
         StringBuilder sbr = new StringBuilder();
-        for (int i = 0; i < string.length(); i++) escape(sbr, useUnicodeEscapes, string.charAt(i));
+        for (int i = 0; i < string.length(); i++) escape(sbr, escapeClass, string.charAt(i));
         return sbr.toString();
     }
 
-    public static String escape(boolean useUnicodeEscapes, int[] values) {
+    public static String escape(EscapeClass escapeClass, int[] values) {
         StringBuilder sbr = new StringBuilder();
-        for (int value : values) escape(sbr, useUnicodeEscapes, value);
+        for (int value : values) escape(sbr, escapeClass, value);
         return sbr.toString();
     }
 
-    public static void escape(StringBuilder sbr, boolean useUnicodeEscapes, int value) {
-        switch (value) {
-            case 0      -> sbr.append("\\u0000");
-            case '\r'   -> sbr.append("\\u000d");
-            case '\n'   -> sbr.append("\\n");
-            case '\\'   -> sbr.append("\\\\");
-            case '"'    -> sbr.append("\\\"");
-            default     -> {
-                if (useUnicodeEscapes && value < ' ' || value >= SURROGATE_START && value < SURROGATE_END) {
-                    sbr.append("\\u").append(String.format("%04x", value));
-                } else {
-                    sbr.appendCodePoint(value);
-                }
+    public static void escape(StringBuilder sbr, EscapeClass escapeClass, int value) {
+        if (escapeClass.matches((char)value)) {
+            if (escapeClass == EscapeClass.ALL) {
+                sbr.append("\\u").append(String.format("%04x", value));
+            } else switch (value) {
+                case '\n'   -> sbr.append("\\n");
+                case '\\'   -> sbr.append("\\\\");
+                case '"'    -> sbr.append("\\\"");
+                default     -> sbr.append("\\u").append(String.format("%04x", value));
             }
+        } else {
+            sbr.append((char) value);
         }
     }
 

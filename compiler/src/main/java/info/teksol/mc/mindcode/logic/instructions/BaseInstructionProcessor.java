@@ -21,6 +21,7 @@ import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.util.EscapeClass;
 import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -49,7 +50,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     protected final boolean instructionValidation;
     protected final boolean noArgumentPadding;
     protected final boolean encodeZeroCharacters;
-    protected final boolean useUnicodeEscapes;
+    protected final EscapeClass escapeClass;
     protected final List<OpcodeVariant> opcodeVariants;
     protected final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     protected final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
@@ -69,14 +70,14 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             boolean instructionValidation,
             boolean noArgumentPadding,
             boolean encodeZeroCharacters,
-            boolean useUnicodeEscapes,
+            EscapeClass escapeClass,
             List<OpcodeVariant> opcodeVariants) {
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorType type,
                 NameCreator nameCreator, boolean instructionValidation, boolean noArgumentPadding, boolean encodeZeroCharacters,
-                boolean useUnicodeEscapes) {
+                EscapeClass escapeClass) {
             this(messageConsumer, version, type, nameCreator, instructionValidation, noArgumentPadding,
-                    encodeZeroCharacters, useUnicodeEscapes, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, type));
+                    encodeZeroCharacters, escapeClass, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, type));
         }
     }
 
@@ -89,7 +90,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
         this.instructionValidation = parameters.instructionValidation;
         this.noArgumentPadding = parameters.noArgumentPadding;
         this.encodeZeroCharacters = parameters.encodeZeroCharacters;
-        this.useUnicodeEscapes = parameters.useUnicodeEscapes && processorVersion.supportsUnicodeEscapes();
+        this.escapeClass = processorVersion.supportsUnicodeEscapes() ? parameters.escapeClass : EscapeClass.MINIMAL;
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream().collect(Collectors.toMap(k -> k,
@@ -704,11 +705,11 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
 
     @Override
     public void encode(StringBuilder stringBuilder, int value) {
-        UtfUtils.escape(stringBuilder, useUnicodeEscapes, value);
+        UtfUtils.escape(stringBuilder, escapeClass, value);
     }
 
     public String encode(int[] values) {
-        return UtfUtils.escape(useUnicodeEscapes, values);
+        return UtfUtils.escape(escapeClass, values);
     }
 
     @Override
@@ -722,6 +723,6 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     public String escapedString(LogicValue value) {
         return value instanceof LogicString string
                 ? string.getNakedLiteral()
-                : UtfUtils.escape(useUnicodeEscapes, value.format(this));
+                : UtfUtils.escape(escapeClass, value.format(this));
     }
 }

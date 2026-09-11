@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import info.teksol.mc.profile.BuiltinEvaluation;
+import info.teksol.mc.util.EscapeClass;
 import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -114,7 +115,7 @@ class ExpressionValue implements LogicReadable {
 
     public String toEscapedString() {
         return isNull() ? "null" : object instanceof String string ? string
-                : UtfUtils.escape(false, processor.formatNumber(getDoubleValue()));
+                : UtfUtils.escape(EscapeClass.MINIMAL, processor.formatNumber(getDoubleValue()));
     }
 
     private static class InvalidValue extends ExpressionValue {

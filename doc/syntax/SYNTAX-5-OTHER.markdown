@@ -265,7 +265,7 @@ carry over specific information into the compiled program (such as signature or 
 | [program-version](#option-program-version)               | global | stable             |
 | [reformat-mlog](#option-reformat-mlog)                   | global | stable             |
 | [symbolic-labels](#option-symbolic-labels)               | global | stable             |
-| [use-unicode-escapes](#option-use-unicode-escapes)       | global | stable             |
+| [unicode-escapes](#option-unicode-escapes)               | global | stable             |
 
 ### Option `author`
 
@@ -602,18 +602,20 @@ compiles to:
             jump label_3 always 0 0
 ```
 
-### Option `use-unicode-escapes`
+### Option `unicode-escapes`
 
 **Option scope: [global](#global-scope)**
 
-Activates/deactivates using Unicode escapes for nonprintable characters in compiler-generated strings in targets 8.2 or higher. Possible values are:
+Select the class of characters to be encoded using Unicode escapes in compiler-generated strings in target `8.2` or higher. Possible values are:
 
-* `false`: only characters which cannot be parsed by the in-game parser are encoded using Unicode escapes.
-* `true` (the default value): all non-printable characters are encoded using Unicode escapes.
+* `minimal`: surrogate characters, `CR` and `NUL` will be encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. All others are used directly.
+* `non-printable` (the default value): surrogate characters, characters below `\u001F` except `LF`, and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
+* `non-ascii`: characters below `\u001F` and above `\u00FF` except `LF` and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
+* `all`: all characters are encoded using Unicode escapes. No simple escapes are used even when available. This makes numerical values encoded into strings and text-encoded jump tables much more readable.
 
-Using Unicode escapes for nonprintable characters makes the code more readable and precludes possible problems when processing the code in various text editors or sharing it on the web. The generated mlog size might get a bit larger.
+Using Unicode escapes makes the code more readable and precludes possible problems when processing the code in various text editors or sharing it on the web. The generated mlog size gets larger.
 
-This option has no effect in targets 8.1 or earlier, as in these targets the Mindustry parser doesn't recognize Unicode escapes in string literals.
+This option has no effect in target `8.1` or earlier, as in these targets the Mindustry parser doesn't recognize Unicode escapes in string literals.
 
 ## Compiler options
 

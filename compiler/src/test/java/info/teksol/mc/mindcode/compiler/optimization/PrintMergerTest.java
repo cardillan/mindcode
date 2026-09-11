@@ -135,6 +135,7 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void skipsNonRepresentablesInPrintChar() {
         assertCompilesTo("""
+                        #set target = 8.1;
                         printchar(30);
                         printchar(31);
                         printchar(32);
@@ -148,6 +149,37 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                 createInstruction(PRINT, q(" !")),
                 createInstruction(PRINTCHAR, "34"),
                 createInstruction(PRINT, q("#$"))
+        );
+    }
+
+    @Test
+    void usesUnicodeEscapesWhenAvailable() {
+        assertCompilesTo("""
+                        printchar(30);
+                        printchar(31);
+                        printchar(32);
+                        printchar(33);
+                        printchar(34);
+                        printchar(35);
+                        printchar(36);
+                        """,
+                createInstruction(PRINT, q("\\u001e\\u001f !\\\"#$"))
+        );
+    }
+
+    @Test
+    void usesFullUnicodeEscapes() {
+        assertCompilesTo("""
+                        #set unicode-escapes = all;
+                        printchar(30);
+                        printchar(31);
+                        printchar(32);
+                        printchar(33);
+                        printchar(34);
+                        printchar(35);
+                        printchar(36);
+                        """,
+                createInstruction(PRINT, q("\\u001e\\u001f\\u0020\\u0021\\u0022\\u0023\\u0024"))
         );
     }
 

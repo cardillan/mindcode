@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
+import info.teksol.mc.util.EscapeClass;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -198,11 +199,12 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category, List.of("")));
 
-        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.USE_UNICODE_ESCAPES, "",
+        list.add(new EnumCompilerOptionValue<>(MlogFormatOptions.UNICODE_ESCAPES, "",
                 "encode all unprintable characters using unicode escapes (has no effects for target '8.2' or lower)",
+                EscapeClass.class,
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
-                true));
+                EscapeClass.NON_PRINTABLE));
 
         list.add(new BooleanCompilerOptionValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS, "",
                 "allow encoding zero characters into mlog string literals (WARNING: the resulting code " +

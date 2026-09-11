@@ -106,7 +106,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [--use-unicode-escapes {true,false}] [--encode-zero-characters [{true,false}]]
+                [--unicode-escapes {minimal,non-printable,non-ascii,all}] [--encode-zero-characters [{true,false}]]
                 [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}] [--array-iteration-threshold {0..1000}]
                 [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
@@ -226,7 +226,7 @@ Mlog formatting options:
                          sets the program name to be stored in the compiled code
   --program-version program_version
                          sets the program version to be stored in the compiled code
-  --use-unicode-escapes {true,false}
+  --unicode-escapes {minimal,non-printable,non-ascii,all}
                          encode all unprintable characters using unicode  escapes  (has  no  effects for target '8.2' or
                          lower)
   --encode-zero-characters [{true,false}]
@@ -582,7 +582,7 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [--use-unicode-escapes {true,false}] [--encode-zero-characters [{true,false}]]
+                [--unicode-escapes {minimal,non-printable,non-ascii,all}] [--encode-zero-characters [{true,false}]]
                 [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}] [--array-iteration-threshold {0..1000}]
                 [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
@@ -707,7 +707,7 @@ Mlog formatting options:
                          sets the program name to be stored in the compiled code
   --program-version program_version
                          sets the program version to be stored in the compiled code
-  --use-unicode-escapes {true,false}
+  --unicode-escapes {minimal,non-printable,non-ascii,all}
                          encode all unprintable characters using unicode  escapes  (has  no  effects for target '8.2' or
                          lower)
   --encode-zero-characters [{true,false}]

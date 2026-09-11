@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
+import info.teksol.mc.util.EscapeClass;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumSet;
@@ -98,8 +99,8 @@ public interface GlobalCompilerProfile {
         return !isWebApplication() && getBooleanValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS);
     }
 
-    default boolean useUnicodeEscapes() {
-        return getBooleanValue(MlogFormatOptions.USE_UNICODE_ESCAPES);
+    default EscapeClass getUnicodeEscapes() {
+        return getEnumValue(MlogFormatOptions.UNICODE_ESCAPES);
     }
 
     default boolean isNoArgumentPadding() {

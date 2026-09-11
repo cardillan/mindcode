@@ -41,9 +41,11 @@ import java.util.List;
 ///```
 @NullMarked
 class PrintMerger extends BaseOptimizer {
+    private final boolean escapesAvailable;
 
     public PrintMerger(OptimizationContext optimizationContext) {
         super(Optimization.PRINT_MERGING, optimizationContext);
+        escapesAvailable = instructionProcessor.getProcessorVersion().supportsUnicodeEscapes();
     }
 
     private final List<PrintingInstruction> printVars = new ArrayList<>();
@@ -120,8 +122,8 @@ class PrintMerger extends BaseOptimizer {
         return switch (ix.getValue()) {
             case LogicNumber number -> {
                 char ch = (char) Math.floor(number.getDoubleValue());
-                boolean isPrintable = !Character.isISOControl(ch) && !Character.isSurrogate(ch);
-                yield isPrintable && ch != '"' ? UtfUtils.escape(getGlobalProfile().useUnicodeEscapes(), String.valueOf(ch)) : null;
+                boolean isPrintable = escapesAvailable || !Character.isISOControl(ch) && !Character.isSurrogate(ch) && ch != '"';
+                yield isPrintable ? UtfUtils.escape(getGlobalProfile().getUnicodeEscapes(), String.valueOf(ch)) : null;
             }
 
             case LogicBuiltIn builtIn -> builtIn.getObject() != null ? builtIn.getObject().iconString(metadata) : null;
