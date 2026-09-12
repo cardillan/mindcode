@@ -333,7 +333,8 @@ number {
 
 @local tokens {
   stringEnd { '"' }
-  stringEscape[@name=Escape] { "\\" $[\\n] }
+  hex { $[0-9a-fA-F] }
+  stringEscape[@name=Escape] { "\\" $[\\n"] | "\\u" hex hex hex hex }
   @else stringContent
 }
 

@@ -42,7 +42,8 @@ value {
   stringEnd { '"' }
   StringFormatPlaceholder { "{" $[0-9] "}"}
   StringEscapedBracket { "[[" }
-  StringNewLineSequence { "\\n" }
+  hex { $[0-9a-fA-F] }
+  StringEscapeSequence { "\\" $[\\n"] | "\\u" hex hex hex hex }
   StringColorTag { "[" $[#a-zA-Z0-9]* "]"}
   stringContent { ![\n] }
 
@@ -51,7 +52,7 @@ value {
     StringFormatPlaceholder,
     StringEscapedBracket,
     StringColorTag,
-    StringNewLineSequence,
+    StringEscapeSequence,
     stringContent
   }
 }
@@ -63,7 +64,7 @@ value {
       StringFormatPlaceholder |
       StringEscapedBracket |
       StringColorTag |
-      StringNewLineSequence
+      StringEscapeSequence
     )* stringEnd
   }
 }

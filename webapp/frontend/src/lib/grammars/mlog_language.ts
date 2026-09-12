@@ -61,7 +61,7 @@ export const mlogLanguage = LRLanguage.define({
 				StringFormatPlaceholder: t.tagName,
 				StringEscapedBracket: t.escape,
 				StringColorTag: t.tagName,
-				StringNewLineSequence: t.escape,
+				StringEscapeSequence: t.escape,
 				';': t.punctuation
 			})
 		]
