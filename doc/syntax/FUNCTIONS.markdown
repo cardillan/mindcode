@@ -6,7 +6,7 @@ A specific `7.1` target was added to Mindcode, where the `getBlock` and `ulocate
 
 The `8.0` and `8.1` targets represent the pre-released and development [Mindustry 8 versions](MINDUSTRY-8.markdown).
 
-At this point, `7.1` is still the default target for both command line tool and web application. `8.1` will become the default target when Mindustry 8 is released.
+Target `8.2` corrsponds to the latest stable Mindustry 8 version, and is the default target.
 
 All supported functions and their respective Mindustry Logic instruction counterparts can be found in the function reference:
 
@@ -41,7 +41,7 @@ There are a few exceptions to these rules:
 
 Some instructions perform an operation on an object (a linked block), which is passed as an argument to one of the instruction parameters. In these cases, the instruction can be mapped to a method called on the given block, e.g., `block.shoot(x, y, doShoot);` translates to `control shoot :block :x :y :doShoot 0`.
 
-In some cases, the instruction can be invoked either as a function or as a method (`printflush(message1)` or `message1.printflush()`). All existing mappings are shown in the function reference above.
+In some cases, the instruction can be invoked either as a function or as a method: `printflush(message1)` or `message1.printflush()`. All existing mappings are shown in the function reference above.
 
 ## Alternative `control` syntax
 
@@ -80,7 +80,7 @@ Unlike the Mindustry `op min`/`op max` operations, the `min()` and `max()` funct
 
 ## The `message()` function
 
-The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success`, which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (to ensure backwards compatibility with earlier Mindustry versions).
+The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success`, which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided.
 
 Mindcode therefore allows passing in the `@wait` built-in value as an argument to this function, even though the parameter is an output one. When the `@wait` value is used as an argument, an `out` modifier must not be used.
 
