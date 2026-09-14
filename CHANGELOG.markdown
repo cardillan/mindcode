@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.20.0 – Unreleased
+
+### Changed
+
+* Changed the target guard generation to use `@blockCount` to identify most processor versions.
+
 ## 3.19.3 – 2026-09-19
 
 > [!NOTE]
@@ -31,9 +37,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* Changed the numeric literal formatting for mlog to accommodate changes in mlog numeric literal parsing in the *v8 Build 160** Mindustry release. The compiler doesn't generate the more readable mlog numeric literals (such as `1.5e10`) yet.   
-* Changed the processor emulator in target `8.2` to match mlog numeric literal parsing in the *v8 Build 160** Mindustry release.
-* Changed compile-time expression evaluation in target `8.2`: intermediate values are now kept instead of being encoded into an mlog literal and parsed back. This preserves the original accuracy of the final result as the *v8 Build 160** Mindustry release provides slightly different accuracy when parsing numeric literals.
+* Changed the numeric literal formatting for mlog to accommodate changes in mlog numeric literal parsing in Mindustry build v160. The compiler doesn't generate the more readable mlog numeric literals (such as `1.5e10`) yet.   
+* Changed the processor emulator in target `8.2` to match mlog numeric literal parsing in Mindustry build v160.
+* Changed compile-time expression evaluation in target `8.2`: intermediate values are now kept instead of being encoded into an mlog literal and parsed back. This preserves the original accuracy of the final result as the Mindustry build v160 provides slightly different accuracy when parsing numeric literals.
 
 ## 3.19.1 – 2026-09-12
 

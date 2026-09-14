@@ -317,7 +317,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "%FFFFFF", "null"),
+                    createInstruction(JUMP, label(0), "lessThan", "@blockCount", "254"),
                     createInstruction(PRINT, q("Hello"))
             );
         }
@@ -346,7 +346,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "%[red]", "null"),
+                    createInstruction(JUMP, label(0), "lessThan", "@blockCount", "260"),
                     createInstruction(PRINT, q("Hello"))
             );
         }
@@ -361,7 +361,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "@bufferUsage", "null"),
+                    createInstruction(JUMP, label(0), "notEqual", "@blockCount", "260"),
                     createInstruction(PRINT, q("Hello"))
             );
         }
@@ -375,7 +375,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "@bufferSize", "null"),
+                    createInstruction(JUMP, label(0), "lessThan", "@blockCount", "261"),
                     createInstruction(PRINT, q("Hello"))
             );
         }
@@ -390,8 +390,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "@bufferSize", "null"),
-                    createInstruction(JUMP, label(0), "notEqual", "@status-wet", "null"),
+                    createInstruction(JUMP, label(0), "notEqual", "@blockCount", "261"),
                     createInstruction(PRINT, q("Hello"))
             );
         }
@@ -405,7 +404,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "@status-wet", "null"),
+                    createInstruction(JUMP, label(0), "lessThan", "@blockCount", "262"),
                     createInstruction(PRINT, q("Hello"))
             );
         }
@@ -420,7 +419,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "@status-wet", "null"),
+                    createInstruction(JUMP, label(0), "notEqual", "@blockCount", "262"),
                     createInstruction(PRINT, q("Hello"))
             );
         }

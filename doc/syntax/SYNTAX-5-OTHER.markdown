@@ -188,7 +188,7 @@ The `7.0` and `7.1` targets differ in the way they map some instructions to Logi
 The target can be set using either just a major or both major and minor version numbers. When specifying both numbers, the specified version is used. When specifying just the major version, the highlighted minor version in the table above is used. Example:
 
 ```
-#set target = 8m;        // Selects target 8.1m
+#set target = 8m;        // Selects target 8.2m
 #set target = 8.0m;      // Selects target 8.0m
 ```
 
@@ -853,16 +853,18 @@ The target guard code doesn't distinguish between world and standard processors.
 
 The guard code is always a single `jump` instruction which jumps back to itself if an incompatible processor is detected. The following table shows the guard instructions corresponding to given target settings:
 
-| Target | Built-in evaluation | Instruction                            |
-|--------|:--------------------|----------------------------------------|
-| 6      | compatible          | No test, code runs on all versions     |
-| 6      | full                | `jump 0 greaterThan %FFFFFF 0`         |
-| 7      | compatible          | `jump 0 strictEqual %FFFFFF null`      |
-| 7      | full                | `jump 0 notEqual @blockCount 254`      |
-| 8.0    | compatible          | `jump 0 strictEqual %[red] null`       |
-| 8.0    | full                | `jump 0 strictEqual @bufferUsage null` |
-| 8.1    | compatible          | `jump 0 strictEqual @bufferSize null`  |
-| 8.1    | full                | `jump 0 strictEqual @bufferSize null`  |
+| Target | Built-in evaluation | Instruction                        |
+|--------|:--------------------|------------------------------------|
+| 6      | compatible          | No test, code runs on all versions |
+| 6      | full                | `jump 0 greaterThan %FFFFFF 0`     |
+| 7      | compatible          | `jump 0 strictEqual %FFFFFF null`  |
+| 7      | full                | `jump 0 notEqual @blockCount 254`  |
+| 8.0    | compatible          | `jump 0 lessThan @blockCount 260`  |
+| 8.0    | full                | `jump 0 notEqual @blockCount 260`  |
+| 8.1    | compatible          | `jump 0 lessThan @blockCount 261`  |
+| 8.1    | full                | `jump 0 notEqual @blockCount 261`  |
+| 8.2    | compatible          | `jump 0 lessThan @blockCount 262`  |
+| 8.2    | full                | `jump 0 notEqual @blockCount 262`  |
 
 The jump target (`0`) is replaced with proper instruction address when it's not the first in the compiled code.
 

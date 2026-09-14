@@ -264,31 +264,35 @@ public class CodeGenerator extends CompilerMessageEmitter {
                     assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
                 } else {
                     // V7 and above
-                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%FFFFFF"), LogicNull.NULL).setTargetGuard(true);
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
                 }
             }
             case V8A -> {
                 if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
                     // V8A only
-                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferUsage"), LogicNull.NULL).setTargetGuard(true);
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(260)).setTargetGuard(true);
                 } else {
                     // V8A and above
-                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%[red]"), LogicNull.NULL).setTargetGuard(true);
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(260)).setTargetGuard(true);
                 }
             }
             case V8B -> {
                 if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
                     // V8B only
-                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferSize"), LogicNull.NULL).setTargetGuard(true);
-                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@status-wet"), LogicNull.NULL).setTargetGuard(true);
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(261)).setTargetGuard(true);
                 } else {
                     // V8B and above
-                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferSize"), LogicNull.NULL).setTargetGuard(true);
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(261)).setTargetGuard(true);
                 }
             }
             case V8C -> {
-                // No distinction between full and compatible: we don't know what the future will look like
-                assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@status-wet"), LogicNull.NULL).setTargetGuard(true);
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V8C only
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(262)).setTargetGuard(true);
+                } else {
+                    // V8C and above (??)
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(262)).setTargetGuard(true);
+                }
             }
             default -> throw new MindcodeInternalError("Unhandled processor version " + globalProfile.getProcessorVersion());
         }
