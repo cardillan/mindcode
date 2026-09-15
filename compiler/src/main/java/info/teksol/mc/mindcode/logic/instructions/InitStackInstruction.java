@@ -64,7 +64,13 @@ public class InitStackInstruction extends BaseInstruction {
         if (recursiveFunctions.isEmpty()) return 0;
 
         boolean symbolic = getAstContext().getGlobalProfile().isSymbolicLabels();
-        int spInit = stackTracker.externalStack() || symbolic ? 1 : recursiveFunctions.size();
+        int spInit;
+        if (stackTracker.externalStack()) {
+            int elements = stackTracker.getStackStorage().size();
+            spInit = elements == 1 ? 1 : elements * 2;
+        } else {
+            spInit = symbolic ? 1 : recursiveFunctions.size();
+        }
         return spInit + recursiveFunctions.stream().mapToInt(f -> f.getArrays().size()).sum();
     }
 }

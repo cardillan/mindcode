@@ -6,7 +6,16 @@ As Mindcode undergoes development, the beast practices may change as new version
 
 ## Mindcode 3.18
 
-Mindcode 3.18 supports an internal stack for recursive functions. The internal stack allows storing values of any type, not just numerical ones, and as a result, recursive functions can use parameters and local variables of all types without any restrictions. With the internal stack, all recursive functions compile and execute correctly, although it may be necessary to [manually set stack sizes](SYNTAX-5-OTHER.markdown#option-stack-depth) to support the desired recursion depth.
+### Recursive functions
+
+Mindcode 3.18 supports an internal stack for recursive functions. The internal stack allows storing values of any type, not just numerical ones, and as a result, recursive functions can use parameters and local variables of all types without any restrictions in all Mindustry versions. With the internal stack, all recursive functions compile and execute correctly, although it may be necessary to [manually set stack sizes](SYNTAX-5-OTHER.markdown#option-stack-depth) to support the desired recursion depth.
+
+> [!NOTE]
+> In Mindustry v8 Build 160 or later, memory cells and memory blocks allow storing any type of data. Thanks to this, you can use either external or internal stacks to fully support recursive functions. Performance-wise, the external and internal stacks are similar. External stack stored in memory banks can support more recursion levels than an internal stack, and it doesn't occupy instruction space. Using internal stacks with Mindustry v8 Build 160 or later is only recommended when the recursion depth is fairly shallow.
+
+### List iteration loops
+
+List iteration loops over arrays are now preferred over indexed loops for most use cases. Mindcode automatically converts lost iteration loop into index-based loops for large arrays, and may apply additional optimizations not available to explicitly created indexed loops.
 
 ## Mindcode 3.17
 
@@ -389,7 +398,7 @@ The compiled code is
     op add :build*retaddr @counter 1
     jump label_10 always 0 0
 end
-        # Function: noinline void build(in cfg)
+    # Function: noinline void build(in cfg)
         # Function: void unpackCfg(in cfg, out type, out x, out y, out rotation, out ind)
 label_10:
             read *tmp0 :build:cfg 1
@@ -409,7 +418,7 @@ label_10:
         jump label_27 always 0 0
         write :buildBlock*retval @this :build:cfg
     set @counter :build*retaddr
-        # Function: noinline def buildBlock(in type, in x, in y, in rotation)
+    # Function: noinline def buildBlock(in type, in x, in y, in rotation)
 label_27:
         print :buildBlock:type
         print :buildBlock:x
@@ -577,7 +586,10 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 
-When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.
+> [!NOTE]
+> List iteration loops over all external arrans and internal arrays larger than [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) are implemented as indexed loops. For external arrays not starting at zero index in the memory block, additional optimization is performed, and such loops may be more efficient than indexed loops created explicitly by the programmer. 
+
+When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based internal array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.
 
 Example of simple array access:
 
@@ -712,8 +724,6 @@ label_22:
 ```
 
 The reason is that in the list iteration loop, all array accesses are performed using direct access to elements, while in index-based access, each array element is accessed separately using lookup access. When `@counter` arrays are used instead of lookup arrays for some reason, the difference is even greater.
-
-Optimizations aimed at merging multiple array accesses are planned but aren't yet available.
 
 > [!NOTE]
 > Many different array access patterns can be encoded using parallel list-iteration syntax, subarrays and/or the `descending` keyword. If your algorithm accesses the arrays linearly, there's probably a way to encode it using list-iteration loops.

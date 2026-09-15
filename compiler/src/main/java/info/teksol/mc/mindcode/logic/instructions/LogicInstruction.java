@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -21,6 +22,14 @@ import java.util.stream.Stream;
 public interface LogicInstruction extends MlogInstruction {
 
     AstContext getAstContext();
+
+    default MindcodeFunction getExistingFunction() {
+        return getAstContext().existingFunction();
+    }
+
+    default @Nullable MindcodeFunction getFunction() {
+        return getAstContext().function();
+    }
 
     default SourcePosition sourcePosition() {
         return getAstContext().sourcePosition();

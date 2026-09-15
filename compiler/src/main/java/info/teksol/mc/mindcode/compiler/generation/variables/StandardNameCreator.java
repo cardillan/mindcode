@@ -208,6 +208,11 @@ public class StandardNameCreator implements NameCreator {
     }
 
     @Override
+    public String stackMemory() {
+        return compilerPrefix + "sm";
+    }
+
+    @Override
     public String remoteSignature() {
         return COMPILER_PREFIX + "signature";
     }

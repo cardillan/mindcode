@@ -93,10 +93,7 @@ public class LExecutor70 extends LExecutor60 {
             counter.numval--;
             if (active && messageHandler.getFlag(DUMP_VARIABLES_ON_STOP)) {
                 messageHandler.dump("%n        'stop' instruction encountered, dumping variable values:");
-                vars.values().stream()
-                        .filter(v -> !v.constant)
-                        .map(v -> v.name + ": " + v.printExact())
-                        .forEach(messageHandler::dump);
+                dumpVars();
             }
             active = false;
             finish(STOP_ON_STOP_INSTRUCTION);

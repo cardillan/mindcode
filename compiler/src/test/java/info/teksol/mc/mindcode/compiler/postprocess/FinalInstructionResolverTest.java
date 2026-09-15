@@ -31,7 +31,7 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
     @BeforeEach
     void setupContext() {
         ContextFactory.setArrayConstructorContext(this);
-        ContextFactory.setStackContext(StackTracker::withExternalStack);
+        ContextFactory.setStackContext(StackTracker::mockExternalStack);
     }
 
     @Test
@@ -201,11 +201,11 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
     void resolvesVirtualInstructions() {
         String expected = Stream.of(
                 createInstruction(JUMP, "8", "always"),
-                createInstruction(WRITE, ":a", "cell1", "*sp"),
+                createInstruction(WRITE, ":a", "bank0", "*sp"),
                 createInstruction(OP, "add", "*sp", "*sp", "1"),
                 createInstruction(OP, "sub", "*sp", "*sp", "1"),
-                createInstruction(READ, ":a", "cell1", "*sp"),
-                createInstruction(WRITE, "8", "cell1", "*sp"),
+                createInstruction(READ, ":a", "bank0", "*sp"),
+                createInstruction(WRITE, "8", "bank0", "*sp"),
                 createInstruction(OP, "add", "*sp", "*sp", "1"),
                 createInstruction(JUMP, "8", "always"),
                 createInstruction(END),
@@ -213,13 +213,13 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
 
         String actual = FinalInstructionResolver.resolve(
-                profile, ip, EMPTY_CALL_GRAPH, ContextFactory.getStackContext().stackTracker(),
+                profile, ip, EMPTY_CALL_GRAPH, StackTracker.mockExternalStack(),
                 mockAstRootContext, nameCreator(),
                 List.of(
                         createInstruction(JUMP, label0, Condition.ALWAYS),
-                        createInstruction(PUSH, cell1, a),
-                        createInstruction(POP, cell1, a),
-                        createInstruction(CALLREC, cell1, label1, label2, fn0retval),
+                        createInstruction(PUSH, a),
+                        createInstruction(POP, a),
+                        createInstruction(CALLREC, label1, label2, fn0retval),
                         createInstruction(LABEL, label1),
                         createInstruction(LABEL, label2),
                         createInstruction(LABEL, label0),

@@ -176,7 +176,7 @@ public class Variables extends CompilerMessageEmitter {
             return registerGlobalVariable(identifier, heapTracker.createVariable(identifier, Modifiers.EMPTY));
         } else if (isLinkedVariableName(identifier)) {
             validateExpectedLinkName(identifier);
-            return registerGlobalVariable(identifier, LogicVariable.block(identifier));
+            return registerGlobalVariable(identifier, LogicVariable.block(identifier, processor.getBlockName(identifier.getName())));
         } else if (isGlobalVariableName(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.global(identifier, nameCreator.global(identifier.getName())));
         } else {
@@ -232,9 +232,10 @@ public class Variables extends CompilerMessageEmitter {
             validateExpectedLinkName(linkedTo);
         }
 
-        String linkedName;
+        String linkedName, blockType = null;
         resolveName: {
             if (modifiers.getParameters(LINKED) instanceof String typeName) {
+                blockType = typeName;
                 if (processor.isBlockName(identifier.getName())) {
                     error(identifier, ERR.UNSUPPORTED_LINK_NAME, identifier.getName());
                 }
@@ -265,13 +266,14 @@ public class Variables extends CompilerMessageEmitter {
             }
 
             linkedName = linkedTo.getName();
+            if (blockType == null) blockType = processor.getBlockName(linkedName);
 
-            if (!isLinkedVariableName(linkedTo)) {
+            if (blockType == null) {
                 warn(linkedTo, WARN.LINKED_VARIABLE_NOT_RECOGNIZED, linkedName);
             }
         }
 
-        LogicVariable result = LogicVariable.block(identifier, linkedName, modifiers.contains(VOLATILE));
+        LogicVariable result = LogicVariable.block(identifier, linkedName, modifiers.contains(VOLATILE), blockType);
         putVariableIfAbsent(identifier.getName(), result);
         return result;
     }
@@ -463,7 +465,7 @@ public class Variables extends CompilerMessageEmitter {
 
         if (allowUndeclaredLinks && isLinkedVariableName(identifier)) {
             validateExpectedLinkName(identifier);
-            return registerGlobalVariable(identifier, LogicVariable.block(identifier));
+            return registerGlobalVariable(identifier, LogicVariable.block(identifier, processor.getBlockName(identifier.getName())));
         }
 
         if (reportedErrors.add(identifier)) {

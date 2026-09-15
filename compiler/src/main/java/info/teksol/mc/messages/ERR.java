@@ -91,9 +91,11 @@ public class ERR {
     public static final String EXPRESSION_REQUIRED = "Expression is required.";
     public static final String EXT_STORAGE_EXCEEDED = "Not enough capacity in external storage for '%s'.";
     public static final String EXT_STORAGE_EXCEEDED_ARRAY = "Not enough capacity in external storage for array '%s' (required %d, available %d).";
+    public static final String EXT_STORAGE_INVALID_ARRAY = "Cannot use '%s' as large storage: the array doesn't contain memory blocks, or the memory blocks differ in capacity.";
     public static final String EXT_STORAGE_INVALID_MEMORY = "Cannot use '%s' as external storage.";
     public static final String EXT_STORAGE_INVALID_MEMORY_VALUE = "Cannot use value assigned to parameter '%s' as a memory for external storage.";
     public static final String EXT_STORAGE_INVALID_RANGE = "Empty or invalid external storage memory range.";
+    public static final String EXT_STORAGE_LARGE_RANGE = "Range or starting index may not be included in large storage specification.";
     public static final String EXT_STORAGE_MISSING_HEAP = "No heap allocated for external variables.";
     public static final String EXT_STORAGE_MUTABLE_INDEX = "External storage declaration must specify constant index.";
     public static final String EXT_STORAGE_MUTABLE_RANGE = "External storage declaration must specify constant range.";

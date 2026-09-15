@@ -136,4 +136,33 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
                                 () -> testAndEvaluateFile(name))
                         ));
     }
+
+//    private static double f(double n) {
+//        var a = n + 1;
+//        var b = n + 2;
+//
+//        if (n == 0) {
+//            return a * b;
+//        }
+//
+//        var r = g(n - 1);
+//        return (r * a) + b;
+//    }
+//
+//    private static double g(double n) {
+//        var x = n + 3;
+//        var y = n + 4;
+//
+//        if (n == 0) {
+//            return x * y;
+//        }
+//
+//        var r = f(n - 1);
+//        return (r * x) + y;
+//    }
+//
+//    public static void main(String[] args) {
+//        System.out.println(f(40));
+//        System.out.println(g(40));
+//    }
 }

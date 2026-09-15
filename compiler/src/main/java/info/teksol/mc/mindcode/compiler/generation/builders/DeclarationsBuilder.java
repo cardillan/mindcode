@@ -765,18 +765,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         }
     }
 
-    private LogicVariable resolveMemory(ExternalStorage node) {
-        ValueStore memory = evaluate(node.getMemory());
-        if (memory instanceof LogicVariable variable && (blockExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
-            if (variable instanceof LogicParameter parameter && !blockExpressionTypes.contains(parameter.getValue().getType())) {
-                error(node.getMemory(), ERR.EXT_STORAGE_INVALID_MEMORY_VALUE, parameter.getName());
-            }
-            return variable;
-        } else {
-            error(node.getMemory(), ERR.EXT_STORAGE_INVALID_MEMORY, node.getMemory().getName());
-            return LogicVariable.INVALID;
-        }
-    }
 
     private LogicVariable resolveProcessor(AstRemoteParameters node) {
         ValueStore memory = evaluate(node.getProcessor());
@@ -791,20 +779,60 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         }
     }
 
-    private Allocation resolveExternalStorage(ExternalStorage externalStorage) {
-        LogicVariable memory = resolveMemory(externalStorage);
-        int defaultEndValue = memory.getType() == BLOCK
-                && processor.isBlockName(memory.getName())
-                && memory.getName().startsWith("bank") ? 511 : 63;
-        int startHeapIndex = getIndex(externalStorage, true, 0);
-        int endHeapIndex = getIndex(externalStorage, false,
-                externalStorage.getStartIndex() == null ? defaultEndValue : startHeapIndex) + 1;
-
-        if (startHeapIndex >= endHeapIndex) {
-            error(externalStorage, ERR.EXT_STORAGE_INVALID_RANGE);
+    // Resolves the external storage for stack, heap or external variable declarations.
+    // Supports Large Storage (storage using an array of memory blocks of the same type)
+    private Allocation resolveExternalStorage(ExternalStorage node) {
+        ValueStore memory = evaluate(node.getMemory());
+        if (memory instanceof LogicVariable variable && (blockExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
+            if (variable instanceof LogicParameter parameter) {
+                if (!blockExpressionTypes.contains(parameter.getValue().getType()) || findMemorySize(parameter.getValue()) == 0) {
+                    error(node.getMemory(), ERR.EXT_STORAGE_INVALID_MEMORY_VALUE, parameter.getName());
+                }
+            }
+            int size = findMemorySize(variable);
+            int defaultEndValue = size == 0 ? 63 : size - 1;
+            int startHeapIndex = getIndex(node, true, 0);
+            int endHeapIndex = getIndex(node, false, node.getStartIndex() == null ? defaultEndValue : startHeapIndex) + 1;
+            if (startHeapIndex >= endHeapIndex) {
+                error(node, ERR.EXT_STORAGE_INVALID_RANGE);
+            }
+            return new Allocation(List.of(variable), startHeapIndex, endHeapIndex);
+        } else if (memory instanceof ArrayStore array && array.getArrayType() == ArrayStore.ArrayType.CONSTANT) {
+            int size = determineMemorySize(array);
+            if (size > 0) {
+                if (node.hasRangeOrIndex()) {
+                    error(node.getRangeOrIndex(), ERR.EXT_STORAGE_LARGE_RANGE);
+                }
+                List<LogicVariable> elements = array.getElements().stream().map(e -> (LogicVariable)e.unwrap()).toList();
+                return new Allocation(elements, 0, size - 1);
+            }
+            error(node.getMemory(), ERR.EXT_STORAGE_INVALID_ARRAY, array.getName());
+        } else {
+            error(node.getMemory(), ERR.EXT_STORAGE_INVALID_MEMORY, node.getMemory().getName());
         }
 
-        return new Allocation(memory, startHeapIndex, endHeapIndex);
+        return new Allocation(List.of(LogicVariable.INVALID), 0, 63);
+    }
+
+    // Determines the memory size of all blocks in a constant array. Returns the size if it is the same for all blocks,
+    // otherwise returns 0
+    private int determineMemorySize(ArrayStore array) {
+        List<Integer> sizes = array.getElements().stream().map(this::findMemorySize).distinct().toList();
+        return sizes.size() == 1 ? sizes.getFirst() : 0;
+    }
+
+    private int findMemorySize(ValueStore valueStore) {
+        if (valueStore.unwrap() instanceof LogicVariable variable) {
+            String typeName = switch (variable.getBlockType()) {
+                case "bank" -> "@memory-bank";
+                case "cell" -> processor.getProcessorType().privileged() ? "@world-cell" : "@memory-cell";
+                case null, default -> variable.getBlockType();
+            };
+
+            BlockType blockType = processor.getMetadata().getBlockByName(typeName);
+            return blockType != null ? blockType.memoryCapacity() : 0;
+        }
+        return 0;
     }
 
     private int getIndex(ExternalStorage node, boolean first, int defaultValue) {
@@ -818,8 +846,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 error(startIndex, ERR.EXT_STORAGE_MUTABLE_INDEX);
             } else if (!number.isInteger()) {
                 error(startIndex, ERR.EXT_STORAGE_NON_INTEGER_INDEX);
-//            } else if (number.getIntValue() < 0 || number.getIntValue() >= 512) {
-//                error(element, ERR.EXT_STORAGE_OUTSIDE_RANGE);
             } else {
                 return number.getIntValue();
             }
@@ -831,8 +857,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 error(element, ERR.EXT_STORAGE_MUTABLE_RANGE);
             } else if (!number.isInteger()) {
                 error(element, ERR.EXT_STORAGE_NON_INTEGER_RANGE);
-//            } else if (number.getIntValue() < 0 || number.getIntValue() + correction >= 512) {
-//                error(element, ERR.EXT_STORAGE_OUTSIDE_RANGE);
             } else {
                 return number.getIntValue() + correction;
             }
@@ -840,9 +864,9 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return defaultValue;
     }
 
-    private record Allocation(LogicVariable memory, int start, int end) {
+    private record Allocation(List<LogicVariable> memory, int start, int end) {
         public HeapTracker createTracker(CodeGeneratorContext context) {
-            return HeapTracker.createTracker(context, memory, start, end);
+            return HeapTracker.createTracker(context, memory.getFirst(), start, end);
         }
     }
 

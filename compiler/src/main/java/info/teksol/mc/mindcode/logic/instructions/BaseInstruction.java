@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
@@ -48,10 +47,6 @@ public class BaseInstruction extends AbstractInstruction {
     @Override
     public Opcode getOpcode() {
         return opcode;
-    }
-
-    public MindcodeFunction getFunction() {
-        return getAstContext().existingFunction();
     }
 
     @Override

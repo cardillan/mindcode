@@ -96,7 +96,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     private final List<AstRequire> requirements = new ArrayList<>();
     private final Set<LogicVariable> forcedVariables = new LinkedHashSet<>();
     private final ReturnStack returnStack;
-    private final StackTracker stackTracker;
+    private @Nullable StackTracker stackTracker;
     private @Nullable AstProgram astProgram;
     private @Nullable AstAllocation heapAllocation;
     private @Nullable CallGraph callGraph;
@@ -150,7 +150,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         this.inputFiles = inputFiles;
         this.directiveProcessor = new DirectiveProcessor(messageLogger);
         returnStack = new ReturnStack();
-        stackTracker = new StackTracker();
 
         ContextFactory.setCompilerContext(this);
     }
@@ -307,6 +306,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         nameCreator = new StandardNameCreator(globalProfile);
         instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, nameCreator, globalProfile);
         metadata = instructionProcessor.getMetadata();
+        stackTracker = new StackTracker(instructionProcessor.stackPointer(), instructionProcessor.stackMemory());
 
         callGraph = CallGraphCreator.createCallGraph(this, astProgram);
 
@@ -352,6 +352,9 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
         unresolved = instructions;
         if (hasCompilerErrors()) return;
+
+        // We're entering the code resolution phase
+        instructionProcessor.setResolutionPhase(true);
 
         // Run the program through the array expander again, as optimizations might have been inactive.
         instructions = virtualInstructionResolver.resolveVirtualInstructions(instructions);
@@ -702,7 +705,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
     @Override
     public StackTracker stackTracker() {
-        return stackTracker;
+        return Objects.requireNonNull(stackTracker);
     }
 
     @Override
