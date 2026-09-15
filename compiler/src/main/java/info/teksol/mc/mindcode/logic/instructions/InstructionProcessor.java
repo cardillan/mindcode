@@ -137,6 +137,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if it conforms to Mindustry Logic base block name
     boolean isBaseBlockName(String identifier);
 
+    @Nullable String getBlockName(String identifier);
+
     /// Determines whether the identifier could be a block name (such as switch1, cell2, projector3, etc.).
     ///
     /// @param identifier identifier to check
@@ -179,6 +181,10 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// as a constant value: an mlog literal or a built-in constant variable.
     boolean isValidMlogName(String symbol);
 
+    /// Activates/deactivates the code resolution phase. in code resolution, it is no longer required JUMP instructions
+    /// not to be present in BODY subcontexts.
+    void setResolutionPhase(boolean resolutionPhase);
+
     /// Rewrites the literal to conform to mlog limitations. If such a conversion isn't possible, an empty optional
     /// is returned.
     ///
@@ -192,6 +198,9 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     Optional<LogicLiteral> createLiteral(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss);
 
     LogicVariable stackPointer();
+
+    /// Provides the stack memory variable for large stacks.
+    LogicVariable stackMemory();
 
     /// Formats number for text output
     ///

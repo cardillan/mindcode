@@ -23,6 +23,7 @@ public record BlockType(
         int maxNodes,
         boolean rotate,
         List<String> unitPlans,
+        int memoryCapacity,
         int iptDefault,
         int iptLimit,
         int instructionScale

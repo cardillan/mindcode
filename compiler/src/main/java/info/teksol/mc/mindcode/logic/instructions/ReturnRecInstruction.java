@@ -1,8 +1,9 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -13,13 +14,16 @@ import java.util.Map;
 
 @NullMarked
 public class ReturnRecInstruction extends BaseInstruction {
+    private final @Nullable StackTracker stackTracker;
 
     ReturnRecInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.RETURNREC, args, params);
+        stackTracker =  ContextFactory.isMasterContextSet() ? ContextFactory.getMasterContext().stackTracker() : null;
     }
 
     protected ReturnRecInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
+        stackTracker =  ContextFactory.isMasterContextSet() ? ContextFactory.getMasterContext().stackTracker() : null;
     }
 
     @Override
@@ -32,10 +36,6 @@ public class ReturnRecInstruction extends BaseInstruction {
         return true;
     }
 
-    public final LogicVariable getStack() {
-        return (LogicVariable) getArg(0);
-    }
-
     @Override
     public boolean endsCodePath() {
         return true;
@@ -43,6 +43,6 @@ public class ReturnRecInstruction extends BaseInstruction {
 
     @Override
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
-        return getFunction().getArrays().size() + 2;
+        return getExistingFunction().getArrays().size() + 2 + (stackTracker != null && stackTracker.largeStack() ? 3 : 0);
     }
 }

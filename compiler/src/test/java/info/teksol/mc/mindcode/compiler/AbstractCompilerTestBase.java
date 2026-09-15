@@ -235,7 +235,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
 
         @Override
         public StackTracker stackTracker() {
-            return new StackTracker();
+            return StackTracker.mockInternalStack();
         }
 
         @Override
@@ -248,8 +248,8 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
         }
     }
 
-    protected static LogicVariable block(String name) {
-        return LogicVariable.block(EMPTY, name);
+    protected static LogicVariable block(String name, String blockType) {
+        return LogicVariable.block(EMPTY, name, blockType);
     }
 
     protected static LogicVariable global(String name) {
@@ -302,10 +302,10 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
             label2      = LogicLabel.symbolic("label2");
 
     protected static final LogicVariable
-            bank1       = block("bank1"),
-            cell1       = block("cell1"),
-            conveyor1   = block("conveyor1"),
-            vault1      = block("vault1"),
+            bank1       = block("bank1", "@memory-bank"),
+            cell1       = block("cell1", "@memory-cell"),
+            conveyor1   = block("conveyor1", "@conveyor"),
+            vault1      = block("vault1", "@vault"),
             unused      = LogicVariable.unusedVariable(),
             C           = global("C"),
             a           = main("a"),

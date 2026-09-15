@@ -58,16 +58,16 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
     91 set *tmp12 :partition:index
     92 jump *label10 always
  
-   119 pop bank1 :quicksort:pivot_index
-   120 pop bank1 :quicksort:right
-   121 pop bank1 :quicksort:left
+   119 pop :quicksort:pivot_index
+   120 pop :quicksort:right
+   121 pop :quicksort:left
 -    * set *tmp8 null
    122 jump *label9 always
    123 label *label8
 -    * set *tmp8 null
    124 label *label9
    125 label *label7
-   126 returnrec bank1
+   126 returnrec
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  
@@ -140,7 +140,7 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-5
  
     24 # "Function: void quicksort(in left, in right)"
     25 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
-    26 initrec true
+    26 initrec false
 -    * op greaterThan *tmp7 :quicksort:right :quicksort:left
 -    * jump *label8 equal *tmp7 false
 +   27 jump *label8 lessThanEq :quicksort:right :quicksort:left
@@ -211,9 +211,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     70 label *label21
     71 set *tmp12 :partition:index
  
-    99 pop bank1 :quicksort:pivot_index
-   100 pop bank1 :quicksort:right
-   101 pop bank1 :quicksort:left
+    99 pop :quicksort:pivot_index
+   100 pop :quicksort:right
+   101 pop :quicksort:left
 -    * jump *label9 always
    102 label *label8
    103 label *label9
@@ -290,9 +290,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * op sub *tmp49 :quicksort:new_pivot_index 1
 +   74 set :quicksort:new_pivot_index :partition:index
 +   75 op sub *tmp49 *tmp12 1
-    76 push bank1 :quicksort:left
-    77 push bank1 :quicksort:right
-    78 push bank1 :quicksort:pivot_index
+    76 push :quicksort:left
+    77 push :quicksort:right
+    78 push :quicksort:pivot_index
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
  
@@ -350,9 +350,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     67 set :quicksort:new_pivot_index :partition:index
 -    * op sub *tmp49 *tmp12 1
 +   68 op sub *tmp49 :partition:index 1
-    69 push bank1 :quicksort:left
-    70 push bank1 :quicksort:right
-    71 push bank1 :quicksort:pivot_index
+    69 push :quicksort:left
+    70 push :quicksort:right
+    71 push :quicksort:pivot_index
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
@@ -375,21 +375,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
-    67 push bank1 :quicksort:right
-    68 push bank1 :quicksort:pivot_index
-    69 push bank1 :quicksort:new_pivot_index
+    67 push :quicksort:right
+    68 push :quicksort:pivot_index
+    69 push :quicksort:new_pivot_index
 -    * set :quicksort:left :quicksort:left
     70 set :quicksort:right *tmp49
-    71 callrec bank1 *label0 *label22 :quicksort*retval
+    71 callrec *label0 *label22 :quicksort*retval
     72 label *label22
  
-    80 push bank1 :quicksort:pivot_index
-    81 push bank1 :quicksort:new_pivot_index
+    80 push :quicksort:pivot_index
+    81 push :quicksort:new_pivot_index
     82 set :quicksort:left *tmp50
 -    * set :quicksort:right :quicksort:right
-    83 callrec bank1 *label0 *label23 :quicksort*retval
+    83 callrec *label0 *label23 :quicksort*retval
     84 label *label23
-    85 pop bank1 :quicksort:new_pivot_index
+    85 pop :quicksort:new_pivot_index
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -430,29 +430,29 @@ Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-24 in
     65 label *label10
     66 set :quicksort:new_pivot_index :partition:index
     67 op sub *tmp49 :partition:index 1
--    * push bank1 :quicksort:left
-    68 push bank1 :quicksort:right
--    * push bank1 :quicksort:pivot_index
-    69 push bank1 :quicksort:new_pivot_index
+-    * push :quicksort:left
+    68 push :quicksort:right
+-    * push :quicksort:pivot_index
+    69 push :quicksort:new_pivot_index
     70 set :quicksort:right *tmp49
-    71 callrec bank1 *label0 *label22 :quicksort*retval
+    71 callrec *label0 *label22 :quicksort*retval
     72 label *label22
-    73 pop bank1 :quicksort:new_pivot_index
--    * pop bank1 :quicksort:pivot_index
-    74 pop bank1 :quicksort:right
--    * pop bank1 :quicksort:left
+    73 pop :quicksort:new_pivot_index
+-    * pop :quicksort:pivot_index
+    74 pop :quicksort:right
+-    * pop :quicksort:left
     75 op add *tmp50 :quicksort:new_pivot_index 1
--    * push bank1 :quicksort:left
--    * push bank1 :quicksort:right
--    * push bank1 :quicksort:pivot_index
--    * push bank1 :quicksort:new_pivot_index
+-    * push :quicksort:left
+-    * push :quicksort:right
+-    * push :quicksort:pivot_index
+-    * push :quicksort:new_pivot_index
     76 set :quicksort:left *tmp50
-    77 callrec bank1 *label0 *label23 :quicksort*retval
+    77 callrec *label0 *label23 :quicksort*retval
     78 label *label23
--    * pop bank1 :quicksort:new_pivot_index
--    * pop bank1 :quicksort:pivot_index
--    * pop bank1 :quicksort:right
--    * pop bank1 :quicksort:left
+-    * pop :quicksort:new_pivot_index
+-    * pop :quicksort:pivot_index
+-    * pop :quicksort:right
+-    * pop :quicksort:left
     79 label *label8
     80 label *label9
     81 label *label7
@@ -461,7 +461,7 @@ Modifications by Iterated phase, Recursive Optimization, pass 1, iteration 1 (-3
  
     23 # "Function: void quicksort(in left, in right)"
     24 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
-    25 initrec true
+    25 initrec false
 -    * jump *label8 lessThanEq :quicksort:right :quicksort:left
 -    * op sub *tmp9 :quicksort:right :quicksort:left
 -    * op idiv *tmp10 *tmp9 2
@@ -504,21 +504,21 @@ Modifications by Iterated phase, Recursive Optimization, pass 1, iteration 1 (-3
 -    * label *label10
 -    * set :quicksort:new_pivot_index :partition:index
 -    * op sub *tmp49 :partition:index 1
--    * push bank1 :quicksort:right
--    * push bank1 :quicksort:new_pivot_index
+-    * push :quicksort:right
+-    * push :quicksort:new_pivot_index
 -    * set :quicksort:right *tmp49
--    * callrec bank1 *label0 *label22 :quicksort*retval
+-    * callrec *label0 *label22 :quicksort*retval
 -    * label *label22
--    * pop bank1 :quicksort:new_pivot_index
--    * pop bank1 :quicksort:right
+-    * pop :quicksort:new_pivot_index
+-    * pop :quicksort:right
 -    * op add *tmp50 :quicksort:new_pivot_index 1
 -    * set :quicksort:left *tmp50
--    * callrec bank1 *label0 *label23 :quicksort*retval
+-    * callrec *label0 *label23 :quicksort*retval
 -    * label *label23
 -    * label *label8
 -    * label *label9
 -    * label *label7
--    * returnrec bank1
+-    * returnrec
 -    * end
 +   26 label *label44
 +   27 jump *label41 lessThanEq :quicksort:right :quicksort:left
@@ -563,13 +563,13 @@ Modifications by Iterated phase, Recursive Optimization, pass 1, iteration 1 (-3
 +   66 label *label38
 +   67 set :quicksort:new_pivot_index :partition:index
 +   68 op sub *tmp49 :partition:index 1
-+   69 push bank1 :quicksort:right
-+   70 push bank1 :quicksort:new_pivot_index
++   69 push :quicksort:right
++   70 push :quicksort:new_pivot_index
 +   71 set :quicksort:right *tmp49
-+   72 callrec bank1 *label0 *label39 :quicksort*retval
++   72 callrec *label0 *label39 :quicksort*retval
 +   73 label *label39
-+   74 pop bank1 :quicksort:new_pivot_index
-+   75 pop bank1 :quicksort:right
++   74 pop :quicksort:new_pivot_index
++   75 pop :quicksort:right
 +   76 op add *tmp50 :quicksort:new_pivot_index 1
 +   77 set :quicksort:left *tmp50
 +   78 jump *label44 always
@@ -577,7 +577,7 @@ Modifications by Iterated phase, Recursive Optimization, pass 1, iteration 1 (-3
 +   80 label *label41
 +   81 label *label42
 +   82 label *label43
-+   83 returnrec bank1
++   83 returnrec
 +   84 end
 
 Modifications by Inline function call at line 39:1 (+40 instructions):
@@ -585,7 +585,7 @@ Modifications by Inline function call at line 39:1 (+40 instructions):
      4 op sub *tmp0 SIZE 1
      5 set :quicksort:left 0
      6 set :quicksort:right *tmp0
--    * callrec bank1 *label0 *label3 :quicksort*retval
+-    * callrec *label0 *label3 :quicksort*retval
 -    * label *label3
 +    7 # "Function: void quicksort(in left, in right)"
 +    8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
@@ -633,13 +633,13 @@ Modifications by Inline function call at line 39:1 (+40 instructions):
 +   50 label *label58
 +   51 set :quicksort:new_pivot_index :partition:index
 +   52 op sub *tmp49 :partition:index 1
-+   53 push bank1 :quicksort:right
-+   54 push bank1 :quicksort:new_pivot_index
++   53 push :quicksort:right
++   54 push :quicksort:new_pivot_index
 +   55 set :quicksort:right *tmp49
-+   56 callrec bank1 *label0 *label59 :quicksort*retval
++   56 callrec *label0 *label59 :quicksort*retval
 +   57 label *label59
-+   58 pop bank1 :quicksort:new_pivot_index
-+   59 pop bank1 :quicksort:right
++   58 pop :quicksort:new_pivot_index
++   59 pop :quicksort:right
 +   60 op add *tmp50 :quicksort:new_pivot_index 1
 +   61 set :quicksort:left *tmp50
 +   62 jump *label45 always
@@ -730,7 +730,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label58
     43 set :quicksort:new_pivot_index :partition:index
     44 op sub *tmp49 :partition:index 1
-    45 push bank1 :quicksort:right
+    45 push :quicksort:right
  
     52 op add *tmp50 :quicksort:new_pivot_index 1
     53 set :quicksort:left *tmp50
@@ -781,7 +781,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label38
    104 set :quicksort:new_pivot_index :partition:index
    105 op sub *tmp49 :partition:index 1
-   106 push bank1 :quicksort:right
+   106 push :quicksort:right
  
    113 op add *tmp50 :quicksort:new_pivot_index 1
    114 set :quicksort:left *tmp50
@@ -790,7 +790,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    116 label *label41
 -    * label *label42
 -    * label *label43
-   117 returnrec bank1
+   117 returnrec
 -    * end
 
 Final code before resolving virtual instructions:
@@ -840,13 +840,13 @@ write :partition:pivot ARRAY :partition:index
 label *label56
 set :quicksort:new_pivot_index :partition:index
 op sub *tmp8 :partition:index 1
-push bank1 :quicksort:right
-push bank1 :quicksort:new_pivot_index
+push :quicksort:right
+push :quicksort:new_pivot_index
 set :quicksort:right *tmp8
-callrec bank1 *label0 *label59 :quicksort*retval
+callrec *label0 *label59 :quicksort*retval
 label *label59
-pop bank1 :quicksort:new_pivot_index
-pop bank1 :quicksort:right
+pop :quicksort:new_pivot_index
+pop :quicksort:right
 op add *tmp9 :quicksort:new_pivot_index 1
 set :quicksort:left *tmp9
 jump *label45 always
@@ -865,7 +865,7 @@ end
 label *label0
 # "Function: void quicksort(in left, in right)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
-initrec true
+initrec false
 label *label44
 jump *label41 lessThanEq :quicksort:right :quicksort:left
 op sub *tmp3 :quicksort:right :quicksort:left
@@ -901,15 +901,15 @@ write :partition:pivot ARRAY :partition:index
 label *label36
 set :quicksort:new_pivot_index :partition:index
 op sub *tmp8 :partition:index 1
-push bank1 :quicksort:right
-push bank1 :quicksort:new_pivot_index
+push :quicksort:right
+push :quicksort:new_pivot_index
 set :quicksort:right *tmp8
-callrec bank1 *label0 *label39 :quicksort*retval
+callrec *label0 *label39 :quicksort*retval
 label *label39
-pop bank1 :quicksort:new_pivot_index
-pop bank1 :quicksort:right
+pop :quicksort:new_pivot_index
+pop :quicksort:right
 op add *tmp9 :quicksort:new_pivot_index 1
 set :quicksort:left *tmp9
 jump *label44 always
 label *label41
-returnrec bank1
+returnrec

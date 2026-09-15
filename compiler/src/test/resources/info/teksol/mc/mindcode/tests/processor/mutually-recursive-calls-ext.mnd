@@ -1,4 +1,5 @@
-allocate stack in bank1;
+linked(@memory-cell) memory[] = (block1 .. block2);
+allocate stack in memory;
 
 def f(n)
     var a = n + 1;
@@ -43,5 +44,7 @@ assertEquals(43, f(2), "f(2)");
 assertEquals(141, g(2), "g(2)");
 assertEquals(569, f(3), "f(3)");
 assertEquals(265, g(3), "g(3)");
+assertPrints("2.5998266744436162E51", print(f(40)), "f(40)");
+assertPrints("6.836746430151065E51",  print(g(40)), "g(40)");
 assertPrints("010201301024", f1(5), "f1(5)");
 stopProcessor();

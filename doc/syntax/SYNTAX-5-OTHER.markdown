@@ -641,7 +641,7 @@ Options which affect the way the source code is compiled.
 
 **Option scope: [local](#local-scope)**
 
-This option specifies the array size at which the compiler prefers using loop to perform array assignment instead of element-by-element assignment. The list iteration loops are also compiled into a ranged loop when the array size reaches the threshold, as explicit list iteration loops get very large (in terms of instruction size) otherwise.
+This option specifies the array size at which the compiler prefers using loop to perform array assignment instead of element-by-element assignment. The list iteration loops are also compiled into a ranged loop when the array size reaches the threshold, as explicit list iteration loops get huge (in terms of instruction size) otherwise.
 
 Possible values are integers in the range of `0` to `1000` (inclusive). The default value is `25`.
 

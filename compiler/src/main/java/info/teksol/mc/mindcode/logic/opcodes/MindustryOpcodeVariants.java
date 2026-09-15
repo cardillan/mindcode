@@ -390,13 +390,13 @@ public class MindustryOpcodeVariants {
         // §§§ retval is a side effect and needs to be handled as such
         add(list, V6,  MAX, S, NONE, Opcode.CALL,        label("callAddr"), out("retAddr"), out("retval"));
         add(list, V6,  MAX, S, NONE, Opcode.RETURN,      in("address"));
-        add(list, V6,  MAX, S, NONE, Opcode.PUSH,        block("memory"), in("value"));
-        add(list, V6,  MAX, S, NONE, Opcode.POP,         block("memory"), out("value"));
+        add(list, V6,  MAX, S, NONE, Opcode.PUSH,        in("value"));
+        add(list, V6,  MAX, S, NONE, Opcode.POP,         out("value"));
         // §§§ retval is a side effect and needs to be handled as such
         add(list, V6,  MAX, S, NONE, Opcode.INITSTACK,   label("call"), label("return"));
-        add(list, V6,  MAX, S, NONE, Opcode.CALLREC,     block("memory"), label("callAddr"), label("retAddr"), out("retval"));
+        add(list, V6,  MAX, S, NONE, Opcode.CALLREC,     label("callAddr"), label("retAddr"), out("retval"));
         add(list, V6,  MAX, S, NONE, Opcode.INITREC,     bool("inlined"));
-        add(list, V6,  MAX, S, NONE, Opcode.RETURNREC,   block("memory"));
+        add(list, V6,  MAX, S, NONE, Opcode.RETURNREC);
         add(list, V6,  MAX, S, NONE, Opcode.MULTILABEL,  label("address"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTIJUMP,   label("address"), in("value"), in("offset"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTICALL,   label("address"), in("offset"));

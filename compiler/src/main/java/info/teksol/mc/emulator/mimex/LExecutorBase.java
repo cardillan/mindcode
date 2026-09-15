@@ -261,6 +261,13 @@ public abstract class LExecutorBase implements LExecutor {
             }
         }
     }
+
+    protected void dumpVars() {
+        vars.values().stream()
+                .filter(v -> !v.constant)
+                .map(v -> v.name + ": " + v.printExact())
+                .forEach(messageHandler::dump);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Results">

@@ -2160,7 +2160,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
             return transformToContext(newContext, labelRemapFilter, true,
                     ix -> switch (ix) {
                         case LabelInstruction lbl when !labelRemapFilter.test(lbl.getLabel()) -> null;
-                        case InitRecInstruction i -> i.withSkipStackSetup(LogicBoolean.TRUE);
+                        case InitRecInstruction i -> i.withInlined(LogicBoolean.TRUE);
                         default -> ix.getJumpToReturn().orElse(ix);
                     });
         }

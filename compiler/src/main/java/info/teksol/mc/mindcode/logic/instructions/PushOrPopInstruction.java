@@ -24,11 +24,7 @@ public abstract class PushOrPopInstruction extends BaseInstruction {
         super(other, astContext);
     }
 
-    public LogicVariable getMemory() {
-        return (LogicVariable) getArg(0);
-    }
-
     public LogicVariable getVariable() {
-        return (LogicVariable) getArg(1);
+        return (LogicVariable) getArg(0);
     }
 }

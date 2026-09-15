@@ -16,7 +16,7 @@ Pass 1: speed optimization selection (cost limit 966):
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
      1 set :fib:n 10
-     2 callrec bank1 *label0 *label3 :fib*retval
+     2 callrec *label0 *label3 :fib*retval
      3 label *label3
 -    * set *tmp0 :fib*retval
 -    * assertequals 55 *tmp0 "fib(10)"
@@ -26,8 +26,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
      7 label *label0
  
     28 label *label8
-    29 pop bank1 *tmp4
-    30 pop bank1 :fib:n
+    29 pop *tmp4
+    30 pop :fib:n
 -    * set *tmp6 :fib*retval
 -    * op add *tmp7 *tmp4 *tmp6
 -    * set *tmp2 *tmp7
@@ -40,7 +40,7 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
  
      8 # "Function: def fib(in n)"
      9 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-    10 initrec true
+    10 initrec false
 -    * op lessThan *tmp1 :fib:n 2
 -    * jump *label5 equal *tmp1 false
 +   11 jump *label5 greaterThanEq :fib:n 2
@@ -52,21 +52,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     14 label *label5
     15 op sub *tmp3 :fib:n 1
-    16 push bank1 :fib:n
+    16 push :fib:n
 -    * set :fib:n *tmp3
 +   17 op sub :fib:n :fib:n 1
-    18 callrec bank1 *label0 *label7 :fib*retval
+    18 callrec *label0 *label7 :fib*retval
     19 label *label7
-    20 pop bank1 :fib:n
+    20 pop :fib:n
  
     22 op sub *tmp5 :fib:n 2
-    23 push bank1 :fib:n
-    24 push bank1 *tmp4
+    23 push :fib:n
+    24 push *tmp4
 -    * set :fib:n *tmp5
 +   25 op sub :fib:n :fib:n 2
-    26 callrec bank1 *label0 *label8 :fib*retval
+    26 callrec *label0 *label8 :fib*retval
     27 label *label8
-    28 pop bank1 *tmp4
+    28 pop *tmp4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
@@ -74,54 +74,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     13 jump *label6 always
     14 label *label5
 -    * op sub *tmp3 :fib:n 1
-    15 push bank1 :fib:n
+    15 push :fib:n
     16 op sub :fib:n :fib:n 1
-    17 callrec bank1 *label0 *label7 :fib*retval
+    17 callrec *label0 *label7 :fib*retval
     18 label *label7
-    19 pop bank1 :fib:n
+    19 pop :fib:n
     20 set *tmp4 :fib*retval
 -    * op sub *tmp5 :fib:n 2
-    21 push bank1 :fib:n
-    22 push bank1 *tmp4
+    21 push :fib:n
+    22 push *tmp4
     23 op sub :fib:n :fib:n 2
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
      8 # "Function: def fib(in n)"
      9 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-    10 initrec true
+    10 initrec false
 -    * jump *label5 greaterThanEq :fib:n 2
 -    * set *tmp2 :fib:n
 -    * jump *label6 always
 +   11 set :fib*retval :fib:n
 +   12 jump *label6 lessThan :fib:n 2
     13 label *label5
-    14 push bank1 :fib:n
+    14 push :fib:n
     15 op sub :fib:n :fib:n 1
  
     24 label *label8
-    25 pop bank1 *tmp4
-    26 pop bank1 :fib:n
+    25 pop *tmp4
+    26 pop :fib:n
 -    * op add *tmp2 *tmp4 :fib*retval
 +   27 op add :fib*retval *tmp4 :fib*retval
     28 label *label6
 -    * set :fib*retval *tmp2
     29 label *label4
-    30 returnrec bank1
+    30 returnrec
     31 end
 
 Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 instructions):
  
     17 label *label7
-    18 pop bank1 :fib:n
+    18 pop :fib:n
     19 set *tmp4 :fib*retval
--    * push bank1 :fib:n
-    20 push bank1 *tmp4
+-    * push :fib:n
+    20 push *tmp4
     21 op sub :fib:n :fib:n 2
-    22 callrec bank1 *label0 *label8 :fib*retval
+    22 callrec *label0 *label8 :fib*retval
     23 label *label8
-    24 pop bank1 *tmp4
--    * pop bank1 :fib:n
+    24 pop *tmp4
+-    * pop :fib:n
     25 op add :fib*retval *tmp4 :fib*retval
     26 label *label6
     27 label *label4
@@ -129,7 +129,7 @@ Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 ins
 Modifications by Inline function call at line 7:18 (+18 instructions):
      0 initstack *label1 *label2
      1 set :fib:n 10
--    * callrec bank1 *label0 *label3 :fib*retval
+-    * callrec *label0 *label3 :fib*retval
 -    * label *label3
 +    2 # "Function: def fib(in n)"
 +    3 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
@@ -137,17 +137,17 @@ Modifications by Inline function call at line 7:18 (+18 instructions):
 +    5 set :fib*retval :fib:n
 +    6 jump *label12 lessThan :fib:n 2
 +    7 label *label9
-+    8 push bank1 :fib:n
++    8 push :fib:n
 +    9 op sub :fib:n :fib:n 1
-+   10 callrec bank1 *label0 *label10 :fib*retval
++   10 callrec *label0 *label10 :fib*retval
 +   11 label *label10
-+   12 pop bank1 :fib:n
++   12 pop :fib:n
 +   13 set *tmp4 :fib*retval
-+   14 push bank1 *tmp4
++   14 push *tmp4
 +   15 op sub :fib:n :fib:n 2
-+   16 callrec bank1 *label0 *label11 :fib*retval
++   16 callrec *label0 *label11 :fib*retval
 +   17 label *label11
-+   18 pop bank1 *tmp4
++   18 pop *tmp4
 +   19 op add :fib*retval *tmp4 :fib*retval
 +   20 label *label12
 +   21 label *label13
@@ -165,17 +165,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    5 set :fib*retval 10
 +    6 jump *label12 lessThan 10 2
      7 label *label9
-     8 push bank1 :fib:n
+     8 push :fib:n
      9 op sub :fib:n :fib:n 1
  
-    12 pop bank1 :fib:n
+    12 pop :fib:n
     13 set *tmp4 :fib*retval
-    14 push bank1 *tmp4
+    14 push *tmp4
 -    * op sub :fib:n :fib:n 2
 +   15 op sub :fib:n 10 2
-    16 callrec bank1 *label0 *label11 :fib*retval
+    16 callrec *label0 *label11 :fib*retval
     17 label *label11
-    18 pop bank1 *tmp4
+    18 pop *tmp4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
@@ -185,7 +185,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * set :fib*retval 10
      5 jump *label12 lessThan 10 2
      6 label *label9
-     7 push bank1 :fib:n
+     7 push :fib:n
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
@@ -194,7 +194,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
      4 initrec true
 -    * jump *label12 lessThan 10 2
      5 label *label9
-     6 push bank1 :fib:n
+     6 push :fib:n
      7 op sub :fib:n :fib:n 1
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
@@ -203,12 +203,12 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
      3 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
      4 initrec true
 -    * label *label9
-     5 push bank1 :fib:n
+     5 push :fib:n
      6 op sub :fib:n :fib:n 1
-     7 callrec bank1 *label0 *label10 :fib*retval
+     7 callrec *label0 *label10 :fib*retval
  
     14 label *label11
-    15 pop bank1 *tmp4
+    15 pop *tmp4
     16 op add :fib*retval *tmp4 :fib*retval
 -    * label *label12
 -    * label *label13
@@ -216,19 +216,19 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     18 stop
     19 end
  
-    23 initrec true
+    23 initrec false
     24 set :fib*retval :fib:n
     25 jump *label6 lessThan :fib:n 2
 -    * label *label5
-    26 push bank1 :fib:n
+    26 push :fib:n
     27 op sub :fib:n :fib:n 1
-    28 callrec bank1 *label0 *label7 :fib*retval
+    28 callrec *label0 *label7 :fib*retval
  
-    36 pop bank1 *tmp4
+    36 pop *tmp4
     37 op add :fib*retval *tmp4 :fib*retval
     38 label *label6
 -    * label *label4
-    39 returnrec bank1
+    39 returnrec
 -    * end
 
 Final code before resolving virtual instructions:
@@ -238,17 +238,17 @@ set :fib:n 10
 # "Function: def fib(in n)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
 initrec true
-push bank1 :fib:n
+push :fib:n
 op sub :fib:n :fib:n 1
-callrec bank1 *label0 *label10 :fib*retval
+callrec *label0 *label10 :fib*retval
 label *label10
-pop bank1 :fib:n
+pop :fib:n
 set *tmp0 :fib*retval
-push bank1 *tmp0
+push *tmp0
 op sub :fib:n 10 2
-callrec bank1 *label0 *label11 :fib*retval
+callrec *label0 *label11 :fib*retval
 label *label11
-pop bank1 *tmp0
+pop *tmp0
 op add :fib*retval *tmp0 :fib*retval
 assertequals 55 :fib*retval "fib(10)"
 stop
@@ -256,20 +256,20 @@ end
 label *label0
 # "Function: def fib(in n)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-initrec true
+initrec false
 set :fib*retval :fib:n
 jump *label6 lessThan :fib:n 2
-push bank1 :fib:n
+push :fib:n
 op sub :fib:n :fib:n 1
-callrec bank1 *label0 *label7 :fib*retval
+callrec *label0 *label7 :fib*retval
 label *label7
-pop bank1 :fib:n
+pop :fib:n
 set *tmp0 :fib*retval
-push bank1 *tmp0
+push *tmp0
 op sub :fib:n :fib:n 2
-callrec bank1 *label0 *label8 :fib*retval
+callrec *label0 *label8 :fib*retval
 label *label8
-pop bank1 *tmp0
+pop *tmp0
 op add :fib*retval *tmp0 :fib*retval
 label *label6
-returnrec bank1
+returnrec

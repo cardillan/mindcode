@@ -353,15 +353,15 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsInsufficientHeapCapacity() {
             assertGeneratesMessage(
-                    "Not enough capacity in external storage for array 'a' (required 100, available 64).",
-                    "allocate heap in cell1; external a[100];");
+                    "Not enough capacity in external storage for array 'a' (required 1000, available 512).",
+                    "allocate heap in bank1; external a[1000];");
         }
 
         @Test
         void reportsInsufficientHeapCapacity2() {
             assertGeneratesMessage(
-                    "Not enough capacity in external storage for array 'b' (required 100, available 54).",
-                    "allocate heap in cell1; external a[10], b[100];");
+                    "Not enough capacity in external storage for array 'b' (required 1000, available 412).",
+                    "allocate heap in bank1; external a[100], b[1000];");
         }
 
         @Test
@@ -1463,17 +1463,13 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesInvalidLiteralNames1() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Linked variable name 'message' doesn't correspond to any known linked block name.")
-                            .add("The literal link name 'message' doesn't match the declared block type '@message'."),
+            assertGeneratesMessage("The literal link name 'message' doesn't match the declared block type '@message'.",
                     "linked(@message) x = message;");
         }
 
         @Test
         void refusesInvalidLiteralNames2() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Linked variable name 'message01' doesn't correspond to any known linked block name.")
-                            .add("The literal link name 'message01' doesn't match the declared block type '@message'."),
+            assertGeneratesMessage("The literal link name 'message01' doesn't match the declared block type '@message'.",
                     "linked(@message) x = message01;");
         }
     }

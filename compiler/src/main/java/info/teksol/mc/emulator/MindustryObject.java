@@ -19,6 +19,13 @@ public interface MindustryObject {
     /// @return text representation of the object
     String format();
 
+    /// Formats the object for trace output. Includes the unique object ID.
+    ///
+    /// @return text representation of the object for trace
+    default String trace() {
+        return format();
+    }
+
     /// Provides the ID of the object. Used by the sensor @id instruction. -1 means no ID and gets translated to null.
     ///
     /// @return numeric id of the object

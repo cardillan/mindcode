@@ -151,7 +151,7 @@ public class LVar implements MlogReadable, MlogWritable {
         if (isobj) {
             return switch(objval) {
                 case String str -> '"' + str.replaceAll("\n", "\\\\n") + '"';
-                case MindustryObject obj -> obj.format();
+                case MindustryObject obj -> obj.trace();
                 case Object obj -> obj.toString();
                 case null -> "null";
             };
