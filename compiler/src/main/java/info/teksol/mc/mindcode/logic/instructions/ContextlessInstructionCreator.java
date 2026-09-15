@@ -30,8 +30,8 @@ public interface ContextlessInstructionCreator {
         return createInstruction(astContext, ASSERT_BOUNDS, List.of(type, multiple, lowerBound, lowerCondition, value, upperCondition, upperBound, message));
     }
 
-    default CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
-        return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr, returnValue);
+    default CallRecInstruction createCallRecursive(AstContext astContext, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
+        return (CallRecInstruction) createInstruction(astContext, CALLREC, callAddr, retAddr, returnValue);
     }
 
     default CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable retAddr, LogicVariable returnValue) {
@@ -114,8 +114,8 @@ public interface ContextlessInstructionCreator {
         return (OpInstruction) createInstruction(astContext, OP, operation, target, first, second);
     }
 
-    default PopInstruction createPop(AstContext astContext, LogicVariable memory, LogicVariable value) {
-        return (PopInstruction) createInstruction(astContext, POP, memory, value);
+    default PopInstruction createPop(AstContext astContext, LogicVariable value) {
+        return (PopInstruction) createInstruction(astContext, POP, value);
     }
 
     default PrintInstruction createPrint(AstContext astContext, LogicValue what) {
@@ -130,8 +130,8 @@ public interface ContextlessInstructionCreator {
         return (PrintflushInstruction) createInstruction(astContext, PRINTFLUSH, messageBlock);
     }
 
-    default PushInstruction createPush(AstContext astContext, LogicVariable memory, LogicVariable value) {
-        return (PushInstruction) createInstruction(astContext, PUSH, memory, value);
+    default PushInstruction createPush(AstContext astContext, LogicVariable value) {
+        return (PushInstruction) createInstruction(astContext, PUSH, value);
     }
 
     default ReadInstruction createRead(AstContext astContext, LogicVariable result, LogicVariable memory, LogicValue index) {
@@ -152,8 +152,8 @@ public interface ContextlessInstructionCreator {
         return (ReturnInstruction) createInstruction(astContext, RETURN, address);
     }
 
-    default ReturnRecInstruction createReturnRec(AstContext astContext, LogicVariable stack) {
-        return (ReturnRecInstruction) createInstruction(astContext, RETURNREC, stack);
+    default ReturnRecInstruction createReturnRec(AstContext astContext) {
+        return (ReturnRecInstruction) createInstruction(astContext, RETURNREC);
     }
 
     default SelectInstruction createSelect(AstContext astContext, LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicValue valueIfTrue, LogicValue valueIfFalse) {

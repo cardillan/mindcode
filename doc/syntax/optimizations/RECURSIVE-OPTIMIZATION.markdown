@@ -10,7 +10,9 @@ Returning from a recursive function requires several instructions (the exact amo
 
 ## Tail call optimization
 
-Tail call optimization can be applied to a recursive function which contains a call to itself as the last statement in the function body. This last function call - the tail call - is replaced by a jump at the beginning of the function body, essentially turning the function into a loop. When no other recursive calls are present inside the function, the function becomes a stackless (non-recursive) one.
+Tail call optimization is only performed when the optimization level is set to `advanced`.
+
+This optimization can be applied to a recursive function which contains a call to itself as the last statement in the function body. This last function call - the tail call - is replaced by a jump at the beginning of the function body, essentially turning the function into a loop. When no other recursive calls are present inside the function, the function becomes a stackless (non-recursive) one.
 
 The tail call optimization is a static optimization and is applied whenever possible. In all but the simplest cases, the optimization relies on other optimizers to simplify the function body and actually make the function call the very last executable statement in the function body (specifically, [Stack Optimization](STACK-OPTIMIZATION.markdown) is essential).
 
@@ -45,26 +47,26 @@ compiles to
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
 set *sp 0
-        # Function: def f(in n)
+    # Function: def f(in n)
         print "f: 10\n"
         set :g:n 9
         op add :g*retaddr @counter 1
         jump label_11 always 0 0
-        # Function: def g(in n)
+    # Function: def g(in n)
             print "g: 10\nf: 9\n"
             op sub *tmp0 10 1
-                # Function: def f(in n)
+            # Function: def f(in n)
                 op sub :g:n 10 2
                 op add :g*retaddr @counter 1
                 jump label_11 always 0 0
 end
-        # Function: def g(in n)
+    # Function: def g(in n)
 label_11:
             jump label_18 lessThanEq :g:n 0
                 print "g: {0}\nf: {0}\n"
                 format :g:n
                 op sub *tmp0 :g:n 1
-                    # Function: def f(in n)
+                # Function: def f(in n)
                     format *tmp0
                     op sub :g:n :g:n 2
         jump label_11 always 0 0

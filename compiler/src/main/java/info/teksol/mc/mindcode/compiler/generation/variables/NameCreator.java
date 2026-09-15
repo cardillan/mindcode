@@ -27,6 +27,7 @@ public interface NameCreator extends ArrayNameCreator {
     String temp(int index);
     String stackFrameSuffix(int frameIndex);
     String stackPointer();
+    String stackMemory();
     String remoteSignature();
     String programId();
 

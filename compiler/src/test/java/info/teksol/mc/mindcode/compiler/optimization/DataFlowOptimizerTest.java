@@ -735,29 +735,29 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             """,
                     createInstruction(INITSTACK, label(1), label(2)),
                     createInstruction(SET, ":fib:n", "10"),
-                    createInstruction(CALLREC, "bank1", label(0), label(3), ":fib*retval"),
+                    createInstruction(CALLREC, label(0), label(3), ":fib*retval"),
                     createInstruction(LABEL, label(3)),
                     createInstruction(PRINT, ":fib*retval"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 2:1: stack overflow error")),
-                    createInstruction(INITREC, "true"),
+                    createInstruction(INITREC, "false"),
                     createInstruction(SET, ":fib*retval", ":fib:n"),
                     createInstruction(JUMP, label(6), "lessThan", ":fib:n", "2"),
-                    createInstruction(PUSH, "bank1", ":fib:n"),
+                    createInstruction(PUSH, ":fib:n"),
                     createInstruction(OP, "sub", ":fib:n", ":fib:n", "1"),
-                    createInstruction(CALLREC, "bank1", label(0), label(7), ":fib*retval"),
+                    createInstruction(CALLREC, label(0), label(7), ":fib*retval"),
                     createInstruction(LABEL, label(7)),
-                    createInstruction(POP, "bank1", ":fib:n"),
+                    createInstruction(POP, ":fib:n"),
                     createInstruction(SET, tmp(4), ":fib*retval"),
-                    createInstruction(PUSH, "bank1", tmp(4)),
+                    createInstruction(PUSH, tmp(4)),
                     createInstruction(OP, "sub", ":fib:n", ":fib:n", "2"),
-                    createInstruction(CALLREC, "bank1", label(0), label(8), ":fib*retval"),
+                    createInstruction(CALLREC, label(0), label(8), ":fib*retval"),
                     createInstruction(LABEL, label(8)),
-                    createInstruction(POP, "bank1", tmp(4)),
+                    createInstruction(POP, tmp(4)),
                     createInstruction(OP, "add", ":fib*retval", tmp(4), ":fib*retval"),
                     createInstruction(LABEL, label(6)),
-                    createInstruction(RETURNREC, "bank1")
+                    createInstruction(RETURNREC)
             );
         }
 
@@ -842,27 +842,27 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(SET, ":foo:n", "10"),
                     createInstruction(SET, ":foo:a", "1"),
                     createInstruction(SET, ":foo:b", "2"),
-                    createInstruction(CALLREC, "bank1", label(0), label(3), ":foo*retval"),
+                    createInstruction(CALLREC, label(0), label(3), ":foo*retval"),
                     createInstruction(LABEL, label(3)),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 2:1: stack overflow error")),
-                    createInstruction(INITREC, "true"),
+                    createInstruction(INITREC, "false"),
                     createInstruction(JUMP, label(5), "notEqual", ":foo:n", "0"),
                     createInstruction(SET, ":foo:a", "5"),
                     createInstruction(SET, ":foo:b", "10"),
-                    createInstruction(RETURNREC, "bank1"),
+                    createInstruction(RETURNREC),
                     createInstruction(LABEL, label(5)),
                     createInstruction(SET, tmp(5), ":foo:a"),
                     createInstruction(OP, "sub", ":foo:n", ":foo:n", "1"),
                     createInstruction(SET, ":foo:a", ":foo:b"),
                     createInstruction(SET, ":foo:b", tmp(5)),
-                    createInstruction(CALLREC, "bank1", label(0), label(7), ":foo*retval"),
+                    createInstruction(CALLREC, label(0), label(7), ":foo*retval"),
                     createInstruction(LABEL, label(7)),
                     createInstruction(SET, tmp(7), ":foo:b"),
                     createInstruction(SET, ":foo:b", ":foo:a"),
                     createInstruction(SET, ":foo:a", tmp(7)),
-                    createInstruction(RETURNREC, "bank1")
+                    createInstruction(RETURNREC)
             );
         }
 
@@ -889,18 +889,18 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(SET, ":foo:b", "2"),
                     createInstruction(SET, ":foo:c", "3"),
                     createInstruction(SET, ":foo:d", "4"),
-                    createInstruction(CALLREC, "bank1", label(0), label(3), ":foo*retval"),
+                    createInstruction(CALLREC, label(0), label(3), ":foo*retval"),
                     createInstruction(LABEL, label(3)),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC, "true"),
+                    createInstruction(INITREC, "false"),
                     createInstruction(JUMP, label(5), "notEqual", ":foo:n", "0"),
                     createInstruction(PRINT, ":foo:a"),
                     createInstruction(PRINT, ":foo:b"),
                     createInstruction(PRINT, ":foo:c"),
                     createInstruction(PRINT, ":foo:d"),
-                    createInstruction(RETURNREC, "bank1"),
+                    createInstruction(RETURNREC),
                     createInstruction(LABEL, label(5)),
                     createInstruction(SET, tmp(7), ":foo:a"),
                     createInstruction(OP, "sub", ":foo:n", ":foo:n", "1"),
@@ -908,9 +908,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(SET, ":foo:b", ":foo:c"),
                     createInstruction(SET, ":foo:c", ":foo:d"),
                     createInstruction(SET, ":foo:d", tmp(7)),
-                    createInstruction(CALLREC, "bank1", label(0), label(7), ":foo*retval"),
+                    createInstruction(CALLREC, label(0), label(7), ":foo*retval"),
                     createInstruction(LABEL, label(7)),
-                    createInstruction(RETURNREC, "bank1")
+                    createInstruction(RETURNREC)
             );
         }
 
@@ -984,20 +984,21 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             """,
                     createInstruction(INITSTACK, label(1), label(2)),
                     createInstruction(SET, ":foo:n", "10"),
-                    createInstruction(CALLREC, "bank1", label(0), label(3), ":foo*retval"),
+                    createInstruction(CALLREC, label(0), label(3), ":foo*retval"),
                     createInstruction(LABEL, label(3)),
                     createInstruction(PRINT, ":foo*retval"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC, "true"),
+                    createInstruction(INITREC, "false"),
                     createInstruction(SET, ":foo*retval", "null"),
                     createInstruction(JUMP, label(6), "lessThanEq", ":foo:n", "0"),
                     createInstruction(OP, "sub", ":foo:n", ":foo:n", "1"),
-                    createInstruction(CALLREC, "bank1", label(0), label(7), ":foo*retval"),
+                    createInstruction(CALLREC, label(0), label(7), ":foo*retval"),
                     createInstruction(LABEL, label(7)),
                     createInstruction(LABEL, label(6)),
-                    createInstruction(RETURNREC, "bank1")
+                    createInstruction(RETURNREC)
+
             );
         }
 

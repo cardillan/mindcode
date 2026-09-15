@@ -310,7 +310,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         if (recursiveCall) {
             // Store all local variables (both user-defined and temporary) on the stack
             assembler.setSubcontextType(function, AstSubcontextType.STACK);
-            variables.forEach(v -> assembler.createPush(stack, v));
+            variables.forEach(assembler::createPush);
         }
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
@@ -319,13 +319,13 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // Recursive function call
         assembler.setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
         final LogicLabel returnLabel = assembler.nextLabel();
-        assembler.createCallRecursive(stack, function.getLabel(), returnLabel, function.getFnRetVal());
+        assembler.createCallRecursive(function.getLabel(), returnLabel, function.getFnRetVal());
         assembler.createLabel(returnLabel); // where the function must return
 
         if (recursiveCall) {
             // Restore all local variables (both user-defined and temporary) from the stack
             assembler.setSubcontextType(function, AstSubcontextType.STACK);
-            variables.reversed().forEach(v -> assembler.createPop(stack, v));
+            variables.reversed().forEach(assembler::createPop);
         }
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);

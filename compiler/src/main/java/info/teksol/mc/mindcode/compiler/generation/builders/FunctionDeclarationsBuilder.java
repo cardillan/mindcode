@@ -80,6 +80,10 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
             assembler.createLabel(function.getLabel());
         }
 
+        if (function.getProfile().isSymbolicLabels()) {
+            assembler.createComment("Function: " + function.getDeclaration().toSourceCode());
+        }
+
         final LogicValue returnValue = function.isVoid() ? LogicVoid.VOID : function.getFnRetVal();
         returnStack.enterFunction(processor.nextLabel(), returnValue);
 
@@ -101,9 +105,6 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
     private void compileFunctionBody(MindcodeFunction function) {
         boolean atomic = function.isAtomic();
         assembler.enterAstNode(function.getDeclaration(), atomic ? AstContextType.ATOMIC : AstContextType.FUNCTION_BODY);
-        if (function.getProfile().isSymbolicLabels()) {
-            assembler.createComment("Function: " + function.getDeclaration().toSourceCode());
-        }
 
         if (atomic) {
             assembler.createWait(LogicNumber.ZERO).setAtomicWait(true);
@@ -111,17 +112,17 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
             assembler.createLabel(function.getAtomicLabel());
         }
         if (function.isRecursive()) {
-            if (function.getProfile().isStackOverflowChecks() && stackTracker.externalStack()) {
+            if (function.getProfile().isStackOverflowChecks() && stackTracker.simpleStack()) {
                 String errorMessage = String.format("%s: stack overflow error", function.getDeclaration().sourcePosition().formatForMlog());
                 assembler.setSubcontextType(AstSubcontextType.STACK, 1.0);
                 assembler.createAssertBounds(LogicKeyword.create("decimal"), LogicNumber.ONE,
                         LogicNumber.create(stackTracker.getAllocationStart()), Condition.LESS_THAN_EQ,
-                        assembler.getProcessor().stackPointer(),
+                        stackTracker.getStackPointer(),
                         Condition.LESS_THAN, LogicNumber.create(stackTracker.getAllocationEnd()),
                         LogicString.createRaw(errorMessage)).setStackOverflowCheck();
                 assembler.clearSubcontextType();
             }
-            assembler.createInitRec(LogicBoolean.get(stackTracker.externalStack()));
+            assembler.createInitRec(LogicBoolean.FALSE);
         }
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
@@ -137,7 +138,7 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
 
     private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {
         compileFunctionBody(function);
-        assembler.createReturnRec(stackTracker.getStackMemory());
+        assembler.createReturnRec();
     }
 
     private void appendRemoteFunctionDeclaration(MindcodeFunction function) {

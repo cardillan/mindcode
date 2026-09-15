@@ -59,8 +59,8 @@ public interface ContextfulInstructionCreator {
         return createInstruction(ASSERT_BOUNDS, List.of(type, multiple, lowerBound, lowerCondition, value, upperCondition, upperBound, message));
     }
 
-    default CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
-        return (CallRecInstruction) createInstruction(CALLREC, stack, callAddr, retAddr, returnValue);
+    default CallRecInstruction createCallRecursive(LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
+        return (CallRecInstruction) createInstruction(CALLREC, callAddr, retAddr, returnValue);
     }
 
     default CallInstruction createCallStackless(LogicAddress address, LogicVariable retAddr, LogicVariable returnValue) {
@@ -155,8 +155,8 @@ public interface ContextfulInstructionCreator {
         return (OpInstruction) createInstruction(OP, operation, target, first, second);
     }
 
-    default PopInstruction createPop(LogicVariable stack, LogicVariable value) {
-        return (PopInstruction) createInstruction(POP, stack, value);
+    default PopInstruction createPop(LogicVariable value) {
+        return (PopInstruction) createInstruction(POP, value);
     }
 
     default PrintInstruction createPrint(LogicValue what) {
@@ -171,8 +171,8 @@ public interface ContextfulInstructionCreator {
         return (PrintflushInstruction) createInstruction(PRINTFLUSH, messageBlock);
     }
 
-    default PushInstruction createPush(LogicVariable stack, LogicVariable value) {
-        return (PushInstruction) createInstruction(PUSH, stack, value);
+    default PushInstruction createPush(LogicVariable value) {
+        return (PushInstruction) createInstruction(PUSH, value);
     }
 
     default ReadInstruction createRead(LogicVariable result, LogicValue memory, LogicValue index) {
@@ -193,8 +193,8 @@ public interface ContextfulInstructionCreator {
         return (ReturnInstruction) createInstruction(RETURN, address);
     }
 
-    default ReturnRecInstruction createReturnRec(LogicVariable stack) {
-        return (ReturnRecInstruction) createInstruction(RETURNREC, stack);
+    default ReturnRecInstruction createReturnRec() {
+        return (ReturnRecInstruction) createInstruction(RETURNREC);
     }
 
     default SelectInstruction createSelect(LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicValue valueIfTrue, LogicValue valueIfFalse) {

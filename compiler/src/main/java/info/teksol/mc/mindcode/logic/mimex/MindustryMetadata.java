@@ -466,7 +466,7 @@ public class MindustryMetadata {
         return Objects.requireNonNull(getBlockMap().get(name));
     }
 
-    public @Nullable BlockType getBlockByName(String name) {
+    public @Nullable BlockType getBlockByName(@Nullable String name) {
         return getBlockMap().get(name);
     }
 
@@ -684,6 +684,7 @@ public class MindustryMetadata {
                     String[] columns = lines.get(i).split(";", -1);
                     list.add(create(columns));
                 }
+                @SuppressWarnings("NullableProblems")
                 Map<String, T> result = list.stream().filter(Objects::nonNull).collect(Collectors.toMap(this::mappingName,
                         t -> t, (a, _) -> a, LinkedHashMap::new));
                 createUnregistered().forEach(t -> result.putIfAbsent(mappingName(t), t));
@@ -737,7 +738,7 @@ public class MindustryMetadata {
 
     private class BlockTypeReader extends AbstractNamedContentReader<BlockType> {
         private int name, id, visibility, implementation, legacy, size, hasPower, configurable, category, range, maxNodes,
-                rotate, unitPlans, iptDefault, iptLimit, instructionScale;
+                rotate, unitPlans, memoryCapacity, iptDefault, iptLimit, instructionScale;
 
         public BlockTypeReader(String resource) {
             super(resource);
@@ -758,6 +759,7 @@ public class MindustryMetadata {
             range = findColumn("range");
             rotate = findColumn("rotate");
             unitPlans = findColumn("unitPlans");
+            memoryCapacity = findColumn("memoryCapacity");
             iptDefault = findColumn("iptDefault");
             iptLimit = findColumn("iptLimit");
             instructionScale = findColumn("instructionScale");
@@ -781,6 +783,7 @@ public class MindustryMetadata {
                     Integer.parseInt(columns[maxNodes]),
                     Boolean.parseBoolean(columns[rotate]),
                     parseUnitPlans(columns[unitPlans]),
+                    Integer.parseInt(columns[memoryCapacity]),
                     Integer.parseInt(columns[iptDefault]),
                     Integer.parseInt(columns[iptLimit]),
                     Integer.parseInt(columns[instructionScale])

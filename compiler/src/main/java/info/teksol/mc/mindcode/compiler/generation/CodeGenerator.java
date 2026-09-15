@@ -355,7 +355,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
 
         program.add(mainBodyEndIndex,
                 context.instructionProcessor().createPrintflush(Objects.requireNonNull(mainBodyContext),
-                        LogicVariable.block(EMPTY, "message1")));
+                        LogicVariable.block(EMPTY, "message1", "@message")));
 
         warn(WARN.MISSING_PRINTFLUSH_ADDED);
     }

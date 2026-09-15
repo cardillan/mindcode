@@ -46,6 +46,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
     private final Map<Integer, AstContext> addressContexts = new HashMap<>();
     private final Map<Integer, Set<LogicInstruction>> textJumpOrigins = new HashMap<>();
     private final Map<Integer, Set<Integer>> textJumpKeys = new HashMap<>();
+    private Map<MindcodeFunction, Integer> stackDepths = Map.of();
 
     public FinalInstructionResolver(GlobalCompilerProfile profile, InstructionProcessor processor, CallGraph callGraph,
             StackTracker stackTracker, AstContext rootAstContext, NameCreator nameCreator) {
@@ -171,6 +172,13 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
         // Save the last instruction before it is resolved
         LogicInstruction last = program.getLast();
 
+        // Compute stack requirements
+        if (stackTracker.largeStack()) {
+            stackDepths = program.stream().filter(PushOrPopInstruction.class::isInstance)
+                    .collect(Collectors.groupingBy(LogicInstruction::getExistingFunction,
+                            Collectors.collectingAndThen(Collectors.toList(), this::computeStackDepth)));
+        }
+
         program = resolveVirtualInstructions(resolveRemarks(program));
         calculateAddresses(program);
         program = resolveAddresses(program);
@@ -207,6 +215,20 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
         }
 
         return program;
+    }
+
+    private int computeStackDepth(List<LogicInstruction> instructions) {
+        int depth = 0, maxDepth = 0;
+        for (LogicInstruction instruction : instructions) {
+            if (instruction.getOpcode() == PUSH) {
+                depth++;
+                maxDepth = Math.max(maxDepth, depth);
+            } else if (instruction.getOpcode() == POP) {
+                depth--;
+            }
+        }
+        // One more is needed for the return address
+        return maxDepth + 1;
     }
 
     private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
@@ -377,7 +399,8 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
         GlobalCompilerProfile profile = astContext.getGlobalProfile();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        LogicVariable stackPointer = processor.stackPointer();
+        LogicVariable stackPointer = stackTracker.getStackPointer();
+        LogicVariable stackMemory = stackTracker.getStackMemory();
         boolean externalStack = stackTracker.externalStack();
 
         switch (instruction) {
@@ -460,7 +483,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
 
             case PushInstruction ix -> {
                 if (externalStack) {
-                    creator.createWrite(ix.getVariable(), ix.getMemory(), stackPointer);
+                    creator.createWrite(ix.getVariable(), stackMemory, stackPointer);
                     creator.createOp(ADD, stackPointer, stackPointer, LogicNumber.ONE).copyComment(ix);
                 } else if (ix.getVariable().getType() == ArgumentType.FUNCTION_PARAMETER) {
                     creator.createSet(ix.getVariable().stackFrame(nameCreator.stackFrameSuffix(0)), ix.getVariable());
@@ -469,7 +492,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
             case PopInstruction ix -> {
                 if (externalStack) {
                     creator.createOp(SUB, stackPointer, stackPointer, LogicNumber.ONE);
-                    creator.createRead(ix.getVariable(), ix.getMemory(), stackPointer).copyComment(ix);
+                    creator.createRead(ix.getVariable(), stackMemory, stackPointer).copyComment(ix);
                 }
             }
 
@@ -478,7 +501,17 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
                         .filter(f -> f.isRecursive() && f.isGenerated()).toList();
                 if (!recursiveFunctions.isEmpty()) {
                     if (stackTracker.externalStack()) {
-                        creator.createSet(stackPointer, LogicNumber.create(stackTracker.getAllocationStart()));
+                        List<LogicVariable> storage = stackTracker.getStackStorage();
+                        if (storage.size() > 1) {
+                            for (int i = 1; i < storage.size(); i++) {
+                                creator.createWrite(storage.get(i), storage.get(i - 1), LogicNumber.ZERO);
+                                creator.createWrite(storage.get(i - 1), storage.get(i), LogicNumber.ONE);
+                            }
+                            creator.createSet(stackMemory, storage.getFirst());
+                            creator.createSet(stackPointer, LogicNumber.FOUR);
+                        } else {
+                            creator.createSet(stackPointer, LogicNumber.create(stackTracker.getAllocationStart()));
+                        }
                     } else if (profile.isSymbolicLabels()) {
                         creator.createJumpUnconditional(ix.getCallLabel());
                         creator.createLabel(ix.getReturnLabel());
@@ -497,22 +530,33 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
                     if (profile.isSymbolicLabels()) {
                         LogicVariable returnAddress = processor.nextTemp();
                         creator.createOp(ADD, returnAddress, LogicBuiltIn.COUNTER, LogicNumber.THREE);
-                        creator.createInstruction(WRITE, returnAddress, ix.getStack(), stackPointer);
+                        creator.createInstruction(WRITE, returnAddress, stackMemory, stackPointer);
                     } else {
-                        creator.createInstruction(WRITE, ix.getRetAddr(), ix.getStack(), stackPointer);
+                        creator.createInstruction(WRITE, ix.getRetAddr(), stackMemory, stackPointer);
                     }
                     creator.createOp(ADD, stackPointer, stackPointer, LogicNumber.ONE);
                     creator.createJumpUnconditional(ix.getCallAddr()).copyComment(ix);
                 } else {
-                    MindcodeFunction function = ix.getAstContext().existingFunction();
+                    MindcodeFunction function = ix.getExistingFunction();
                     creator.createInstruction(SET, function.getFnRetAddr(), ix.getRetAddr());
                     creator.createSet(LogicBuiltIn.COUNTER, function.getFnStackFrame());
                 }
             }
             case InitRecInstruction ix -> {
-                MindcodeFunction function = ix.getFunction();
-                if (!ix.getSkipStackSetup().getBooleanValue()) {
-                    creator.createOp(Operation.ADD, function.getFnStackFrame(), function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize()));
+                MindcodeFunction function = ix.getExistingFunction();
+                if (!ix.isInlined().getBooleanValue()) {
+                    if (stackTracker.largeStack()) {
+                        int depth = stackDepths.get(ix.getExistingFunction());
+                        LogicNumber limit = LogicNumber.create(stackTracker.getAllocationEnd() - depth + 1);
+                        LogicLabel skipSwitch = processor.nextLabel();
+                        creator.createJump(skipSwitch, Condition.LESS_THAN_EQ, stackPointer, limit);
+                        creator.createWrite(stackPointer, stackMemory, LogicNumber.TWO);
+                        creator.createRead(stackMemory, stackMemory, LogicNumber.ZERO);
+                        creator.createSet(stackPointer, LogicNumber.THREE);
+                        creator.createLabel(skipSwitch);
+                    } else if (!stackTracker.externalStack()) {
+                        creator.createOp(Operation.ADD, function.getFnStackFrame(), function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize()));
+                    }
                 }
                 function.getArrays().forEach(array -> {
                     if (array.getArrayOffset() instanceof LogicVariable offset) {
@@ -521,16 +565,23 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
                 });
             }
             case ReturnRecInstruction ix -> {
-                ix.getFunction().getArrays().forEach(array -> {
+                ix.getExistingFunction().getArrays().forEach(array -> {
                     if (array.getArrayOffset() instanceof LogicVariable offset) {
                         creator.createOp(SUB, offset, offset, LogicNumber.create(array.getSize()));
                     }
                 });
                 if (externalStack) {
+                    if (stackTracker.largeStack()) {
+                        LogicLabel skipSwitch = processor.nextLabel();
+                        creator.createJump(skipSwitch, Condition.GREATER_THAN, stackPointer, LogicNumber.THREE);
+                        creator.createRead(stackMemory, stackMemory, LogicNumber.ONE);
+                        creator.createRead(stackPointer, stackMemory, LogicNumber.TWO);
+                        creator.createLabel(skipSwitch);
+                    }
                     creator.createOp(SUB, stackPointer, stackPointer, LogicNumber.ONE);
-                    creator.createRead(LogicBuiltIn.COUNTER, ix.getStack(), stackPointer).copyComment(ix);
+                    creator.createRead(LogicBuiltIn.COUNTER, stackMemory, stackPointer).copyComment(ix);
                 } else {
-                    MindcodeFunction function = ix.getAstContext().existingFunction();
+                    MindcodeFunction function = ix.getExistingFunction();
                     creator.createOp(SUB, function.getFnStackFrame(), function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize()));
                     creator.createOp(ADD, LogicBuiltIn.COUNTER, function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize() - function.getReturnOffset()));
                 }

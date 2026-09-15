@@ -315,6 +315,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
                     .forEach(variableStates::markInitialized);
             variableStates.markInitialized(function.getFnRetAddr());
             variableStates.markInitialized(instructionProcessor.stackPointer());
+            variableStates.markInitialized(instructionProcessor.stackMemory());
         }
 
         iterator = createIteratorAtContext(context);
@@ -1020,7 +1021,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {
                 // Function may be null for array access
-                MindcodeFunction function = instruction.getAstContext().function();
+                MindcodeFunction function = instruction.getFunction();
                 if (function != null) {
                     variableStates.updateAfterFunctionCall(function, instruction);
                     if (modifyInstructions && optimizationContext.getEndingFunctions().contains(function)) {

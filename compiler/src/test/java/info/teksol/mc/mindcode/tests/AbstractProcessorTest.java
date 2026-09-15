@@ -185,6 +185,10 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     protected void setupLogicBlock(LogicBlock logicBlock, Map<String, MindustryBuilding> blocks) {
         logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
         logicBlock.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
+        logicBlock.addBlock("cell1", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
+        logicBlock.addBlock("cell2", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
+        logicBlock.addBlock("cell3", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
+        logicBlock.addBlock("cell4", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
         blocks.forEach(logicBlock::addBlock);
     }
 

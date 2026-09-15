@@ -58,6 +58,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     protected final Map<InstructionParameterType, Collection<String>> validArgumentValues;
     protected final Set<String> additionalBuiltins = new HashSet<>();
     protected final Set<String> additionalColors = new HashSet<>();
+    protected boolean resolutionPhase;
     protected int tmpIndex = 0;
     protected int labelIndex = 0;
     protected int markerIndex = 0;
@@ -267,6 +268,14 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
         return stackPointer;
     }
 
+    private @Nullable LogicVariable stackMemory;
+    public LogicVariable stackMemory() {
+        if (stackMemory == null) {
+            stackMemory = LogicVariable.preserved(nameCreator.stackMemory());
+        }
+        return stackMemory;
+    }
+
     @Override
     public <T extends LogicInstruction> T copy(T instruction) {
         return replaceArgs(instruction, instruction.getArgs());
@@ -463,11 +472,17 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             throw new MindcodeInternalError("Instruction created without valid parameters: " + instruction);
         }
 
-        if (instruction instanceof JumpInstruction && instruction.getAstContext().subcontextType() == AstSubcontextType.BODY) {
+        if (instruction instanceof JumpInstruction && instruction.getAstContext().subcontextType() == AstSubcontextType.BODY
+                && !resolutionPhase) {
             throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + instruction);
         }
 
         return instruction;
+    }
+
+    @Override
+    public void setResolutionPhase(boolean resolutionPhase) {
+        this.resolutionPhase = resolutionPhase;
     }
 
     private int getOpcodeVariantSelectorPosition(Opcode opcode, List<OpcodeVariant> opcodeVariants) {
@@ -529,9 +544,18 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     @Override
-    public boolean isBlockName(String identifier) {
+    public @Nullable String getBlockName(String identifier) {
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
-        return matcher.find() && getBlockNames().contains(matcher.group(1));
+        if (matcher.find()) {
+            String blockName = matcher.group(1);
+            return getBlockNames().contains(blockName) ? blockName : null;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isBlockName(String identifier) {
+        return getBlockName(identifier) != null;
     }
 
     @Override

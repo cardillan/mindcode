@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -28,16 +27,12 @@ public class CallRecInstruction extends BaseInstruction implements CallingInstru
         return this.astContext == astContext ? this : new CallRecInstruction(this, astContext);
     }
 
-    public final LogicVariable getStack() {
-        return (LogicVariable) getArg(0);
-    }
-
     public final LogicLabel getCallAddr() {
-        return (LogicLabel) getArg(1);
+        return (LogicLabel) getArg(0);
     }
 
     public final LogicLabel getRetAddr() {
-        return (LogicLabel) getArg(2);
+        return (LogicLabel) getArg(1);
     }
 
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {

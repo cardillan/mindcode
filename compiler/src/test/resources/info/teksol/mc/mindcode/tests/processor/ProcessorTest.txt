@@ -11,7 +11,7 @@ for-each-loop-conversion.mnd:                      45       45     100.0%   715C
 function-inlining.mnd:                            884      884     100.0%   B3AB880177C19FDA   BEF1D17B44D03B7F
 iterated-for-loop-break-continue.mnd:              37      168      97.3%   80825B23266F8FF3   667BEC98615F8550
 loops-in-conditions.mnd:                            4        4     100.0%   25F777AD40847D3B   EE23FA8DF27E06B7
-mutually-recursive-calls-ext.mnd:                 221      528      99.5%   61B36E3FE17E9278   D57F1CF424C052B4
+mutually-recursive-calls-ext.mnd:                 291     1949      97.3%   634889B0F87ABE31   B76CA34F5AE588BD
 mutually-recursive-calls-int.mnd:                 302      643      52.6%   013C2A5C5C858AC9   11BEC215A810A199
 prints-values.mnd:                                 42       42     100.0%   810146F338C25648   D7CFEF163C2D0658
 processesAssertBounds:                              5        5     100.0%   95377598091542AF   BB70677764474A51
