@@ -54,8 +54,7 @@ public class InitRecInstruction extends BaseInstruction {
             if (stackTracker.largeStack()) {
                 size += 4 + switch (getLocalProfile().getErrorReporting()) {
                     case NONE -> 0;
-                    case ASSERT -> 2;
-                    case MINIMAL -> 1;
+                    case ASSERT, MINIMAL -> 1;
                     case SIMPLE -> 2;
                     case DESCRIBED -> 3;
                 };
@@ -86,18 +85,22 @@ public class InitRecInstruction extends BaseInstruction {
                 creator.createSet(stackPointer, LogicNumber.THREE);
                 switch (getLocalProfile().getErrorReporting()) {
                     case NONE -> {}
-                    case ASSERT, SIMPLE -> {
-                        creator.createJump(skipSwitch, Condition.NOT_EQUAL, stackMemory, LogicNumber.ZERO);
-                        creator.createStop();
+                    case ASSERT -> {
+                        creator.createInstruction(Opcode.ASSERT_TYPE, LogicKeyword.create(AssertionDataType.memory), stackMemory,
+                                LogicString.createRaw(String.format("%s: stack overflow error", astContext.sourcePosition().formatForMlog())));
                     }
                     case MINIMAL -> {
                         LogicLabel error = processor.nextLabel();
                         creator.createLabel(error);
                         creator.createJump(error, Condition.EQUAL, stackMemory, LogicNumber.ZERO);
                     }
+                    case SIMPLE -> {
+                        creator.createJump(skipSwitch, Condition.NOT_EQUAL, stackMemory, LogicNumber.ZERO);
+                        creator.createStop();
+                    }
                     case DESCRIBED -> {
                         creator.createJump(skipSwitch, Condition.NOT_EQUAL, stackMemory, LogicNumber.ZERO);
-                        creator.createPrint(LogicString.createRaw("Stack overflow"));
+                        creator.createPrint(LogicString.createRaw(String.format("%s: stack overflow error", astContext.sourcePosition().formatForMlog())));
                         creator.createStop();
                     }
                 }
