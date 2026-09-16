@@ -4,11 +4,9 @@ package info.teksol.mc.mindcode.compiler.postprocess;
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
-import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
@@ -19,10 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
@@ -195,39 +190,6 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                         print "%s"
                         """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
-    }
-
-    @Test
-    void resolvesVirtualInstructions() {
-        String expected = Stream.of(
-                createInstruction(JUMP, "8", "always"),
-                createInstruction(WRITE, ":a", "bank0", "*sp"),
-                createInstruction(OP, "add", "*sp", "*sp", "1"),
-                createInstruction(OP, "sub", "*sp", "*sp", "1"),
-                createInstruction(READ, ":a", "bank0", "*sp"),
-                createInstruction(WRITE, "8", "bank0", "*sp"),
-                createInstruction(OP, "add", "*sp", "*sp", "1"),
-                createInstruction(JUMP, "8", "always"),
-                createInstruction(END),
-                createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
-        ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
-
-        String actual = FinalInstructionResolver.resolve(
-                profile, ip, EMPTY_CALL_GRAPH, StackTracker.mockExternalStack(),
-                mockAstRootContext, nameCreator(),
-                List.of(
-                        createInstruction(JUMP, label0, Condition.ALWAYS),
-                        createInstruction(PUSH, a),
-                        createInstruction(POP, a),
-                        createInstruction(CALLREC, label1, label2, fn0retval),
-                        createInstruction(LABEL, label1),
-                        createInstruction(LABEL, label2),
-                        createInstruction(LABEL, label0),
-                        createInstruction(END)
-                )
-        ).stream().map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
-
-        assertEquals(expected, actual);
     }
 
     @Test

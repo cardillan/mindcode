@@ -1,17 +1,16 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.Condition;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.RuntimeErrorReporting;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @NullMarked
 public class AssertBoundsInstruction extends BaseInstruction {
@@ -81,5 +80,47 @@ public class AssertBoundsInstruction extends BaseInstruction {
 
     private int conditions() {
         return (getLowerBound() == getValue() ? 0 : 1) + (getUpperBound() == getValue() ? 0 : 1);
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        LocalContextfulInstructionsCreator creator = creator(processor, consumer);
+
+        switch (getLocalProfile().getErrorReporting()) {
+            case NONE -> {}
+            case ASSERT -> consumer.accept(this);
+            case MINIMAL -> {
+                if (hasLowerBound()) {
+                    LogicLabel label = processor.nextLabel();
+                    creator.createLabel(label);
+                    creator.createJump(label, getLowerCondition().inverse(false), getLowerBound(), getValue());
+                }
+                if (hasUpperBound()) {
+                    LogicLabel label = processor.nextLabel();
+                    creator.createLabel(label);
+                    creator.createJump(label, getUpperCondition().inverse(false), getValue(), getUpperBound());
+                }
+            }
+            case SIMPLE, DESCRIBED -> {
+                LogicLabel logicLabelStop = processor.nextLabel();
+                LogicLabel logicLabelRun = processor.nextLabel();
+
+                if (!hasUpperBound()) {
+                    creator.createJump(logicLabelRun, getLowerCondition(), getLowerBound(), getValue());
+                } else {
+                    if (hasLowerBound()) {
+                        creator.createJump(logicLabelStop, getLowerCondition().inverse(false), getLowerBound(), getValue());
+                    }
+                    creator.createJump(logicLabelRun, getUpperCondition(), getValue(), getUpperBound());
+                }
+
+                creator.createLabel(logicLabelStop);
+                if (getLocalProfile().getErrorReporting() == RuntimeErrorReporting.DESCRIBED) {
+                    creator.createPrint(getMessage());
+                }
+                creator.createStop();
+                creator.createLabel(logicLabelRun);
+            }
+        }
     }
 }

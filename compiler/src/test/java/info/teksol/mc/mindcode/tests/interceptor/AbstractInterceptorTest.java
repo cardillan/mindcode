@@ -61,7 +61,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
         private Emulator runProgram(List<LogicInstruction> program) {
             FinalInstructionResolver resolver = new FinalInstructionResolver(compiler.globalCompilerProfile(),
-                    ip, compiler.getCallGraph(), StackTracker.mockInternalStack(), rootAstContext(), nameCreator());
+                    ip, StackTracker.mockInternalStack(), rootAstContext());
             List<LogicInstruction> instructions = resolver.resolve(program);
             String code = LogicInstructionPrinter.toString(ip, instructions,
                     compiler.globalCompilerProfile().isSymbolicLabels(), compiler.globalCompilerProfile().getMlogIndent(), true);

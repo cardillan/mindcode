@@ -2,9 +2,9 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -12,6 +12,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+
+import static info.teksol.mc.mindcode.logic.arguments.Operation.ADD;
 
 @NullMarked
 public class InitRecInstruction extends BaseInstruction {
@@ -43,9 +46,71 @@ public class InitRecInstruction extends BaseInstruction {
 
     @Override
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
-        int stackOperation = isInlined().getBooleanValue() || stackTracker == null ? 0 :
-                stackTracker.largeStack() ? 4 : stackTracker.externalStack() ? 0 : 1;
+        // If the call was inlined, only process the arrays
+        int size = getExistingFunction().getArrays().size();
 
-        return stackOperation + getExistingFunction().getArrays().size();
+        if (!isInlined().getBooleanValue() && stackTracker != null) {
+            // Note: stack overflow for simple stacks is handled by a separate assertbounds instruction.
+            if (stackTracker.largeStack()) {
+                size += 4 + switch (getLocalProfile().getErrorReporting()) {
+                    case NONE -> 0;
+                    case ASSERT -> 2;
+                    case MINIMAL -> 1;
+                    case SIMPLE -> 2;
+                    case DESCRIBED -> 3;
+                };
+            } else if (!stackTracker.externalStack()) {
+                size++;
+            }
+        }
+
+        return size;
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        LocalContextfulInstructionsCreator creator = creator(processor, consumer);
+
+        assert stackTracker != null;
+        LogicVariable stackPointer = stackTracker.getStackPointer();
+        LogicVariable stackMemory = stackTracker.getStackMemory();
+
+        MindcodeFunction function = getExistingFunction();
+        if (!isInlined().getBooleanValue()) {
+            if (stackTracker.largeStack()) {
+                LogicNumber limit = LogicNumber.create(stackTracker.getAllocationEnd() - function.getStackDepth() + 1);
+                LogicLabel skipSwitch = processor.nextLabel();
+                creator.createJump(skipSwitch, Condition.LESS_THAN_EQ, stackPointer, limit);
+                creator.createWrite(stackPointer, stackMemory, LogicNumber.TWO);
+                creator.createRead(stackMemory, stackMemory, LogicNumber.ZERO);
+                creator.createSet(stackPointer, LogicNumber.THREE);
+                switch (getLocalProfile().getErrorReporting()) {
+                    case NONE -> {}
+                    case ASSERT, SIMPLE -> {
+                        creator.createJump(skipSwitch, Condition.NOT_EQUAL, stackMemory, LogicNumber.ZERO);
+                        creator.createStop();
+                    }
+                    case MINIMAL -> {
+                        LogicLabel error = processor.nextLabel();
+                        creator.createLabel(error);
+                        creator.createJump(error, Condition.EQUAL, stackMemory, LogicNumber.ZERO);
+                    }
+                    case DESCRIBED -> {
+                        creator.createJump(skipSwitch, Condition.NOT_EQUAL, stackMemory, LogicNumber.ZERO);
+                        creator.createPrint(LogicString.createRaw("Stack overflow"));
+                        creator.createStop();
+                    }
+                }
+                creator.createLabel(skipSwitch);
+            } else if (!stackTracker.externalStack()) {
+                creator.createOp(Operation.ADD, function.getFnStackFrame(), function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize()));
+            }
+        }
+
+        function.getArrays().forEach(array -> {
+            if (array.getArrayOffset() instanceof LogicVariable offset) {
+                creator.createOp(ADD, offset, offset, LogicNumber.create(array.getSize()));
+            }
+        });
     }
 }
