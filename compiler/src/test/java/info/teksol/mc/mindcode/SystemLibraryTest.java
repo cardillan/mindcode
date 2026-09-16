@@ -219,6 +219,6 @@ public class SystemLibraryTest {
     }
 
     void assertSuccess(Assertion assertion) {
-        assertEquals(assertion.expected(), assertion.actual(), "Test " + assertion.title() + " failed");
+        assertTrue(assertion.success(), "Test " + assertion.title() + " failed: " + assertion.generateErrorMessage());
     }
 }

@@ -1,12 +1,13 @@
 package info.teksol.mc.emulator;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public interface ExecutorResults {
     String getProcessorId();
 
-    List<Assertion> getAssertions();
+    Collection<Assertion> getAssertions();
 
     String getFormattedOutput();
 

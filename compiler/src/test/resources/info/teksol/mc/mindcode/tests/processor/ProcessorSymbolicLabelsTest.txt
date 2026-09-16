@@ -13,7 +13,7 @@ loops-in-conditions.mnd:                            4        4     100.0%   25F7
 mutually-recursive-calls-ext.mnd:                 302     2008      97.4%   634889B0F87ABE31   4C503DE60803753D
 mutually-recursive-calls-int.mnd:                 306      647      53.3%   013C2A5C5C858AC9   99EC3F4DBE607656
 prints-values.mnd:                                 42       42     100.0%   810146F338C25648   817A42B7D39B78BF
-processesAssertBounds:                              5        5     100.0%   95377598091542AF   0F743E6A74607BC3
+processesAssertBounds:                              5        5     100.0%   BC529B1FD2CBFA3C   0F743E6A74607BC3
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   30633B28AE9D9EDA
 processesCaseExpressions:                           6        4      66.7%   0A6F2A75C193B958   381E5D60588F2DF8

@@ -6,9 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.20.0 – Unreleased
 
+### Added
+
+* Added support for the [`asserttype` instruction](/doc/syntax/TOOLS-TESTING-TOOL.markdown#unit-testing-support) provided by Mlog Assertions mod v0.9.0.
+
 ### Changed
 
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
+* Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.  
+* **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary. 
+* **Breaking:** the `err-runtime-check-failed` execution flag has been split into five separate flags: `err-stop-on-assert-bounds`, `err-stop-on-assert-equals`, `err-stop-on-assert-prints`, `err-stop-on-assert-type` and `err-stop-on-error`.
 
 ## 3.19.3 – 2026-09-19
 

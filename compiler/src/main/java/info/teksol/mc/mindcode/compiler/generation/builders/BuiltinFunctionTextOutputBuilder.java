@@ -193,7 +193,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
                     sbr.append(UtfUtils.escape(EscapeClass.NON_PRINTABLE, lit.format(processor)));
                 } else {
                     values.add(value);
-                    sbr.append("[[").append(values.size()).append("]");
+                    sbr.append("{").append(values.size()).append("}");
                 }
             }
         }

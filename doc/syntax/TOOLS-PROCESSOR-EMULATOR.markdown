@@ -128,7 +128,11 @@ All flags are described in the following table:
 | err-text-buffer-overflow        | false   | stop execution when the text buffer size (400 characters) is exceeded                         |
 | err-invalid-format              | true    | stop execution when no placeholder for the 'format' instruction exists in the buffer          |
 | err-graphics-buffer-overflow    | true    | stop execution when the graphics buffer size (256 operations) is exceeded                     |
-| err-runtime-check-failed        | true    | stop execution when a compiler-generated runtime check fails.                                 |
+| err-stop-on-assert-bounds       | true    | stop execution when `assertbounds` fails.                                                     |
+| err-stop-on-assert-equals       | false   | stop execution when `assertequals` fails.                                                     |
+| err-stop-on-assert-prints       | false   | stop execution when `assertprints` fails.                                                     |
+| err-stop-on-assert-type         | true    | stop execution when `asserttype` fails.                                                       |
+| err-stop-on-error               | true    | stop execution when `error` instruction is executed.                                          |
 
 Some flags are `false` by default. It is expected that these events can happen even in an otherwise sound program. Setting them to `true` enforces even stricter standards in your programs.
 

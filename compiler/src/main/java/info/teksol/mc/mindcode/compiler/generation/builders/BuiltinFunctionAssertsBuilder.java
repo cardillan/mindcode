@@ -7,10 +7,12 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -55,6 +57,24 @@ public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
             assembler.createInstruction(Opcode.ASSERT_FLUSH, tmp);
             validateAndCompile(call.getArgument(1));           // Just print, not interested in the result
             assembler.createInstruction(Opcode.ASSERT_PRINTS, tmp, expected, title);
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
+    }
+
+    public ValueStore handleAssertType(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        if (validateStandardFunctionArguments(call, arguments, 3)) {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            OpcodeVariant opcodeVariant = Objects.requireNonNull(processor.getOpcodeVariant(Opcode.ASSERT_TYPE, List.of()));
+            FunctionArgument expectedArgument = arguments.getFirst();
+            LogicKeyword expected = assembler.validateKeyword(opcodeVariant.namedParameters().getFirst(), expectedArgument, true);
+            LogicValue actual = arguments.get(1).getValue(assembler);
+            LogicValue title = arguments.get(2).getValue(assembler);
+            assembler.createInstruction(Opcode.ASSERT_TYPE, expected, actual, title);
         }
 
         assembler.clearSubcontextType();

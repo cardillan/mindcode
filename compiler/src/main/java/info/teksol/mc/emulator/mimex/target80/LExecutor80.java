@@ -41,6 +41,7 @@ public class LExecutor80 extends LExecutor70 {
             to.isobj = from.isobj;
         }
     }
+
     protected boolean processorRead(LVar output, Object object, LVar address) {
         if (!(object instanceof LogicBlock block)) {
             return false;

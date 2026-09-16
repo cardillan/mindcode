@@ -108,7 +108,7 @@ The built-in `error()` function serves for logging diagnostic information when t
 > [!NOTE]
 > When the `error-function` option is set to `false`, or the `error-reporting` option is set to `none`, calls to the `error()` function are ignored and not compiled into the final code.
 
-When the first parameter to the error function is a formattable string literal, the string and other function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `[[1]`, `[[2]`, and so on.
+When the first parameter to the error function is a formattable string literal, the string and other function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
 
 When the first parameter to the error function is not a formattable string literal, all parameters to the function are simply taken as is.
 
@@ -145,7 +145,7 @@ gets compiled to
     jump label_4 lessThan i 0
     jump label_8 lessThanEq i max
 label_4:
-        set *ERROR_0 "Index [[1] of array foo is out of bounds (0, [[2])!"
+        set *ERROR_0 "Index {1} of array foo is out of bounds (0, {2})!"
         set *ERROR_1 i
         set *ERROR_2 max
         stop
@@ -162,7 +162,7 @@ The built-in `emitLog()` function serves for logging diagnostic information into
 
 The first parametr of the function is a logic keyword, one of `:err`, `:warn`, `:info` or `:debug`. It specifies the logging level of the message being generated and is handled by the game's logging system. Typically, messages at the `:debug` level are ignored, the rest is written to the log file.
 
-When the second parameter to the error function is a formattable string literal, the string and the following function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `[[1]`, `[[2]`, and so on.
+When the second parameter to the error function is a formattable string literal, the string and the following function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
 
 When the second parameter to the error function is not a formattable string literal, all parameters to the function starting at the second one are simply taken as is.
 

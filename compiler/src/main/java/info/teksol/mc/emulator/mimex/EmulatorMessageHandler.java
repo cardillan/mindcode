@@ -62,6 +62,7 @@ public class EmulatorMessageHandler extends EmulatorMessageEmitter implements Pa
         return error(ExecutionFlag.ERR_PARSE_ERROR, message, args);
     }
 
+    /// @return true if the execution should stop due to this error
     public boolean error(ExecutionFlag flag, @PrintFormat String message, Object... args) {
         if (!error && getFlag(flag)) {
             error(flag, index, instruction, message, args);
