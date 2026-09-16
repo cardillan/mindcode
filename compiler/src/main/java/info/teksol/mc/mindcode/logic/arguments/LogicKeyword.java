@@ -63,6 +63,10 @@ public class LogicKeyword extends AbstractArgument implements ValueStore {
         return new LogicKeyword(SourcePosition.EMPTY, keyword);
     }
 
+    public static LogicKeyword create(Enum<?> value) {
+        return new LogicKeyword(SourcePosition.EMPTY, value.name());
+    }
+
     @Override
     public boolean isConstantValue() {
         return true;
