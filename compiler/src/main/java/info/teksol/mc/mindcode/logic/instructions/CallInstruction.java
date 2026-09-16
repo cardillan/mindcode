@@ -1,9 +1,7 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -11,6 +9,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+
+import static info.teksol.mc.mindcode.logic.arguments.Operation.ADD;
 
 @NullMarked
 public class CallInstruction extends BaseInstruction implements CallingInstruction {
@@ -42,5 +43,15 @@ public class CallInstruction extends BaseInstruction implements CallingInstructi
 
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         return super.getSharedSize(sharedStructures) + (astContext.getGlobalProfile().isSymbolicLabels() ? 1 : 0);
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        LocalContextfulInstructionsCreator creator = creator(processor, consumer);
+
+        if (astContext.getGlobalProfile().isSymbolicLabels()) {
+            creator.createOp(ADD, getReturnAddr(), LogicBuiltIn.COUNTER, LogicNumber.ONE);
+        }
+        creator.createJumpUnconditional(getCallAddr()).copyComment(this);
     }
 }

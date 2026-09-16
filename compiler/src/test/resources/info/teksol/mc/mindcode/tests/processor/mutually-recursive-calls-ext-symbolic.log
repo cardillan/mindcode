@@ -1,4 +1,4 @@
-   240 instructions before optimizations.
+   241 instructions before optimizations.
     20 instructions eliminated by Temp Variables Elimination (6 iterations).
      8 instructions eliminated by Dead Code Elimination (5 iterations).
      4 instructions eliminated by Jump Normalization (5 iterations).
@@ -13,9 +13,9 @@
      2 return statements optimized by Recursive Optimization.
     94 instructions eliminated by Unreachable Code Elimination (2 iterations).
     32 instructions eliminated by Stack Optimization (2 passes, 4 iterations).
-   301 instructions after optimizations.
+   302 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 825):
+Pass 1: speed optimization selection (cost limit 824):
     Inline function call at line 39:17                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 40:18                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 41:18                           size   +25, benefit        3.5, efficiency      0.140
@@ -32,7 +32,7 @@ Pass 1: speed optimization selection (cost limit 825):
     Optimize return at line 9:9                                  size    +4, benefit        6.0, efficiency      1.500
     Optimize return at line 21:9                                 size    +4, benefit        6.0, efficiency      1.500
 
-Pass 1: speed optimization selection (cost limit 807):
+Pass 1: speed optimization selection (cost limit 806):
     Inline function call at line 39:17                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 40:18                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 41:18                           size   +43, benefit        3.5, efficiency      0.081
@@ -47,7 +47,7 @@ Pass 1: speed optimization selection (cost limit 807):
   * Optimize return at line 9:9                                  size    +4, benefit        6.0, efficiency      1.500 (+4 instructions)
     Optimize return at line 21:9                                 size    +4, benefit        6.0, efficiency      1.500
 
-Pass 1: speed optimization selection (cost limit 803):
+Pass 1: speed optimization selection (cost limit 802):
     Inline function call at line 39:17                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 40:18                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 41:18                           size   +47, benefit        3.5, efficiency      0.074
@@ -61,7 +61,7 @@ Pass 1: speed optimization selection (cost limit 803):
     Inline function call at line 49:30                           size   +27, benefit        3.5, efficiency      0.130
   * Optimize return at line 21:9                                 size    +4, benefit        6.0, efficiency      1.500 (+4 instructions)
 
-Pass 1: speed optimization selection (cost limit 799):
+Pass 1: speed optimization selection (cost limit 798):
     Inline function call at line 39:17                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 40:18                           size   +29, benefit        3.5, efficiency      0.121
     Inline function call at line 41:18                           size   +47, benefit        3.5, efficiency      0.074
@@ -74,7 +74,7 @@ Pass 1: speed optimization selection (cost limit 799):
     Inline function call at line 48:45                           size   +29, benefit        3.5, efficiency      0.121
   * Inline function call at line 49:30                           size   +27, benefit        3.5, efficiency      0.130 (+20 instructions)
 
-Pass 1: speed optimization selection (cost limit 779):
+Pass 1: speed optimization selection (cost limit 778):
     Inline function call at line 39:17                           size   +47, benefit        3.5, efficiency      0.074
   * Inline function call at line 40:18                           size   +29, benefit        3.5, efficiency      0.121 (+16 instructions)
     Inline function call at line 41:18                           size   +47, benefit        3.5, efficiency      0.074
@@ -86,7 +86,7 @@ Pass 1: speed optimization selection (cost limit 779):
     Inline function call at line 47:45                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 48:45                           size   +29, benefit        3.5, efficiency      0.121
 
-Pass 1: speed optimization selection (cost limit 763):
+Pass 1: speed optimization selection (cost limit 762):
     Inline function call at line 39:17                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 41:18                           size   +47, benefit        3.5, efficiency      0.074
   * Inline function call at line 42:18                           size   +29, benefit        3.5, efficiency      0.121 (+17 instructions)
@@ -97,7 +97,7 @@ Pass 1: speed optimization selection (cost limit 763):
     Inline function call at line 47:45                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 48:45                           size   +29, benefit        3.5, efficiency      0.121
 
-Pass 1: speed optimization selection (cost limit 746):
+Pass 1: speed optimization selection (cost limit 745):
     Inline function call at line 39:17                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 41:18                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 43:18                           size   +47, benefit        3.5, efficiency      0.074
@@ -107,7 +107,7 @@ Pass 1: speed optimization selection (cost limit 746):
     Inline function call at line 47:45                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 48:45                           size   +29, benefit        3.5, efficiency      0.121
 
-Pass 1: speed optimization selection (cost limit 729):
+Pass 1: speed optimization selection (cost limit 728):
     Inline function call at line 39:17                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 41:18                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 43:18                           size   +47, benefit        3.5, efficiency      0.074
@@ -116,7 +116,7 @@ Pass 1: speed optimization selection (cost limit 729):
     Inline function call at line 47:45                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 48:45                           size   +29, benefit        3.5, efficiency      0.121
 
-Pass 1: speed optimization selection (cost limit 712):
+Pass 1: speed optimization selection (cost limit 711):
     Inline function call at line 39:17                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 41:18                           size   +47, benefit        3.5, efficiency      0.074
     Inline function call at line 43:18                           size   +47, benefit        3.5, efficiency      0.074
@@ -124,29 +124,29 @@ Pass 1: speed optimization selection (cost limit 712):
     Inline function call at line 47:45                           size   +47, benefit        3.5, efficiency      0.074
   * Inline function call at line 48:45                           size   +29, benefit        3.5, efficiency      0.121 (+3 instructions)
 
-Pass 1: speed optimization selection (cost limit 709):
+Pass 1: speed optimization selection (cost limit 708):
   * Inline function call at line 39:17                           size   +45, benefit        3.5, efficiency      0.078 (+28 instructions)
     Inline function call at line 41:18                           size   +45, benefit        3.5, efficiency      0.078
     Inline function call at line 43:18                           size   +45, benefit        3.5, efficiency      0.078
     Inline function call at line 45:19                           size   +45, benefit        3.5, efficiency      0.078
     Inline function call at line 47:45                           size   +45, benefit        3.5, efficiency      0.078
 
-Pass 1: speed optimization selection (cost limit 681):
+Pass 1: speed optimization selection (cost limit 680):
   * Inline function call at line 41:18                           size   +45, benefit        3.5, efficiency      0.078 (+30 instructions)
     Inline function call at line 43:18                           size   +45, benefit        3.5, efficiency      0.078
     Inline function call at line 45:19                           size   +45, benefit        3.5, efficiency      0.078
     Inline function call at line 47:45                           size   +45, benefit        3.5, efficiency      0.078
 
-Pass 1: speed optimization selection (cost limit 651):
+Pass 1: speed optimization selection (cost limit 650):
   * Inline function call at line 43:18                           size   +45, benefit        3.5, efficiency      0.078 (+30 instructions)
     Inline function call at line 45:19                           size   +45, benefit        3.5, efficiency      0.078
     Inline function call at line 47:45                           size   +45, benefit        3.5, efficiency      0.078
 
-Pass 1: speed optimization selection (cost limit 621):
+Pass 1: speed optimization selection (cost limit 620):
   * Inline function call at line 45:19                           size   +45, benefit        3.5, efficiency      0.078 (+31 instructions)
     Inline function call at line 47:45                           size   +45, benefit        3.5, efficiency      0.078
 
-Pass 1: speed optimization selection (cost limit 590):
+Pass 1: speed optimization selection (cost limit 589):
   * Inline function call at line 47:45                           size   +45, benefit        3.5, efficiency      0.078 (+31 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructions):

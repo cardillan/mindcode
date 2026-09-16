@@ -10,6 +10,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @NullMarked
 public class OpInstruction extends BaseResultInstruction implements ConditionalInstruction {
@@ -110,5 +111,15 @@ public class OpInstruction extends BaseResultInstruction implements ConditionalI
     @Override
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         return getArg(0) == Operation.BOOLEAN_OR ? 2 : 1;
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        if (getOperation() == Operation.STRICT_NOT_EQUAL) {
+            creator(processor, consumer).createSelect(getResult(), Condition.STRICT_EQUAL,
+                    getX(), getY(), LogicBoolean.FALSE, LogicBoolean.TRUE).copyComment(this);
+        } else {
+            consumer.accept(this);
+        }
     }
 }
