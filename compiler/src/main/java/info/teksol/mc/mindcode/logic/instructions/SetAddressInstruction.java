@@ -11,6 +11,9 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
+
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.SET;
 
 @NullMarked
 public class SetAddressInstruction extends BaseResultInstruction {
@@ -47,5 +50,10 @@ public class SetAddressInstruction extends BaseResultInstruction {
 
     public SetAddressInstruction withLabel(LogicLabel label) {
         return new SetAddressInstruction(astContext, List.of(getResult(), label), getArgumentTypes()).copyInfo(this);
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        creator(processor, consumer).createInstruction(SET, getResult(), getLabel()).copyComment(this);
     }
 }

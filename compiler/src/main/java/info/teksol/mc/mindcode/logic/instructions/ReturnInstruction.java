@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -9,6 +10,9 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
+
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.SET;
 
 @NullMarked
 public class ReturnInstruction extends BaseInstruction {
@@ -38,5 +42,10 @@ public class ReturnInstruction extends BaseInstruction {
     @Override
     public boolean endsCodePath() {
         return true;
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        creator(processor, consumer).createInstruction(SET, LogicBuiltIn.COUNTER, getIndirectAddress()).copyComment(this);
     }
 }

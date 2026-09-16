@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @NullMarked
 public class EmptyInstruction extends BaseInstruction {
@@ -22,4 +23,8 @@ public class EmptyInstruction extends BaseInstruction {
         return this.astContext == astContext ? this : new EmptyInstruction(this, astContext);
     }
 
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        // Do nothing
+    }
 }

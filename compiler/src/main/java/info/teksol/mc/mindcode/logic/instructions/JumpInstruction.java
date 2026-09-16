@@ -1,10 +1,7 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.Condition;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.GlobalCompilerProfile;
@@ -12,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @NullMarked
 public class JumpInstruction extends BaseInstruction implements ConditionalInstruction {
@@ -100,6 +98,16 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
     private void ensureConditional() {
         if (isUnconditional()) {
             throw new IllegalArgumentException("Conditional jump required, got " + this);
+        }
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        if (getCondition() == Condition.STRICT_NOT_EQUAL) {
+            creator(processor, consumer).createSelect(LogicBuiltIn.COUNTER, Condition.STRICT_EQUAL,
+                    getX(), getY(), LogicBuiltIn.COUNTER, getTarget()).copyComment(this);
+        } else {
+            consumer.accept(this);
         }
     }
 }

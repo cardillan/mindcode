@@ -120,6 +120,19 @@ public interface LogicInstruction extends MlogInstruction {
         return getAstContext().getLocalProfile();
     }
 
+    /// Resolves virtual instructions into real ones. May be also used to modify real instructions slghtly
+    /// (such as turning `jump strictNotEqual ...` into `select strictEqual @counter ...`). Use the
+    /// {@link BaseInstruction#creator(InstructionProcessor, Consumer)}` to create real instructions replacing
+    /// the current one.
+    ///
+    /// The default implementation passes this instruction unchanged and doesn't even instantiate
+    /// the instruction creator.
+    ///
+    /// It is also possible to erase an instruction by not passing anything to the consumer.
+    default void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        consumer.accept(this);
+    }
+
     //<editor-fold desc="Instruction Info getters/setters">
     default LogicLabel getMarker() {
         return (LogicLabel) getInfo(InstructionInfo.MARKER);

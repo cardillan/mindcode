@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @NullMarked
 public class SelectInstruction extends BaseResultInstruction implements ConditionalInstruction {
@@ -76,5 +77,15 @@ public class SelectInstruction extends BaseResultInstruction implements Conditio
 
     public LogicValue getResultValue() {
         return (LogicValue) getArg(resultIndex);
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        if (getCondition() == Condition.STRICT_NOT_EQUAL) {
+            creator(processor, consumer).createSelect(getResult(), Condition.STRICT_EQUAL,
+                    getX(), getY(), getFalseValue(), getTrueValue()).copyComment(this);
+        } else {
+            consumer.accept(this);
+        }
     }
 }
