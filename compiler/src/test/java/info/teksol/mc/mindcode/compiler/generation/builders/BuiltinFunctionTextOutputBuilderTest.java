@@ -73,7 +73,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(LOG, "info", q("Index [[1] out of bounds (0, [[2])!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
+                    createInstruction(LOG, "info", q("Index {1} out of bounds (0, {2})!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
             );
         }
 
@@ -133,7 +133,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(ERROR, q("Index [[1] out of bounds (0, [[2])!"), "i", "max")
+                    createInstruction(ERROR, q("Index {1} out of bounds (0, {2})!"), "i", "max")
             );
         }
 

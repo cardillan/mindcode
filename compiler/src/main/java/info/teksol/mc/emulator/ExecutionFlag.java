@@ -35,7 +35,11 @@ public enum ExecutionFlag {
     ERR_GRAPHICS_BUFFER_OVERFLOW    ("stop execution when the graphics buffer size (256 operations) is exceeded"),
 
     ERR_INVALID_ASSERT_PRINTS       ("stop execution when 'assertflush' and 'assertprints' are called out of order",false, true),
-    ERR_RUNTIME_CHECK_FAILED        ("stop execution when a compiler-generated runtime check fails."),
+    ERR_STOP_ON_ASSERT_BOUNDS       ("stop execution when `assertbounds` fails."),
+    ERR_STOP_ON_ASSERT_EQUALS       ("stop execution when `assertequals` fails.", true, false),
+    ERR_STOP_ON_ASSERT_PRINTS       ("stop execution when `assertprints` fails.", true, false),
+    ERR_STOP_ON_ASSERT_TYPE         ("stop execution when `asserttype` fails."),
+    ERR_STOP_ON_ERROR               ("stop execution when `error` instruction is executed."),
     ;
 
     private final String optionName;

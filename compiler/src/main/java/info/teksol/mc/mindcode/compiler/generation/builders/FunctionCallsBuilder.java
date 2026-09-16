@@ -141,6 +141,7 @@ public class FunctionCallsBuilder extends AbstractCodeBuilder implements
 
         map.put("assertEquals",     call -> assertsBuilder.get().handleAssertEquals(call));
         map.put("assertPrints",     call -> assertsBuilder.get().handleAssertPrints(call));
+        map.put("assertType",       call -> assertsBuilder.get().handleAssertType(call));
 
         map.put("async",            this::handleAsync);
         map.put("await",            call -> callBuilder.get().handleAwait(call));

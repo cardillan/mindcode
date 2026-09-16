@@ -6,6 +6,7 @@ import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.blocks.graphics.GraphicsBuffer;
 import info.teksol.mc.emulator.mimex.target60.LExecutor60;
 import info.teksol.mc.mindcode.logic.arguments.AssertOp;
+import info.teksol.mc.mindcode.logic.arguments.AssertionDataType;
 import info.teksol.mc.mindcode.logic.arguments.AssertionType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
@@ -117,9 +118,11 @@ public abstract class LExecutorBase implements LExecutor {
 
         builders.put("assertbounds", AssertBoundsI::new);
         builders.put("assertequals", AssertEqualsI::new);
+        builders.put("asserttype", AssertTypeI::new);
         builders.put("assertflush", AssertFlushI::new);
         builders.put("assertprints", AssertPrintsI::new);
         builders.put("error", ErrorI::new);
+        builders.put("log", LogI::new);
     }
 
     //<editor-fold desc="Initialization">
@@ -268,6 +271,14 @@ public abstract class LExecutorBase implements LExecutor {
                 .map(v -> v.name + ": " + v.printExact())
                 .forEach(messageHandler::dump);
     }
+
+    protected void addAssertion(Assertion assertion, ExecutionFlag executionFlag) {
+        assertions.add(assertion);
+
+        if (assertion.failure() && !error(executionFlag, "Failed runtime check: '%s'.", assertion.title())) {
+            messageHandler.warn("Failed runtime check: '%s'.", assertion.title());
+        }
+    }
     //</editor-fold>
 
     //<editor-fold desc="Results">
@@ -297,7 +308,7 @@ public abstract class LExecutorBase implements LExecutor {
     }
 
     @Override
-    public List<Assertion> getAssertions() {
+    public Collection<Assertion> getAssertions() {
         return assertions;
     }
 
@@ -359,6 +370,7 @@ public abstract class LExecutorBase implements LExecutor {
         return builders.getOrDefault(statement.opcode(), UnknownI::new).apply(statement);
     }
 
+    /// @return true if the execution should stop due to this error
     protected boolean error(ExecutionFlag flag, @PrintFormat String message, Object... args) {
         if (messageHandler.error(flag, message, args)) {
             if (!finished) {
@@ -525,7 +537,7 @@ public abstract class LExecutorBase implements LExecutor {
                     && (opMax.function.get(value.num(), max.num()))) {
                 // We're okay
             } else {
-                if (!error(ERR_RUNTIME_CHECK_FAILED, "Failed runtime check: '%s'.", message.printExact())) {
+                if (!error(ERR_STOP_ON_ASSERT_BOUNDS, "Failed runtime check: '%s'.", message.printExact())) {
                     messageHandler.warn("Failed runtime check: '%s'.", message.printExact());
                 }
             }
@@ -546,7 +558,31 @@ public abstract class LExecutorBase implements LExecutor {
 
         @Override
         public void run() {
-            assertions.add(new Assertion(expected.printExact(), actual.printExact(), message.printExact()));
+            addAssertion(new DataAssertion(expected.printExact(), actual.printExact(), message.printExact()),
+                    ERR_STOP_ON_ASSERT_EQUALS);
+        }
+    }
+
+    protected class AssertTypeI extends AbstractInstruction {
+        protected final @Nullable AssertionDataType expected;
+        protected final LVar actual;
+        protected final LVar message;
+
+        public AssertTypeI(LStatement statement) {
+            super(statement);
+            expected = AssertionDataType.byName(statement.arg0());
+            actual = assembler.var(statement.arg1());
+            message = assembler.var(statement.arg2());
+        }
+
+        @Override
+        public void run() {
+            if (expected == null) {
+                error(ERR_UNSUPPORTED_OPCODE, "Invalid assertion data type.");
+                return;
+            }
+
+            addAssertion(new TypeAssertion(expected, actual, message.printExact()), ERR_STOP_ON_ASSERT_TYPE);
         }
     }
 
@@ -578,8 +614,8 @@ public abstract class LExecutorBase implements LExecutor {
 
         @Override
         public void run() {
-            assertions.add(new Assertion(expected.printExact(),
-                    textBuffer.getAssertedOutput(flushIndex.numi()), message.printExact()));
+            addAssertion(new DataAssertion(expected.printExact(),
+                    textBuffer.getAssertedOutput(flushIndex.numi()), message.printExact()), ERR_STOP_ON_ASSERT_PRINTS);
         }
     }
 
@@ -593,8 +629,94 @@ public abstract class LExecutorBase implements LExecutor {
 
         @Override
         public void run() {
-            error(ERR_RUNTIME_CHECK_FAILED, "error() called: %s.",
-                    String.join(" ", args.stream().map(LVar::printExact).toList()));
+            String message = buildMessage("", true, args.toArray());
+            if (!error(ERR_STOP_ON_ERROR, "error() called: %s.", message)) {
+                messageHandler.warn("Failed runtime check: '%s'.", message);
+            }
+        }
+    }
+
+    protected class LogI extends AbstractInstruction {
+        protected final String level;
+        protected final List<LVar> args;
+
+        public LogI(LStatement statement) {
+            super(statement);
+            level = statement.arg0();
+            args = statement.arguments().stream().skip(1).filter(s -> !"null".equals(s)).map(assembler::var).toList();
+        }
+
+        @Override
+        public void run() {
+            System.out.println(buildMessage("[" + Character.toUpperCase(level.charAt(0)) + "] ", true, args.toArray()));
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Message formatting">
+    private String buildMessage(String prefix, boolean appendUnused, Object... vars) {
+        int used = 0;
+        StringBuilder sbr = new StringBuilder(50).append(prefix).append(print(vars[0]));
+        int pos = sbr.indexOf("{");
+        while (pos >= 0) {
+            if (sbr.charAt(pos + 1) >= '1' && sbr.charAt(pos + 1) <= '9' && sbr.charAt(pos + 2) == '}') {
+                int index = sbr.charAt(pos + 1) - '0';
+                String str = print(vars[index], true);
+                sbr.replace(pos, pos + 3, str);
+                pos = sbr.indexOf("{", pos + str.length());
+                used |= (1 << index);
+            } else {
+                pos = sbr.indexOf("{", pos + 1);
+            }
+        }
+
+        if (appendUnused) {
+            for (int i = 1; i < vars.length; i++) {
+                LVar var = (LVar) vars[i];
+                if ((used & (1 << i)) == 0 && nonNull(var)) sbr.append(' ').append(print(var, true));
+            }
+        }
+
+        return sbr.toString();
+    }
+
+    private boolean nonNull(LVar var) {
+        return !"null".equals(var.name);
+    }
+
+    private final double COLOR_LIMIT = Double.longBitsToDouble(0xffffffffL);
+
+    private String print(Object message) {
+        return print(message, false);
+    }
+
+    private String print(Object message, boolean formatString) {
+        return message instanceof LVar lvar ? print(lvar, formatString) : String.valueOf(message);
+    }
+
+    private String print(LVar var, boolean formatString) {
+        if (var.isobj) {
+            return formatString && var.objval instanceof String str ? '"' + str + '"' : formatValue(var);
+        } else if (var.numval <= COLOR_LIMIT && var.numval > 0) {
+            long color = Double.doubleToLongBits(var.numval) & 0xFFFFFFFFL;
+            return '%' + Integer.toHexString((int) color);
+        } else if ((long) var.numval == var.numval) {
+            return String.valueOf((long) var.numval);
+        } else {
+            return String.valueOf(var.numval);
+        }
+    }
+
+    public String formatValue(LVar var) {
+        if (var.isobj) {
+            return switch (var.objval) {
+                case null -> "null";
+                case String s -> s;
+                case MindustryObject c -> c.format();
+                default -> "[object]";
+            };
+        } else {
+            return String.valueOf(var.numval);
         }
     }
     //</editor-fold>
