@@ -273,10 +273,12 @@ public abstract class LExecutorBase implements LExecutor {
     }
 
     protected void addAssertion(Assertion assertion, ExecutionFlag executionFlag) {
-        assertions.add(assertion);
-
-        if (assertion.failure() && !error(executionFlag, "Failed runtime check: '%s'.", assertion.title())) {
-            messageHandler.warn("Failed runtime check: '%s'.", assertion.title());
+        if (getFlag(executionFlag)) {
+            if (assertion.failure()) {
+                error(executionFlag, "Failed runtime check: '%s'.", assertion.title());
+            }
+        } else {
+            assertions.add(assertion);
         }
     }
     //</editor-fold>
