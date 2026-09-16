@@ -236,7 +236,7 @@ public class LExecutor60 extends LExecutorBase {
         }
     }
 
-    protected class PrintI extends AbstractInstruction {
+    public class PrintI extends AbstractInstruction {
         protected final LVar value;
 
         public PrintI(LStatement statement) {

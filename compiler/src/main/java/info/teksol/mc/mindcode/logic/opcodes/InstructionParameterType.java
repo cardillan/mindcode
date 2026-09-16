@@ -21,13 +21,19 @@ public enum InstructionParameterType {
     /// Mindcode's array - a ValueStore instance
     ARRAY           (Flags.SPECIAL),
 
+    /// Mindcode's array - a ValueStore instance
+    ASSERT_TYPE     (Flags.KEYWORD, _ -> List.of(
+            "number", "string", "content", "item", "block", "bulletType", "liquid", "statusEffect", "unitType", "weather",
+            "team", "unitCommand", "unitStance", "unit", "building", "processor", "memory", "message", "display", "canvas",
+            "property", "readable", "writable", "senseable")),
+
     /// Input parameter accepting blocks (buildings).
     BLOCK           (Flags.INPUT),
 
     /// Selector for the `control` instruction (LAccess.controls)
     BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getLAccessControllableNames),
 
-    /// A boolean parameter - expected as an input 
+    /// A boolean parameter - expected as an input
     BOOL            (Flags.INPUT),
 
     /// True/false to set/clear status in `status` instruction.
@@ -42,7 +48,7 @@ public enum InstructionParameterType {
     /// Selector for the `draw` instruction.
     DRAW            (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getGraphicsTypes),
 
-    /// Type of visual effect 
+    /// Type of visual effect
     EFFECT          (Flags.SELECTOR,  MindustryMetadata::getEffects),
 
     /// Item to fetch in `fetch` instruction
@@ -54,13 +60,13 @@ public enum InstructionParameterType {
     /// A const parameter. Specifies a group of buildings to locate.
     GROUP           ("blockGroup", Flags.KEYWORD, MindustryMetadata::getBlockFlags, blockGroup),
 
-    /// Non-specific input parameter. Accepts literals and variables 
+    /// Non-specific input parameter. Accepts literals and variables
     INPUT           (Flags.INPUT),
 
-    /// Non-specific input/output parameter for custom-made instructions. Accepts literals and variables 
+    /// Non-specific input/output parameter for custom-made instructions. Accepts literals and variables
     INPUT_OUTPUT    (Flags.INPUT | Flags.OUTPUT),
 
-    /// A label pseudo-parameter. 
+    /// A label pseudo-parameter.
     LABEL           (Flags.INPUT),
 
     /// Layer in the `getblock` instruction.
@@ -99,10 +105,10 @@ public enum InstructionParameterType {
     /// A const parameter. Specifies properties of units searchable by radar.
     RADAR           ("category", Flags.KEYWORD, MindustryMetadata::getRadarTargets, radarTarget),
 
-    /// A const parameter. Specifies property to sort radar outputs by. 
+    /// A const parameter. Specifies property to sort radar outputs by.
     RADAR_SORT      ("sortBy", Flags.KEYWORD, MindustryMetadata::getRadarSorts, radarSort),
 
-    /// Output parameter. Maps to the return value of a function. 
+    /// Output parameter. Maps to the return value of a function.
     RESULT          (Flags.OUTPUT),
 
     /// Game rule in `setrule` instruction
@@ -111,7 +117,7 @@ public enum InstructionParameterType {
     /// Scope for the `playsound` instruction: true=positional, false=global
     SCOPE           (Flags.SELECTOR, _ -> Set.of("true", "false")),
 
-    /// Input parameter accepting property id. 
+    /// Input parameter accepting property id.
     SENSOR          ("property", Flags.INPUT, MindustryMetadata::getLAccessNames),
 
     /// Input parameter accepting settable property id.
@@ -123,7 +129,7 @@ public enum InstructionParameterType {
     /// Settable layer in `setblock` instruction (TileLayer.settable)
     SETTABLE_LAYER  ("layer", Flags.SELECTOR, MindustryMetadata::getTileLayersSettable, settableTileLayer),
 
-    /// Sound to play 
+    /// Sound to play
     SOUND           ("sound", Flags.INPUT, MindustryMetadata::getSoundNames),
 
     /// Unit status in a `status` instruction.
@@ -141,10 +147,10 @@ public enum InstructionParameterType {
     /// Selector for the `ucontrol` instruction.
     UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getUnitControls),
 
-    /// Non-specific parameter type for generic instructions 
+    /// Non-specific parameter type for generic instructions
     UNSPECIFIED     (0),
 
-    /// An unused input parameter. Ignored by given opcode variant. 
+    /// An unused input parameter. Ignored by given opcode variant.
     UNUSED          (Flags.UNUSED),
 
     /// An unused output parameter. Ignored by the given opcode variant, output in some other opcode variant.

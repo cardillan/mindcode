@@ -82,6 +82,7 @@ public enum Opcode {
     // Unit testing support. These instructions are left in the final code for execution by the processor emulator.
 
     ASSERT_EQUALS   (NONE,   "assertequals",    1),
+    ASSERT_TYPE     (NONE,   "asserttype",      1),
     ASSERT_PRINTS   (NONE,   "assertprints",    1),
     ASSERT_FLUSH    (NONE,   "assertflush",     1),
 

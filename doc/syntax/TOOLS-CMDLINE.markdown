@@ -142,7 +142,9 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
                 [--err-invalid-format {true,false}] [--err-graphics-buffer-overflow {true,false}]
-                [--err-runtime-check-failed {true,false}] [input]
+                [--err-stop-on-assert-bounds {true,false}] [--err-stop-on-assert-equals {true,false}]
+                [--err-stop-on-assert-prints {true,false}] [--err-stop-on-assert-type {true,false}]
+                [--err-stop-on-error {true,false}] [input]
 
 Compile a Mindcode source file into text mlog file.
 
@@ -451,8 +453,16 @@ Emulator options:
                          stop execution when no placeholder for the 'format' instruction exists in the buffer
   --err-graphics-buffer-overflow {true,false}
                          stop execution when the graphics buffer size (256 operations) is exceeded
-  --err-runtime-check-failed {true,false}
-                         stop execution when a compiler-generated runtime check fails.
+  --err-stop-on-assert-bounds {true,false}
+                         stop execution when `assertbounds` fails.
+  --err-stop-on-assert-equals {true,false}
+                         stop execution when `assertequals` fails.
+  --err-stop-on-assert-prints {true,false}
+                         stop execution when `assertprints` fails.
+  --err-stop-on-assert-type {true,false}
+                         stop execution when `asserttype` fails.
+  --err-stop-on-error {true,false}
+                         stop execution when `error` instruction is executed.
 ```
 
 ## Process Mlog action help
@@ -475,7 +485,9 @@ usage: mindcode pm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTP
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
                 [--err-invalid-format {true,false}] [--err-graphics-buffer-overflow {true,false}]
-                [--err-runtime-check-failed {true,false}] [input]
+                [--err-stop-on-assert-bounds {true,false}] [--err-stop-on-assert-equals {true,false}]
+                [--err-stop-on-assert-prints {true,false}] [--err-stop-on-assert-type {true,false}]
+                [--err-stop-on-error {true,false}] [input]
 
 Load mlog code from a file  or  an  in-game  processor  for  further  processing  (partially decompiling into a Mindcode
 source, running on the internal emulator or sending to an in-game processor).
@@ -565,8 +577,16 @@ Emulator options:
                          stop execution when no placeholder for the 'format' instruction exists in the buffer
   --err-graphics-buffer-overflow {true,false}
                          stop execution when the graphics buffer size (256 operations) is exceeded
-  --err-runtime-check-failed {true,false}
-                         stop execution when a compiler-generated runtime check fails.
+  --err-stop-on-assert-bounds {true,false}
+                         stop execution when `assertbounds` fails.
+  --err-stop-on-assert-equals {true,false}
+                         stop execution when `assertequals` fails.
+  --err-stop-on-assert-prints {true,false}
+                         stop execution when `assertprints` fails.
+  --err-stop-on-assert-type {true,false}
+                         stop execution when `asserttype` fails.
+  --err-stop-on-error {true,false}
+                         stop execution when `error` instruction is executed.
 ```
 
 ## Compile Schematic action help
@@ -618,7 +638,9 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
                 [--err-invalid-format {true,false}] [--err-graphics-buffer-overflow {true,false}]
-                [--err-runtime-check-failed {true,false}] [input]
+                [--err-stop-on-assert-bounds {true,false}] [--err-stop-on-assert-equals {true,false}]
+                [--err-stop-on-assert-prints {true,false}] [--err-stop-on-assert-type {true,false}]
+                [--err-stop-on-error {true,false}] [input]
 
 Compile a schematic definition file into binary msch file.
 
@@ -932,8 +954,16 @@ Emulator options:
                          stop execution when no placeholder for the 'format' instruction exists in the buffer
   --err-graphics-buffer-overflow {true,false}
                          stop execution when the graphics buffer size (256 operations) is exceeded
-  --err-runtime-check-failed {true,false}
-                         stop execution when a compiler-generated runtime check fails.
+  --err-stop-on-assert-bounds {true,false}
+                         stop execution when `assertbounds` fails.
+  --err-stop-on-assert-equals {true,false}
+                         stop execution when `assertequals` fails.
+  --err-stop-on-assert-prints {true,false}
+                         stop execution when `assertprints` fails.
+  --err-stop-on-assert-type {true,false}
+                         stop execution when `asserttype` fails.
+  --err-stop-on-error {true,false}
+                         stop execution when `error` instruction is executed.
 ```
 
 ## Process Schematic action help
@@ -956,7 +986,9 @@ usage: mindcode ps [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTP
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
                 [--err-invalid-format {true,false}] [--err-graphics-buffer-overflow {true,false}]
-                [--err-runtime-check-failed {true,false}] [input]
+                [--err-stop-on-assert-bounds {true,false}] [--err-stop-on-assert-equals {true,false}]
+                [--err-stop-on-assert-prints {true,false}] [--err-stop-on-assert-type {true,false}]
+                [--err-stop-on-error {true,false}] [input]
 
 Load schematic from a binary msch file  or  the  in-game  Schematics  Library for further processing (decompiling into a
 Schemacode definition file, running on the internal emulator or sending to the in-game library)
@@ -1064,8 +1096,16 @@ Emulator options:
                          stop execution when no placeholder for the 'format' instruction exists in the buffer
   --err-graphics-buffer-overflow {true,false}
                          stop execution when the graphics buffer size (256 operations) is exceeded
-  --err-runtime-check-failed {true,false}
-                         stop execution when a compiler-generated runtime check fails.
+  --err-stop-on-assert-bounds {true,false}
+                         stop execution when `assertbounds` fails.
+  --err-stop-on-assert-equals {true,false}
+                         stop execution when `assertequals` fails.
+  --err-stop-on-assert-prints {true,false}
+                         stop execution when `assertprints` fails.
+  --err-stop-on-assert-type {true,false}
+                         stop execution when `asserttype` fails.
+  --err-stop-on-error {true,false}
+                         stop execution when `error` instruction is executed.
 ```
 
 ---

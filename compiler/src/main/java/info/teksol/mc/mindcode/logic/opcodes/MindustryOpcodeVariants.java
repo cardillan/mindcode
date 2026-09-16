@@ -372,8 +372,9 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.LOCALEPRINT, in("property"));
 
         // Unit testing support
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_EQUALS, in("expected"), in("actual"), in("title"));
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("flushIndex"), in("expected"), in("title"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_EQUALS, in("expected"), in("actual"), in("message"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_TYPE,   assertType("expectedType"), in("actualValue"), in("message"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("flushIndex"), in("expected"), in("message"));
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH, out("flushIndex"));
 
         // Assertions mod
@@ -415,6 +416,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter array(String name) {
         return new NamedParameter(InstructionParameterType.ARRAY, name);
+    }
+
+    public static NamedParameter assertType(String name) {
+        return new NamedParameter(InstructionParameterType.ASSERT_TYPE, name);
     }
 
     public static NamedParameter bctrl(String name) {

@@ -221,7 +221,7 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                     """
                             set max 8
                             set i 10
-                            set *ERROR_0 "Index [[1] out of bounds (0, [[2])!"
+                            set *ERROR_0 "Index {1} out of bounds (0, {2})!"
                             set *ERROR_1 i
                             set *ERROR_2 max
                             stop
@@ -243,7 +243,7 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                     """
                             set max 8
                             set i 10
-                            error "Index [[1] out of bounds (0, [[2])!" i max null null null null null null null
+                            error "Index {1} out of bounds (0, {2})!" i max null null null null null null null
                             end
                             print "%s"
                             """.formatted(CompilerProfile.SIGNATURE_STATIC)
