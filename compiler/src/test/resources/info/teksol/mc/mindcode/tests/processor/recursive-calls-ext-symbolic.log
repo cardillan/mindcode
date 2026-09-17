@@ -400,7 +400,7 @@ Modifications by Inline function call at line 34:34 (+14 instructions):
 -    * callrec *label1 *label6 :bar*retval
 -    * label *label6
 +   12 # "Function: def bar(in n, in out a, in out b)"
-+   13 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
++   13 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
 +   14 initrec true
 +   15 print :bar:a
 +   16 print :bar:b
@@ -428,7 +428,7 @@ Modifications by Inline function call at line 34:34 (+14 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     12 # "Function: def bar(in n, in out a, in out b)"
-    13 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    13 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
     14 initrec true
 -    * print :bar:a
 -    * print :bar:b
@@ -457,7 +457,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :bar:a 0
 -    * set :bar:b 0
      9 # "Function: def bar(in n, in out a, in out b)"
-    10 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    10 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
     11 initrec true
     12 print 0
     13 print 0
@@ -520,7 +520,7 @@ Modifications by Inline function call at line 33:34 (+19 instructions):
 -    * callrec *label0 *label5 :foo*retval
 -    * label *label5
 +    5 # "Function: def foo(in n, in a, in b)"
-+    6 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
++    6 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 +    7 initrec true
 +    8 print :foo:a
 +    9 print :foo:b
@@ -549,7 +549,7 @@ Modifications by Inline function call at line 33:34 (+19 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      5 # "Function: def foo(in n, in a, in b)"
-     6 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     6 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      7 initrec true
 -    * print :foo:a
 -    * print :foo:b
@@ -588,7 +588,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set :foo:a 0
      2 set :foo:b 0
      3 # "Function: def foo(in n, in a, in b)"
-     4 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     4 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
  
     19 pop :foo:a
     20 label *label25
@@ -606,7 +606,7 @@ Modifications by Inline function call at line 35:34 (+19 instructions):
 -    * callrec *label2 *label7 :baz*retval
 -    * label *label7
 +   51 # "Function: def baz(in n, in out a, in out b)"
-+   52 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
++   52 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
 +   53 initrec true
 +   54 print :baz:a
 +   55 print :baz:b
@@ -635,7 +635,7 @@ Modifications by Inline function call at line 35:34 (+19 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     51 # "Function: def baz(in n, in out a, in out b)"
-    52 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    52 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
     53 initrec true
 -    * print :baz:a
 -    * print :baz:b
@@ -676,7 +676,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set :baz:a 0
     48 set :baz:b 0
     49 # "Function: def baz(in n, in out a, in out b)"
-    50 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    50 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
  
     65 pop :baz:b
     66 label *label29
@@ -783,7 +783,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * end
     85 label *label1
     86 # "Function: def bar(in n, in out a, in out b)"
-    87 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    87 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
  
    100 set :bar:b :bar:a
    101 set :bar:a *tmp21
@@ -797,7 +797,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * end
    107 label *label2
    108 # "Function: def baz(in n, in out a, in out b)"
-   109 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+   109 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
  
    123 pop :baz:a
    124 pop :baz:b
@@ -813,7 +813,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
  
      3 # "Function: def foo(in n, in a, in b)"
-     4 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     4 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      5 initrec true
 -    * print 0
 -    * print 0
@@ -831,7 +831,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
     19 assertprints *tmp0 "0001111223221211" "foo"
     20 assertflush *tmp2
     21 # "Function: def bar(in n, in out a, in out b)"
-    22 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    22 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
     23 initrec true
 -    * print 0
 -    * print 0
@@ -841,7 +841,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
     27 set :bar:a 0
  
     38 # "Function: def baz(in n, in out a, in out b)"
-    39 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    39 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
     40 initrec true
 -    * print 0
 -    * print 0
@@ -866,7 +866,7 @@ initstack *label3 *label4
 assertflush *tmp0
 set :foo:b 0
 # "Function: def foo(in n, in a, in b)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 initrec true
 print "00"
 set :foo:a 1
@@ -884,7 +884,7 @@ print "11"
 assertprints *tmp0 "0001111223221211" "foo"
 assertflush *tmp1
 # "Function: def bar(in n, in out a, in out b)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
 initrec true
 print "00"
 set *tmp4 1
@@ -901,7 +901,7 @@ assertprints *tmp1 "0001111223333444" "bar"
 assertflush *tmp2
 set :baz:b 0
 # "Function: def baz(in n, in out a, in out b)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
 initrec true
 print "00"
 set :baz:a 1
@@ -921,7 +921,7 @@ stop
 end
 label *label0
 # "Function: def foo(in n, in a, in b)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 initrec false
 print :foo:a
 print :foo:b
@@ -944,7 +944,7 @@ print :foo:b
 returnrec
 label *label1
 # "Function: def bar(in n, in out a, in out b)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
 initrec false
 print :bar:a
 print :bar:b
@@ -966,7 +966,7 @@ print :bar:b
 returnrec
 label *label2
 # "Function: def baz(in n, in out a, in out b)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
 initrec false
 print :baz:a
 print :baz:b

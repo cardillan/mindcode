@@ -44,7 +44,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
      7 label *label0
-     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     8 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      9 initrec false
 -    * op greaterThan *tmp1 :foo:n 0
 -    * jump *label5 equal *tmp1 false
@@ -66,7 +66,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     8 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      9 initrec false
     10 jump *label5 lessThanEq :foo:n 0
 -    * op sub *tmp3 :foo:n 1
@@ -77,7 +77,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
      7 label *label0
-     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     8 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      9 initrec false
 -    * jump *label5 lessThanEq :foo:n 0
 +   10 set :foo*retval 10
@@ -117,7 +117,7 @@ Modifications by Inline function call at line 7:18 (+5 instructions):
      1 set :foo:n 1
 -    * callrec *label0 *label3 :foo*retval
 -    * label *label3
-+    2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
++    2 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 +    3 initrec true
 +    4 set :foo*retval 10
 +    5 jump *label9 lessThanEq :foo:n 0
@@ -134,7 +134,7 @@ Modifications by Inline function call at line 7:18 (+5 instructions):
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     2 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      3 initrec true
      4 set :foo*retval 10
 -    * jump *label9 lessThanEq :foo:n 0
@@ -148,7 +148,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
      0 initstack *label1 *label2
 -    * set :foo:n 1
-     1 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     1 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      2 initrec true
 -    * set :foo*retval 10
      3 jump *label9 lessThanEq 1 0
@@ -157,7 +157,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
      0 initstack *label1 *label2
-     1 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     1 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      2 initrec true
 -    * jump *label9 lessThanEq 1 0
      3 op sub :foo:n 1 1
@@ -202,7 +202,7 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-
 
 Modifications by Iterated phase, Recursive Optimization, pass 2, iteration 1 (-4 instructions):
      0 initstack *label1 *label2
--    * assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+-    * assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 -    * initrec true
      1 op sub :foo:n 1 1
 -    * callrec *label0 *label8 :foo*retval
@@ -216,7 +216,7 @@ Modifications by Iterated phase, Recursive Optimization, pass 2, iteration 1 (-4
      8 stop
      9 end
     10 label *label0
--    * assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+-    * assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 -    * initrec false
 -    * set :foo*retval 10
 -    * jump *label6 lessThanEq :foo:n 0

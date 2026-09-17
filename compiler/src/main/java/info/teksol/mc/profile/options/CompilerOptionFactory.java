@@ -238,10 +238,10 @@ public class CompilerOptionFactory {
                 false).setConstValue(true));
 
         list.add(new IntegerCompilerOptionValue(CompilerOptions.STACK_DEPTH, "",
-                "number of stack frames to reserve for recursive functions on the internal stack",
+                "number of stack frames to reserve for recursive functions on the stack",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
-                1, 512, 10));
+                1, 10000, 10));
 
         list.add(new IntegerCompilerOptionValue(CompilerOptions.SETRATE, "",
                 "generates a 'setrate' instruction with the specified value in the initialization code," +

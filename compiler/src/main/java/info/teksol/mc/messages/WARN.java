@@ -8,6 +8,7 @@ public class WARN {
     public static final String DEPRECATED_USE_OF_REQUIRE_REMOTE = "Using the 'remote' directive after 'require' is deprecated. Move the 'remote' directive in front of 'require'.";
     public static final String FORMAT_PRECLUDED_BY_STRING_LITERAL = "A string literal precludes using 'format' instruction for print merging.";
     public static final String FUNCTION_NO_LONGER_SUPPORTED = "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.";
+    public static final String INSUFFICIENT_STACK_CAPACITY = "Function group '%s': the external stack potentially too small (required %d, guaranteed %d).";
     public static final String LINKED_UNKNOWN_TYPE_SPEC = "Unknown linked block type specification '%s' (must use block type, e.g. '@memory-cell').";
     public static final String LINKED_VARIABLE_NOT_RECOGNIZED = "Linked variable name '%s' doesn't correspond to any known linked block name.";
     public static final String LITERAL_LOSS_OF_PRECISION = "Loss of precision while creating mlog literal (original value %s, encoded value %s).";

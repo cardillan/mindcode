@@ -79,7 +79,7 @@ public class AssertBoundsInstruction extends BaseInstruction {
     }
 
     private int conditions() {
-        return (getLowerBound() == getValue() ? 0 : 1) + (getUpperBound() == getValue() ? 0 : 1);
+        return (hasLowerBound() ? 1 : 0) + (hasUpperBound() ? 1 : 0);
     }
 
     @Override

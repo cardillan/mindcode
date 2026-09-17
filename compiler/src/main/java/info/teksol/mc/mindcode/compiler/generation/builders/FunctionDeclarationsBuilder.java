@@ -118,7 +118,7 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
                 assembler.createAssertBounds(LogicKeyword.create("decimal"), LogicNumber.ONE,
                         LogicNumber.create(stackTracker.getAllocationStart()), Condition.LESS_THAN_EQ,
                         stackTracker.getStackPointer(),
-                        Condition.LESS_THAN, LogicNumber.create(stackTracker.getAllocationEnd()),
+                        Condition.LESS_THAN_EQ, LogicNumber.create(stackTracker.getAllocationEnd()),
                         LogicString.createRaw(errorMessage)).setStackOverflowCheck();
                 assembler.clearSubcontextType();
             }

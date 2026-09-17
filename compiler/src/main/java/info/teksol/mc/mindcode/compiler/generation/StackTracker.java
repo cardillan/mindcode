@@ -1,11 +1,16 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @NullMarked
 public class StackTracker {
@@ -57,6 +62,41 @@ public class StackTracker {
 
     public List<LogicVariable> getStackStorage() {
         return stackStorage;
+    }
+
+    public void verifyStackCapacity(MindcodeFunction function) {
+        int processedDepth = 0;
+        int required = 0;
+        int leftOver = stackStorage.size () == 1 ? 0 : 1;
+        int overhead = stackStorage.size () == 1 ? 0 : 3;
+        int segmentSize = allocationEnd - allocationStart;
+        Set<MindcodeFunction> functions = function.getIndirectCalls();
+
+        while (true) {
+            int limit = processedDepth;
+            int curDepth = functions.stream().filter(f -> f.getMaxDepth() > limit).mapToInt(MindcodeFunction::getMaxDepth).min().orElse(0);
+            if (curDepth == 0) break;
+            int sumSize = functions.stream().filter(f -> f.getMaxDepth() > limit).mapToInt(MindcodeFunction::getCallSize).sum();
+            int maxSize = functions.stream().filter(f -> f.getMaxDepth() > limit).mapToInt(MindcodeFunction::getCallSize).max().orElse(0);
+
+            // How much we still need to store on the stack
+            int totalSize = sumSize * (curDepth - processedDepth) + leftOver;
+
+            // How many blocks we need, given that we may waste up to (maxSize + overhead - 1) elements
+            int count = totalSize / (segmentSize - (maxSize + overhead - 1));
+            required += count * segmentSize;
+            leftOver = totalSize % (segmentSize - (maxSize + overhead - 1));      // Needed to store in the next block
+            processedDepth = curDepth;
+        }
+
+        required += leftOver;
+        int capacity = stackStorage.size() * segmentSize;
+
+        if (required > capacity) {
+            String names = functions.stream().map(MindcodeFunction::getName).sorted().collect(Collectors.joining("', '"));
+            ContextFactory.getMasterContext().warn(function.getSourcePosition(),
+                    WARN.INSUFFICIENT_STACK_CAPACITY, names, required, capacity);
+        }
     }
 
     public static StackTracker mockInternalStack() {
