@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.19.2 – 2026-09-17
+
+### Fixed
+
+* Fixed missing support for escape characters in string literals in mlog blocks ([#361](https://github.com/cardillan/mindcode/issues/361)).
+
 ## 3.19.1 – 2026-09-12
 
 ### Added

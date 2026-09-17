@@ -102,6 +102,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     """
             );
         }
+
         @Test
         void refusesInvalidArrays() {
             assertGeneratesMessages(
@@ -1112,7 +1113,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     mlog { ;a}
                     mlog {;a }
                     mlog { ;a }
-
+                    
                     mlog {a ;}
                     mlog { a ;}
                     mlog {a ; }
@@ -1121,7 +1122,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     mlog {  ;a}
                     mlog { ;a }
                     mlog {  ;a }
-
+                    
                     mlog {a; }
                     mlog { a; }
                     mlog {a;  }
@@ -1130,7 +1131,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     mlog { ; a}
                     mlog {; a }
                     mlog { ; a }
-
+                    
                     mlog {a ; }
                     mlog { a ; }
                     mlog {a ;  }
@@ -1189,7 +1190,7 @@ class MindcodeParserTest extends AbstractParserTest {
                         print .5E10
                         print .5E+10
                         print .5E-10
-
+                    
                         print +1.0
                         print +0.0
                         print +.5
@@ -1205,7 +1206,7 @@ class MindcodeParserTest extends AbstractParserTest {
                         print +.5E10
                         print +.5E+10
                         print +.5E-10
-
+                    
                         print -1.0
                         print -0.0
                         print -.5
@@ -1266,13 +1267,12 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
-        void refusesQuotesWithinStringLiterals() {
-            assertGeneratesMessageRegex(2, 18, "Parse error: .*",
-                    """
-                            mlog {
-                                print "Hi, \\"friend\\""
-                            }
-                            """);
+        void parsesQuotesWithinStringLiterals() {
+            assertParses("""
+                    mlog {
+                        print "Hi, \\"friend\\""
+                    }
+                    """);
         }
 
         @Test
