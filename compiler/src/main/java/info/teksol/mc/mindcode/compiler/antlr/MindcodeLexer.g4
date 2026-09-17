@@ -239,7 +239,7 @@ fragment PlusOrMinus    : [+-] ;
 
 // Literals - need to be defined again in mlog mode
 // We also need the plus and minus signs explicitly here
-MLOGSTRING              : '"' ~[\r\n"]* '"' ;
+MLOGSTRING              : '"' ( EscapedQuote | ~[\n\r"] )* '"' ;
 MLOGCOLOR               : '%' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit ( HexDigit HexDigit )? ;
 MLOGNAMEDCOLOR          : '%[' Letter+ ']';
 MLOGBINARY              : PlusOrMinus? '0b' BinDigit+ ;

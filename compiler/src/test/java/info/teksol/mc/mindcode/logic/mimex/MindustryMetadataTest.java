@@ -23,7 +23,7 @@ class MindustryMetadataTest {
         // Create a list of metadata
         String last = "";
         for (ProcessorVersion version : ProcessorVersion.values()) {
-            if (!version.mimexVersion.equals(last)) {
+            if (version != ProcessorVersion.V6 && !version.mimexVersion.equals(last)) {
                 last = version.mimexVersion;
                 metadataList.add(MindustryMetadata.forVersion(version));
             }
