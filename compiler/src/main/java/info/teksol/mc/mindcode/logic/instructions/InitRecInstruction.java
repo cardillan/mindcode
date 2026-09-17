@@ -77,7 +77,7 @@ public class InitRecInstruction extends BaseInstruction {
         MindcodeFunction function = getExistingFunction();
         if (!isInlined().getBooleanValue()) {
             if (stackTracker.largeStack()) {
-                LogicNumber limit = LogicNumber.create(stackTracker.getAllocationEnd() - function.getStackDepth() + 1);
+                LogicNumber limit = LogicNumber.create(stackTracker.getAllocationEnd() - function.getCallSize());
                 LogicLabel skipSwitch = processor.nextLabel();
                 creator.createJump(skipSwitch, Condition.LESS_THAN_EQ, stackPointer, limit);
                 creator.createWrite(stackPointer, stackMemory, LogicNumber.TWO);

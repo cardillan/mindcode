@@ -804,7 +804,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                     error(node.getRangeOrIndex(), ERR.EXT_STORAGE_LARGE_RANGE);
                 }
                 List<LogicVariable> elements = array.getElements().stream().map(e -> (LogicVariable)e.unwrap()).toList();
-                return new Allocation(elements, 0, size - 1);
+                return new Allocation(elements, 0, size);
             }
             error(node.getMemory(), ERR.EXT_STORAGE_INVALID_ARRAY, array.getName());
         } else {

@@ -98,7 +98,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2 instructions):
  
     47 # "Function: def ways(in amount, in index)"
-    48 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    48 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     49 initrec false
 -    * op equal *tmp4 :ways:amount 0
 -    * jump *label16 equal *tmp4 false
@@ -411,7 +411,7 @@ Modifications by Inline function call at line 9:18 (+34 instructions):
 -    * callrec *label0 *label14 :ways*retval
 -    * label *label14
 +   28 # "Function: def ways(in amount, in index)"
-+   29 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
++   29 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
 +   30 initrec true
 +   31 jump *label58 notEqual :ways:amount 0
 +   32 set :ways*retval 1
@@ -455,7 +455,7 @@ Modifications by Inline function call at line 9:18 (+34 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     28 # "Function: def ways(in amount, in index)"
-    29 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    29 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     30 initrec true
 -    * jump *label58 notEqual :ways:amount 0
 +   31 jump *label58 notEqual 20 0
@@ -479,7 +479,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    29 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    29 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     30 initrec true
     31 jump *label58 notEqual 20 0
 -    * set :ways*retval 1
@@ -509,7 +509,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
     28 # "Function: def ways(in amount, in index)"
-    29 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    29 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     30 initrec true
 -    * jump *label58 notEqual 20 0
 +   31 jump *label58 always
@@ -554,7 +554,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
      9 set :ways:amount 20
     10 set :ways:index 1
     11 # "Function: def ways(in amount, in index)"
-    12 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    12 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     13 initrec true
     14 jump *label58 always
 -    * jump *label67 always
@@ -606,7 +606,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
     11 # "Function: def ways(in amount, in index)"
-    12 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    12 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     13 initrec true
 -    * jump *label58 always
     14 label *label58
@@ -627,7 +627,7 @@ write 1 bank1 7
 set :ways:amount 20
 set :ways:index 1
 # "Function: def ways(in amount, in index)"
-assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
 initrec true
 set :ways:result 0
 set :ways:i 1
@@ -657,7 +657,7 @@ stop
 end
 label *label0
 # "Function: def ways(in amount, in index)"
-assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
 initrec false
 jump *label16 notEqual :ways:amount 0
 set :ways*retval 1

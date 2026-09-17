@@ -95,7 +95,8 @@ public class MindcodeFunction {
     private @Nullable LogicLabel stackFrameLabel;
     private int stackFrameSize = 0;
     private int returnOffset = 0;
-    private int stackDepth = 0;
+    private int callSize = 0;
+    private int maxDepth = 0;
 
     /// Keeps the number of copies of this function
     private AtomicInteger copyNumber = new AtomicInteger();
@@ -583,12 +584,20 @@ public class MindcodeFunction {
         this.returnOffset = returnOffset;
     }
 
-    public int getStackDepth() {
-        return stackDepth;
+    public int getCallSize() {
+        return callSize;
     }
 
-    public void setStackDepth(int stackDepth) {
-        this.stackDepth = stackDepth;
+    public void setCallSize(int callSize) {
+        this.callSize = callSize;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    public void setMaxDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
     }
 
     void createVariables(NameCreator nameCreator) {

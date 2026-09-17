@@ -86,7 +86,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(WRITE, tmp(5), "cell2", "4"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
-                createInstruction(ASSERT_BOUNDS, "decimal", "1", "33", "lessThanEq", "*sp", "lessThan", "49", q("position 2:1: stack overflow error")),
+                createInstruction(ASSERT_BOUNDS, "decimal", "1", "33", "lessThanEq", "*sp", "lessThanEq", "49", q("position 2:1: stack overflow error")),
                 createInstruction(INITREC, "false"),
                 createInstruction(PUSH, ":fn:n"),
                 createInstruction(OP, "sub", ":fn:n", ":fn:n", "1"),

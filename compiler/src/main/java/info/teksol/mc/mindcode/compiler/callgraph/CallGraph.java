@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import org.jspecify.annotations.NullMarked;
 
@@ -39,10 +38,6 @@ public final class CallGraph {
         }
 
         return remoteFunctions;
-    }
-
-    public MindcodeFunction findFunction(AstFunctionDeclaration declaration) {
-        return functionDefinitions.findFunction(declaration);
     }
 
     /// Returns the representation of the main function, that is the main program body.

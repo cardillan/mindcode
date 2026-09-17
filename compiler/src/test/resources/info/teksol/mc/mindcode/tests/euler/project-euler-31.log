@@ -98,7 +98,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2 instructions):
  
     46 label *label0
-    47 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    47 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     48 initrec false
 -    * op equal *tmp4 :ways:amount 0
 -    * jump *label16 equal *tmp4 false
@@ -410,7 +410,7 @@ Modifications by Inline function call at line 9:18 (+34 instructions):
     27 set :ways:index 1
 -    * callrec *label0 *label14 :ways*retval
 -    * label *label14
-+   28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
++   28 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
 +   29 initrec true
 +   30 jump *label58 notEqual :ways:amount 0
 +   31 set :ways*retval 1
@@ -454,7 +454,7 @@ Modifications by Inline function call at line 9:18 (+34 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     27 set :ways:index 1
-    28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    28 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     29 initrec true
 -    * jump *label58 notEqual :ways:amount 0
 +   30 jump *label58 notEqual 20 0
@@ -478,7 +478,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    28 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     29 initrec true
     30 jump *label58 notEqual 20 0
 -    * set :ways*retval 1
@@ -508,7 +508,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
     27 set :ways:index 1
-    28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    28 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     29 initrec true
 -    * jump *label58 notEqual 20 0
 +   30 jump *label58 always
@@ -552,7 +552,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label5
      9 set :ways:amount 20
     10 set :ways:index 1
-    11 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    11 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     12 initrec true
     13 jump *label58 always
 -    * jump *label67 always
@@ -604,7 +604,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
     10 set :ways:index 1
-    11 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    11 assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
     12 initrec true
 -    * jump *label58 always
     13 label *label58
@@ -624,7 +624,7 @@ write 2 bank1 6
 write 1 bank1 7
 set :ways:amount 20
 set :ways:index 1
-assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
 initrec true
 set :ways:result 0
 set :ways:i 1
@@ -653,7 +653,7 @@ assertequals 41 :ways:result "Project Euler 31"
 stop
 end
 label *label0
-assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+assertbounds decimal 1 16 lessThanEq *sp lessThanEq 512 "position 12:1: stack overflow error"
 initrec false
 jump *label16 notEqual :ways:amount 0
 set :ways*retval 1

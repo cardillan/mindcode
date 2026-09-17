@@ -338,6 +338,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
         };
         int additionalSize = stackOverflowCheck + (function.getProfile().isSymbolicLabels() ? 2 : 0);
 
+        function.setMaxDepth(depth);
         return new StackParameters(function, variables, depth, fixedDepth, frameSize, returnOffset, additionalSize);
     }
 
