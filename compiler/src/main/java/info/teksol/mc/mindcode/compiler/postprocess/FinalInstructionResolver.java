@@ -164,11 +164,16 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
         LogicInstruction last = program.getLast();
 
         // Compute stack depth requirements
-        if (stackTracker.largeStack()) {
+        if (stackTracker.externalStack()) {
             Map<MindcodeFunction, Integer> stackDepths = program.stream().filter(PushOrPopInstruction.class::isInstance)
                     .collect(Collectors.groupingBy(LogicInstruction::getExistingFunction,
-                            Collectors.collectingAndThen(Collectors.toList(), this::computeStackDepth)));
-            stackDepths.forEach(MindcodeFunction::setStackDepth);
+                            Collectors.collectingAndThen(Collectors.toList(), this::computeCallSize)));
+            stackDepths.forEach(MindcodeFunction::setCallSize);
+            while (!stackDepths.isEmpty()) {
+                MindcodeFunction function = stackDepths.entrySet().iterator().next().getKey();
+                stackDepths.keySet().removeAll(function.getIndirectCalls());
+                stackTracker.verifyStackCapacity(function);
+            }
         }
 
         program = resolveVirtualInstructions(resolveRemarks(program));
@@ -209,7 +214,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
         return program;
     }
 
-    private int computeStackDepth(List<LogicInstruction> instructions) {
+    private int computeCallSize(List<LogicInstruction> instructions) {
         int depth = 0, maxDepth = 0;
         for (LogicInstruction instruction : instructions) {
             if (instruction.getOpcode() == PUSH) {

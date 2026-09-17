@@ -39,7 +39,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
      7 label *label0
-     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     8 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      9 initrec false
 -    * op lessThan *tmp1 :fib:n 2
 -    * jump *label5 equal *tmp1 false
@@ -88,7 +88,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
      7 label *label0
-     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     8 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      9 initrec false
 -    * jump *label5 greaterThanEq :fib:n 2
 -    * set *tmp2 :fib:n
@@ -131,7 +131,7 @@ Modifications by Inline function call at line 7:18 (+17 instructions):
      1 set :fib:n 10
 -    * callrec *label0 *label3 :fib*retval
 -    * label *label3
-+    2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
++    2 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 +    3 initrec true
 +    4 set :fib*retval :fib:n
 +    5 jump *label12 lessThan :fib:n 2
@@ -157,7 +157,7 @@ Modifications by Inline function call at line 7:18 (+17 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      1 set :fib:n 10
-     2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     2 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      3 initrec true
 -    * set :fib*retval :fib:n
 -    * jump *label12 lessThan :fib:n 2
@@ -179,7 +179,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
      1 set :fib:n 10
-     2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     2 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      3 initrec true
 -    * set :fib*retval 10
      4 jump *label12 lessThan 10 2
@@ -189,7 +189,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
      1 set :fib:n 10
-     2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     2 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      3 initrec true
 -    * jump *label12 lessThan 10 2
      4 label *label9
@@ -199,7 +199,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
      1 set :fib:n 10
-     2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     2 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      3 initrec true
 -    * label *label9
      4 push :fib:n
@@ -234,7 +234,7 @@ Final code before resolving virtual instructions:
 
 initstack *label1 *label2
 set :fib:n 10
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 initrec true
 push :fib:n
 op sub :fib:n :fib:n 1
@@ -252,7 +252,7 @@ assertequals 55 :fib*retval "fib(10)"
 stop
 end
 label *label0
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 initrec false
 set :fib*retval :fib:n
 jump *label6 lessThan :fib:n 2

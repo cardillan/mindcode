@@ -399,7 +399,7 @@ Modifications by Inline function call at line 34:34 (+14 instructions):
     11 set :bar:b 0
 -    * callrec *label1 *label6 :bar*retval
 -    * label *label6
-+   12 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
++   12 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
 +   13 initrec true
 +   14 print :bar:a
 +   15 print :bar:b
@@ -427,7 +427,7 @@ Modifications by Inline function call at line 34:34 (+14 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     11 set :bar:b 0
-    12 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    12 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
     13 initrec true
 -    * print :bar:a
 -    * print :bar:b
@@ -455,7 +455,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :bar:n 3
 -    * set :bar:a 0
 -    * set :bar:b 0
-     9 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+     9 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
     10 initrec true
     11 print 0
     12 print 0
@@ -517,7 +517,7 @@ Modifications by Inline function call at line 33:34 (+19 instructions):
      4 set :foo:b 0
 -    * callrec *label0 *label5 :foo*retval
 -    * label *label5
-+    5 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
++    5 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 +    6 initrec true
 +    7 print :foo:a
 +    8 print :foo:b
@@ -541,12 +541,12 @@ Modifications by Inline function call at line 33:34 (+19 instructions):
 +   26 label *label27
     27 assertprints *tmp0 "0001111223221211" "foo"
     28 assertflush *tmp2
-    29 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    29 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      4 set :foo:b 0
-     5 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     5 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      6 initrec true
 -    * print :foo:a
 -    * print :foo:b
@@ -584,7 +584,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set :foo:n 3
 -    * set :foo:a 0
      2 set :foo:b 0
-     3 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     3 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      4 initrec true
  
     18 pop :foo:a
@@ -602,7 +602,7 @@ Modifications by Inline function call at line 35:34 (+19 instructions):
     48 set :baz:b 0
 -    * callrec *label2 *label7 :baz*retval
 -    * label *label7
-+   49 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
++   49 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
 +   50 initrec true
 +   51 print :baz:a
 +   52 print :baz:b
@@ -631,7 +631,7 @@ Modifications by Inline function call at line 35:34 (+19 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     48 set :baz:b 0
-    49 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    49 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
     50 initrec true
 -    * print :baz:a
 -    * print :baz:b
@@ -671,7 +671,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set :baz:n 3
 -    * set :baz:a 0
     46 set :baz:b 0
-    47 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    47 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
     48 initrec true
  
     62 pop :baz:b
@@ -740,7 +740,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label27
     20 assertprints *tmp0 "0001111223221211" "foo"
     21 assertflush *tmp2
-    22 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    22 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
  
     30 callrec *label1 *label20 :bar*retval
     31 label *label20
@@ -778,7 +778,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     80 returnrec
 -    * end
     81 label *label1
-    82 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    82 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
     83 initrec false
  
     95 set :bar:b :bar:a
@@ -792,7 +792,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    101 returnrec
 -    * end
    102 label *label2
-   103 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+   103 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
    104 initrec false
  
    117 pop :baz:a
@@ -809,7 +809,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
  
      2 set :foo:b 0
-     3 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     3 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
      4 initrec true
 -    * print 0
 -    * print 0
@@ -826,7 +826,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
 +   17 print "11"
     18 assertprints *tmp0 "0001111223221211" "foo"
     19 assertflush *tmp2
-    20 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    20 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
     21 initrec true
 -    * print 0
 -    * print 0
@@ -836,7 +836,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
     25 set :bar:a 0
  
     35 set :baz:b 0
-    36 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    36 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
     37 initrec true
 -    * print 0
 -    * print 0
@@ -860,7 +860,7 @@ Final code before resolving virtual instructions:
 initstack *label3 *label4
 assertflush *tmp0
 set :foo:b 0
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 initrec true
 print "00"
 set :foo:a 1
@@ -877,7 +877,7 @@ pop :foo:a
 print "11"
 assertprints *tmp0 "0001111223221211" "foo"
 assertflush *tmp1
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
 initrec true
 print "00"
 set *tmp4 1
@@ -893,7 +893,7 @@ print :bar:b
 assertprints *tmp1 "0001111223333444" "bar"
 assertflush *tmp2
 set :baz:b 0
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
 initrec true
 print "00"
 set :baz:a 1
@@ -912,7 +912,7 @@ assertprints *tmp2 "0001111223221211" "baz"
 stop
 end
 label *label0
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 3:1: stack overflow error"
 initrec false
 print :foo:a
 print :foo:b
@@ -934,7 +934,7 @@ print :foo:a
 print :foo:b
 returnrec
 label *label1
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 13:1: stack overflow error"
 initrec false
 print :bar:a
 print :bar:b
@@ -955,7 +955,7 @@ print :bar:a
 print :bar:b
 returnrec
 label *label2
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 23:1: stack overflow error"
 initrec false
 print :baz:a
 print :baz:b

@@ -139,7 +139,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 ins
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-5 instructions):
  
     24 # "Function: void quicksort(in left, in right)"
-    25 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
+    25 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 6:1: stack overflow error"
     26 initrec false
 -    * op greaterThan *tmp7 :quicksort:right :quicksort:left
 -    * jump *label8 equal *tmp7 false
@@ -460,7 +460,7 @@ Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-24 in
 Modifications by Iterated phase, Recursive Optimization, pass 1, iteration 1 (-3 instructions):
  
     23 # "Function: void quicksort(in left, in right)"
-    24 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
+    24 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 6:1: stack overflow error"
     25 initrec false
 -    * jump *label8 lessThanEq :quicksort:right :quicksort:left
 -    * op sub *tmp9 :quicksort:right :quicksort:left
@@ -588,7 +588,7 @@ Modifications by Inline function call at line 39:1 (+40 instructions):
 -    * callrec *label0 *label3 :quicksort*retval
 -    * label *label3
 +    7 # "Function: void quicksort(in left, in right)"
-+    8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
++    8 assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 6:1: stack overflow error"
 +    9 initrec true
 +   10 label *label45
 +   11 jump *label61 lessThanEq :quicksort:right :quicksort:left
@@ -803,7 +803,7 @@ op sub *tmp0 SIZE 1
 set :quicksort:left 0
 set :quicksort:right *tmp0
 # "Function: void quicksort(in left, in right)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 6:1: stack overflow error"
 initrec true
 label *label45
 jump *label61 lessThanEq :quicksort:right :quicksort:left
@@ -864,7 +864,7 @@ stop
 end
 label *label0
 # "Function: void quicksort(in left, in right)"
-assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 6:1: stack overflow error"
+assertbounds decimal 1 0 lessThanEq *sp lessThanEq 512 "position 6:1: stack overflow error"
 initrec false
 label *label44
 jump *label41 lessThanEq :quicksort:right :quicksort:left

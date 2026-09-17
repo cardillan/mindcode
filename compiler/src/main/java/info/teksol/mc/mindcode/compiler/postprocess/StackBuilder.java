@@ -29,9 +29,9 @@ import java.util.Objects;
 public class StackBuilder extends CompilerMessageEmitter {
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
-    private final CallGraph callGraph;
     private final OptimizationCoordinator optimizationCoordinator;
     private final List<LogicInstruction> program;
+    private final List<StackParameters> stacks;
 
     private final AstContext rootAstContext;
     private final boolean symbolicLabels;
@@ -40,14 +40,14 @@ public class StackBuilder extends CompilerMessageEmitter {
     private LogicLabel nextInitLabel;
 
     public StackBuilder(StackBuilderContext stackBuilderContext, OptimizationCoordinator optimizationCoordinator,
-            List<LogicInstruction> program, InitStackInstruction initStackInstruction) {
+            List<LogicInstruction> program, List<StackParameters> stacks, InitStackInstruction initStackInstruction) {
         super(stackBuilderContext.messageConsumer());
         this.processor = stackBuilderContext.instructionProcessor();
         this.nameCreator = stackBuilderContext.nameCreator();
         this.rootAstContext = stackBuilderContext.rootAstContext();
-        this.callGraph = stackBuilderContext.callGraph();
         this.optimizationCoordinator = optimizationCoordinator;
         this.program = program;
+        this.stacks = stacks;
         this.symbolicLabels = optimizationCoordinator.getGlobalProfile().isSymbolicLabels();
 
         nextInitLabel = initStackInstruction.getCallLabel();
@@ -58,9 +58,14 @@ public class StackBuilder extends CompilerMessageEmitter {
             List<LogicInstruction> instructions) {
         StackTracker stackTracker = stackBuilderContext.stackTracker();
         CallGraph callGraph = stackBuilderContext.callGraph();
-        if (stackTracker.externalStack() || !callGraph.containsRecursiveFunction()) return instructions;
 
-        InstructionProcessor processor = stackBuilderContext.instructionProcessor();
+        List<StackParameters> stacks = callGraph.getFunctions().stream().filter(f -> f.isRecursive() && f.isGenerated())
+                .map(function -> optimizationCoordinator.computeStackParameters(function, instructions))
+                .filter(Objects::nonNull)
+                .toList();
+
+        if (stacks.isEmpty() || stackTracker.externalStack()) return instructions;
+
         List<LogicInstruction> program = new ArrayList<>(instructions);
 
         int index = CollectionUtils.indexOf(program, 0, ix -> ix.getAstContext().matches(AstContextType.STACK));
@@ -68,19 +73,10 @@ public class StackBuilder extends CompilerMessageEmitter {
             throw new MindcodeInternalError("No stack initialization found.");
         }
 
-        return new StackBuilder(stackBuilderContext, optimizationCoordinator, program, initStackInstruction).buildStack();
+        return new StackBuilder(stackBuilderContext, optimizationCoordinator, program, stacks, initStackInstruction).buildStack();
     }
 
     private List<LogicInstruction> buildStack() {
-        @SuppressWarnings("NullableProblems")
-        List<StackParameters> stacks = callGraph.getFunctions().stream().filter(f -> f.isRecursive() && f.isGenerated())
-                .map(function -> optimizationCoordinator.computeStackParameters(function, program))
-                .filter(Objects::nonNull)
-                .toList();
-        if (stacks.isEmpty()) {
-            return program;
-        }
-
         int stackSize = stacks.stream().mapToInt(StackParameters::totalSize).sum();
         int availableSpace = optimizationCoordinator.getGlobalProfile().getInstructionLimit() - InstructionCounter.globalSize(program);
         if (stackSize > availableSpace) {

@@ -49,7 +49,7 @@ class RecursiveOptimizerTest extends AbstractOptimizerTest<RecursiveOptimizer> {
                 createInstruction(PRINT, ":fib*retval"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
-                createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 2:1: stack overflow error")),
+                createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThanEq", "512", q("position 2:1: stack overflow error")),
                 createInstruction(INITREC, "false"),
                 createInstruction(JUMP, label(5), "greaterThanEq", ":fib:n", "2"),
                 createInstruction(SET, ":fib*retval", ":fib:n"),
