@@ -45,7 +45,7 @@ jobs:
         echo "spring.datasource.password=mindcode" >> webapp/src/test/resources/application.properties
 
     - name: Cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.m2
         key: maven-v1
