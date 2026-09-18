@@ -29,7 +29,7 @@
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.39.1",
 		"@fsegurai/codemirror-theme-forest": "^6.2.3",
-		"@fsegurai/codemirror-theme-vscode-light": "^6.2.4",
+		"@fsegurai/codemirror-theme-vscode-light": "^6.2.8",
 		"@internationalized/date": "^3.10.1",
 		"@lezer/common": "^1.5.0",
 		"@lezer/generator": "^1.8.0",
