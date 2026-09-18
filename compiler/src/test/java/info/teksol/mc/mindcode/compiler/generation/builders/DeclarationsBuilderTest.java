@@ -869,6 +869,13 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void refusesConfigureAsParameterName() {
+            assertGeneratesMessage(
+                    "'configure' is not a valid name for an mlog variable.",
+                    "param configure = 10;");
+        }
+
+        @Test
         void refusesFormattablesAsParameters() {
             assertGeneratesMessage(
                     "Value assigned to parameter 'a' is not a constant expression.",

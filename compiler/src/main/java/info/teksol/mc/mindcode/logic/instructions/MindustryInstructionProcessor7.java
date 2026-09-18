@@ -13,6 +13,11 @@ public class MindustryInstructionProcessor7 extends BaseInstructionProcessor {
     }
 
     @Override
+    public boolean isValidMlogName(String symbol) {
+        return !symbol.equals("configure") && super.isValidMlogName(symbol);
+    }
+
+    @Override
     public boolean isValidHexLiteral(long value) {
         return value >= 0;
     }

@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed possibly incorrect code generated for list iteration loops ([#372](https://github.com/cardillan/mindcode/issues/372)).
 * Fixed missing support for escape characters in string literals in mlog blocks ([#361](https://github.com/cardillan/mindcode/issues/361)).
 
+### Added
+
+* Added a validation for program parameters and variable names specified via the `mlog` to prevent using `configure` as an mlog variable name (`configure` is silently changed to `config` in Mindustry 7 and higher). 
+
 ## 3.19.1 – 2026-09-12
 
 ### Added

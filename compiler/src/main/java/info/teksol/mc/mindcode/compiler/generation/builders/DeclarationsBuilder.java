@@ -194,6 +194,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
     public ValueStore visitParameter(AstParameter node) {
         if (processor.isBlockName(node.getParameterName())) {
             error(node.getName(), ERR.VARIABLE_NAME_RESERVED_FOR_LINKS, node.getParameterName());
+        } else if (!processor.isValidMlogName(node.getParameterName())) {
+            error(node.getName(), ERR.INVALID_MLOG_SYMBOL, node.getParameterName());
         }
 
         ValueStore valueStore = processInLocalScope(() -> evaluate(node.getValue()));
