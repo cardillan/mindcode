@@ -339,7 +339,7 @@ number {
 }
 
 @local tokens {
-  mlogString { '"' !["]* '"' }
+  mlogString { '"' ("\\" _ | !["])* '"' }
   MlogBodyEnd[openedBy="MlogBodyStart"] { "}" }
   rawMlogToken { ':' !["#; \t\r\n] ![#; \t\r\n]* }
   @else mlogToken
