@@ -40,7 +40,7 @@ public class LAssembler80 extends LAssemblerBase {
         return l == usedInvalidNum ? Double.NaN : negative ? -l : l;
     }
 
-    private double parseColor(String symbol) {
+    protected double parseColor(String symbol) {
         int r = strings.parseInt(symbol, 16, 0, 1, 3);
         int g = strings.parseInt(symbol, 16, 0, 3, 5);
         int b = strings.parseInt(symbol, 16, 0, 5, 7);

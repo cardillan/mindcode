@@ -125,9 +125,7 @@ public class LStrings70 implements LStrings {
         }
     }
 
-    /**
-     * Faster double parser that doesn't throw exceptions.
-     */
+    /// Faster double parser that doesn't throw exceptions.
     @Override
     public double parseDouble(String value, double defaultValue) {
         int len = value.length();

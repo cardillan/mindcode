@@ -42,4 +42,50 @@ public class LAssembler82 extends LAssembler81 {
             return putConst("___" + value, value);
         }
     }
+
+    @Override
+    public double parseDouble(String symbol){
+        //fail fast for obvious non-numbers
+        if(symbol.isEmpty() || !isNumStart(symbol.charAt(0))) return Double.NaN;
+
+        //parse hex/binary syntax
+        if(symbol.startsWith("0b")) return parseHexOrBin(false, symbol, true, 2);
+        if(symbol.startsWith("+0b")) return parseHexOrBin(false, symbol, true, 3);
+        if(symbol.startsWith("-0b")) return parseHexOrBin(true, symbol, true, 3);
+        if(symbol.startsWith("0x")) return parseHexOrBin(false, symbol, false, 2);
+        if(symbol.startsWith("+0x")) return parseHexOrBin(false, symbol, false, 3);
+        if(symbol.startsWith("-0x")) return parseHexOrBin(true, symbol, false, 3);
+        if(symbol.startsWith("%[") && symbol.endsWith("]") && symbol.length() > 3) return parseNamedColor(symbol);
+        if(symbol.startsWith("%") && (symbol.length() == 7 || symbol.length() == 9)) return parseColor(symbol);
+
+        return strings.parseDouble(symbol, Double.NaN);
+    }
+
+    boolean isNumStart(char c){
+        //note that 'e10' isn't a valid number; '%ffffff' is. Hex numbers start with '0x'.
+        return c >= '0' && c <= '9' || c == '.' || c == '-' || c == '+' || c == '%';
+    }
+
+    //parses *unsigned* hex or bin number, including negative ones (0xffffffffffffffff as -1)
+    //detects overflow by input length and uses bit manipulation to avoid signed arithmetics
+    double parseHexOrBin(boolean negative, String s, boolean binary, int offset){
+        int end = s.length();
+        if(offset >= end) return Double.NaN;
+
+        int pos = offset;
+        while(pos < end && s.charAt(pos) == '0') pos ++;    //skip leading zeros to avoid incorrect overflow detection
+
+        int shift = binary ? 1 : 4;
+        if(end - pos > 64 / shift) return Double.NaN;
+
+        long acc = 0;
+        int radix = 1 << shift;
+        while(pos < end){
+            int digit = Character.digit(s.charAt(pos), radix);
+            if(digit < 0) return Double.NaN;
+            acc = acc << shift | digit;
+            pos ++;
+        }
+        return negative ? -acc : acc;
+    }
 }

@@ -127,6 +127,10 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
         return new LogicNumber(sourcePosition, literal, processor.parseNumber(literal));
     }
 
+    public static LogicNumber create(SourcePosition sourcePosition, String literal, double value) {
+        return new LogicNumber(sourcePosition, literal, value);
+    }
+
     @Override
     public LogicNumber withSourcePosition(SourcePosition sourcePosition) {
         return new LogicNumber(sourcePosition, literal, value);

@@ -597,13 +597,20 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             return Optional.of(LogicColor.create(sourcePosition, Color.unpack(value)));
         }
         return mlogFormat(sourcePosition, value, String.valueOf(value), allowPrecisionLoss)
-                .map(literal -> LogicNumber.create(this, sourcePosition, literal));
+                .map(literal -> createLogicNumber(sourcePosition, literal, value));
+    }
+
+    protected LogicNumber createLogicNumber(SourcePosition sourcePosition, String literal, double value) {
+        return LogicNumber.create(this, sourcePosition, literal);
     }
 
     protected abstract Optional<String> mlogFormat(SourcePosition sourcePosition, double value, String literal, boolean allowPrecisionLoss);
 
     // 17 Digit precision - enough for 2^54. Larger numbers will lose precision anyway
     protected static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
+
+    protected static final BigDecimal LONG_MAX = new BigDecimal("9223372036854775807",
+            new MathContext(22, RoundingMode.HALF_UP));
 
     protected Optional<String> mlogFormatWithoutExponent(double value, String literal) {
         double absoluteValue = Math.abs(value);
@@ -619,7 +626,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             // NOTE: Some precision is lost for numbers above 2^53, since double can only store 53 digits
             //       of the mantissa.
             BigDecimal decimal = new BigDecimal(literal, CONVERSION_CONTEXT);
-            return Optional.of(decimal.stripTrailingZeros().toPlainString());
+            return decimal.compareTo(LONG_MAX) > 0 ? Optional.empty() : Optional.of(decimal.stripTrailingZeros().toPlainString());
         } else {
             return Optional.empty();
         }
