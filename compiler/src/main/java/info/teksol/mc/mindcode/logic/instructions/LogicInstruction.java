@@ -264,6 +264,14 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.NON_NEGATIVE_INT_TABLE, nonNegative);
     }
 
+    default boolean isSafeAccess() {
+        return (boolean) getInfo(InstructionInfo.SAFE_ACCESS);
+    }
+
+    default LogicInstruction setSafeAccess(boolean safeAccess) {
+        return setInfo(InstructionInfo.SAFE_ACCESS, safeAccess);
+    }
+
     default boolean isStackOverflowCheck() {
         return (boolean) getInfo(InstructionInfo.STACK_OVERFLOW_CHECK);
     }

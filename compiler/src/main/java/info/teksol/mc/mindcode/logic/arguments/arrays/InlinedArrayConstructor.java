@@ -46,11 +46,11 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
             LogicValue index = computeIndex(creator);
             LogicVariable tmp;
             if (useTextTables) {
-                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                generateBoundsCheck(astContext, consumer, instruction.getIndex());
                 tmp = LogicVariable.INVALID;  // Won't be used
             } else if (folded()) {
                 LogicVariable tmp1 = creator.nextTemp();
-                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                generateBoundsCheck(astContext, consumer, instruction.getIndex());
                 creator.createOp(Operation.SHL, tmp1, index, LogicNumber.ONE).setNonNegativeInt(index);
                 LogicVariable tmp2 = creator.nextTemp();
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
@@ -58,7 +58,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 tmp = tmp2;
             } else {
                 tmp = creator.nextTemp();
-                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                generateBoundsCheck(astContext, consumer, instruction.getIndex());
                 creator.createOp(Operation.SHL, tmp, index, LogicNumber.ONE).setNonNegativeInt(index);
             }
 

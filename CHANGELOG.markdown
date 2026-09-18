@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
+* Fixed possibly incorrect code generated for list iteration loops ([#372](https://github.com/cardillan/mindcode/issues/372)).
 * Fixed missing support for escape characters in string literals in mlog blocks ([#361](https://github.com/cardillan/mindcode/issues/361)).
 
 ## 3.19.1 – 2026-09-12

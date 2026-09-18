@@ -215,8 +215,8 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
         assembler.createLabel(beginLabel);
 
         // Copy
-        target.getElement(assembler, node.sourcePosition(), index).copyFrom(assembler,
-                source.getElement(assembler, node.sourcePosition(), index));
+        target.getElement(assembler, node.sourcePosition(), index, true).copyFrom(assembler,
+                source.getElement(assembler, node.sourcePosition(), index, true));
         assembler.createOp(reverse ? Operation.SUB : Operation.ADD, index, index, LogicNumber.ONE);
 
         // Condition

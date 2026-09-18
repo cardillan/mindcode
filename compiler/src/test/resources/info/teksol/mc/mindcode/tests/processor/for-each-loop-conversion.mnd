@@ -1,0 +1,21 @@
+external(bank1) var a[4], b[5], c[5];
+
+void foo()
+    var i = 'A';
+
+    for out x in a descending do
+        x = i++;
+    end;
+
+    for out y in b; out z in c descending do
+        y = i++;
+        z = i++;
+    end;
+
+    for x in a, b, c do
+        printchar(x);
+    end;
+end;
+
+assertPrints("DCBAEGIKMNLJHF", foo(), "Test ranged loops");
+stopProcessor();

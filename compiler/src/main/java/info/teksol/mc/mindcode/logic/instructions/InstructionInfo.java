@@ -89,6 +89,10 @@ public enum InstructionInfo {
     /// When the floor optimization is applied, these instructions need to be modified as well.
     NON_NEGATIVE_INT_TABLE(LogicVariable.INVALID),
 
+    /// Turns off out-of-range checks on array access instructions. Used by the compiler when creating
+    /// array access known to be in bounds.
+    SAFE_ACCESS(Boolean.FALSE),
+
     /// This is an AssertBounds instruction checking a stack overflow. No lower bounds check is necessary.
     STACK_OVERFLOW_CHECK(Boolean.FALSE),
     ;

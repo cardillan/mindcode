@@ -53,7 +53,8 @@ public interface ArrayStore extends ValueStore {
 
     ValueStore getElement(ContextfulInstructionCreator creator, int index);
 
-    ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index);
+    ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index,
+            boolean safeAccess);
 
     /// Returns true if this array store can benefit from replacing a random-element-access with direct access
     /// External arrays do not benefit, but internal and remote ones do, except arrays with floating array offset

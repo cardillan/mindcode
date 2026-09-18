@@ -801,4 +801,163 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
             );
         }
     }
+
+    @Nested
+    class RangeIterationLoops {
+        @Test
+        void convertsExternalArrays() {
+            assertCompilesTo("""
+                            external(cell1) a[10];
+                            for x in a do print(x); end;
+                            """,
+                    createInstruction(SET, tmp(10), "0"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "greaterThan", tmp(10), "9"),
+                    createInstruction(SET, tmp(11), tmp(10)),
+                    createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
+                    createInstruction(SET, ":x", tmp(12)),
+                    createInstruction(PRINT, ":x"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "add", tmp(10), tmp(10), "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void convertsExternalArraysDescending() {
+            assertCompilesTo("""
+                            external(cell1) a[10];
+                            for x in a descending do print(x); end;
+                            """,
+                    createInstruction(SET, tmp(10), "9"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "lessThan", tmp(10), "0"),
+                    createInstruction(SET, tmp(11), tmp(10)),
+                    createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
+                    createInstruction(SET, ":x", tmp(12)),
+                    createInstruction(PRINT, ":x"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "sub", tmp(10), tmp(10), "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void convertsExternalArraysOffset() {
+            assertCompilesTo("""
+                            external(cell1[5 ... 15]) a[10];
+                            for x in a do print(x); end;
+                            """,
+                    createInstruction(SET, tmp(10), "5"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "greaterThan", tmp(10), "14"),
+                    createInstruction(SET, tmp(11), tmp(10)),
+                    createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
+                    createInstruction(SET, ":x", tmp(12)),
+                    createInstruction(PRINT, ":x"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "add", tmp(10), tmp(10), "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void convertsExternalArraysOffsetDescending() {
+            assertCompilesTo("""
+                            external(cell1[5 ... 15]) a[10];
+                            for x in a descending do print(x); end;
+                            """,
+                    createInstruction(SET, tmp(10), "14"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "lessThan", tmp(10), "5"),
+                    createInstruction(SET, tmp(11), tmp(10)),
+                    createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
+                    createInstruction(SET, ":x", tmp(12)),
+                    createInstruction(PRINT, ":x"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "sub", tmp(10), tmp(10), "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void convertsExternalArraysMixed1() {
+            assertCompilesTo("""
+                            external(cell1) a[4], b[5], c[5];
+                            for x in b; y in c descending do print(x, y); end;
+                            """,
+                    createInstruction(SET, tmp(14), "4"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "greaterThan", tmp(14), "8"),
+                    createInstruction(SET, tmp(15), tmp(14)),
+                    createInstruction(READARR, tmp(16), ".b[]", tmp(15)),
+                    createInstruction(SET, ":x", tmp(16)),
+                    createInstruction(OP, "sub", tmp(17), "8", tmp(14)),
+                    createInstruction(OP, "add", tmp(18), tmp(17), "9"),
+                    createInstruction(READARR, tmp(19), ".c[]", tmp(18)),
+                    createInstruction(SET, ":y", tmp(19)),
+                    createInstruction(PRINT, ":x"),
+                    createInstruction(PRINT, ":y"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "add", tmp(14), tmp(14), "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void convertsExternalArraysMixed2() {
+            assertCompilesTo("""
+                            external(cell1) a[4], b[5], c[5];
+                            for x in b descending; y in c do print(x, y); end;
+                            """,
+                    createInstruction(SET, tmp(14), "8"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "lessThan", tmp(14), "4"),
+                    createInstruction(SET, tmp(15), tmp(14)),
+                    createInstruction(READARR, tmp(16), ".b[]", tmp(15)),
+                    createInstruction(SET, ":x", tmp(16)),
+                    createInstruction(OP, "sub", tmp(17), "8", tmp(14)),
+                    createInstruction(OP, "add", tmp(18), tmp(17), "9"),
+                    createInstruction(READARR, tmp(19), ".c[]", tmp(18)),
+                    createInstruction(SET, ":y", tmp(19)),
+                    createInstruction(PRINT, ":x"),
+                    createInstruction(PRINT, ":y"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "sub", tmp(14), tmp(14), "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void convertsInternalArray() {
+            assertCompilesTo("""
+                            #set array-iteration-threshold = 4;
+                            var b[5], c[5];
+                            for x in b descending; y in c do print(x, y); end;
+                            """,
+                    createInstruction(SET, tmp(0), "4"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "lessThan", tmp(0), "0"),
+                    createInstruction(SET, tmp(1), tmp(0)),
+                    createInstruction(READARR, tmp(2), ".b[]", tmp(1)),
+                    createInstruction(SET, ":x", tmp(2)),
+                    createInstruction(OP, "sub", tmp(3), "4", tmp(0)),
+                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(READARR, tmp(5), ".c[]", tmp(4)),
+                    createInstruction(SET, ":y", tmp(5)),
+                    createInstruction(PRINT, ":x"),
+                    createInstruction(PRINT, ":y"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "sub", tmp(0), tmp(0), "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+    }
 }

@@ -23,6 +23,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
@@ -49,7 +50,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         return sizes.length == 1 ? sizes[0] : 0;
     }
 
-    // if this iterator group should be replaced by a ranged loop, returns the number of iterations.
+    // If this iterator group should be replaced by a ranged loop, returns the number of iterations.
     // Returns 0 otherwise.
     private int iteratorGroupFixedRange(AstIteratorsValuesGroup group) {
         if (group.getIterators().size() != 1 || group.getValues().getExpressions().size() != 1) return 0;
@@ -83,14 +84,24 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             arrays.add((ArrayStore) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
         });
 
-        int offset = arrays.stream().mapToInt(ArrayStore::getStartOffset).min().orElse(0);
+        boolean descending = iterators.getFirst().descending;
+        int offset = IntStream.range(0, iterators.size())
+                .filter(i -> iterators.get(i).descending == descending)
+                .map(i -> arrays.get(i).getStartOffset())
+                .min().orElse(0);
+
         if (offset != 0) {
-            arrays.replaceAll(array -> array.offset(-offset));
+            for (int i = 0; i < arrays.size(); i++) {
+                if (iterators.get(i).descending == descending) {
+                    arrays.set(i, arrays.get(i).offset(-offset));
+                }
+            }
         }
 
-        LogicNumber upperBound = LogicNumber.create(iterations + offset);
+        LogicNumber start = LogicNumber.create(descending ? offset + iterations - 1 : offset);
+        LogicNumber limit = LogicNumber.create(descending ? offset : offset + iterations - 1);
         LogicVariable loopControlVariable = assembler.nextTemp();
-        loopControlVariable.setValue(assembler, LogicNumber.create(offset));
+        loopControlVariable.setValue(assembler, start);
 
         final LogicLabel beginLabel = assembler.nextLabel();
         LoopLabels loopLabels = enterLoop(node, "for");
@@ -98,7 +109,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, iterations);
         assembler.createLabel(beginLabel);
-        assembler.createJump(loopLabels.breakLabel(), Condition.GREATER_THAN_EQ, loopControlVariable, upperBound);
+        assembler.createJump(loopLabels.breakLabel(), descending ? Condition.LESS_THAN : Condition.GREATER_THAN, loopControlVariable, limit);
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, iterations);
@@ -107,7 +118,15 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         for (int i = 0; i < iterators.size(); i++) {
             Iterator iterator = iterators.get(i);
             ArrayStore array = arrays.get(i);
-            iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), loopControlVariable));
+            if (iterator.descending == descending) {
+                iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(),
+                        loopControlVariable, true));
+            } else {
+                LogicVariable index = assembler.nextTemp();
+                LogicNumber diff = LogicNumber.create(iterations - 1 + offset);
+                assembler.createOp(Operation.SUB, index, diff, loopControlVariable);
+                iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), index, true));
+            }
         }
         visitBody(node.getBody());
 
@@ -120,13 +139,20 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             Iterator iterator = iterators.get(i);
             if (iterator.out) {
                 ArrayStore array = arrays.get(i);
-                array.getElement(assembler, array.sourcePosition(), loopControlVariable).copyFrom(assembler, iterator.var);
+                if (iterator.descending == descending) {
+                    array.getElement(assembler, array.sourcePosition(), loopControlVariable, true).copyFrom(assembler, iterator.var);
+                } else {
+                    LogicVariable index = assembler.nextTemp();
+                    LogicNumber diff = LogicNumber.create(iterations - 1 + offset);
+                    assembler.createOp(Operation.SUB, index, diff, loopControlVariable);
+                    array.getElement(assembler, array.sourcePosition(), index, true).copyFrom(assembler, iterator.var);
+                }
             }
         }
 
         // Update
         assembler.setSubcontextType(AstSubcontextType.UPDATE, iterations);
-        assembler.createOp(Operation.ADD, loopControlVariable, loopControlVariable, LogicNumber.ONE);
+        assembler.createOp(descending ? Operation.SUB : Operation.ADD, loopControlVariable, loopControlVariable, LogicNumber.ONE);
 
         // Flow control
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, iterations);
@@ -406,7 +432,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                         values.addAll(0, Collections.nCopies(n, LogicVariable.INVALID));
                         for (int i = 0; i < n; i++) {
                             int index = descending ? n - 1 - i : i;
-                            values.set(i, arrayStore.getElement(assembler, value.sourcePosition(), LogicNumber.create(index)));
+                            values.set(i, arrayStore.getElement(assembler, value.sourcePosition(), LogicNumber.create(index), true));
                         }
                     } else {
                         values.addAll(0, descending ? arrayStore.getElements().reversed() : arrayStore.getElements());
@@ -451,17 +477,19 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 error(iterator.getIterator(), ERR.IDENTIFIER_EXPECTED);
             }
         }
-        return new Iterator(iterator.hasOutModifier(), resolveLValue(iterator.getIterator()));
+        return new Iterator(iterator.hasOutModifier(), resolveLValue(iterator.getIterator()), group.isDescending());
     }
 
     ///  Represents an iterator variable in the loop
     private final class Iterator {
         public final boolean out;
         private final ValueStore var;
+        public final boolean descending;
 
-        private Iterator(boolean out, ValueStore var) {
+        private Iterator(boolean out, ValueStore var, boolean descending) {
             this.out = out;
             this.var = var;
+            this.descending = descending;
         }
 
         void setValue(LogicValue value) {

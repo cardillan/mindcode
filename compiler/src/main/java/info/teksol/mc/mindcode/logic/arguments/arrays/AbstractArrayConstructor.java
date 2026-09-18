@@ -106,7 +106,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     protected int boundsCheckExecutionSteps() {
-        return profile.isBoundaryChecks() ? profile.getErrorReporting().getExecutionSteps() : 0;
+        return profile.isBoundaryChecks() && !instruction.isSafeAccess() ? profile.getErrorReporting().getExecutionSteps() : 0;
     }
 
     protected LogicValue computeIndex(LocalContextfulInstructionsCreator creator) {
@@ -127,20 +127,16 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         }
     }
 
-    protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {
-        if (!profile.isBoundaryChecks()) return;
+    protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index) {
+        if (!profile.isBoundaryChecks() || instruction.isSafeAccess()) return;
 
         int maxIndex = arrayStore.getSize() - 1;
-        int max = maxIndex * multiple;
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
 
-        LogicInstruction instruction = processor.createAssertBounds(astContext, LogicKeyword.create("multiple"), LogicNumber.create(multiple),
+        LogicInstruction instruction = processor.createAssertBounds(astContext, LogicKeyword.create("multiple"), LogicNumber.create(1),
                 LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ,
-                LogicNumber.create(max), LogicString.createRaw(errorMessage));
-        if (multiple == 1) {
-            instruction.setNonNegativeInt(index);
-        }
-
+                LogicNumber.create(maxIndex), LogicString.createRaw(errorMessage));
+        instruction.setNonNegativeInt(index);
         consumer.accept(instruction);
     }
 

@@ -162,16 +162,17 @@ public class InternalArray extends AbstractArrayStore {
     @Override
     public ValueStore getElement(ContextfulInstructionCreator creator, int index) {
         if (hasArrayOffset()) {
-            return new InternalArrayElement(sourcePosition, LogicNumber.create(index), creator.nextTemp());
+            return new InternalArrayElement(sourcePosition, LogicNumber.create(index), creator.nextTemp(), true);
         } else {
             return elements.get(index);
         }
     }
 
     @Override
-    public ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index) {
+    public ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index,
+            boolean safeAccess) {
         LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
-        return new InternalArrayElement(sourcePosition, fixedIndex, creator.nextTemp());
+        return new InternalArrayElement(sourcePosition, fixedIndex, creator.nextTemp(), safeAccess);
     }
 
     @Override
@@ -184,11 +185,14 @@ public class InternalArray extends AbstractArrayStore {
         private final SourcePosition sourcePosition;
         private final LogicValue index;
         private final LogicVariable transferVariable;
+        private final boolean safeAccess;
 
-        private InternalArrayElement(SourcePosition sourcePosition, LogicValue index, LogicVariable transferVariable) {
+        private InternalArrayElement(SourcePosition sourcePosition, LogicValue index, LogicVariable transferVariable,
+                boolean safeAccess) {
             this.sourcePosition = sourcePosition;
             this.index = index;
             this.transferVariable = transferVariable;
+            this.safeAccess = safeAccess;
         }
 
         @Override
@@ -203,18 +207,18 @@ public class InternalArray extends AbstractArrayStore {
 
         @Override
         public LogicValue getValue(ContextfulInstructionCreator creator) {
-            creator.createReadArr(transferVariable, logicArray, index);
+            creator.createReadArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
             return transferVariable;
         }
 
         @Override
         public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-            creator.createReadArr(target, logicArray, index);
+            creator.createReadArr(target, logicArray, index).setSafeAccess(safeAccess);
         }
 
         @Override
         public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
-            creator.createWriteArr(value, logicArray, index);
+            creator.createWriteArr(value, logicArray, index).setSafeAccess(safeAccess);
         }
 
         @Override
@@ -225,7 +229,7 @@ public class InternalArray extends AbstractArrayStore {
         @Override
         public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
             valueSetter.accept(transferVariable);
-            creator.createWriteArr(transferVariable, logicArray, index);
+            creator.createWriteArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
         }
 
         @Override
@@ -235,7 +239,7 @@ public class InternalArray extends AbstractArrayStore {
 
         @Override
         public void storeValue(ContextfulInstructionCreator creator) {
-            creator.createWriteArr(transferVariable, logicArray, index);
+            creator.createWriteArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
         }
     }
 

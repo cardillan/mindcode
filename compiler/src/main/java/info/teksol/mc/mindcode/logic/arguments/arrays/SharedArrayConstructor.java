@@ -109,7 +109,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
 
         if (!skipCompactLookup()) {
             prepareTableCall(creator);
-            generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+            generateBoundsCheck(astContext, consumer, instruction.getIndex());
             LogicValue index = computeIndex(creator);
             creator.createOp(Operation.SHL, arrayInd, index, LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
             creator.createCallStackless(jumpTable.label(), arrayRet, LogicVariable.INVALID).setSideEffects(createCallSideEffects());
@@ -129,7 +129,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
 
             prepareTableCall(creator);
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
-            generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+            generateBoundsCheck(astContext, consumer, instruction.getIndex());
             LogicValue index = computeIndex(creator);
             LogicVariable branchIndex = folded ? arrayInd : processor.nextTemp();
             creator.createOp(Operation.SHL, branchIndex, index, LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
@@ -157,7 +157,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             LogicLabel returnLabel = processor.nextLabel();
             prepareTableCall(creator);
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
-            generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+            generateBoundsCheck(astContext, consumer, instruction.getIndex());
             LogicValue index = computeIndex(creator);
             if (folded) {
                 creator.createSet(arrayInd, index);

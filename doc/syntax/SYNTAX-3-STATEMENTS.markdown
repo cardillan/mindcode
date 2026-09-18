@@ -409,7 +409,7 @@ op add *tmp1 *tmp0 20
 op add :sum :sum :x
 write :sum cell1 *tmp1
 op add *tmp0 *tmp0 1
-jump 2 lessThan *tmp0 20
+jump 2 lessThanEq *tmp0 19
 print :sum
 ```
 

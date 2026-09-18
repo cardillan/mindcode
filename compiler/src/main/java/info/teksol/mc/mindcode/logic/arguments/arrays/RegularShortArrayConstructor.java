@@ -59,7 +59,7 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
     }
 
     protected LocalContextfulInstructionsCreator prepareExpansion(Consumer<LogicInstruction> consumer) {
-        generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1);
+        generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex());
 
         AstContextType contextType = useSelects ? AstContextType.CODE :  AstContextType.IF;
         AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
