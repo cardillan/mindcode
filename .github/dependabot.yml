@@ -10,8 +10,17 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-
+    target-branch: "hotfix"
+    
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    target-branch: "hotfix"
+    
+  - package-ecosystem: "npm"
+    directory: "/webapp"
+    schedule:
+      interval: "weekly"
+    target-branch: "hotfix"
+    
