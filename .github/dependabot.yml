@@ -21,7 +21,7 @@ updates:
     open-pull-requests-limit: 20
     
   - package-ecosystem: "npm"
-    directory: "/webapp"
+    directory: "/webapp/frontend"
     schedule:
       interval: "weekly"
     target-branch: "hotfix"
