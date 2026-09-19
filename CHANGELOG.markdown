@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 > [!NOTE]
 > Mindustry builds 160 to 160.4 contain a bug which precludes parsing of some valid numeric literals in hexadecimal or binary notation (specifically, unsigned literals which produce a negative value). These problematic numbers may be produced either by using these numeric constants directly or by compile-time evaluations performed by the compiler. There's no general workaround for this issue, although using or producing such numbers seems quite rare.
 > The number-parsing issues are fixed in the Bleeding Edge version of Mindustry (Build 27876 or later).
-> 
+ 
 > [!NOTE]
 > The documentation still hasn't been fully updated to reflect the significant changes in Mindustry Build 160 and later: the ability to store any data in memory blocks, and the changes to the number-parsing routines. The documentation will be gradually updated to match the actual state.
 
