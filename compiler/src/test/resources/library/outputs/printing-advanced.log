@@ -1187,7 +1187,7 @@ Final code before resolving virtual instructions:
         label *label34
   181:  assertprints *tmp19 "3.000000070000000" "printExactFast(3.00000007)"
   182:  assertflush *tmp20
-  183:  set :printExactFast:n 3E50
+  183:  set :printExactFast:n 3.0E50
   184:  setaddr :printExactFast*retaddr *label35
   185:  call *label6 *invalid :printExactFast*retval
         label *label35
@@ -1199,19 +1199,19 @@ Final code before resolving virtual instructions:
         label *label36
   191:  assertprints *tmp21 "1.0123456789" "printExactFast(1.0123456789)"
   192:  assertflush *tmp22
-  193:  set :printExactFast:n 10000001E13
+  193:  set :printExactFast:n 1.0000001E20
   194:  setaddr :printExactFast*retaddr *label37
   195:  call *label6 *invalid :printExactFast*retval
         label *label37
-  196:  assertprints *tmp22 "1.000000099999999E20" "printExactFast(1.0000001e20)"
+  196:  assertprints *tmp22 "1.000000100000000E20" "printExactFast(1.0000001e20)"
   197:  assertflush *tmp23
-  198:  set :printExactFast:n 12345E-54
+  198:  set :printExactFast:n 1.2345E-50
   199:  setaddr :printExactFast*retaddr *label38
   200:  call *label6 *invalid :printExactFast*retval
         label *label38
   201:  assertprints *tmp23 "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
   202:  assertflush *tmp24
-  203:  set :printExactFast:n -12345E-54
+  203:  set :printExactFast:n -1.2345E-50
   204:  setaddr :printExactFast*retaddr *label39
   205:  call *label6 *invalid :printExactFast*retval
         label *label39
@@ -1247,7 +1247,7 @@ Final code before resolving virtual instructions:
   234:  jump *label419 lessThanEq :printExactSlow:digit 15
   235:  assertprints *tmp31 "1.012345678900000" "printExactSlow(1.0123456789)"
   236:  assertflush *tmp32
-  237:  op mul :printExactSlow:base 10000001E13 0.00000000000000000001
+  237:  op mul :printExactSlow:base 1.0000001E20 1.0E-20
   238:  print "1."
   239:  set :printExactSlow:digit 1
         label *label433
@@ -1258,9 +1258,9 @@ Final code before resolving virtual instructions:
   244:  op add :printExactSlow:digit :printExactSlow:digit 1
   245:  jump *label433 lessThanEq :printExactSlow:digit 15
   246:  print "E20"
-  247:  assertprints *tmp32 "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  247:  assertprints *tmp32 "1.000000100000000E20" "printExactSlow(1.0000001e20)"
   248:  assertflush *tmp33
-  249:  op mul :printExactSlow:base 12345E-54 1E50
+  249:  op mul :printExactSlow:base 1.2345E-50 1.0E50
   250:  print "1."
   251:  set :printExactSlow:digit 1
         label *label447
@@ -1274,7 +1274,7 @@ Final code before resolving virtual instructions:
   259:  assertprints *tmp33 "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
   260:  assertflush *tmp34
   261:  print "-1."
-  262:  op mul :printExactSlow:base 12345E-54 1E50
+  262:  op mul :printExactSlow:base 1.2345E-50 1.0E50
   263:  set :printExactSlow:digit 1
         label *label461
   264:  op mod *tmp45 :printExactSlow:base 1
@@ -1450,5 +1450,5 @@ Final code before resolving virtual instructions:
 *tmp42: 0.23450000000000015
 :printExactFast:cmp: 0.23450000000000015
 *tmp43: 1.0
-*tmp44: 0.9999983634211276
-:printExactFast:t: 99999.0
+*tmp44: 5.838671768287895E-7
+:printExactFast:t: 0.0

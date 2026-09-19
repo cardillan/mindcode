@@ -181,7 +181,7 @@ set :printExactFast*retaddr 181
 jump 280 always 0 0
 assertprints *tmp19 "3.000000070000000" "printExactFast(3.00000007)"
 assertflush *tmp20
-set :printExactFast:n 3E50
+set :printExactFast:n 3.0E50
 set :printExactFast*retaddr 186
 jump 280 always 0 0
 assertprints *tmp20 "3E50" "printExactFast(3e50)"
@@ -191,17 +191,17 @@ set :printExactFast*retaddr 191
 jump 280 always 0 0
 assertprints *tmp21 "1.0123456789" "printExactFast(1.0123456789)"
 assertflush *tmp22
-set :printExactFast:n 10000001E13
+set :printExactFast:n 1.0000001E20
 set :printExactFast*retaddr 196
 jump 280 always 0 0
-assertprints *tmp22 "1.000000099999999E20" "printExactFast(1.0000001e20)"
+assertprints *tmp22 "1.000000100000000E20" "printExactFast(1.0000001e20)"
 assertflush *tmp23
-set :printExactFast:n 12345E-54
+set :printExactFast:n 1.2345E-50
 set :printExactFast*retaddr 201
 jump 280 always 0 0
 assertprints *tmp23 "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush *tmp24
-set :printExactFast:n -12345E-54
+set :printExactFast:n -1.2345E-50
 set :printExactFast*retaddr 206
 jump 280 always 0 0
 assertprints *tmp24 "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
@@ -235,7 +235,7 @@ op add :printExactSlow:digit :printExactSlow:digit 1
 jump 229 lessThanEq :printExactSlow:digit 15
 assertprints *tmp31 "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush *tmp32
-op mul :printExactSlow:base 10000001E13 0.00000000000000000001
+op mul :printExactSlow:base 1.0000001E20 1.0E-20
 print "1."
 set :printExactSlow:digit 1
 op mod *tmp45 :printExactSlow:base 1
@@ -245,9 +245,9 @@ print *tmp46
 op add :printExactSlow:digit :printExactSlow:digit 1
 jump 240 lessThanEq :printExactSlow:digit 15
 print "E20"
-assertprints *tmp32 "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+assertprints *tmp32 "1.000000100000000E20" "printExactSlow(1.0000001e20)"
 assertflush *tmp33
-op mul :printExactSlow:base 12345E-54 1E50
+op mul :printExactSlow:base 1.2345E-50 1.0E50
 print "1."
 set :printExactSlow:digit 1
 op mod *tmp45 :printExactSlow:base 1
@@ -260,7 +260,7 @@ print "E-50"
 assertprints *tmp33 "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush *tmp34
 print "-1."
-op mul :printExactSlow:base 12345E-54 1E50
+op mul :printExactSlow:base 1.2345E-50 1.0E50
 set :printExactSlow:digit 1
 op mod *tmp45 :printExactSlow:base 1
 op mul :printExactSlow:base *tmp45 10

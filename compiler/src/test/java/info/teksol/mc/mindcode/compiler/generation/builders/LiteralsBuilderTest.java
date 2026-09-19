@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.PRINT;
@@ -142,8 +143,8 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                 createInstruction(SET, ":a", "5000000000"),
                 createInstruction(SET, ":a", "5000000000"),
                 createInstruction(SET, ":a", "0.00000000005"),
-                createInstruction(SET, ":a", "15E29"),
-                createInstruction(SET, ":a", "15E-31")
+                createInstruction(SET, ":a", "1.5E30"),
+                createInstruction(SET, ":a", "1.5E-30")
         );
     }
 
@@ -183,8 +184,8 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                 createInstruction(SET, ":a", "-5000000000"),
                 createInstruction(SET, ":a", "-5000000000"),
                 createInstruction(SET, ":a", "-0.00000000005"),
-                createInstruction(SET, ":a", "-15E29"),
-                createInstruction(SET, ":a", "-15E-31")
+                createInstruction(SET, ":a", "-1.5E30"),
+                createInstruction(SET, ":a", "-1.5E-30")
         );
     }
 
@@ -224,8 +225,8 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                 createInstruction(SET, ":a", "5000000000"),
                 createInstruction(SET, ":a", "5000000000"),
                 createInstruction(SET, ":a", "0.00000000005"),
-                createInstruction(SET, ":a", "15E29"),
-                createInstruction(SET, ":a", "15E-31")
+                createInstruction(SET, ":a", "1.5E30"),
+                createInstruction(SET, ":a", "1.5E-30")
         );
     }
 
@@ -246,7 +247,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                 createInstruction(SET, ":a", "0"),
                 createInstruction(SET, ":a", "01"),
                 createInstruction(SET, ":a", "123"),
-                createInstruction(SET, ":a", "49E-325")
+                createInstruction(SET, ":a", "4.9E-324")
         );
     }
 
@@ -374,7 +375,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages()
                         .add("Literal '0x7fffffffffffffff' exceeds safe range for integer operations (0 ... 2**53).")
-                        .add("Value '-9223372036854775808' does not have a valid mlog representation."),
+                        .add("Literal '0x8000000000000000' exceeds safe range for integer operations (0 ... 2**53)."),
                 """
                         var a = 0x7fffffffffffffff;
                         var b = 0x8000000000000000;
@@ -387,7 +388,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages()
                         .add("Literal '0b0111111111111111111111111111111111111111111111111111111111111111' exceeds safe range for integer operations (0 ... 2**53).")
-                        .add("Value '-9223372036854775808' does not have a valid mlog representation."),
+                        .add("Literal '0b1000000000000000000000000000000000000000000000000000000000000000' exceeds safe range for integer operations (0 ... 2**53)."),
                 """
                         var a = 0b0111111111111111111111111111111111111111111111111111111111111111;
                         var b = 0b1000000000000000000000000000000000000000000000000000000000000000;
@@ -448,5 +449,36 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Invalid unicode escape sequence: expected 4 hexadecimal digits following '\\u'.",
                 "a = \"\\uora\";");
+    }
+
+    @Nested
+    class Target81 {
+        @Test
+        void refusesTooBigBinaryLiterals() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .add("Literal '0b0111111111111111111111111111111111111111111111111111111111111111' exceeds safe range for integer operations (0 ... 2**53).")
+                            .add("Value '-9223372036854775808' does not have a valid mlog representation."),
+                    """
+                            #set target = 8.1m;
+                            var a = 0b0111111111111111111111111111111111111111111111111111111111111111;
+                            var b = 0b1000000000000000000000000000000000000000000000000000000000000000;
+                            """
+            );
+        }
+
+        @Test
+        void refusesTooBigHexadecimalLiterals() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .add("Literal '0x7fffffffffffffff' exceeds safe range for integer operations (0 ... 2**53).")
+                            .add("Value '-9223372036854775808' does not have a valid mlog representation."),
+                    """
+                            #set target = 8.1m;
+                            var a = 0x7fffffffffffffff;
+                            var b = 0x8000000000000000;
+                            """
+            );
+        }
     }
 }

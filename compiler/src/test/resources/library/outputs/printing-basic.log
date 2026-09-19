@@ -2,9 +2,9 @@
     27 instructions eliminated by Temp Variables Elimination (8 iterations).
      1 instruction eliminated by Case Expression Optimization.
     38 instructions eliminated by Dead Code Elimination (6 iterations).
-    91 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
+   102 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
     22 instructions eliminated by Condition Optimization (8 iterations).
-   111 instructions eliminated by Single Step Elimination (4 passes, 11 iterations).
+   110 instructions eliminated by Single Step Elimination (4 passes, 11 iterations).
     20 instructions modified by Expression Optimization (3 passes, 5 iterations).
     10 instructions eliminated by Boolean Optimization (3 passes, 9 iterations).
        2 fully-evaluated expressions optimized using 'select's.
@@ -19,8 +19,8 @@
      4 case expressions converted to fast dispatches by Case Switching.
      7 instructions eliminated by Jump Straightening (8 iterations).
     30 instructions updated by Jump Threading.
-   256 instructions eliminated by Unreachable Code Elimination (2 iterations).
-   249 instructions eliminated by Print Merging.
+   245 instructions eliminated by Unreachable Code Elimination (2 iterations).
+   250 instructions eliminated by Print Merging.
    298 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 627):
@@ -815,8 +815,8 @@ Final code before resolving virtual instructions:
   250:  print 1.0123456789
   251:  assertprints *tmp21 "1.0123456789" "printExactFast(1.0123456789)"
   252:  assertflush *tmp22
-  253:  print "1.000000099999999E20"
-  254:  assertprints *tmp22 "1.000000099999999E20" "printExactFast(1.0000001e20)"
+  253:  print "1.000000100000000E20"
+  254:  assertprints *tmp22 "1.000000100000000E20" "printExactFast(1.0000001e20)"
   255:  assertflush *tmp23
   256:  print "1.2345000000000002E-50"
   257:  assertprints *tmp23 "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
@@ -845,8 +845,8 @@ Final code before resolving virtual instructions:
   280:  print "1.012345678900000"
   281:  assertprints *tmp31 "1.012345678900000" "printExactSlow(1.0123456789)"
   282:  assertflush *tmp32
-  283:  print "1.000000099999999E20"
-  284:  assertprints *tmp32 "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  283:  print "1.000000100000000E20"
+  284:  assertprints *tmp32 "1.000000100000000E20" "printExactSlow(1.0000001e20)"
   285:  assertflush *tmp33
   286:  print "1.234500000000000E-50"
   287:  assertprints *tmp33 "1.234500000000000E-50" "printExactSlow(1.2345e-50)"

@@ -492,7 +492,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     72 write *tmp43 .MEMORY :lastCell
 -    * op mul *tmp44 :rate 60000
 -    * op floor :ratePerMin *tmp44
-+   73 op idiv :ratePerMin :rate 0.000016666666666666667
++   73 op idiv :ratePerMin :rate 1.6666666666666667E-5
     74 jump *label25 greaterThan :duration 2000
     75 op add *tmp48 :batch 10
     76 op min :batch *tmp48 .EFF_MAX_BATCH
@@ -710,7 +710,7 @@ op add :limit :limit :batch
 op div :rate :batch :duration
 op mul *tmp7 :rate 16.666666666666668
 write *tmp7 .MEMORY :lastCell
-op idiv :ratePerMin :rate 0.000016666666666666667
+op idiv :ratePerMin :rate 1.6666666666666667E-5
 jump *label25 greaterThan :duration 2000
 op add *tmp8 :batch 10
 op min :batch *tmp8 .EFF_MAX_BATCH

@@ -251,8 +251,8 @@ assertflush *tmp21
 print 1.0123456789
 assertprints *tmp21 "1.0123456789" "printExactFast(1.0123456789)"
 assertflush *tmp22
-print "1.000000099999999E20"
-assertprints *tmp22 "1.000000099999999E20" "printExactFast(1.0000001e20)"
+print "1.000000100000000E20"
+assertprints *tmp22 "1.000000100000000E20" "printExactFast(1.0000001e20)"
 assertflush *tmp23
 print "1.2345000000000002E-50"
 assertprints *tmp23 "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
@@ -281,8 +281,8 @@ assertflush *tmp31
 print "1.012345678900000"
 assertprints *tmp31 "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush *tmp32
-print "1.000000099999999E20"
-assertprints *tmp32 "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+print "1.000000100000000E20"
+assertprints *tmp32 "1.000000100000000E20" "printExactSlow(1.0000001e20)"
 assertflush *tmp33
 print "1.234500000000000E-50"
 assertprints *tmp33 "1.234500000000000E-50" "printExactSlow(1.2345e-50)"

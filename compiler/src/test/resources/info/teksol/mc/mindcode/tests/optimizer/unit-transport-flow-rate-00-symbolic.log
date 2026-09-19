@@ -380,7 +380,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     62 op mod :index *tmp47 10
 -    * op mul *tmp49 60000 :flow_rate
 -    * op floor :flow_rate_str *tmp49
-+   63 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
++   63 op idiv :flow_rate_str :flow_rate 1.6666666666666667E-5
     64 op div :seconds .MILLIS 1000
     65 op sub :elapsed @time :start
     66 print "Measured interval: "
@@ -531,7 +531,7 @@ Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 i
 
 Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
  
-    58 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
+    58 op idiv :flow_rate_str :flow_rate 1.6666666666666667E-5
     59 op div :seconds .MILLIS 1000
     60 op sub :elapsed @time :start
 -    * print "Measured interval: "
@@ -627,7 +627,7 @@ write :flow_rate .BANK 507
 write @time .BANK 508
 op add *tmp7 :index 1
 op mod :index *tmp7 10
-op idiv :flow_rate_str :flow_rate 0.000016666666666666667
+op idiv :flow_rate_str :flow_rate 1.6666666666666667E-5
 op div :seconds .MILLIS 1000
 op sub :elapsed @time :start
 print "Measured interval: {0} sec\nItem: {0}\nItems shipped: {0}\nContainer level: 0\nFlow rate: {0}\nTotal: {0}\nLast total: {0}\nIndex: {0}\nElapsed: {0} ms"

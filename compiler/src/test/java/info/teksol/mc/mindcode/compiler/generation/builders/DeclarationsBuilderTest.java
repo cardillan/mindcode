@@ -133,7 +133,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void compilesFloatLiteralConstants() {
-            assertCompilesTo("const c = 1e70; a = c;", createInstruction(SET, ":a", "1E70"));
+            assertCompilesTo("const c = 1e70; a = c;", createInstruction(SET, ":a", "1.0E70"));
         }
 
         @Test

@@ -41,6 +41,8 @@ public class IntermediateValue extends AstLiteralFloat {
                     : null;
             case LONG -> processor.isValidIntegerLiteral((long) value)
                     ? new AstLiteralDecimal(sourcePosition(), String.valueOf((long) value))
+                    : processor.isValidHexLiteral((long) value)
+                    ? new AstLiteralHexadecimal(sourcePosition(), addPrefix(Long.toUnsignedString((long)value, 16), "0x"))
                     : null;
             case DOUBLE -> {
                 Optional<LogicLiteral> literal = processor.createLiteral(sourcePosition(), value, false);

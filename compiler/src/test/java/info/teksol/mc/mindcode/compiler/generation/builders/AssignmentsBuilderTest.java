@@ -436,7 +436,7 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("a = 10;", createInstruction(SET, ":a", "10"));
             assertCompilesTo("a = 1.05;", createInstruction(SET, ":a", "1.05"));
             assertCompilesTo("a = 1.50e10;", createInstruction(SET, ":a", "15000000000"));
-            assertCompilesTo("a = 1.50e80;", createInstruction(SET, ":a", "15E79"));
+            assertCompilesTo("a = 1.50e80;", createInstruction(SET, ":a", "1.5E80"));
             assertCompilesTo("a = 0x10;", createInstruction(SET, ":a", "0x10"));
             assertCompilesTo("a = null;", createInstruction(SET, ":a", "null"));
         }

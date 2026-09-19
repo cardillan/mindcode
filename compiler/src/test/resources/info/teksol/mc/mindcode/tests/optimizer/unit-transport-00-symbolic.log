@@ -1318,11 +1318,11 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-95 ins
 -    * set :elapsed_str *tmp182
 -    * op div *tmp183 :transferred :elapsed_ms
 -    * set :items_per_ms *tmp183
--    * op idiv *tmp184 :items_per_ms 0.000016666666666666667
+-    * op idiv *tmp184 :items_per_ms 1.6666666666666667E-5
 -    * set :items_per_min *tmp184
 +  624 op div :elapsed_str *tmp181 10
 +  625 op div :items_per_ms :transferred :elapsed_ms
-+  626 op idiv :items_per_min :items_per_ms 0.000016666666666666667
++  626 op idiv :items_per_min :items_per_ms 1.6666666666666667E-5
    627 set :transferred 0
    628 set :transfers 0
    629 jump *label138 equal .EFF_AUTO_ALLOCATION false
@@ -3149,7 +3149,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    544 op div :items_per_ms_unit .UNIT_CAPACITY :turnaround_ms
 -    * op mul *tmp192 :items_per_ms_unit 60000
 -    * op floor :items_per_min_unit *tmp192
-+  545 op idiv :items_per_min_unit :items_per_ms_unit 0.000016666666666666667
++  545 op idiv :items_per_min_unit :items_per_ms_unit 1.6666666666666667E-5
    546 op add *tmp194 :min_level :max_level
    547 op div :this_level *tmp194 2
    548 op sub *tmp196 :last_level :this_level
@@ -3159,7 +3159,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    552 op add :total_flow_per_ms :items_per_ms :corr_per_ms
 -    * op mul *tmp200 60000 :corr_per_ms
 -    * op floor :corr_per_min *tmp200
-+  553 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
++  553 op idiv :corr_per_min :corr_per_ms 1.6666666666666667E-5
    554 set .CORR_SIGN "[]([green]"
    555 jump *label140 lessThan :corr_per_min 0
    556 set .CORR_SIGN "[]([green]+"
@@ -3495,7 +3495,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-32 
    479 op div *tmp175 :wait_time 100
  
    506 op add :total_flow_per_ms :items_per_ms :corr_per_ms
-   507 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
+   507 op idiv :corr_per_min :corr_per_ms 1.6666666666666667E-5
    508 set .CORR_SIGN "[]([green]"
 -    * jump *label140 lessThan :corr_per_min 0
 -    * set .CORR_SIGN "[]([green]+"
@@ -3601,7 +3601,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    144 jump *label42 notEqual *tmp45 0
  
    507 op add :total_flow_per_ms :items_per_ms :corr_per_ms
-   508 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
+   508 op idiv :corr_per_min :corr_per_ms 1.6666666666666667E-5
    509 set .CORR_SIGN "[]([green]"
 -    * select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" .CORR_SIGN
 +  510 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
@@ -3621,7 +3621,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
  
    505 set :last_level :this_level
    506 op add :total_flow_per_ms :items_per_ms :corr_per_ms
-   507 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
+   507 op idiv :corr_per_min :corr_per_ms 1.6666666666666667E-5
 -    * set .CORR_SIGN "[]([green]"
    508 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
    509 set .SPEED_UNIT_TXT "[])/min"
@@ -4697,7 +4697,7 @@ op div :elapsed_ms :elapsed_ticks 0.06
 op idiv *tmp41 :elapsed_ms 100
 op div :elapsed_str *tmp41 10
 op div :items_per_ms :transferred :elapsed_ms
-op idiv :items_per_min :items_per_ms 0.000016666666666666667
+op idiv :items_per_min :items_per_ms 1.6666666666666667E-5
 set :transferred 0
 set :transfers 0
 jump *label138 equal .EFF_AUTO_ALLOCATION false
@@ -4708,7 +4708,7 @@ op mul .WAIT_LIMIT :turnaround_ms .DEC_OVERALLOCATION
 op idiv *tmp43 :turnaround_ms 100
 op div :turnaround_str *tmp43 10
 op div :items_per_ms_unit .UNIT_CAPACITY :turnaround_ms
-op idiv :items_per_min_unit :items_per_ms_unit 0.000016666666666666667
+op idiv :items_per_min_unit :items_per_ms_unit 1.6666666666666667E-5
 op add *tmp44 :min_level :max_level
 op div :this_level *tmp44 2
 op sub *tmp45 :last_level :this_level
@@ -4716,7 +4716,7 @@ op mul :corr *tmp45 .FLOW_CORR_SIGN
 op div :corr_per_ms :corr :elapsed_ms
 set :last_level :this_level
 op add :total_flow_per_ms :items_per_ms :corr_per_ms
-op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
+op idiv :corr_per_min :corr_per_ms 1.6666666666666667E-5
 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
 set .SPEED_UNIT_TXT "[])/min"
 jump *label142 equal :alive false

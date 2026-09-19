@@ -1260,7 +1260,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    333 op div :expected_flow *tmp179 11.25
 -    * op mul *tmp181 :expected_flow 3600
 -    * op floor :expected_flow_str *tmp181
-+  334 op idiv :expected_flow_str :expected_flow 0.0002777777777777778
++  334 op idiv :expected_flow_str :expected_flow 2.777777777777778E-4
    335 set :lastRate :rate
    336 draw color 0 0 80 255
    337 draw rect 156 0 16 176
@@ -1270,7 +1270,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    358 draw triangle 156 :pos1 164 :pos 156 :pos2
 -    * op mul *tmp191 3600 :rate
 -    * op floor :flow_str *tmp191
-+  359 op idiv :flow_str :rate 0.0002777777777777778
++  359 op idiv :flow_str :rate 2.777777777777778E-4
    360 label *label69
    361 label *label70
    362 label *label67
@@ -1752,7 +1752,7 @@ Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 i
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-   287 op idiv :flow_str :rate 0.0002777777777777778
+   287 op idiv :flow_str :rate 2.777777777777778E-4
    288 label *label69
    289 label *label67
 -    * print "\nNominal production: "
@@ -2041,7 +2041,7 @@ read :rate bank1 511
 jump *label69 equal :lastRate :rate
 op mul *tmp56 EXPECTED_BOOST :factories
 op div :expected_flow *tmp56 11.25
-op idiv :expected_flow_str :expected_flow 0.0002777777777777778
+op idiv :expected_flow_str :expected_flow 2.777777777777778E-4
 set :lastRate :rate
 draw color 0 0 80 255
 draw rect 156 0 16 176
@@ -2066,7 +2066,7 @@ op add :pos1 :pos 7
 op sub :pos2 :pos 7
 draw color 255 255 16 255
 draw triangle 156 :pos1 164 :pos 156 :pos2
-op idiv :flow_str :rate 0.0002777777777777778
+op idiv :flow_str :rate 2.777777777777778E-4
 label *label69
 label *label67
 print "\nNominal production: {0}/min\nActual production: {0}/min"

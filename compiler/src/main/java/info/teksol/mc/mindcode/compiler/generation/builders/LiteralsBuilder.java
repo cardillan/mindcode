@@ -194,7 +194,7 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
                     ? Long.parseLong(literal, beginIndex, literal.length(), radix)
                     : Long.parseUnsignedLong(literal, beginIndex, literal.length(), radix);
 
-            if (!processor.isValidIntegerLiteral(absValue)) {
+            if (!processor.isValidIntegerLiteral(absValue) && !processor.isValidHexLiteral(absValue)) {
                 error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, absValue);
             } else if (!node.isSuppressWarning() && (absValue == Long.MIN_VALUE || Math.abs(absValue) >= (1L << 53))) {
                 warn(node, WARN.LITERAL_UNSAFE_DECIMAL_RANGE, literal);

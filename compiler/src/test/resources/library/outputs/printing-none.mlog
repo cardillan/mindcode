@@ -114,7 +114,7 @@ set :printExactFast*retaddr 114
 jump 359 always 0 0
 assertprints *tmp20 "3.000000070000000" "printExactFast(3.00000007)"
 assertflush *tmp21
-set :printExactFast:n 3E50
+set :printExactFast:n 3.0E50
 set :printExactFast*retaddr 119
 jump 359 always 0 0
 assertprints *tmp21 "3E50" "printExactFast(3e50)"
@@ -124,17 +124,17 @@ set :printExactFast*retaddr 124
 jump 359 always 0 0
 assertprints *tmp22 "1.0123456789" "printExactFast(1.0123456789)"
 assertflush *tmp23
-set :printExactFast:n 10000001E13
+set :printExactFast:n 1.0000001E20
 set :printExactFast*retaddr 129
 jump 359 always 0 0
-assertprints *tmp23 "1.000000099999999E20" "printExactFast(1.0000001e20)"
+assertprints *tmp23 "1.000000100000000E20" "printExactFast(1.0000001e20)"
 assertflush *tmp24
-set :printExactFast:n 12345E-54
+set :printExactFast:n 1.2345E-50
 set :printExactFast*retaddr 134
 jump 359 always 0 0
 assertprints *tmp24 "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush *tmp25
-set :printExactFast:n -12345E-54
+set :printExactFast:n -1.2345E-50
 set :printExactFast*retaddr 139
 jump 359 always 0 0
 assertprints *tmp25 "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
@@ -164,7 +164,7 @@ set :printExactSlow*retaddr 164
 jump 447 always 0 0
 assertprints *tmp30 "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush *tmp31
-set :printExactSlow:n 3E50
+set :printExactSlow:n 3.0E50
 set :printExactSlow*retaddr 169
 jump 447 always 0 0
 assertprints *tmp31 "3.000000000000000E50" "printExactSlow(3e50)"
@@ -174,17 +174,17 @@ set :printExactSlow*retaddr 174
 jump 447 always 0 0
 assertprints *tmp32 "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush *tmp33
-set :printExactSlow:n 10000001E13
+set :printExactSlow:n 1.0000001E20
 set :printExactSlow*retaddr 179
 jump 447 always 0 0
-assertprints *tmp33 "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+assertprints *tmp33 "1.000000100000000E20" "printExactSlow(1.0000001e20)"
 assertflush *tmp34
-set :printExactSlow:n 12345E-54
+set :printExactSlow:n 1.2345E-50
 set :printExactSlow*retaddr 184
 jump 447 always 0 0
 assertprints *tmp34 "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush *tmp35
-set :printExactSlow:n -12345E-54
+set :printExactSlow:n -1.2345E-50
 set :printExactSlow*retaddr 189
 jump 447 always 0 0
 assertprints *tmp35 "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"

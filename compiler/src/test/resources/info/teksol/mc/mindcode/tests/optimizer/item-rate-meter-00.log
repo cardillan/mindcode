@@ -557,7 +557,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    130 print "[]\n"
 -    * op mul *tmp54 :rate 3600
 -    * op floor *tmp55 *tmp54
-+  131 op idiv *tmp55 :rate 0.0002777777777777778
++  131 op idiv *tmp55 :rate 2.777777777777778E-4
    132 print "Current rate [green]"
    133 print *tmp55
    134 print "[]/min\n"
@@ -891,7 +891,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 -    * print "[]\n"
 +   96 print "Item Rate Meter\nTotal items: [gold]{0}[]\nCurrent rate [green]{0}[]/min\n  memory start: [gold]{0}[]\n  memory index: [gold]{0}[]\n[lightgray]Loop time: {0} ms"
 +   97 format :curr
-    98 op idiv *tmp55 :rate 0.0002777777777777778
+    98 op idiv *tmp55 :rate 2.777777777777778E-4
 -    * print "Current rate [green]"
 -    * print *tmp55
 -    * print "[]/min\n"
@@ -1013,7 +1013,7 @@ write :index .TARGET_MEMORY :startIndex
 write :rate .TARGET_MEMORY :index
 print "Item Rate Meter\nTotal items: [gold]{0}[]\nCurrent rate [green]{0}[]/min\n  memory start: [gold]{0}[]\n  memory index: [gold]{0}[]\n[lightgray]Loop time: {0} ms"
 format :curr
-op idiv *tmp7 :rate 0.0002777777777777778
+op idiv *tmp7 :rate 2.777777777777778E-4
 format *tmp7
 format :startIndex
 format :index

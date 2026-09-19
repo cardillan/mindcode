@@ -279,16 +279,6 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
         );
     }
 
-    @Test
-    void ignoresUnrepresentableValues() {
-        assertCompilesTo("""
-                        print(1 << 63);
-                        """,
-                createInstruction(OP, "shl", tmp(0), "1", "63"),
-                createInstruction(PRINT, tmp(0))
-        );
-    }
-
     @Nested
     class Functions {
         @Test
@@ -320,7 +310,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         print(x, y);
                         """,
                     createInstruction(PRINT, "2"),
-                    createInstruction(PRINT, "1234E47")
+                    createInstruction(PRINT, "1.234E50")
             );
         }
 
@@ -376,6 +366,20 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                             print(x);
                             """,
                     createInstruction(PRINT, "4")
+            );
+        }
+    }
+
+    @Nested
+    class Target81 {
+        @Test
+        void ignoresUnrepresentableValues() {
+            assertCompilesTo("""
+                        #set target = 8.1;
+                        print(1 << 63);
+                        """,
+                    createInstruction(OP, "shl", tmp(0), "1", "63"),
+                    createInstruction(PRINT, tmp(0))
             );
         }
     }

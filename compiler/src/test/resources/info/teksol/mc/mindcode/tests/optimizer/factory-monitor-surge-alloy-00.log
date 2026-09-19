@@ -702,7 +702,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     48 draw triangle 156 :pos1 164 :pos 156 :pos2
 -    * op mul *tmp25 3600 :rate
 -    * op floor :flow_str *tmp25
-+   49 op idiv :flow_str :rate 0.0002777777777777778
++   49 op idiv :flow_str :rate 2.777777777777778E-4
     50 jump *label10 always
     51 label *label9
     52 draw color 0 0 80 255
@@ -955,7 +955,7 @@ op add :pos1 :pos 7
 op sub :pos2 :pos 7
 draw color 255 255 16 255
 draw triangle 156 :pos1 164 :pos 156 :pos2
-op idiv :flow_str :rate 0.0002777777777777778
+op idiv :flow_str :rate 2.777777777777778E-4
 jump *label10 always
 label *label9
 draw color 0 0 80 255

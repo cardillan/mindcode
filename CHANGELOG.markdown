@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.19.3 – 2026-09-19
+
+> [!NOTE]
+> Mindustry builds 160 to 160.4 contain a bug which precludes parsing of some valid numeric literals in hexadecimal or binary notation (specifically, unsigned literals which produce a negative value). These problematic numbers may be produced either by using these numeric constants directly or by compile-time evaluations performed by the compiler. There's no general workaround for this issue, although using or producing such numbers seems quite rare.
+> The number-parsing issues are fixed in the Bleeding Edge version of Mindustry (Build 27876 or later).
+> 
+> [!NOTE]
+> The documentation still hasn't been fully updated to reflect the significant changes in Mindustry Build 160 and later: the ability to store any data in memory blocks, and the changes to the number-parsing routines. The documentation will be gradually updated to match the actual state.
+
+### Changed
+
+* Changed the numeric literal formatting for mlog to match the number-parsing bugfixes and changes in the latest build in Mindustry 8. The compiler generates numeric literals which cannot be encoded as integers in decimal or scientific notation.
+* Changed the processor emulator in target `8.2` to match the number-parsing bugfixes and changes in the latest build in Mindustry 8.
+
 ## 3.19.2 – 2026-09-19
 
 ### Fixed
@@ -17,9 +31,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* Changed the numeric literal formatting for mlog to accommodate changes in mlog numeric literal parsing in Mindustry build v160. The compiler doesn't generate the more readable mlog numeric literals (such as `1.5e10`) yet.   
-* Changed the processor emulator in target `8.2` to match mlog numeric literal parsing in Mindustry build v160.
-* Changed compile-time expression evaluation in target `8.2`: intermediate values are now kept instead of being encoded into an mlog literal and parsed back. This preserves the original accuracy of the final result as the Mindustry build v160 provides slightly different accuracy when parsing numeric literals.
+* Changed the numeric literal formatting for mlog to accommodate changes in mlog numeric literal parsing in the *v8 Build 160** Mindustry release. The compiler doesn't generate the more readable mlog numeric literals (such as `1.5e10`) yet.   
+* Changed the processor emulator in target `8.2` to match mlog numeric literal parsing in the *v8 Build 160** Mindustry release.
+* Changed compile-time expression evaluation in target `8.2`: intermediate values are now kept instead of being encoded into an mlog literal and parsed back. This preserves the original accuracy of the final result as the *v8 Build 160** Mindustry release provides slightly different accuracy when parsing numeric literals.
 
 ## 3.19.1 – 2026-09-12
 
