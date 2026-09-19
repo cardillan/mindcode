@@ -218,7 +218,7 @@ Mlog formatting options:
   --author author [author ...]
                          adds an author to  the  list  of  authors  which  is  then  output  similarly to the compiler's
                          signature
-  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.19.2 - github.com/cardillan/mindcode'
+  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.19.3 - github.com/cardillan/mindcode'
                          at the end of the final code
   --processor-id processor_ID
                          sets the processor ID to be stored in the compiled code
@@ -699,7 +699,7 @@ Mlog formatting options:
   --author author [author ...]
                          adds an author to  the  list  of  authors  which  is  then  output  similarly to the compiler's
                          signature
-  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.19.2 - github.com/cardillan/mindcode'
+  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.19.3 - github.com/cardillan/mindcode'
                          at the end of the final code
   --processor-id processor_ID
                          sets the processor ID to be stored in the compiled code
