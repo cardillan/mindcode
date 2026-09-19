@@ -61,7 +61,7 @@
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.48.1",
 		"vaul-svelte": "^1.0.0-next.7",
-		"vite": "^8.0.16",
+		"vite": "^8.3.0",
 		"vitest": "^4.1.11"
 	}
 }
