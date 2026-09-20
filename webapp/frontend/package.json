@@ -30,7 +30,7 @@
 		"@eslint/js": "^9.39.1",
 		"@fsegurai/codemirror-theme-forest": "^6.2.7",
 		"@fsegurai/codemirror-theme-vscode-light": "^6.2.8",
-		"@internationalized/date": "^3.10.1",
+		"@internationalized/date": "^3.12.4",
 		"@lezer/common": "^1.5.2",
 		"@lezer/generator": "^1.8.0",
 		"@lezer/lr": "^1.4.10",
