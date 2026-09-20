@@ -33,7 +33,7 @@
 		"@internationalized/date": "^3.10.1",
 		"@lezer/common": "^1.5.2",
 		"@lezer/generator": "^1.8.0",
-		"@lezer/lr": "^1.4.8",
+		"@lezer/lr": "^1.4.10",
 		"@lucide/svelte": "^1.47.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.70.1",
