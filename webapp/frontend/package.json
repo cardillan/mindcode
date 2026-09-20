@@ -43,7 +43,7 @@
 		"bits-ui": "^2.19.2",
 		"clsx": "^2.1.1",
 		"codemirror": "^6.0.2",
-		"eslint": "^9.39.1",
+		"eslint": "^10.10.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.23.0",
 		"globals": "^16.5.0",
