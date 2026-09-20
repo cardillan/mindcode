@@ -27,7 +27,7 @@
 		"@codemirror/state": "^6.5.4",
 		"@codemirror/view": "^6.43.12",
 		"@eslint/compat": "^1.4.0",
-		"@eslint/js": "^9.39.1",
+		"@eslint/js": "^10.0.1",
 		"@fsegurai/codemirror-theme-forest": "^6.2.7",
 		"@fsegurai/codemirror-theme-vscode-light": "^6.2.8",
 		"@internationalized/date": "^3.12.4",
