@@ -39,7 +39,7 @@
 		"@sveltejs/kit": "^2.70.3",
 		"@sveltejs/vite-plugin-svelte": "^7.3.0",
 		"@tailwindcss/vite": "^4.3.3",
-		"@types/node": "~22.19.13",
+		"@types/node": "~25.9.7",
 		"bits-ui": "^2.19.2",
 		"clsx": "^2.1.1",
 		"codemirror": "^6.0.2",
