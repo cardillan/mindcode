@@ -2,9 +2,9 @@ name: Pre-deployment CI
 
 on:
   push:
-    branches: [ main, devel ]
+    branches: [ main, hotfix ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, hotfix ]
 
 jobs:
   build:
