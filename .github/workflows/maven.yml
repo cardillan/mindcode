@@ -46,7 +46,7 @@ jobs:
         echo >> webapp/src/test/resources/application.properties "spring.datasource.password=mindcode"
 
     - name: Cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         # A list of files, directories, and wildcard patterns to cache and restore
         path: ~/.m2
