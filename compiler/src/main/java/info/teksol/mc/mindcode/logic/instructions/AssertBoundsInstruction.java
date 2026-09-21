@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.LocalCompilerProfile;
 import info.teksol.mc.profile.RuntimeErrorReporting;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -69,13 +70,7 @@ public class AssertBoundsInstruction extends BaseInstruction {
 
     @Override
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
-        return switch (getLocalProfile().getErrorReporting()) {
-            case NONE -> 0;
-            case ASSERT -> 1;
-            case MINIMAL -> conditions();
-            case SIMPLE -> conditions() + 1;
-            case DESCRIBED -> conditions() + 2;
-        };
+        return getSize(getLocalProfile(), conditions());
     }
 
     private int conditions() {
@@ -122,5 +117,16 @@ public class AssertBoundsInstruction extends BaseInstruction {
                 creator.createLabel(logicLabelRun);
             }
         }
+    }
+
+
+    public static int getSize(LocalCompilerProfile profile, int conditions) {
+        return switch (profile.getErrorReporting()) {
+            case NONE -> 0;
+            case ASSERT -> 1;
+            case MINIMAL -> conditions;
+            case SIMPLE -> conditions + 1;
+            case DESCRIBED -> conditions + 2;
+        };
     }
 }
