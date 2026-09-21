@@ -12,18 +12,69 @@ updates:
       interval: "weekly"
     target-branch: "hotfix"
     open-pull-requests-limit: 20
-    
+
+    groups:
+      junit:
+        patterns:
+          - "org.junit.jupiter:*"
+
+      spring:
+        patterns:
+          - "org.springframework.boot:*"
+          - "org.springframework.session:*"
+
+      maven-plugins:
+        patterns:
+          - "org.apache.maven.plugins:*"
+          - "org.codehaus.mojo:*"
+
+      jackson:
+        patterns:
+          - "com.fasterxml.jackson:*"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     target-branch: "hotfix"
     open-pull-requests-limit: 20
-    
+
   - package-ecosystem: "npm"
     directory: "/webapp/frontend"
     schedule:
       interval: "weekly"
     target-branch: "hotfix"
     open-pull-requests-limit: 20
-    
+
+    groups:
+      svelte:
+        patterns:
+          - "svelte"
+          - "@sveltejs/*"
+
+      codemirror:
+        patterns:
+          - "codemirror"
+          - "@codemirror/*"
+          - "@lezer/*"
+          - "@fsegurai/codemirror-theme-*"
+
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - "tailwind-*"
+          - "tw-animate-css"
+
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "eslint-*"
+          - "typescript-eslint"
+          - "globals"
+
+      prettier:
+        patterns:
+          - "prettier"
+          - "prettier-plugin-*"
