@@ -19,6 +19,17 @@ Changes intended for the next regular release.
 
 * **Planned**
 
+* Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
+* After updating a processor via MlogWatcher, download the processor's content again and compare to determine whether Mindustry parsing causes some changes; if so, it is an error.
+  * Update MlogWatcher to automatically return the new processor content.
+* Add support for Mindcode user preferences: allow setting command-line options centrally.
+* Add `update.json` to the repo, lists new versions and their level:
+  * Optional: no bug fixes
+  * Recommended: no critical bug fixes
+  * Required: critical bug fixes, critical updates to match the latest Mindustry version.
+* Add checking for new versions:
+  * Downloads the `update.json` locally once per hour or day.
+  * Reports the most serious update level available since the current version.   
 * Support for mlogls directives
 * Automatically make global variables accessed by a background process volatile.
   * Might need a category for volatile, but removable variables.

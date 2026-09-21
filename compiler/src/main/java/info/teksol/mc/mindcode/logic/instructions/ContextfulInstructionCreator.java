@@ -54,9 +54,10 @@ public interface ContextfulInstructionCreator {
         return createInstruction(opcode, List.of(arguments));
     }
 
-    default LogicInstruction createAssertBounds(LogicKeyword type, LogicValue multiple, LogicValue lowerBound,
+    default AssertBoundsInstruction createAssertBounds(LogicKeyword type, LogicValue multiple, LogicValue lowerBound,
             Condition lowerCondition, LogicValue value, Condition upperCondition, LogicValue upperBound, LogicValue message) {
-        return createInstruction(ASSERT_BOUNDS, List.of(type, multiple, lowerBound, lowerCondition, value, upperCondition, upperBound, message));
+        return (AssertBoundsInstruction) createInstruction(ASSERT_BOUNDS, List.of(type, multiple,
+                lowerBound, lowerCondition, value, upperCondition, upperBound, message));
     }
 
     default CallRecInstruction createCallRecursive(LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
