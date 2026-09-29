@@ -14,15 +14,22 @@ Changes intended for the next regular release.
 
 * **Doing**
 
-* If expression telescoping optimization
 * Large stack
+* Large arrays
+  * Nested for loops for list-iteration loops 
 
 * **Planned**
 
+* Compatibility test 2: verifies how Mindustry parses (numeric) literals.
+* String minification
+  * Replacing icon names with the corresponding characters
+  * Choosing a shorter representation for colors (e.g., replace `[lightgray]` with `[#bfbfbf]`, or `[#ffd700]` with `[gold]`). Replace a RGB color with a close enough named color.
+* If expression telescoping optimization
 * Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
 * After updating a processor via MlogWatcher, download the processor's content again and compare to determine whether Mindustry parsing causes some changes; if so, it is an error.
+  * Update MlogWatcher to perform this check automatically.
   * Update MlogWatcher to automatically return the new processor content.
-* Add support for Mindcode user preferences: allow setting command-line options centrally.
+* Add support for Mindcode user preferences: allow setting command-line options in them.
 * Add `update.json` to the repo, lists new versions and their level:
   * Optional: no bug fixes
   * Recommended: no critical bug fixes
@@ -33,15 +40,16 @@ Changes intended for the next regular release.
 * Support for mlogls directives
 * Automatically make global variables accessed by a background process volatile.
   * Might need a category for volatile, but removable variables.
-* Large arrays
 * Large heap
-* Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays. 
+  * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays. 
 * Reuse array offset variable for same-sized arrays.
 * Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
-* Array code injection optimization (?)
 * Invoke properties on any expression, including arrays.
 * Allow using linked arrays in the `remote require` clause.
+
+* Array code injection optimization (?)
+  * Lower priority due to the availability of external arrays
 
 * **Quick ideas**
 
