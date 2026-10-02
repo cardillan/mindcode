@@ -5,6 +5,7 @@
 
 <br>
 
+[![Static Badge](https://img.shields.io/badge/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3-red)](README_zh.markdown)
 [![Static Badge](https://img.shields.io/badge/web%20app-blue?link=https%3A%2F%2Fmindcode.herokuapp.com%2F)](https://mindcode.herokuapp.com/)
 [![Static Badge](https://img.shields.io/badge/doc-mincdcode-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](doc/syntax/SYNTAX.markdown)
 [![Static Badge](https://img.shields.io/badge/doc-mlog-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](https://yrueii.github.io/Mlog%20Documentation/)
