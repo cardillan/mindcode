@@ -34,7 +34,7 @@
 		"@lezer/common": "^1.5.3",
 		"@lezer/generator": "^1.8.1",
 		"@lezer/lr": "^1.4.10",
-		"@lucide/svelte": "^1.48.0",
+		"@lucide/svelte": "^1.50.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.70.3",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
