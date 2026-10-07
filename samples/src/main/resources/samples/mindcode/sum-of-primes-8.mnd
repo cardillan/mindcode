@@ -7,7 +7,6 @@
 //
 // This is the version for Mindustry 8. The data is kept in in-memory arrays, no external memory bank is needed.
 
-#set target = 8m;
 #set syntax = strict;
 
 // Using a system library to print the result
@@ -38,14 +37,15 @@ begin
     printNumber(result);
     print(".");
     printflush(message1);
+    stopProcessor();
 end;
 
 void setBit(bitIndex)
-  data[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
+    data[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
 end;
 
 def getBit(bitIndex)
-  data[bitIndex \ MOD] & (1 << (bitIndex % MOD));
+    data[bitIndex \ MOD] & (1 << (bitIndex % MOD));
 end;
 
 def testAndSetMultiples(n, maximum)
