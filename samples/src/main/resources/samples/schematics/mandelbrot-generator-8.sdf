@@ -693,7 +693,7 @@ compute = """
         // Mandelbrot iteration loop, gets unrolled by the compiler
         var dist, i;
         Compute: do
-            for i in 0 ... MAX_DEPTH do
+            for i = 0; i < MAX_DEPTH; i++ do
                 var x1 = zx;
                 var y1 = zy;
                 zx = x1 * x1 - y1 * y1 + cx;

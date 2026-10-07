@@ -1,6 +1,8 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
+import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -57,7 +59,7 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration) {
+    public ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean optional, boolean implicitDeclaration) {
         throw new MindcodeInternalError("Trying to create a local variable in global context:" + identifier);
     }
 
@@ -94,5 +96,10 @@ public class GlobalContext implements FunctionContext {
     @Override
     public <T> T excludeVariablesFromNode(Supplier<T> expression) {
         return expression.get();
+    }
+
+    @Override
+    public void registerLoopControlVariable(CompilerMessageEmitter emitter, SourceElement element, LogicVariable variable) {
+        throw new MindcodeInternalError("Trying to register a loop control variable in global context:" + variable);
     }
 }

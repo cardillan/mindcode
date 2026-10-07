@@ -47,43 +47,43 @@ print "\nFound: "
 print :findLinkedBlocks:block
 sensor *tmp3 :findLinkedBlocks:block @type
 set :findLinkedBlocks:type *tmp3
-set :findLinkedBlocks:requested @large-logic-display
-set :findLinkedBlocks:name "Display"
-set :findLinkedBlocks:variable :display
-set :findLinkedBlocks:required true
+set :findLinkedBlocks:requested.1 @large-logic-display
+set :findLinkedBlocks:name.1 "Display"
+set :findLinkedBlocks:variable.1 :display
+set :findLinkedBlocks:required.1 true
 set *tmp4 55
 jump 82 always 0 0
-set :display :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @message
-set :findLinkedBlocks:name "Message"
-set :findLinkedBlocks:variable :message
-set :findLinkedBlocks:required false
+set :display :findLinkedBlocks:variable.1
+set :findLinkedBlocks:requested.1 @message
+set :findLinkedBlocks:name.1 "Message"
+set :findLinkedBlocks:variable.1 :message
+set :findLinkedBlocks:required.1 false
 set *tmp4 62
 jump 82 always 0 0
-set :message :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @switch
-set :findLinkedBlocks:name "Switch"
-set :findLinkedBlocks:variable :switch
-set :findLinkedBlocks:required false
+set :message :findLinkedBlocks:variable.1
+set :findLinkedBlocks:requested.1 @switch
+set :findLinkedBlocks:name.1 "Switch"
+set :findLinkedBlocks:variable.1 :switch
+set :findLinkedBlocks:required.1 false
 set *tmp4 69
 jump 82 always 0 0
-set :switch :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @memory-bank
-set :findLinkedBlocks:name "Memory"
-set :findLinkedBlocks:variable :memory
-set :findLinkedBlocks:required true
+set :switch :findLinkedBlocks:variable.1
+set :findLinkedBlocks:requested.1 @memory-bank
+set :findLinkedBlocks:name.1 "Memory"
+set :findLinkedBlocks:variable.1 :memory
+set :findLinkedBlocks:required.1 true
 set *tmp4 76
 jump 82 always 0 0
-set :memory :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @memory-cell
-set :findLinkedBlocks:name "Memory"
-set :findLinkedBlocks:variable :memory
-set :findLinkedBlocks:required true
+set :memory :findLinkedBlocks:variable.1
+set :findLinkedBlocks:requested.1 @memory-cell
+set :findLinkedBlocks:name.1 "Memory"
+set :findLinkedBlocks:variable.1 :memory
+set :findLinkedBlocks:required.1 true
 set *tmp4 95
-op equal *tmp5 :findLinkedBlocks:requested :findLinkedBlocks:type
+op equal *tmp5 :findLinkedBlocks:requested.1 :findLinkedBlocks:type
 jump 93 equal *tmp5 false
-set :findLinkedBlocks:variable :findLinkedBlocks:block
-op equal *tmp7 :findLinkedBlocks:requested @message
+set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
+op equal *tmp7 :findLinkedBlocks:requested.1 @message
 jump 90 equal *tmp7 false
 set :findLinkedBlocks:message :findLinkedBlocks:block
 set *tmp8 :findLinkedBlocks:message
@@ -93,53 +93,53 @@ set *tmp6 *tmp8
 jump 94 always 0 0
 set *tmp6 null
 set @counter *tmp4
-set :memory :findLinkedBlocks:variable
+set :memory :findLinkedBlocks:variable.1
 jump 40 always 0 0
 set :findLinkedBlocks:foundAll 1
-set :findLinkedBlocks:requested @large-logic-display
-set :findLinkedBlocks:name "Display"
-set :findLinkedBlocks:variable :display
-set :findLinkedBlocks:required true
+set :findLinkedBlocks:requested.2 @large-logic-display
+set :findLinkedBlocks:name.2 "Display"
+set :findLinkedBlocks:variable.2 :display
+set :findLinkedBlocks:required.2 true
 set *tmp9 104
 jump 131 always 0 0
-set :display :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @message
-set :findLinkedBlocks:name "Message"
-set :findLinkedBlocks:variable :message
-set :findLinkedBlocks:required false
+set :display :findLinkedBlocks:variable.2
+set :findLinkedBlocks:requested.2 @message
+set :findLinkedBlocks:name.2 "Message"
+set :findLinkedBlocks:variable.2 :message
+set :findLinkedBlocks:required.2 false
 set *tmp9 111
 jump 131 always 0 0
-set :message :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @switch
-set :findLinkedBlocks:name "Switch"
-set :findLinkedBlocks:variable :switch
-set :findLinkedBlocks:required false
+set :message :findLinkedBlocks:variable.2
+set :findLinkedBlocks:requested.2 @switch
+set :findLinkedBlocks:name.2 "Switch"
+set :findLinkedBlocks:variable.2 :switch
+set :findLinkedBlocks:required.2 false
 set *tmp9 118
 jump 131 always 0 0
-set :switch :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @memory-bank
-set :findLinkedBlocks:name "Memory"
-set :findLinkedBlocks:variable :memory
-set :findLinkedBlocks:required true
+set :switch :findLinkedBlocks:variable.2
+set :findLinkedBlocks:requested.2 @memory-bank
+set :findLinkedBlocks:name.2 "Memory"
+set :findLinkedBlocks:variable.2 :memory
+set :findLinkedBlocks:required.2 true
 set *tmp9 125
 jump 131 always 0 0
-set :memory :findLinkedBlocks:variable
-set :findLinkedBlocks:requested @memory-cell
-set :findLinkedBlocks:name "Memory"
-set :findLinkedBlocks:variable :memory
-set :findLinkedBlocks:required true
+set :memory :findLinkedBlocks:variable.2
+set :findLinkedBlocks:requested.2 @memory-cell
+set :findLinkedBlocks:name.2 "Memory"
+set :findLinkedBlocks:variable.2 :memory
+set :findLinkedBlocks:required.2 true
 set *tmp9 141
 print "\n"
-print :findLinkedBlocks:name
+print :findLinkedBlocks:name.2
 print ": "
-print :findLinkedBlocks:variable
-jump 139 equal :findLinkedBlocks:required false
-op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable
+print :findLinkedBlocks:variable.2
+jump 139 equal :findLinkedBlocks:required.2 false
+op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable.2
 set *tmp10 :findLinkedBlocks:foundAll
 jump 140 always 0 0
 set *tmp10 null
 set @counter *tmp9
-set :memory :findLinkedBlocks:variable
+set :memory :findLinkedBlocks:variable.2
 printflush :findLinkedBlocks:message
 op equal *tmp11 :findLinkedBlocks:foundAll false
 jump 2 notEqual *tmp11 false

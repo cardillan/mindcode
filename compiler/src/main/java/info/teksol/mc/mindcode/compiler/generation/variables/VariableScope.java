@@ -13,4 +13,7 @@ public enum VariableScope {
 
     /// The registration is valid within the current node only.
     NODE,
+
+    /// Loop control variable. The registration is valid within the current node only.
+    LOOP_CONTROL,
 }

@@ -182,6 +182,10 @@ public interface GlobalCompilerProfile {
         return getSyntacticMode() != SyntacticMode.STRICT;
     }
 
+    default boolean isRelaxed() {
+        return getSyntacticMode() == SyntacticMode.RELAXED;
+    }
+
     default int getSetrate() {
         return getIntValue(CompilerOptions.SETRATE);
     }

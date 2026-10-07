@@ -133,7 +133,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     // Local/parameter
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String functionName,
             String functionPrefix, String name, String mlog, boolean noinit, boolean input, boolean output,
-            boolean constant, boolean reference, boolean preserved) {
+            boolean constant, boolean reference, boolean optional, boolean preserved) {
         super(argumentType, ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
@@ -153,7 +153,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.output = output;
         this.constant = constant;
         this.reference = reference;
-        this.optional = false;
+        this.optional = optional;
         this.preserved = preserved;
     }
 
@@ -321,25 +321,25 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @SuppressWarnings("ConfusingMainMethod")
     public static LogicVariable main(AstIdentifier identifier, String mlog) {
-        return main(identifier, mlog, false);
+        return main(identifier, mlog, false, false);
     }
 
     @SuppressWarnings("ConfusingMainMethod")
-    public static LogicVariable main(AstIdentifier identifier, String mlog, boolean noinit) {
+    public static LogicVariable main(AstIdentifier identifier, String mlog, boolean noinit, boolean optional) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE,
-                identifier.getName(), mlog, false, noinit, false);
+                identifier.getName(), mlog, false, noinit, optional);
     }
 
-    public static LogicVariable local(AstIdentifier identifier, MindcodeFunction function, String mlog, boolean noinit) {
+    public static LogicVariable local(AstIdentifier identifier, MindcodeFunction function, String mlog, boolean noinit, boolean optional) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, function.getName(),
-                function.getPrefix(), identifier.getName(), mlog, noinit, false, false, false, false, false);
+                function.getPrefix(), identifier.getName(), mlog, noinit, false, false, false, false, optional, false);
     }
 
     public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function, String mlog, boolean preserved) {
         AstIdentifier identifier = parameter.getIdentifier();
         return new LogicVariable(identifier.sourcePosition(), FUNCTION_PARAMETER, function.getName(),
                 function.getPrefix(), identifier.getName(), mlog,
-                false, parameter.isInput(), parameter.isOutput(), parameter.isConstant(), parameter.isReference(), preserved);
+                false, parameter.isInput(), parameter.isOutput(), parameter.isConstant(), parameter.isReference(), false, preserved);
     }
 
     public static LogicVariable temporary(NameCreator nameCreator, int index) {
@@ -349,7 +349,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
         return new LogicVariable(function.getSourcePosition(), FUNCTION_RETVAL,
                 function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE_NAME,
-                mlog, true, false, true, false, false, function.isExport());
+                mlog, true, false, true, false, false, false, function.isExport());
     }
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
@@ -364,13 +364,13 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable fnArrayOffset(MindcodeFunction function, AstIdentifier identifier, String mlog) {
         return new LogicVariable(identifier.sourcePosition(), FUNCTION_ARRAYOFFSET, function.getName(),
-                function.getPrefix(), identifier.getName() + ARRAY_OFFSET, mlog, true, false, false, false, false, false);
+                function.getPrefix(), identifier.getName() + ARRAY_OFFSET, mlog, true, false, false, false, false, false, false);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED_NAME,
-                mlog,false, false, true, false, false, true);
+                mlog,false, false, true, false, false, false, true);
     }
 
     public static LogicVariable remoteWaitAddr() {
@@ -425,7 +425,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 functionName, functionPrefix, functionPrefix + RETURN_VALUE_NAME,
-                functionPrefix + RETURN_VALUE_NAME, true, false, true, false, false, false);
+                functionPrefix + RETURN_VALUE_NAME, true, false, true, false, false, false, false);
     }
 
     // ValueStore methods

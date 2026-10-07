@@ -147,6 +147,8 @@ public class ERR {
     public static final String LITERAL_UNSUPPORTED_NEWLINE_ESCAPE = "String sequence '\\\\n' cannot be encoded in language target '8.1' and earlier.";
     public static final String LOOKUP_REQUIRES_BUILTIN_EVALUATION = "Lookup arrays not available when 'builtin-evaluation' is set to 'none'.";
     public static final String LOOKUP_REQUIRES_TARGET_8 = "Lookup arrays require language target '8.0' or higher.";
+    public static final String LOOP_CONTROL_VARIABLE_NOT_DECLARED = "Loop control variable must be declared in the loop.";
+    public static final String LOOP_CONTROL_VARIABLE_REUSED = "Loop control variable '%s' is already used.";
     public static final String LOOP_LABEL_ALREADY_IN_USE = "Loop label '%s' already in use.";
     public static final String LVALUE_ASSIGNMENT_TO_CONST_NOT_ALLOWED = "Assignment to constant or parameter '%s' not allowed.";
     public static final String LVALUE_ASSIGNMENT_TO_LINKED_NOT_ALLOWED = "Assignment to variable '%s' representing a linked block not allowed.";
