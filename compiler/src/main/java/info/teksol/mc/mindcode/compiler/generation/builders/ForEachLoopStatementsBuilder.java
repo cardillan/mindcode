@@ -471,13 +471,21 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     private Iterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
         if (group.hasDeclaration()) {
             if (iterator.getIterator() instanceof AstIdentifier identifier) {
-                variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Modifiers.EMPTY);
+                variables.createVariable(isLocalContext(), identifier, VariableScope.LOOP_CONTROL, Modifiers.EMPTY);
             } else {
                 // Probably can't happen due to grammar
                 error(iterator.getIterator(), ERR.IDENTIFIER_EXPECTED);
             }
+        } else if (globalProfile.isStrict()) {
+            error(group, ERR.LOOP_CONTROL_VARIABLE_NOT_DECLARED);
         }
-        return new Iterator(iterator.hasOutModifier(), resolveLValue(iterator.getIterator()), group.isDescending());
+
+        ValueStore loopControlVariable = resolveLValue(iterator.getIterator());
+        if (loopControlVariable instanceof LogicVariable variable && variable.isUserWritable()) {
+            variables.registerLoopControlVariable(iterator.getIterator(), variable);
+        }
+
+        return new Iterator(iterator.hasOutModifier(), loopControlVariable, group.isDescending());
     }
 
     ///  Represents an iterator variable in the loop

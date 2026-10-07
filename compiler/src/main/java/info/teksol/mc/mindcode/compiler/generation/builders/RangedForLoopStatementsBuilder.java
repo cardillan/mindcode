@@ -44,13 +44,19 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
 
         if (node.hasDeclaration()) {
             if (node.getVariable() instanceof AstIdentifier identifier) {
-                variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Modifiers.EMPTY);
+                variables.createVariable(isLocalContext(), identifier, VariableScope.LOOP_CONTROL, Modifiers.EMPTY);
             } else {
                 error(node.getVariable(), ERR.IDENTIFIER_EXPECTED);
             }
+        } else if (globalProfile.isStrict()) {
+            error(node, ERR.LOOP_CONTROL_VARIABLE_NOT_DECLARED);
         }
 
         ValueStore loopControlVariable = resolveLValue(node.getVariable());
+
+        if (loopControlVariable instanceof LogicVariable variable && variable.isUserWritable()) {
+            variables.registerLoopControlVariable(node.getVariable(), variable);
+        }
 
         LogicValue fixedFinalBound;
         Condition condition;

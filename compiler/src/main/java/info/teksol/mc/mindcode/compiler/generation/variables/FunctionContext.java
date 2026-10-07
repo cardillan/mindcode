@@ -1,6 +1,8 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
+import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
@@ -34,7 +36,7 @@ public interface FunctionContext {
     int getVariableReuseCount(AstIdentifier identifier);
 
     ///  Creates a new variable in the current function context
-    ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration);
+    ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean optional, boolean implicitDeclaration);
 
     /// Registers a new function variable.
     ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, ValueStore variable);
@@ -61,10 +63,10 @@ public interface FunctionContext {
     /// Called when exiting an AST node. Removes variables belonging to that node.
     void exitAstNode();
 
-    ///  Registers a temporary variable valid in given node.
+    /// Registers a temporary variable valid in given node.
     void registerNodeVariable(LogicVariable variable);
 
-    ///  Registers a temporary variable within the parent node.
+    /// Registers a temporary variable within the parent node.
     void registerParentNodeVariable(LogicVariable variable);
 
     /// Encapsulates processing of the given expression by keeping temporary variable(s) created while evaluating
@@ -81,4 +83,7 @@ public interface FunctionContext {
     /// @param expression expression to evaluate
     /// @return value provided by the expression
     <T> T excludeVariablesFromNode(Supplier<T> expression);
+
+    /// Registers a loop control variable.
+    void registerLoopControlVariable(CompilerMessageEmitter emitter, SourceElement element, LogicVariable variable);
 }

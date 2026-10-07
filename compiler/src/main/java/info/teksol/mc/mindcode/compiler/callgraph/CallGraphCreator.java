@@ -11,7 +11,6 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.GlobalCompilerProfile;
-import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -324,7 +323,7 @@ public class CallGraphCreator extends CompilerMessageEmitter {
 
         // When the module is not the main one, the syntax mode must be strict
         // Remote functions use strict mode per being declared in a module
-        if (globalProfile.getSyntacticMode() != SyntacticMode.STRICT && function.getModule().isMain() && !function.isExport()) {
+        if (globalProfile.isNonStrict() && function.getModule().isMain() && !function.isExport()) {
             params.stream()
                     .filter(p -> processor.isBlockName(p.getName()))
                     .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_LINKED, p.getName(), function.getName()));

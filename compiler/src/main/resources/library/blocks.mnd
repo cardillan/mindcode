@@ -52,11 +52,7 @@ module blocks;
  */
 inline void findLinkedBlocks(title, message, linkMap...)
     do
-        // Declare variables just once and reuse them, otherwise warnings about unused variables
-        // would get generated
-        var requested, name, variable, required;
-
-        for requested, name, out variable, required in linkMap do
+        for var requested, name, out variable, required in linkMap do
             variable = null;
         end;
         print(title);
@@ -65,7 +61,7 @@ inline void findLinkedBlocks(title, message, linkMap...)
             var block = getlink(--n);
             print("\nFound: ", block);
             var type = block.@type;
-            for requested, name, out variable, required in linkMap do
+            for var requested, name, out variable, required in linkMap do
                 if requested == type then
                     variable = block;
                     if requested == @message then message = block; end;
@@ -74,7 +70,7 @@ inline void findLinkedBlocks(title, message, linkMap...)
         end;
 
         var foundAll = 1;
-        for requested, name, out variable, required in linkMap do
+        for var requested, name, out variable, required in linkMap do
             print($"\n$name: $variable");
             if required then foundAll &= variable; end;
         end;

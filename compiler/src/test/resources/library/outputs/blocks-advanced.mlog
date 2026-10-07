@@ -11,18 +11,18 @@ getlink :findLinkedBlocks:block :findLinkedBlocks:n
 print "\nFound: "
 print :findLinkedBlocks:block
 sensor :findLinkedBlocks:type :findLinkedBlocks:block @type
-select :findLinkedBlocks:variable equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
-set :display :findLinkedBlocks:variable
-set :findLinkedBlocks:variable :message
+select :findLinkedBlocks:variable.1 equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
+set :display :findLinkedBlocks:variable.1
+set :findLinkedBlocks:variable.1 :message
 jump 19 notEqual @message :findLinkedBlocks:type
-set :findLinkedBlocks:variable :findLinkedBlocks:block
+set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
 set :findLinkedBlocks:message :findLinkedBlocks:block
-set :message :findLinkedBlocks:variable
-select :findLinkedBlocks:variable equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
-set :switch :findLinkedBlocks:variable
-select :findLinkedBlocks:variable equal @memory-bank :findLinkedBlocks:type :findLinkedBlocks:block :memory
-select :findLinkedBlocks:variable equal @memory-cell :findLinkedBlocks:type :findLinkedBlocks:block :findLinkedBlocks:variable
-set :memory :findLinkedBlocks:variable
+set :message :findLinkedBlocks:variable.1
+select :findLinkedBlocks:variable.1 equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
+set :switch :findLinkedBlocks:variable.1
+select :findLinkedBlocks:variable.1 equal @memory-bank :findLinkedBlocks:type :findLinkedBlocks:block :memory
+select :findLinkedBlocks:variable.1 equal @memory-cell :findLinkedBlocks:type :findLinkedBlocks:block :findLinkedBlocks:variable.1
+set :memory :findLinkedBlocks:variable.1
 jump 8 greaterThan :findLinkedBlocks:n 0
 print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
 format :display

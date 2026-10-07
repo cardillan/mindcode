@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
+import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
@@ -15,6 +16,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @NullMarked
@@ -30,14 +32,11 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
     /// (in non-overlapping nodes)
     private final Map<String, MutableInteger> variableReuses = new HashMap<>();
 
-    /// List of active variables allocated within the function, in order of allocation.
-    private final List<String> nodeVariables = new ArrayList<>();
+    /// Tracks node variables usage. Ensures variables are removed from the variables map when the node exits.
+    private final VariableStack nodeVariables = new VariableStack(variables::remove);
 
-    /// Start of the current node in the nodeVariables list
-    private int currentNodeIndex = 0;
-
-    /// Keeps starting positions inside the nodeVariables list for all active (nested) nodes.
-    private final Deque<Integer> nodeStack = new ArrayDeque<>(50);
+    /// Tracks active loop control variables.
+    private final VariableStack loopControlVariables = new VariableStack();
 
     public LocalContext(MessageConsumer messageConsumer, NameCreator nameCreator, FunctionContext parentContext,
             MindcodeFunction function, List<FunctionArgument> varargs) {
@@ -54,6 +53,7 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
         return variables.put(name, variable);
     }
 
+    @Override
     public LoopStack loopStack() {
         return loopStack;
     }
@@ -74,24 +74,27 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
         variables.addAll(this.variables.values());
     }
 
+    @Override
     public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
         putVariable(identifier.getName(), variable);
     }
 
+    @Override
     public int getVariableReuseCount(AstIdentifier identifier) {
         return variableReuses.computeIfAbsent(identifier.getName(), _ -> MutableInteger.zero()).getAndIncrement();
     }
 
-    public ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration) {
+    @Override
+    public ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean optional, boolean implicitDeclaration) {
         int index = getVariableReuseCount(identifier);
         if (implicitDeclaration && index > 0) {
             error(identifier, ERR.VARIABLE_NOT_RESOLVED, identifier.getName());
         }
 
         if (function.isMain()) {
-            return LogicVariable.main(identifier, nameCreator.main(identifier.getName(), index), noinit);
+            return LogicVariable.main(identifier, nameCreator.main(identifier.getName(), index), noinit, optional);
         } else {
-            return LogicVariable.local(identifier, function, nameCreator.local(function, identifier.getName(), index), noinit);
+            return LogicVariable.local(identifier, function, nameCreator.local(function, identifier.getName(), index), noinit, optional);
         }
     }
 
@@ -104,14 +107,8 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
         }
 
         switch (scope) {
-            case NODE -> nodeVariables.add(identifier.getName());
-            case PARENT_NODE -> {
-                if (currentNodeIndex != nodeVariables.size()) {
-                    throw new MindcodeInternalError("Adding to parent node while child node variables exist");
-                }
-                nodeVariables.add(identifier.getName());
-                currentNodeIndex++;
-            }
+            case LOOP_CONTROL, NODE -> nodeVariables.add(identifier.getName());
+            case PARENT_NODE -> nodeVariables.addToParent(identifier.getName());
         }
 
         return variable;
@@ -134,16 +131,14 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
 
     @Override
     public void enterAstNode() {
-        nodeStack.push(currentNodeIndex);
-        currentNodeIndex = nodeVariables.size();
+        nodeVariables.push();
+        loopControlVariables.push();
     }
 
     @Override
     public void exitAstNode() {
-        List<String> variablesToRemove = nodeVariables.subList(currentNodeIndex, nodeVariables.size());
-        variablesToRemove.forEach(variables::remove);
-        variablesToRemove.clear();
-        currentNodeIndex = nodeStack.pop();
+        loopControlVariables.pop();
+        nodeVariables.pop();
     }
 
     @Override
@@ -159,5 +154,68 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
     @Override
     public <T> T excludeVariablesFromNode(Supplier<T> expression) {
         return expression.get();
+    }
+
+    @Override
+    public void registerLoopControlVariable(CompilerMessageEmitter emitter, SourceElement element, LogicVariable variable) {
+        if (loopControlVariables.exists(variable.toMlog())) {
+            emitter.error(element, ERR.LOOP_CONTROL_VARIABLE_REUSED, variable.getFullName());
+        } else {
+            loopControlVariables.add(variable.toMlog());
+        }
+    }
+
+    private static class VariableStack {
+        /// List of active variables allocated within the function, in order of allocation.
+        private final List<String> variables = new ArrayList<>();
+
+        /// Start of the current node in the nodeVariables list
+        private int currentIndex = 0;
+
+        /// Keeps starting positions inside the nodeVariables list for all active (nested) nodes.
+        private final Deque<Integer> stack = new ArrayDeque<>(50);
+
+        /// A cleanup routine
+        private final Consumer<String> cleanup;
+
+        public VariableStack() {
+            this.cleanup = _ -> {};
+        }
+
+        public VariableStack(Consumer<String> cleanup) {
+            this.cleanup = cleanup;
+        }
+
+        public void add(String name) {
+            variables.add(name);
+        }
+
+        public void addToParent(String name) {
+            if (!isEmpty()) {
+                throw new MindcodeInternalError("Adding to parent node while child node variables exist");
+            }
+            variables.add(name);
+            currentIndex++;
+        }
+
+        public boolean exists(String name) {
+            return variables.contains(name);
+        }
+
+        public void push() {
+            stack.push(currentIndex);
+            currentIndex = variables.size();
+        }
+
+        public void pop() {
+            List<String> variablesToRemove = variables.subList(currentIndex, variables.size());
+            variablesToRemove.forEach(cleanup);
+            variablesToRemove.clear();
+            currentIndex = stack.pop();
+        }
+
+        public boolean isEmpty() {
+            return currentIndex == variables.size();
+        }
     }
 }

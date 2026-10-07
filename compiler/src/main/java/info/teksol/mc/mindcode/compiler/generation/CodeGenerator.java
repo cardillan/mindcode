@@ -26,7 +26,6 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.GlobalCompilerProfile;
-import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.profile.options.CompilerOptions;
 import info.teksol.mc.util.CRC64;
 import org.jspecify.annotations.NullMarked;
@@ -369,12 +368,12 @@ public class CodeGenerator extends CompilerMessageEmitter {
             codeInGlobalScopeWarning = true;
         }
 
-        if (node.getProfile().getSyntacticMode() != SyntacticMode.RELAXED || node.reportAllScopeErrors()) {
+        if (!node.getProfile().isRelaxed() || node.reportAllScopeErrors()) {
             String message = isLocalContext()
                     ? ERR.SCOPE_DECLARATION_WITHIN_CODE_BLOCK
                     : ERR.SCOPE_CODE_OUTSIDE_CODE_BLOCK;
 
-            if (node.getProfile().getSyntacticMode() == SyntacticMode.STRICT || node.reportAllScopeErrors()) {
+            if (node.getProfile().isStrict() || node.reportAllScopeErrors()) {
                 error(node, "%s", message);
             } else {
                 warn(node, "%s", message);

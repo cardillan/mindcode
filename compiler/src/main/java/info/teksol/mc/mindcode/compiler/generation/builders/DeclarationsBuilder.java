@@ -20,7 +20,6 @@ import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
-import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.profile.options.CompilerOptionFactory;
 import info.teksol.mc.profile.options.CompilerOptions;
 import info.teksol.mc.profile.options.Target;
@@ -176,7 +175,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
     @Override
     public ValueStore visitModuleDeclaration(AstModuleDeclaration node) {
-        if (node.getProfile().getSyntacticMode() != SyntacticMode.STRICT) {
+        if (!node.getProfile().isStrict()) {
             error(node, ERR.MODULE_STRICT_MODE_REQUIRED);
         }
 

@@ -16,7 +16,6 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.GlobalCompilerProfile;
-import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -181,7 +180,7 @@ public class Variables extends CompilerMessageEmitter {
             return registerGlobalVariable(identifier, LogicVariable.global(identifier, nameCreator.global(identifier.getName())));
         } else {
             return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier, VariableScope.FUNCTION,
-                    functionContext.createFunctionVariable(identifier, false, true)));
+                    functionContext.createFunctionVariable(identifier, false, false, true)));
         }
     }
 
@@ -384,7 +383,7 @@ public class Variables extends CompilerMessageEmitter {
                 return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
             }
             return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier, scope,
-                    functionContext.createFunctionVariable(identifier, modifiers.contains(NOINIT), false)));
+                    functionContext.createFunctionVariable(identifier, modifiers.contains(NOINIT), scope == VariableScope.LOOP_CONTROL, false)));
         } else {
             if (globalVariables.containsKey(name)) {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
@@ -475,8 +474,7 @@ public class Variables extends CompilerMessageEmitter {
             }
         }
 
-        return identifier.getProfile().getSyntacticMode() == SyntacticMode.STRICT
-                ? LogicVariable.INVALID : createImplicitVariable(identifier);
+        return identifier.getProfile().isStrict() ? LogicVariable.INVALID : createImplicitVariable(identifier);
     }
 
     /// Tries to find a variable among declared variables (local, then global). Returns null when not found.
@@ -559,6 +557,10 @@ public class Variables extends CompilerMessageEmitter {
             expression.run();
             return Void.TYPE;
         });
+    }
+
+    public void registerLoopControlVariable(SourceElement element, LogicVariable variable) {
+        functionContext.registerLoopControlVariable(this, element, variable);
     }
 
     private void verifyMlogName(LogicString mlogName) {

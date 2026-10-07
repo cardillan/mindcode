@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax.
+* Loop control variables declared within the loop are never reported as unused. 
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
 * Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.  
 * **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary. 
