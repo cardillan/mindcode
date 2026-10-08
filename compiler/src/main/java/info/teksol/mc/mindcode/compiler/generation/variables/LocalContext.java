@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
-import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
@@ -157,11 +156,11 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
     }
 
     @Override
-    public void registerLoopControlVariable(CompilerMessageEmitter emitter, SourceElement element, LogicVariable variable) {
-        if (loopControlVariables.exists(variable.toMlog())) {
-            emitter.error(element, ERR.LOOP_CONTROL_VARIABLE_REUSED, variable.getFullName());
+    public void registerLoopControlVariable(CompilerMessageEmitter emitter, AstIdentifier identifier, boolean declared) {
+        if (!declared && loopControlVariables.exists(identifier.getName())) {
+            emitter.error(identifier, ERR.LOOP_CONTROL_VARIABLE_REUSED, identifier.getName());
         } else {
-            loopControlVariables.add(variable.toMlog());
+            loopControlVariables.add(identifier.getName());
         }
     }
 

@@ -28,8 +28,9 @@ public class TestNode implements AstMindcodeNode {
     }
 
     @Override
-    public void setProfile(CompilerProfile profile) {
+    public TestNode setProfile(CompilerProfile profile) {
         this.profile = profile;
+        return this;
     }
 
     @Override

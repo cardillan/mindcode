@@ -19,6 +19,7 @@ public interface ArrayStore extends ValueStore {
 
     String getName();
 
+    /// Size of the array. -1 for a dynamically sized array.
     int getSize();
 
     default int getFullSize() {
@@ -80,6 +81,9 @@ public interface ArrayStore extends ValueStore {
 
         /// Constant array elements, no variables involved
         CONSTANT,
+
+        /// The array of local linked blocks
+        LINKS,
 
         /// Residing in a memory cell or memory bank
         EXTERNAL,

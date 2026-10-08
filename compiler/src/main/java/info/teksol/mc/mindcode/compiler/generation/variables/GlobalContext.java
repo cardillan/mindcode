@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
-import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -99,7 +98,7 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public void registerLoopControlVariable(CompilerMessageEmitter emitter, SourceElement element, LogicVariable variable) {
-        throw new MindcodeInternalError("Trying to register a loop control variable in global context:" + variable);
+    public void registerLoopControlVariable(CompilerMessageEmitter emitter, AstIdentifier identifier, boolean declared) {
+        throw new MindcodeInternalError("Trying to register a loop control variable in global context:" + identifier.getName());
     }
 }

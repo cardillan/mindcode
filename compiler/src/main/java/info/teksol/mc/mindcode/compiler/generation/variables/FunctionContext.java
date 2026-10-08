@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
-import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
@@ -85,5 +84,5 @@ public interface FunctionContext {
     <T> T excludeVariablesFromNode(Supplier<T> expression);
 
     /// Registers a loop control variable.
-    void registerLoopControlVariable(CompilerMessageEmitter emitter, SourceElement element, LogicVariable variable);
+    void registerLoopControlVariable(CompilerMessageEmitter emitter, AstIdentifier identifier, boolean declared);
 }

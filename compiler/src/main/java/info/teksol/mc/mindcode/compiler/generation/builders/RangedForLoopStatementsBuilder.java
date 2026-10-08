@@ -52,11 +52,11 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
             error(node, ERR.LOOP_CONTROL_VARIABLE_NOT_DECLARED);
         }
 
-        ValueStore loopControlVariable = resolveLValue(node.getVariable());
-
-        if (loopControlVariable instanceof LogicVariable variable && variable.isUserWritable()) {
-            variables.registerLoopControlVariable(node.getVariable(), variable);
+        if (node.getVariable() instanceof AstIdentifier identifier){
+            variables.registerLoopControlVariable(identifier, node.hasDeclaration());
         }
+
+        ValueStore loopControlVariable = resolveLValue(node.getVariable());
 
         LogicValue fixedFinalBound;
         Condition condition;

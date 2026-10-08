@@ -152,7 +152,7 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
 
     private ValueStore applyArrayOperation(AstExpression node, ArrayStore target, ValueStore eval,
             @Nullable Operation operation, boolean returnPriorValue) {
-        if (operation != null || !(eval instanceof ArrayStore source)) {
+        if (operation != null || !(eval instanceof ArrayStore source) || source.getSize() < 0 || target.getSize() < 0) {
             error(node, ERR.ARRAY_UNSUPPORTED_OPERATION);
             return target;
         }

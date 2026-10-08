@@ -62,8 +62,9 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
         return Objects.requireNonNull(profile);
     }
 
-    public void setProfile(CompilerProfile profile) {
+    public AstMindcodeNode setProfile(CompilerProfile profile) {
         this.profile = profile;
+        return this;
     }
 
     @Override

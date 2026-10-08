@@ -35,7 +35,7 @@ public interface AstMindcodeNode extends SourceElement {
     }
 
     /// Sets the compiler profile for this AST node.
-    void setProfile(CompilerProfile profile);
+    AstMindcodeNode setProfile(CompilerProfile profile);
 
     /// Returns the compiler profile holding compiler options valid for this AST node.
     CompilerProfile getProfile();
