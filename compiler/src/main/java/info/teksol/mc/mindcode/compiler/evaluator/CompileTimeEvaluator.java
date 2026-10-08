@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.LinkArray;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
@@ -381,8 +382,10 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
     private AstMindcodeNode evaluateLength(AstFunctionCall node, boolean local) {
         if (node.getArguments().size() == 1 && node.getArgument(0).getExpression() instanceof AstIdentifier identifier) {
             ValueStore valueStore = variables.resolveVariable(identifier, local, true);
-            if (valueStore instanceof ArrayStore array) {
-                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.getSize()));
+            if (valueStore instanceof LinkArray) {
+                return new AstBuiltInIdentifier(node.sourcePosition(), "@links").setProfile(identifier.getProfile());
+            } else if (valueStore instanceof ArrayStore array) {
+                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.getSize())).setProfile(identifier.getProfile());
             }
         }
 
@@ -414,7 +417,8 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
         if (node.getArguments().size() == 1) {
             List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
             if (evaluated.size() == 1 && evaluated.getFirst() instanceof AstLiteralString s && !s.getValue().isEmpty()) {
-                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf((long) s.getValue().charAt(0)));
+                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf((long) s.getValue().charAt(0)))
+                        .setProfile(node.getProfile());
             }
         }
 
@@ -428,7 +432,8 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
                 String string = s.getValue();
                 int index = i.getIntValue();
                 if (index >= 0 && index < string.length()) {
-                    return new AstLiteralDecimal(node.sourcePosition(), String.valueOf((long) string.charAt(index)));
+                    return new AstLiteralDecimal(node.sourcePosition(), String.valueOf((long) string.charAt(index)))
+                            .setProfile(node.getProfile());
                 }
             }
         }
@@ -440,7 +445,8 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
         if (node.getArguments().size() == 1) {
             List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
             if (evaluated.size() == 1 && evaluated.getFirst() instanceof AstLiteralString s) {
-                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(s.getValue().length()));
+                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(s.getValue().length()))
+                        .setProfile(node.getProfile());
             }
         }
 
@@ -452,13 +458,13 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
     private AstMindcodeNode evaluateEncode(AstFunctionCall node, boolean local) {
         if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
             error(node.getIdentifier(), FUNCTION_REQUIRES_TARGET_8, node.getFunctionName());
-            return new AstLiteralString(node.sourcePosition(), "");
+            return new AstLiteralString(node.sourcePosition(), "").setProfile(node.getProfile());
         }
 
         if (node.getArguments().size() < 2) {
             error(node, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS,
                     node.getFunctionName(), 2, node.getArguments().size());
-            return new AstLiteralString(node.sourcePosition(), "");
+            return new AstLiteralString(node.sourcePosition(), "").setProfile(node.getProfile());
         }
 
         List<AstLiteral> literals = evaluateConstantArguments(node, local, l -> {
@@ -466,7 +472,7 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
             return l instanceof AstLiteralNumeric && value == (int) value;
         }, f -> error(f, ERR.ENCODE_INVALID_ARGUMENT, node.getFunctionName()));
 
-        if (literals.size() != node.getArguments().size()) return new AstLiteralString(node.sourcePosition(), "");
+        if (literals.size() != node.getArguments().size()) return new AstLiteralString(node.sourcePosition(), "").setProfile(node.getProfile());
 
         int offset = literals.removeFirst().getIntValue();
         StringBuilder sbr = new StringBuilder(2 * literals.size());
@@ -483,7 +489,7 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
         }
 
         String value = sbr.toString();
-        return new AstLiteralString(node.sourcePosition(), value);
+        return new AstLiteralString(node.sourcePosition(), value).setProfile(node.getProfile());
     }
 
     private <N extends AstMindcodeNode> List<N> evaluateArguments(AstFunctionCall node, boolean local, Class<N> requiredClass) {

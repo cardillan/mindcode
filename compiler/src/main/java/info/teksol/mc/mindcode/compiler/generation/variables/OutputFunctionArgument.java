@@ -12,8 +12,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-// A FunctionArgument representing and output argument to a function call or instruction.
-// Provides mechanism to update the value with the output from the function/instruction.
+// A FunctionArgument representing an output argument to a function call or instruction.
+// Provides a mechanism to update the value with the output from the function/instruction.
 @NullMarked
 public class OutputFunctionArgument extends InputFunctionArgument {
     /// Used only for passing the output argument into mlog instructions.

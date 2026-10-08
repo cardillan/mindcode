@@ -202,7 +202,7 @@ public class InternalArray extends AbstractArrayStore {
 
         @Override
         public boolean isLvalue() {
-            return true;
+            return arrayType != ArrayType.CONSTANT;
         }
 
         @Override

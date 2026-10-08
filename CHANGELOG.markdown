@@ -8,11 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* Added a `links` implicit global variable representing the blocks linked to the processor. List iteration loops and index-based access are supported with this array. Declaring another `links` variable shadows the implicit one.
 * Added support for the [`asserttype` instruction](/doc/syntax/TOOLS-TESTING-TOOL.markdown#unit-testing-support) provided by Mlog Assertions mod v0.9.0.
 
 ### Changed
 
-* **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax.
+* **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax ([#464](https://github.com/cardillan/mindcode/issues/464)).
 * Loop control variables declared within the loop are never reported as unused. 
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
 * Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.  

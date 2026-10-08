@@ -159,8 +159,13 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
     }
 
     private ValueStore storeSubarrayAccess(AstSubarray node, ArrayStore array) {
-        IntRange range = parseSubarrayRange(node, array.getSize());
-        return range == null ? LogicVariable.INVALID : array.subarray(node.sourcePosition(), range.min(), range.max() + 1);
+        if (array.getSize() < 0) {
+            error(node.getArray(), ERR.ARRAY_UNSUPPORTED_OPERATION);
+            return LogicVariable.INVALID;
+        } else {
+            IntRange range = parseSubarrayRange(node, array.getSize());
+            return range == null ? LogicVariable.INVALID : array.subarray(node.sourcePosition(), range.min(), range.max() + 1);
+        }
     }
 
     private @Nullable IntRange parseSubarrayRange(AstSubarray node, int size) {

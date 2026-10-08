@@ -12,6 +12,7 @@ public class ERR {
     public static final String ARGUMENT_KEYWORD_INVALID_VALUE = "Invalid value '%s' for keyword parameter: allowed values are '%s'.";
     public static final String ARGUMENT_KEYWORD_IN_OUT_NOT_ALLOWED = "Parameter is an mlog keyword, no 'in' or 'out' modifiers allowed.";
     public static final String ARGUMENT_KEYWORD_UNSPECIFIED_VALUE = "Invalid or unspecified value for keyword parameter: allowed values are '%s'.";
+    public static final String ARGUMENT_LINKS_REQUIRES_REF = "The 'links' array may only be passed as a 'ref' argument.";
     public static final String ARGUMENT_NOT_CONST = "Argument assigned to constant parameter '%s' is not a compile-time constant.";
     public static final String ARGUMENT_NOT_LVALUE = "Argument assigned to output parameter '%s' is not writable.";
     public static final String ARGUMENT_NOT_OPTIONAL = "Parameter '%s' isn't optional, a value must be provided.";
@@ -32,7 +33,7 @@ public class ERR {
     public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
     public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "Array index out of bounds (0 .. %d)";
     public static final String ARRAY_INIT_INVALID_RANGE = "Range in array initialization is only supported for linked linked block arrays.";
-    public static final String ARRAY_INVALID = "'%s' is not an array.'";
+    public static final String ARRAY_INVALID = "'%s' is not an array.";
     public static final String ARRAY_LINKED_NOT_INITIALIZED = "Linked block array must be initialized.";
     public static final String ARRAY_LINKED_INVALID_RANGE = "Invalid link range (both link names must use identical base name, range must not be empty).";
     public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";
@@ -106,6 +107,7 @@ public class ERR {
     public static final String FORMATTABLE_TOO_MANY_ARGS = "Too many arguments for formattable placeholders.";
     public static final String FOR_EACH_UNBALANCED_GROUPS = "Not enough values to supply this iterator group (provided: %d, required: %d).";
     public static final String FOR_EACH_WRONG_NUMBER_OF_VALUES = "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).";
+    public static final String FOR_EACH_INVALID_LINKS = "A single iterator and no other values can be used with the 'links' array in a list iteration loop.";
     public static final String FUNCTION_CALL_ASYNC_UNSUPPORTED = "Function or method '%s' cannot be called asynchronously.";
     public static final String FUNCTION_CALL_NOT_ENOUGH_ARGS = "Not enough arguments to the '%s' function (expected %d or more, found %d).";
     public static final String FUNCTION_CALL_UNDEFINED = "Unknown function '%s'.";
@@ -155,6 +157,7 @@ public class ERR {
     public static final String LVALUE_ASSIGNMENT_TO_PARAM_NOT_ALLOWED = "Assignment to a parameter not allowed.";
     public static final String LVALUE_CANNOT_ASSIGN_TO_ARGUMENT = "Function is trying to assign a value to an argument not declared 'out'.";
     public static final String LVALUE_CANNOT_ASSIGN_TO_EXPRESSION = "Cannot assign a value to this expression.";
+    public static final String LVALUE_CANNOT_ASSIGN_TO_ITERATOR = "Cannot assign a value to one or more list elements.";
     public static final String LVALUE_VARIABLE_EXPECTED = "Variable expected.";
     public static final String METHOD_CALL_UNDEFINED = "Unknown method '%s'.";
     public static final String METHOD_CALL_UNRESOLVED = "Cannot resolve method '%s'.";

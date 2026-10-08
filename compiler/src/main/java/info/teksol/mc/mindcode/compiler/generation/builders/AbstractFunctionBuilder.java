@@ -33,7 +33,7 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
 
     /// Creates a list of FunctionArgument instances representing arguments of this function call.
     /// Resolves vararg parameters passed into another function into the full list of values
-    /// passed as varargs to current function.
+    /// passed as varargs to the current function.
     protected List<FunctionArgument> processArguments(AstFunctionCall call) {
         return variables.excludeVariablesFromTracking(
                 () -> call.getArguments().stream().mapMulti(this::convertArguments).toList());
@@ -53,7 +53,9 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
         if (!argument.hasModifier() && argument.getExpression() instanceof AstIdentifier identifier) {
             // If it is an array, expand it right here
             ValueStore valueStore = variables.findVariable(identifier.getName(), true);
-            if (valueStore instanceof ArrayStore array) {
+            if (valueStore instanceof LinkArray) {
+                error(identifier, ERR.ARGUMENT_LINKS_REQUIRES_REF);
+            } else if (valueStore instanceof ArrayStore array) {
                 expandArray(argument, array, consumer);
             } else {
                 consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier, argument.hasRefModifier()));
@@ -68,6 +70,8 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
             final ValueStore value = evaluate(Objects.requireNonNull(argument.getExpression()));
             if (value == LogicVoid.VOID) {
                 warn(argument, ERR.VOID_ARGUMENT);
+            } else if (value instanceof LinkArray) {
+                error(argument, ERR.ARGUMENT_LINKS_REQUIRES_REF);
             }
 
             if (value instanceof ArrayStore array && !argument.isReference()) {

@@ -40,8 +40,8 @@ mindcode_source = """
         repeat = false;
         println("Configuring regulator...");
         controlled = 0;
-        links = @links;
-        for n in 0 ... links do
+        numLinks = @links;
+        for n in 0 ... numLinks do
             block = getlink(n);
             println("Found: ", block);
             case block.@type
@@ -133,8 +133,8 @@ mindcode_source = """
 
         print(ACTIVE_TEXT);
 
-        if links != @links then end(); end;
-        for n in 0 ... links do
+        if numLinks != @links then end(); end;
+        for n in 0 ... numLinks do
             block = getlink(n);
             if controlled & (1 << n) then
                 block.enabled = ON;

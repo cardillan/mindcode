@@ -33,6 +33,7 @@ public class Variables extends CompilerMessageEmitter {
     private final GlobalCompilerProfile globalProfile;
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
+    private final Map<String, ValueStore> defaultVariables = new HashMap<>();
     private final Map<String, ValueStore> globalVariables;
     private final @Nullable Map<String, String> schematicLinks;
     private final Map<String, StructuredValueStore> structuredVariables = new HashMap<>();
@@ -60,6 +61,7 @@ public class Variables extends CompilerMessageEmitter {
         putVariable("@@TARGET_MAJOR", LogicNumber.create(globalProfile.getProcessorVersion().major));
         putVariable("@@TARGET_MINOR", LogicNumber.create(globalProfile.getProcessorVersion().minor));
         putVariable("@@PROCESSOR_TYPE", LogicString.createSimple(globalProfile.getProcessorType().code()));
+        defaultVariables.put("links", new LinkArray("links"));
     }
 
     public boolean hasSchematicLinks() {
@@ -456,6 +458,10 @@ public class Variables extends CompilerMessageEmitter {
             return Objects.requireNonNull(globalVariables.get(identifier.getName()));
         }
 
+        if (defaultVariables.containsKey(identifier.getName())) {
+            return Objects.requireNonNull(defaultVariables.get(identifier.getName()));
+        }
+
         if (identifier.isIntrinsic()) {
             error(identifier, ERR.VARIABLE_INTRINSIC_IDENTIFIER, identifier.getName());
             putVariableIfAbsent(identifier.getName(), LogicNull.NULL);
@@ -488,6 +494,8 @@ public class Variables extends CompilerMessageEmitter {
             return Objects.requireNonNull(functionContext.variables().get(name));
         } else if (globalVariables.containsKey(name)) {
             return Objects.requireNonNull(globalVariables.get(name));
+        } else if (defaultVariables.containsKey(name)) {
+            return Objects.requireNonNull(defaultVariables.get(name));
         }
         return null;
     }
@@ -559,8 +567,8 @@ public class Variables extends CompilerMessageEmitter {
         });
     }
 
-    public void registerLoopControlVariable(SourceElement element, LogicVariable variable) {
-        functionContext.registerLoopControlVariable(this, element, variable);
+    public void registerLoopControlVariable(AstIdentifier identifier, boolean declared) {
+        functionContext.registerLoopControlVariable(this, identifier, declared);
     }
 
     private void verifyMlogName(LogicString mlogName) {
