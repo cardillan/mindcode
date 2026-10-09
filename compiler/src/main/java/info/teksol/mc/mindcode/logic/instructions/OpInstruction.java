@@ -24,6 +24,11 @@ public class OpInstruction extends BaseResultInstruction implements ConditionalI
     }
 
     @Override
+    public boolean supportsAlways() {
+        return false;
+    }
+
+    @Override
     public OpInstruction withContext(AstContext astContext) {
         return this.astContext == astContext ? this : new OpInstruction(this, astContext);
     }

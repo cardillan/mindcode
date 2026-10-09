@@ -59,13 +59,17 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         Path path = Path.of(LIBRARY_DOC_FILE);
         StringBuilder fileLines = new StringBuilder();
 
+        int[] start = {0};
         try (Stream<String> lineStream = Files.lines(path)) {
-            lineStream.filter(line -> line.startsWith(PREFIX)).forEach(l -> fileLines.append(l).append('\n'));
+            lineStream.forEach(line -> {
+                if (fileLines.isEmpty()) start[0]++;
+                if (line.startsWith(PREFIX)) fileLines.append(line).append('\n');
+            });
         }
 
         String generatedLines = processAllLibraries();
 
-        assertEquals(fileLines.toString(), generatedLines, "Library documentation does not match the source code");
+        assertEquals(fileLines.toString(), generatedLines, "Library documentation does not match the source code at " + uriString(path, start[0]));
     }
 
     private String processAllLibraries() {

@@ -8,8 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* **Breaking:** a new `internal` keyword has been added to the language and is reserved for future use. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
+* **Breaking:** the `err-runtime-check-failed` execution flag has been split into five separate flags: `err-stop-on-assert-bounds`, `err-stop-on-assert-equals`, `err-stop-on-assert-prints`, `err-stop-on-assert-type` and `err-stop-on-error`.
 * Added a `links` implicit global variable representing the blocks linked to the processor. List iteration loops and index-based access are supported with this array. Declaring another `links` variable shadows the implicit one.
-* Added support for the [`asserttype` instruction](/doc/syntax/TOOLS-TESTING-TOOL.markdown#unit-testing-support) provided by Mlog Assertions mod v0.9.0.
+* Added support for instructions provided by the Mlog Dev Tools mod v0.11.6: `assert` and `asserttype`. 
+* Added the [`devtools` system library](/doc/syntax/SYSTEM-LIBRARY-DEVTOOLS.markdown). This library provides access to the Mlog Dev Tools mod's instructions not provided directly by the compiler (`breakpoint`, `profile`, `reset` and `snapshot`). The `breakpoint` instruction can be used to trigger variale dump in Mindcode's processor emulator.
 
 ### Changed
 

@@ -371,19 +371,22 @@ public class MindustryOpcodeVariants {
 
         add(list, V8A, MAX, W, FUNC, Opcode.LOCALEPRINT, in("property"));
 
-        // Unit testing support
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_EQUALS, in("expected"), in("actual"), in("message"));
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_TYPE,   assertType("expectedType"), in("actualValue"), in("message"));
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("flushIndex"), in("expected"), in("message"));
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH, out("flushIndex"));
-
-        // Assertions mod
+        // Mlog Dev Tools
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT,        cond("equal"), in("x"), in("y"), in("message"));
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_BOUNDS,
                 type("type"), in("multiple"), in("min"), cond("minOp"), in("value"), cond("maxOp"), in("max"), in("message"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_EQUALS, in("expected"), in("actual"), in("message"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH,  out("flushIndex"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("flushIndex"), in("expected"), in("message"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_TYPE,   assertType("expectedType"), in("actualValue"), in("message"));
+        add(list, V6,  MAX, S, NONE, Opcode.BREAKPOINT,    cond("equal"), in("x"), in("y"));
         add(list, V6, MAX,  S, NONE, Opcode.ERROR,
                 in("e0"), in("e1"), in("e2"), in("e3"), in("e4"), in("e5"), in("e6"), in("e7"), in("e8"), in("e9"));
         add(list, V8A,MAX,  S, NONE, Opcode.LOG, loglevel("level"),
                 in("e0"), in("e1"), in("e2"), in("e3"), in("e4"), in("e5"), in("e6"), in("e7"), in("e8"), in("e9"));
+        add(list, V6,  MAX, S, NONE, Opcode.PROFILE,       profile("command"), block("block"));
+        add(list, V6,  MAX, S, NONE, Opcode.RESTART,       block("block"));
+        add(list, V6,  MAX, S, NONE, Opcode.SNAPSHOT,      snapshot("type"), block("block"), in("steps"), in("name"));
 
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.EMPTY);
@@ -514,6 +517,10 @@ public class MindustryOpcodeVariants {
         return new NamedParameter(InstructionParameterType.OUTPUT, name);
     }
 
+    public static NamedParameter profile(String name) {
+        return new NamedParameter(InstructionParameterType.PROFILE, name);
+    }
+
     public static NamedParameter queryshape(String name) {
         return new NamedParameter(InstructionParameterType.QUERY_SHAPE, name);
     }
@@ -556,6 +563,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter settable(String name) {
         return new NamedParameter(InstructionParameterType.SETTABLE, name);
+    }
+
+    public static NamedParameter snapshot(String name) {
+        return new NamedParameter(InstructionParameterType.SNAPSHOT, name);
     }
 
     public static NamedParameter sound(String name) {

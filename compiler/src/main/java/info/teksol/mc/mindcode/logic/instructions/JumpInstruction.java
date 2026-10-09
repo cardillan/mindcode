@@ -33,11 +33,6 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
     }
 
     @Override
-    protected void validate() {
-        super.validate();
-    }
-
-    @Override
     public JumpInstruction withOperands(Condition condition, LogicValue x, LogicValue y) {
         assert getArgumentTypes() != null;
         ensureConditional();
@@ -51,12 +46,14 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
                 : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getArgumentTypes()).copyInfo(this);
     }
 
-    public JumpInstruction invert(GlobalCompilerProfile profile) {
-        return (JumpInstruction) ConditionalInstruction.super.invert(profile);
+    @Override
+    public ConditionalInstruction withAlways() {
+        return getCondition() == Condition.ALWAYS ? this
+                : new JumpInstruction(getAstContext(), List.of(getTarget(), Condition.ALWAYS), getArgumentTypes()).copyInfo(this);
     }
 
-    public JumpInstruction forceInvert() {
-        return (JumpInstruction) ConditionalInstruction.super.forceInvert();
+    public JumpInstruction invert(GlobalCompilerProfile profile) {
+        return (JumpInstruction) ConditionalInstruction.super.invert(profile);
     }
 
     @Override

@@ -22,6 +22,11 @@ public interface LogicArgument extends LogicReadable {
     /// @return the mlog representation of the variable
     String toMlog();
 
+    /// @return true when the argument is virtual (not supported by mlog)
+    default boolean isVirtual() {
+        return false;
+    }
+
     /// Determines whether two logic arguments are equal. The support for `UNSPECIFIED` types serves for testing code,
     /// where expected instructions are created using generic mlog arguments.
     static boolean isEqual(LogicArgument a1, LogicArgument a2) {

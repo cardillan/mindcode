@@ -201,7 +201,7 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                 createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(8)),
                 createInstruction(PRINT, q("bar")),
-                createInstruction(JUMP, label(3), "notEqual", "true", "false"),
+                createInstruction(JUMP, label(3), "always"),
                 createInstruction(JUMP, "__start__", "always"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),

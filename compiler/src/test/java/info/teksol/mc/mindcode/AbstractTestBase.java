@@ -20,9 +20,10 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter {
                 + ":" + line;
     }
 
-    protected static String uriString(Path path) {
+    protected static String uriString(Path path, int line) {
         URI uri = path.toUri().normalize();
         return (System.getProperty("os.name").toLowerCase().startsWith("win")
-                ? uri.toString().replaceAll("file:/", "file:///") : uri.toString());
+                ? uri.toString().replaceAll("file:/", "file:///") : uri.toString())
+                + ":" + line;
     }
 }

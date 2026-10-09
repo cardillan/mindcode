@@ -7,10 +7,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import org.jspecify.annotations.NullMarked;
@@ -23,6 +20,21 @@ public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
 
     public BuiltinFunctionAssertsBuilder(AbstractCodeBuilder builder) {
         super(builder);
+    }
+
+    public ValueStore handleAssert(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        if (validateStandardFunctionArguments(call, arguments, 2)) {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            LogicValue condition = arguments.get(0).getValue(assembler);
+            LogicValue message= arguments.get(1).getValue(assembler);
+            assembler.createInstruction(Opcode.ASSERT, Condition.NOT_EQUAL, condition, LogicBoolean.FALSE, message);
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
     }
 
     public ValueStore handleAssertEquals(AstFunctionCall call) {

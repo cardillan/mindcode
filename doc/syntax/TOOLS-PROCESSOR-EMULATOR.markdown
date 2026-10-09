@@ -108,6 +108,7 @@ All flags are described in the following table:
 |---------------------------------|---------|-----------------------------------------------------------------------------------------------|
 | trace-execution                 | false   | output instruction and variable states at each execution step                                 |
 | dump-variables-on-stop          | true    | output variable values when the 'stop' instruction is encountered                             |
+| dump-variables-on-breakpoint    | true    | output variable values when an active 'breakpoint' instruction is encountered                 |
 | stop-on-stop-instruction        | true    | stop execution when the 'stop' instruction is encountered                                     |
 | stop-on-end-instruction         | true    | stop execution when the 'end' instruction is encountered                                      |
 | stop-on-program-end             | true    | stop execution when the end of instruction list is reached                                    |

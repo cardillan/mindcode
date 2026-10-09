@@ -269,7 +269,7 @@ class LoopRotator extends AbstractConditionalOptimizer {
                     if (j.getTarget().equals(exitLabel)) {
                         if (hoistingRotation) {
                             if (j.getCondition().hasInverse(getGlobalProfile())) {
-                                copy.replaceKeepingContext(index, j.forceInvert().withTarget(repeatLabel));
+                                copy.replaceKeepingContext(index, j.invert(getGlobalProfile()).withTarget(repeatLabel));
                             } else {
                                 LogicVariable tmp = instructionProcessor.nextTemp();
                                 copy.addKeepingContext(index++, createOp(j.getAstContext(), j.getCondition().toOperation(),
@@ -281,7 +281,7 @@ class LoopRotator extends AbstractConditionalOptimizer {
                             LogicLabel label = instructionProcessor.nextLabel();
                             if (j.getCondition().hasInverse(getGlobalProfile())) {
                                 frontIndex++;
-                                copy.replaceKeepingContext(index, j.forceInvert().withTarget(label));
+                                copy.replaceKeepingContext(index, j.invert(getGlobalProfile()).withTarget(label));
                             } else if (fullRotation || j == lastJumpCopy) {
                                 LogicVariable tmp = instructionProcessor.nextTemp();
                                 copy.addKeepingContext(index++, createOp(j.getAstContext(), j.getCondition().toOperation(),
