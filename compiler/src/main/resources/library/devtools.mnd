@@ -1,0 +1,196 @@
+// Mindcode system library for Mindustry Logic version 8
+// Mlog Dev Tools support
+//
+//* Provides functions for some of the instructions provided by the Mlog Dev Tools mod.
+
+module devtools;
+
+/**
+ * Creates an unconditional breakpoint.
+ */
+inline void breakpoint()
+    mlog("breakpoint", :always, 0, 0);
+end;
+
+/**
+ * Creates a conditional breakpoint. The breakpoint only triggers when the condition evaluates as true (that is,
+ * not `false`).
+ */
+inline void breakpoint(condition)
+    mlog("breakpoint", :notEqual, in condition, false);
+end;
+
+/**
+ * Activates profiling of the current processor. The profiling results are available on the processor's
+ * **Profile** screen.
+ */
+inline void startProfiling()
+    startProfiling(@this);
+end;
+
+/**
+ * Activates profiling of the specified processor. The profiling results are available on the processor's
+ * **Profile** screen.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `processor`: the processor to profile. Any processor accessible to the user can be profiled.
+ */
+inline void startProfiling(processor)
+    mlog("profile", :start, in processor);
+end;
+
+/**
+ * Deactivates profiling of the current processor. The profiling results are available on the processor's
+ * **Profile** screen.
+ */
+inline void stopProfiling()
+    stopProfiling(@this);
+end;
+
+/**
+ * Deactivates profiling of the specified processor. The profiling results are available on the processor's
+ * **Profile** screen.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `processor`: the processor to profile. Any processor accessible to the user can be profiled.
+ */
+inline void stopProfiling(processor)
+    mlog("profile", :stop, in processor);
+end;
+
+/**
+ * Clears the profiling data of the current processor. Clearing the profiling data does not activate or deactivate
+ * profiling.
+ */
+inline void clearProfiling()
+    clearProfiling(@this);
+end;
+
+/**
+ * Clears the profiling data of the specified processor. Clearing the profiling data does not activate or deactivate
+ * profiling.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `processor`: the processor to profile. Any processor accessible to the user can be profiled.
+ */
+inline void clearProfiling(processor)
+    mlog("profile", :clear, in processor);
+end;
+
+/**
+ * Restarts the current processor. If a profiling was active before, it will be reactivated after the restart, but the
+ * profiling data will be cleared.
+ */
+inline void restartProcessor()
+    restartProcessor(@this);
+end;
+
+/**
+ * Restarts the specified processor. If a profiling was active before, it will be reactivated after the restart, but the
+ * profiling data will be cleared.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `processor`: the processor to restart. Any processor accessible to the user can be restarted.
+ */
+inline void restartProcessor(processor)
+    mlog("restart", in processor);
+end;
+
+/**
+ * Creates an isolated snapshot of the current processor with the specified name. The snapshot records the state of the
+ * processor at the time of the snapshot.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `name`: the name of the snapshot.
+ */
+inline void isolatedSnapshot(name)
+    isolatedSnapshot(@this, name);
+end;
+
+/**
+ * Creates an isolated snapshot of the given block with the specified name. The snapshot records the state of the
+ * block at the time of the snapshot.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `block`: the block to take a snapshot of.
+ * - `name`: the name of the snapshot.
+ */
+inline void isolatedSnapshot(block, name)
+    mlog("snapshot", :isolated, in block, null, in name);
+end;
+
+/**
+ * Creates a connected snapshot of the current processor with the specified name. The snapshot records the state of the
+ * processor, and all entities related to the processor (linked blocks, objects stored in processor's variables,
+ * controlled units) at the time of the snapshot.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `name`: the name of the snapshot.
+ */
+inline void connectedSnapshot(name)
+    connectedSnapshot(@this, name);
+end;
+
+/**
+ * Creates a connected snapshot of the given block with the specified name. The snapshot records the state of the
+ * block, and all entities related to the block (linked blocks, objects stored in processor's variables,
+ * controlled units in case of processors, and stored objects in cases of memory blocks) at the time of the snapshot.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `block`: the block to take a snapshot of.
+ * - `name`: the name of the snapshot.
+ */
+inline void connectedSnapshot(block, name)
+    mlog("snapshot", :connected, in block, null, in name);
+end;
+
+/**
+ * Creates a series of recording snapshots in the current processor for the specified number of instructions.
+ * A connected snapshot is created first, followed by a snapshot after the execution of each instruction.
+ * The instruction snapshots include objects referenced by the instruction's variables.
+ *
+ * The number of steps is limited by the mod's settings.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `name`: the name of the snapshot.
+ */
+inline void recordingSnapshot(steps)
+    recordingSnapshot(@this, steps);
+end;
+
+/**
+ * Creates a series of recording snapshots in the specified processor for the specified number of instructions.
+ * A connected snapshot is created first, followed by a snapshot after the execution of each instruction.
+ * The instruction snapshots include objects referenced by the instruction's variables.
+ *
+ * The number of steps is limited by the mod's settings.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `processor`: the processor to record the snapshots of. Any processor accessible to the user can be recorded.
+ * - `steps`: number of instruction executions to record.
+ */
+inline void recordingSnapshot(processor, steps)
+    mlog("snapshot", :recording, in processor, in steps, null);
+end;
+
+/**
+ * Creates a global snapshot. The snapshot records the state of each accessible processor and each accessible
+ * memory block on the map.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `name`: the name of the snapshot.
+ */
+inline void globalSnapshot(name)
+    mlog("snapshot", :global, null, null, in name);
+end;

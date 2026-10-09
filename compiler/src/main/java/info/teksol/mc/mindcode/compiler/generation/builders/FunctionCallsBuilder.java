@@ -139,6 +139,7 @@ public class FunctionCallsBuilder extends AbstractCodeBuilder implements
     private Map<String, Function<AstFunctionCall, ValueStore>> createBuiltinFunctionHandlers() {
         Map<String, Function<AstFunctionCall, ValueStore>> map = new HashMap<>();
 
+        map.put("assert",           call -> assertsBuilder.get().handleAssert(call));
         map.put("assertEquals",     call -> assertsBuilder.get().handleAssertEquals(call));
         map.put("assertPrints",     call -> assertsBuilder.get().handleAssertPrints(call));
         map.put("assertType",       call -> assertsBuilder.get().handleAssertType(call));

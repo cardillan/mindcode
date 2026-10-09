@@ -5,9 +5,12 @@ import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.blocks.graphics.GraphicsBuffer;
 import info.teksol.mc.emulator.mimex.target60.LExecutor60;
+import info.teksol.mc.evaluator.ConditionEvaluator;
+import info.teksol.mc.evaluator.LogicCondition;
 import info.teksol.mc.mindcode.logic.arguments.AssertOp;
 import info.teksol.mc.mindcode.logic.arguments.AssertionDataType;
 import info.teksol.mc.mindcode.logic.arguments.AssertionType;
+import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.intellij.lang.annotations.PrintFormat;
@@ -116,11 +119,13 @@ public abstract class LExecutorBase implements LExecutor {
 
         builders.put("noop", NoopI::new);
 
+        builders.put("assert", AssertI::new);
         builders.put("assertbounds", AssertBoundsI::new);
         builders.put("assertequals", AssertEqualsI::new);
         builders.put("asserttype", AssertTypeI::new);
         builders.put("assertflush", AssertFlushI::new);
         builders.put("assertprints", AssertPrintsI::new);
+        builders.put("breakpoint", BreakpointI::new);
         builders.put("error", ErrorI::new);
         builders.put("log", LogI::new);
     }
@@ -504,6 +509,31 @@ public abstract class LExecutorBase implements LExecutor {
         }
     }
 
+    protected class AssertI extends AbstractInstruction {
+        protected final @Nullable Condition condition;
+        protected final LVar x;
+        protected final LVar y;
+        protected final LVar message;
+
+        public AssertI(LStatement statement) {
+            super(statement);
+            condition = Condition.fromMlog(statement.arg0());
+            x = assembler.var(statement.arg1());
+            y = assembler.var(statement.arg2());
+            message = assembler.var(statement.arg3());
+        }
+
+        @Override
+        public void run() {
+            if (condition == null) {
+                error(ERR_UNSUPPORTED_OPCODE, "Invalid assert condition.");
+            } else {
+                addAssertion(new BasicAssertion(condition, x.copy(), y.copy(), message.printExact()),
+                        ERR_STOP_ON_ASSERT_EQUALS);
+            }
+        }
+    }
+
     protected class AssertBoundsI extends AbstractInstruction {
         protected final @Nullable AssertionType type;
         protected final LVar multiple;
@@ -584,7 +614,7 @@ public abstract class LExecutorBase implements LExecutor {
                 return;
             }
 
-            addAssertion(new TypeAssertion(expected, actual, message.printExact()), ERR_STOP_ON_ASSERT_TYPE);
+            addAssertion(new TypeAssertion(expected, actual.copy(), message.printExact()), ERR_STOP_ON_ASSERT_TYPE);
         }
     }
 
@@ -618,6 +648,31 @@ public abstract class LExecutorBase implements LExecutor {
         public void run() {
             addAssertion(new DataAssertion(expected.printExact(),
                     textBuffer.getAssertedOutput(flushIndex.numi()), message.printExact()), ERR_STOP_ON_ASSERT_PRINTS);
+        }
+    }
+
+    protected class BreakpointI extends AbstractInstruction {
+        protected final @Nullable LogicCondition condition;
+        protected final LVar x;
+        protected final LVar y;
+
+        public BreakpointI(LStatement statement) {
+            super(statement);
+            condition = ConditionEvaluator.getCondition(Condition.fromMlog(statement.arg0()));
+            x = assembler.var(statement.arg1());
+            y = assembler.var(statement.arg2());
+        }
+
+        @Override
+        public void run() {
+            if (condition == null) {
+                error(ERR_UNSUPPORTED_OPCODE, "Invalid assert condition.");
+            } else if (condition.evaluate(x, y)) {
+                if (messageHandler.getFlag(DUMP_VARIABLES_ON_BREAKPOINT)) {
+                    messageHandler.dump("%n        'breakpoint' instruction encountered, dumping variable values:");
+                    dumpVars();
+                }
+            }
         }
     }
 

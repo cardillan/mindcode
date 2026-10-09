@@ -12,14 +12,17 @@ Changes intended for the next regular release.
 
 **Done**
 
+* Large stack
+* `links` array
+
 * **Doing**
 
-* Large stack
 * Large arrays
   * Nested for loops for list-iteration loops 
 
 * **Planned**
 
+* Internal: enum for variable flags. When creating variables, a set of flags would be specified.
 * Compatibility test 2: verifies how Mindustry parses (numeric) literals.
 * String minification
   * Replacing icon names with the corresponding characters
@@ -27,7 +30,6 @@ Changes intended for the next regular release.
 * If expression telescoping optimization
 * Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
 * After updating a processor via MlogWatcher, download the processor's content again and compare to determine whether Mindustry parsing causes some changes; if so, it is an error.
-  * Update MlogWatcher to perform this check automatically.
   * Update MlogWatcher to automatically return the new processor content.
 * Add support for Mindcode user preferences: allow setting command-line options in them.
 * Add `update.json` to the repo, lists new versions and their level:

@@ -60,6 +60,14 @@ public class LVar implements MlogReadable, MlogWritable {
         return this;
     }
 
+    public LVar copy() {
+        LVar result = new LVar(name, constant, privileged);
+        result.isobj = isobj;
+        result.objval = objval;
+        result.numval = numval;
+        return result;
+    }
+
     public @Nullable Object obj() {
         return isobj ? objval : null;
     }

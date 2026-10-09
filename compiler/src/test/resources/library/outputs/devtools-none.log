@@ -1,0 +1,79 @@
+
+Final code before resolving virtual instructions:
+
+    0:  set :block null
+    1:  set :condition null
+    2:  set :name null
+    3:  set :processor null
+    4:  set :steps null
+    5:  breakpoint always 0 0
+        label *label1
+    6:  set :breakpoint.1:condition :condition
+    7:  breakpoint notEqual :breakpoint.1:condition false
+        label *label2
+    8:  set :startProfiling.1:processor @this
+    9:  profile start :startProfiling.1:processor
+        label *label4
+        label *label3
+   10:  set :startProfiling.2:processor :processor
+   11:  profile start :startProfiling.2:processor
+        label *label5
+   12:  set :stopProfiling.1:processor @this
+   13:  profile stop :stopProfiling.1:processor
+        label *label7
+        label *label6
+   14:  set :stopProfiling.2:processor :processor
+   15:  profile stop :stopProfiling.2:processor
+        label *label8
+   16:  set :clearProfiling.1:processor @this
+   17:  profile clear :clearProfiling.1:processor
+        label *label10
+        label *label9
+   18:  set :clearProfiling.2:processor :processor
+   19:  profile clear :clearProfiling.2:processor
+        label *label11
+   20:  set :restartProcessor.1:processor @this
+   21:  restart :restartProcessor.1:processor
+        label *label13
+        label *label12
+   22:  set :restartProcessor.2:processor :processor
+   23:  restart :restartProcessor.2:processor
+        label *label14
+   24:  set :isolatedSnapshot:name :name
+   25:  set *tmp0 :isolatedSnapshot:name
+   26:  set :isolatedSnapshot.1:block @this
+   27:  set :isolatedSnapshot.1:name *tmp0
+   28:  snapshot isolated :isolatedSnapshot.1:block null :isolatedSnapshot.1:name
+        label *label16
+        label *label15
+   29:  set :isolatedSnapshot.2:block :block
+   30:  set :isolatedSnapshot.2:name :name
+   31:  snapshot isolated :isolatedSnapshot.2:block null :isolatedSnapshot.2:name
+        label *label17
+   32:  set :connectedSnapshot:name :name
+   33:  set *tmp1 :connectedSnapshot:name
+   34:  set :connectedSnapshot.1:block @this
+   35:  set :connectedSnapshot.1:name *tmp1
+   36:  snapshot connected :connectedSnapshot.1:block null :connectedSnapshot.1:name
+        label *label19
+        label *label18
+   37:  set :connectedSnapshot.2:block :block
+   38:  set :connectedSnapshot.2:name :name
+   39:  snapshot connected :connectedSnapshot.2:block null :connectedSnapshot.2:name
+        label *label20
+   40:  set :recordingSnapshot:steps :steps
+   41:  set *tmp2 :recordingSnapshot:steps
+   42:  set :recordingSnapshot.1:processor @this
+   43:  set :recordingSnapshot.1:steps *tmp2
+   44:  snapshot recording :recordingSnapshot.1:processor :recordingSnapshot.1:steps null
+        label *label22
+        label *label21
+   45:  set :recordingSnapshot.2:processor :processor
+   46:  set :recordingSnapshot.2:steps :steps
+   47:  snapshot recording :recordingSnapshot.2:processor :recordingSnapshot.2:steps null
+        label *label23
+   48:  set :globalSnapshot:name :name
+   49:  snapshot global null null :globalSnapshot:name
+        label *label24
+        label *label0
+   50:  end

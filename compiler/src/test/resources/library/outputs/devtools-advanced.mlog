@@ -1,0 +1,17 @@
+breakpoint always 0 0
+breakpoint notEqual null false
+profile start @this
+profile start null
+profile stop @this
+profile stop null
+profile clear @this
+profile clear null
+restart @this
+restart null
+snapshot isolated @this null null
+snapshot isolated null null null
+snapshot connected @this null null
+snapshot connected null null null
+snapshot recording @this null null
+snapshot recording null null null
+snapshot global null null null

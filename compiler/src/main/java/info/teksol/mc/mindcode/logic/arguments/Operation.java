@@ -221,6 +221,13 @@ public enum Operation implements LogicArgument {
         return ordinal() <= STRICT_NOT_EQUAL.ordinal() || this == BOOLEAN_AND || this == LOGICAL_AND || this == LOGICAL_OR;
     }
 
+    public boolean isVirtual() {
+        return switch (this) {
+            case BOOLEAN_OR, LOGICAL_AND, LOGICAL_OR -> true;
+            default -> mlog == null;
+        };
+    }
+
     @Override
     public String toMlog() {
         if (mlog == null) {

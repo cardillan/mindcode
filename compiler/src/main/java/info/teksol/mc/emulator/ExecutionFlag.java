@@ -10,6 +10,7 @@ import java.util.List;
 public enum ExecutionFlag {
     TRACE_EXECUTION                 ("output instruction and variable states at each execution step", true, false),
     DUMP_VARIABLES_ON_STOP          ("output variable values when the 'stop' instruction is encountered"),
+    DUMP_VARIABLES_ON_BREAKPOINT    ("output variable values when an active 'breakpoint' instruction is encountered"),
 
     STOP_ON_STOP_INSTRUCTION        ("stop execution when the 'stop' instruction is encountered"),
     STOP_ON_END_INSTRUCTION         ("stop execution when the 'end' instruction is encountered"),

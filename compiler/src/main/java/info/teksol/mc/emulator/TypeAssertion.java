@@ -4,7 +4,7 @@ import info.teksol.mc.mindcode.logic.arguments.AssertionDataType;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public record TypeAssertion(AssertionDataType expectedType, LVar actualValue, String title) implements Assertion {
+public record TypeAssertion(AssertionDataType expectedType, LVar actualValue, String title) implements EqualityAssertion {
 
     @Override
     public String expected() {

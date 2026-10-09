@@ -80,6 +80,7 @@ public class DocValidatorTest extends AbstractTestBase {
             "SYSTEM-LIBRARY-BIGARRAY.markdown",
             "SYSTEM-LIBRARY-BLOCKS.markdown",
             "SYSTEM-LIBRARY-COMPATIBILITY.markdown",
+            "SYSTEM-LIBRARY-DEVTOOLS.markdown",
             "SYSTEM-LIBRARY-GRAPHICS.markdown",
             "SYSTEM-LIBRARY-MATH.markdown",
             "SYSTEM-LIBRARY-PRINTING.markdown",

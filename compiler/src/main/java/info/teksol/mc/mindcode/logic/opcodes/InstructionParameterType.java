@@ -1,5 +1,8 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
+import info.teksol.mc.mindcode.logic.arguments.Condition;
+import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -40,7 +43,7 @@ public enum InstructionParameterType {
     CLEAR           (Flags.SELECTOR | Flags.FUNCTION, _ -> Set.of("true", "false")),
 
     /// Selector for the `jump` instruction.
-    CONDITION       (Flags.SELECTOR, MindustryMetadata::getConditions),
+    CONDITION       (Flags.SELECTOR, MindustryMetadata::getConditions, Condition.class),
 
     /// Type of cut scene in `cutscene` instruction
     CUTSCENE        (Flags.SELECTOR, MindustryMetadata::getCutsceneActions),
@@ -96,6 +99,9 @@ public enum InstructionParameterType {
     /// Output parameter. Sets a value of a variable in a parameter list.
     OUTPUT          (Flags.OUTPUT),
 
+    /// MLog Dev Tools: profiling command
+    PROFILE         ("profile", Flags.KEYWORD, _ -> List.of("start", "stop", "clear")),
+
     /// True/false to set/clear status in `status` instruction.
     QUERY_SHAPE     ("queryShape", Flags.SELECTOR, MindustryMetadata::getQueryShapes, queryShape),
 
@@ -115,7 +121,7 @@ public enum InstructionParameterType {
     RULE            (Flags.SELECTOR, MindustryMetadata::getLogicRules),
 
     /// Scope for the `playsound` instruction: true=positional, false=global
-    SCOPE           (Flags.SELECTOR, _ -> Set.of("true", "false")),
+    SCOPE           (Flags.SELECTOR, _ -> List.of("true", "false")),
 
     /// Input parameter accepting property id.
     SENSOR          ("property", Flags.INPUT, MindustryMetadata::getLAccessNames),
@@ -128,6 +134,9 @@ public enum InstructionParameterType {
 
     /// Settable layer in `setblock` instruction (TileLayer.settable)
     SETTABLE_LAYER  ("layer", Flags.SELECTOR, MindustryMetadata::getTileLayersSettable, settableTileLayer),
+
+    /// Mlog Dev Tools: snapshot type
+    SNAPSHOT        ("snapshot", Flags.KEYWORD, _ -> List.of("isolated", "connected", "recording", "global")),
 
     /// Sound to play
     SOUND           ("sound", Flags.INPUT, MindustryMetadata::getSoundNames),
@@ -162,19 +171,30 @@ public enum InstructionParameterType {
 
     private final String typeName;
     private final int flags;
+    private final @Nullable EnumArgumentClass<?> keywordClass;
     private final @Nullable Function<MindustryMetadata, Collection<String>> keywordsSupplier;
     private final @Nullable KeywordCategory keywordCategory;
 
     InstructionParameterType(int flags) {
         this.typeName = name();
         this.flags = flags;
+        this.keywordClass = null;
         this.keywordsSupplier = null;
+        this.keywordCategory = null;
+    }
+
+    <E extends Enum<E> & LogicArgument> InstructionParameterType(int flags, Function<MindustryMetadata, Collection<String>> keywordsSupplier, Class<E> enumClass) {
+        this.typeName = name();
+        this.flags = flags;
+        this.keywordsSupplier = keywordsSupplier;
+        this.keywordClass = new EnumArgumentClass<>(enumClass);
         this.keywordCategory = null;
     }
 
     InstructionParameterType(int flags, Function<MindustryMetadata, Collection<String>> keywordsSupplier) {
         this.typeName = name();
         this.flags = flags;
+        this.keywordClass = null;
         this.keywordsSupplier = keywordsSupplier;
         this.keywordCategory = null;
     }
@@ -182,6 +202,7 @@ public enum InstructionParameterType {
     InstructionParameterType(String typeName, int flags, Function<MindustryMetadata, Collection<String>> keywordsSupplier) {
         this.typeName = typeName;
         this.flags = flags;
+        this.keywordClass = null;
         this.keywordsSupplier = keywordsSupplier;
         this.keywordCategory = null;
     }
@@ -190,6 +211,7 @@ public enum InstructionParameterType {
             KeywordCategory keywordCategory) {
         this.typeName = typeName;
         this.flags = flags;
+        this.keywordClass = null;
         this.keywordsSupplier = keywordsSupplier;
         this.keywordCategory = keywordCategory;
     }
@@ -267,6 +289,14 @@ public enum InstructionParameterType {
         }
     }
 
+    public @Nullable LogicArgument convertKeyword(LogicKeyword keyword) {
+        if (keywordClass == null) {
+            return keyword;
+        } else {
+            return keywordClass.fromString(keyword.getKeyword());
+        }
+    }
+
     private static final Map<KeywordCategory, InstructionParameterType> categoryMap = Stream.of(values())
             .filter(t -> t.keywordCategory != null)
             .collect(Collectors.toMap(t -> t.keywordCategory, t -> t));
@@ -302,5 +332,16 @@ public enum InstructionParameterType {
 
         /// Parameter not corresponding to an existing mlog parameter type (e.g. array)
         private static final int SPECIAL = 64;
+    }
+
+    private record EnumArgumentClass<E extends Enum<E> & LogicArgument>(Class<E> enumClass, Map<String, E> nameToEnum) {
+        public EnumArgumentClass(Class<E> enumClass) {
+            this(enumClass, Stream.of(enumClass.getEnumConstants()).filter(a -> !a.isVirtual())
+                    .collect(Collectors.toMap(LogicArgument::toMlog, e -> e)));
+        }
+
+        public @Nullable E fromString(String value) {
+            return nameToEnum.get(value);
+        }
     }
 }

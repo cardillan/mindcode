@@ -1,0 +1,24 @@
+    51 instructions before optimizations.
+     1 instruction eliminated by Single Step Elimination (5 iterations).
+    33 instructions eliminated by Data Flow Optimization (6 iterations).
+    17 instructions after optimizations.
+
+Final code before resolving virtual instructions:
+
+    0:  breakpoint always 0 0
+    1:  breakpoint notEqual null false
+    2:  profile start @this
+    3:  profile start null
+    4:  profile stop @this
+    5:  profile stop null
+    6:  profile clear @this
+    7:  profile clear null
+    8:  restart @this
+    9:  restart null
+   10:  snapshot isolated @this null null
+   11:  snapshot isolated null null null
+   12:  snapshot connected @this null null
+   13:  snapshot connected null null null
+   14:  snapshot recording @this null null
+   15:  snapshot recording null null null
+   16:  snapshot global null null null

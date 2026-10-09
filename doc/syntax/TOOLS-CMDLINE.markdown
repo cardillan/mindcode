@@ -132,12 +132,12 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--dump-variables-on-stop {true,false}] [--dump-variables-on-breakpoint {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -413,6 +413,8 @@ Emulator options:
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}
                          output variable values when the 'stop' instruction is encountered
+  --dump-variables-on-breakpoint {true,false}
+                         output variable values when an active 'breakpoint' instruction is encountered
   --stop-on-stop-instruction {true,false}
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
@@ -475,12 +477,12 @@ usage: mindcode pm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTP
                 [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--dump-variables-on-stop {true,false}] [--dump-variables-on-breakpoint {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -537,6 +539,8 @@ Emulator options:
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}
                          output variable values when the 'stop' instruction is encountered
+  --dump-variables-on-breakpoint {true,false}
+                         output variable values when an active 'breakpoint' instruction is encountered
   --stop-on-stop-instruction {true,false}
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
@@ -628,12 +632,12 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--dump-variables-on-stop {true,false}] [--dump-variables-on-breakpoint {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -914,6 +918,8 @@ Emulator options:
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}
                          output variable values when the 'stop' instruction is encountered
+  --dump-variables-on-breakpoint {true,false}
+                         output variable values when an active 'breakpoint' instruction is encountered
   --stop-on-stop-instruction {true,false}
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
@@ -976,12 +982,12 @@ usage: mindcode ps [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTP
                 [--emulator-target [{6,6.0,7.0,7.0w,7,7w,7.1,7.1w,8.0,8.0w,8.1,8.1w,8,8w,8.2,8.2w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--dump-variables-on-stop {true,false}] [--dump-variables-on-breakpoint {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -1056,6 +1062,8 @@ Emulator options:
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}
                          output variable values when the 'stop' instruction is encountered
+  --dump-variables-on-breakpoint {true,false}
+                         output variable values when an active 'breakpoint' instruction is encountered
   --stop-on-stop-instruction {true,false}
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}

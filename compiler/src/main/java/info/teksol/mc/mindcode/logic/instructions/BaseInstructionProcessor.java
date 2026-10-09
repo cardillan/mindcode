@@ -181,7 +181,9 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
         List<InstructionParameterType> params = getParameters(opcode, args);
 
         return switch (opcode) {
+            case ASSERT         -> new AssertInstruction(astContext, args, params);
             case ASSERT_BOUNDS  -> new AssertBoundsInstruction(astContext, args, params);
+            case BREAKPOINT     -> new BreakpointInstruction(astContext, args, params);
             case CALL           -> new CallInstruction(astContext, args, params);
             case CALLREC        -> new CallRecInstruction(astContext, args, params);
             case COMMENT        -> new CommentInstruction(astContext, args, params);

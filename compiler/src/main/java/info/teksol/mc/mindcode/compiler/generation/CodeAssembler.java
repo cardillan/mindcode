@@ -19,15 +19,14 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.NamedParameter;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.BREAKPOINT;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
 
 /// CodeAssembler provides means for creating code from the AST tree: methods for creating individual instructions
@@ -281,7 +280,27 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
         return createLabel(nextLabel()).getLabel();
     }
 
+    // A regular instruction cannot be created from a custom one for protected opcodes.
+    private static final Set<Opcode> convertibleOpcodes = Set.of(BREAKPOINT);
+
     public LogicInstruction createCustomInstruction(boolean safe, boolean text, boolean label, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+        Opcode opcodeEnum = Opcode.fromOpcode(opcode);
+        OpcodeVariant opcodeVariant = opcodeEnum == null || !convertibleOpcodes.contains(opcodeEnum) ? null : processor.getOpcodeVariant(opcodeEnum, args);
+        if (opcodeVariant != null) {
+            List<LogicArgument> arguments = new ArrayList<>();
+            for (int i = 0; i < args.size(); i++) {
+                LogicArgument argument = args.get(i);
+                InstructionParameterType type = opcodeVariant.parameterTypes().get(i);
+                LogicArgument converted = argument instanceof LogicKeyword keyword ? type.convertKeyword(keyword) : argument;
+                if (converted == null) break;
+                arguments.add(converted);
+            }
+
+            if (arguments.size() == args.size()) {
+                return createInstruction(opcodeEnum, arguments);
+            }
+        }
+
         return addInstruction(new CustomInstruction(astContext, safe, text, label, opcode, args, params));
     }
 

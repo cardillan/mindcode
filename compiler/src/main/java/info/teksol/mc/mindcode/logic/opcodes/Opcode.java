@@ -79,17 +79,20 @@ public enum Opcode {
     MAKEMARKER      (WRITES, "makemarker",       "MakeMarker"),
     LOCALEPRINT     (WRITES, "localeprint",      "LocalePrint"),
 
-    // Unit testing support. These instructions are left in the final code for execution by the processor emulator.
+    // Mlog Dev Tools instructions.
 
-    ASSERT_EQUALS   (NONE,   "assertequals",    1),
-    ASSERT_TYPE     (NONE,   "asserttype",      1),
-    ASSERT_PRINTS   (NONE,   "assertprints",    1),
-    ASSERT_FLUSH    (NONE,   "assertflush",     1),
-
-    /// Instruction supported by the Mlog Assertions mod.
+    ASSERT          (NONE,   "assert",          1),
     ASSERT_BOUNDS   (NONE,   "assertbounds",    1),
+    ASSERT_EQUALS   (NONE,   "assertequals",    1),
+    ASSERT_FLUSH    (NONE,   "assertflush",     1),
+    ASSERT_PRINTS   (NONE,   "assertprints",    1),
+    ASSERT_TYPE     (NONE,   "asserttype",      1),
+    BREAKPOINT      (NONE,   "breakpoint",      1),
     ERROR           (NONE,   "error",           1),
     LOG             (NONE,   "log",             1),
+    PROFILE         (NONE,   "profile",         1),
+    RESTART         (NONE,   "restart",         1),
+    SNAPSHOT        (NONE,   "snapshot",        1),
 
     // Virtual instructions - resolved when the final code is generated
 

@@ -1,0 +1,30 @@
+require devtools;
+
+begin
+
+    var block = null;
+    var condition = null;
+    var name = null;
+    var processor = null;
+    var steps = null;
+
+
+
+    breakpoint();
+    breakpoint(condition);
+    startProfiling();
+    startProfiling(processor);
+    stopProfiling();
+    stopProfiling(processor);
+    clearProfiling();
+    clearProfiling(processor);
+    restartProcessor();
+    restartProcessor(processor);
+    isolatedSnapshot(name);
+    isolatedSnapshot(block, name);
+    connectedSnapshot(name);
+    connectedSnapshot(block, name);
+    recordingSnapshot(steps);
+    recordingSnapshot(processor, steps);
+    globalSnapshot(name);
+end;

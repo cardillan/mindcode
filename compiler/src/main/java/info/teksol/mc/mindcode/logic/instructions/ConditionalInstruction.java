@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 
@@ -19,6 +20,14 @@ public interface ConditionalInstruction extends BinaryInstruction {
 
     ConditionalInstruction withOperands(Condition condition, LogicValue x, LogicValue y);
 
+    default boolean supportsAlways() {
+        return true;
+    }
+
+    default ConditionalInstruction withAlways() {
+        return getCondition() == Condition.ALWAYS ? this : withOperands(Condition.ALWAYS, LogicNumber.ZERO, LogicNumber.ZERO);
+    }
+
     default boolean isPlainComparison() {
         Condition c = getCondition();
         return (c == Condition.EQUAL || c == Condition.NOT_EQUAL) && (getX() == LogicBoolean.FALSE || getY() == LogicBoolean.FALSE);
@@ -29,14 +38,10 @@ public interface ConditionalInstruction extends BinaryInstruction {
     }
 
     default ConditionalInstruction invert(GlobalCompilerProfile profile) {
+        assert getArgumentTypes() != null;
         if (!isInvertible(profile)) {
             throw new MindcodeInternalError("Condition is not invertible. " + this);
         }
-        return forceInvert();
-    }
-
-    default ConditionalInstruction forceInvert() {
-        assert getArgumentTypes() != null;
         return withOperands(getCondition().inverse(true), getX(), getY());
     }
 }

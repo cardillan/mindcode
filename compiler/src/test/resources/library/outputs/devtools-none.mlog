@@ -1,0 +1,52 @@
+set :block null
+set :condition null
+set :name null
+set :processor null
+set :steps null
+breakpoint always 0 0
+set :breakpoint.1:condition :condition
+breakpoint notEqual :breakpoint.1:condition false
+set :startProfiling.1:processor @this
+profile start :startProfiling.1:processor
+set :startProfiling.2:processor :processor
+profile start :startProfiling.2:processor
+set :stopProfiling.1:processor @this
+profile stop :stopProfiling.1:processor
+set :stopProfiling.2:processor :processor
+profile stop :stopProfiling.2:processor
+set :clearProfiling.1:processor @this
+profile clear :clearProfiling.1:processor
+set :clearProfiling.2:processor :processor
+profile clear :clearProfiling.2:processor
+set :restartProcessor.1:processor @this
+restart :restartProcessor.1:processor
+set :restartProcessor.2:processor :processor
+restart :restartProcessor.2:processor
+set :isolatedSnapshot:name :name
+set *tmp0 :isolatedSnapshot:name
+set :isolatedSnapshot.1:block @this
+set :isolatedSnapshot.1:name *tmp0
+snapshot isolated :isolatedSnapshot.1:block null :isolatedSnapshot.1:name
+set :isolatedSnapshot.2:block :block
+set :isolatedSnapshot.2:name :name
+snapshot isolated :isolatedSnapshot.2:block null :isolatedSnapshot.2:name
+set :connectedSnapshot:name :name
+set *tmp1 :connectedSnapshot:name
+set :connectedSnapshot.1:block @this
+set :connectedSnapshot.1:name *tmp1
+snapshot connected :connectedSnapshot.1:block null :connectedSnapshot.1:name
+set :connectedSnapshot.2:block :block
+set :connectedSnapshot.2:name :name
+snapshot connected :connectedSnapshot.2:block null :connectedSnapshot.2:name
+set :recordingSnapshot:steps :steps
+set *tmp2 :recordingSnapshot:steps
+set :recordingSnapshot.1:processor @this
+set :recordingSnapshot.1:steps *tmp2
+snapshot recording :recordingSnapshot.1:processor :recordingSnapshot.1:steps null
+set :recordingSnapshot.2:processor :processor
+set :recordingSnapshot.2:steps :steps
+snapshot recording :recordingSnapshot.2:processor :recordingSnapshot.2:steps null
+set :globalSnapshot:name :name
+snapshot global null null :globalSnapshot:name
+end
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

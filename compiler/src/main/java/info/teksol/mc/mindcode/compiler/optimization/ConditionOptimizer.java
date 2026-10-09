@@ -25,6 +25,14 @@ class ConditionOptimizer extends BaseOptimizer {
         try (LogicIterator logicIterator = createIterator()) {
             while (logicIterator.hasNext()) {
                 if (logicIterator.next() instanceof ConditionalInstruction cond && cond.isConditional() && !cond.getCondition().isStrict()) {
+                    if (cond.supportsAlways()) {
+                        LogicBoolean result = optimizationContext.evaluatePlainCondition(cond, cond.getX(), cond.getY());
+                        if (result == LogicBoolean.TRUE) {
+                            logicIterator.set(cond.withAlways());
+                            continue;
+                        }
+                    }
+
                     Tuple2<LogicValue, LogicValue> condArgs = extractConstantOperand(cond);
                     if (condArgs.e1().isNumericLiteral() && condArgs.e2() instanceof LogicVariable variable
                             && !variable.isGlobalVariable()
@@ -46,7 +54,7 @@ class ConditionOptimizer extends BaseOptimizer {
                         } else if (operation == Operation.STRICT_NOT_EQUAL && cond.isPlainComparison()) {
                             // Invert both operation and condition
                             replaceInstruction(oper, oper.withOperands(Operation.STRICT_EQUAL, oper.getX(), oper.getY()));
-                            logicIterator.set(cond.forceInvert());
+                            logicIterator.set(cond.invert(getGlobalProfile()));
                         } else if (cond instanceof OpInstruction next){
                             tryMergeOperations(logicIterator, oper, next);
                         }

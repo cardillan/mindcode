@@ -15,6 +15,7 @@ System libraries contain functions and sometimes constants that can be used by a
 * [Module `bigarray`](SYSTEM-LIBRARY-BIGARRAY.markdown). Used internally by the Mindcode compiler/Schemacode builder to create processors for large storage.
 * [Module `blocks`](SYSTEM-LIBRARY-BLOCKS.markdown). Block-related functions (just the `findLinkedBlocks` function at this moment).
 * [Module `compatibility`](SYSTEM-LIBRARY-COMPATIBILITY.markdown). A special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
+* [Module `devtools`](SYSTEM-LIBRARY-DEVTOOLS.markdown). Provides functions for some of the instructions provided by the Mlog Dev Tools mod.
 * [Module `graphics`](SYSTEM-LIBRARY-GRAPHICS.markdown). Additional graphics functions. Functions related to display transformations require the Mindustry Logic 8 instruction set.
 * [Module `math`](SYSTEM-LIBRARY-MATH.markdown). A math library.
 * [Module `printing`](SYSTEM-LIBRARY-PRINTING.markdown). Functions for printing and formatting numbers. Some functions require the Mindustry Logic 8 instruction set.
