@@ -14,6 +14,7 @@ Changes intended for the next regular release.
 
 * Large stack
 * `links` array
+* Mlog Dev Tools integration
 
 * **Doing**
 
@@ -70,6 +71,7 @@ These are topics that I'm spending time thinking about. Some of these should app
   * "Natural" types
   * Structures/records, including arrays of structures
   * Modules as objects/classes
+  * Invoke properties on any expression, including arrays.
   * Allow using linked arrays in the `remote require` clause.
   * Enums
   * Local structures

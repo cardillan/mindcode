@@ -122,9 +122,11 @@ The above module compiles into this mlog:
 
 ```mlog
 jump 2 always 0 0
-jump 10 always 0 0
+jump 12 always 0 0
 set .invocations -1
-set *signature "7633f8c34aded96b:v1"
+set *signature "7633f8c34aded96b:v2"
+write 1e-15 *caller "*remotewait"
+set *caller false
 op add .invocations .invocations 1
 print "Number of method calls: "
 print .invocations
@@ -235,6 +237,9 @@ sum = processor1.foo.z;
 
 This call functions waits for `foo` completion, and then returns its return value. Other output parameters are available under their fully qualified names, e.g., `processor1.foo.z`. The output parameters may be queried as soon as `finished()` returned true. Calling `await()` is not necessary before starting another remote call on the same processor.
 
+> [!IMPORTANT]
+> The results of a remote call are only guaranteed to be valid until the same remote function is called again, including calls from different processors. 
+
 ### Dynamic binding
 
 A processor containing the remote code can also be located dynamically. In this case, the `remote` clause in the `require` directive contains a variable, not a linked block reference.
@@ -244,7 +249,7 @@ A processor containing the remote code can also be located dynamically. In this 
 
 ```
 var proc;
- remote(proc) require "remote.mnd";
+remote(proc) require "remote.mnd";
 ```
 
 The compiler doesn't automatically generate code to verify the module signature for dynamically bound processors. It is possible to verify the signature using a `verifySignature()` built-in function. This function takes a processor as an argument, and returns `true` if the processor contains the expected module code.
@@ -301,16 +306,18 @@ This chapter briefly describes how synchronous and asynchronous calls are implem
 
 * The function parameters are set up in the remote processor.
 * `:functionName*finished` is set to `false` in the remote processor.
+* `*caller` is set to the local processor (`@this`) in the remote processor.
+* `*remotewait` is set to `1e12` in the local processor.
 * `@counter` in the remote processor is set to the function dispatch index.
-* Waiting for call completion:
-  * instruction `wait 0` is executed. This skips the rest of the tick while transferring the unspent instruction execution quota to the next tick(s).
-  * loop while `:functionName*finished` in the remote processor equals `false`
+* Waiting for call completion: `wait *remoteWait` is executed. The wait ends when the remote processor writes `1e-15` to `*remotewait` in the local processor.
+* The code execution continues in the main processor.  
 * The function return-value, if any, and values of its output parameters, are copied from the remote processor to the main processor.
 
 ### Local side—asynchronous call
 
 * The function parameters are set up in the remote processor.
 * `:functionName*finished` is set to `false` in the remote processor.
+* `*caller` is set to `null` in the remote processor. This prevents the remote processor to rewrite the `*remotewait` variable when the asynchronous call is finished, as this might cause a separate wait for an end of a synchronous call to be (incorrectly) terminated. 
 * `@counter` in the remote processor is set to the function dispatch index.
 * The code execution continues in the main processor.
 
@@ -324,15 +331,25 @@ The call mechanism on the remote side is the same for both synchronous and async
 * Remote call is initiated by the main processor remotely setting `@counter` to the function entry point in the dispatch table. The function starts executing immediately, as the caller sets up all input parameters.
 * Upon completion, the function performs these operations:
     * `:functionName*finished` is set to `true`.
+    * `*remotewait` is set to `1e-15` in the processor stored in `*caller`.
     * The waiting phase is reentered.
 
-## Terminating function calls
+## Terminating remote function calls
 
-If the same or different remote function gets called while a previous call is active, the previous call is terminated. The corresponding `:functionName*finished` flag won't be set.
+If the same or different remote function gets called while a previous call is active, the previous call is terminated. The corresponding `:functionName*finished` flag won't be set, and the `*remotewait` variable in the caller processor won't be reset. This might lead to the processor that initiated the terminated call to wait for its finish indefinitely.
 
 There's no way to define a cleanup routine in case a remote call is terminated, and Mindcode doesn't guard against possible corruption of the remote processor state.
 
-It is also possible to start an asynchronous remote call and use remote variables to communicate with the remote function instead of waiting for it to finish. It's up to the user to devise a communication protocol for such a scenario. By calling the same (or different) function again, this remote processing could be restarted or terminated.
+Terminating remote calls is possibly safe when performed by the processor that initiated the call. This can be done by calling another remote function. There isn't a built-in function to terminate a remote call, but it can be easily created by defining an empty exported function, such as:
+
+```Mindcode
+module example;
+
+export void stop()
+end;
+```
+
+It is also possible to start an asynchronous remote call and use remote variables to communicate with the remote function instead of waiting for it to finish. It's up to the user to devise a communication protocol for such a scenario. By calling the same (or different) function again, this remote processing can be restarted or terminated.
 
 ## Performance of remote calls
 
@@ -349,15 +366,18 @@ Code generated by Mindcode uses the `wait` instruction when waiting for a remote
 
 When the interval between remote calls is longer than a single tick, and the duration of the remote calls is also longer than a single tick, synchronous remote calls might even provide execution boosts. This could lead to faster execution than running an equivalent code on a single processor. Getting the timing just right to consistently use this effect can be very tricky, though.
 
-Code in a remote processor accrues execution quota when waiting for a remote call. Code in a main processor accrues execution quota when waiting for the return from a remote call during synchronous calls and when using the `await()` function on asynchronous calls.
+Code in a remote processor accrues execution quota when waiting for a remote call. Code in a main processor accrues execution quota when waiting for the return from a synchronous remote call. Calling `await()` on asynchronous remote calls doesn't guarantee the execution quota would be increased. 
 
 Note: the execution quota only increases when `wait` instruction are being executed. If there is a background process defined, no execution quota accrues while it is being run (unless the background process itself contains some `wait` instructions).
 
 ## Local calls to exported functions
 
-Exported function may be also called locally. Doing so incurs a slight penalty to remote calls of the function (one additional instruction per remote call). However, exported functions cannot be called recursively (either directly or indirectly).
+Exported functions may be also called locally, although they cannot be recursive. Doing so incurs a very small overhead with both local and remote calls:
 
-Local call of an exported function also sets the function's `:functionName*finished` flag to `true` (this also incurs a penalty of one instruction per local call, compared to calls of non-exported functions). This should be harmless, as local and remote calls to the same function may not occur concurrently. However, if a remote function call was terminated without completion, and the function is later called locally (e.g., from a background process), the flag may be set to `true` even though the remote call never completed. That's generally the problem of terminating remote function calls, which should be avoided.
+* A remote call to an exported function which is also called locally takes an additional step compared to a remote call to a function which is not called locally.
+* A local call to an exported function also takes an additional step compared to a local call to a non-exported function.
+
+Local call of an exported function also sets the function's `:functionName*finished` flag to `true`. This should be harmless, as local and remote calls to the same function may not occur concurrently. However, if a remote function call was terminated without completion, and the function is later called locally (e.g., from a background process), the flag may be set to `true` even though the remote call never completed.
 
 # Arbitrary access to remote variables
 

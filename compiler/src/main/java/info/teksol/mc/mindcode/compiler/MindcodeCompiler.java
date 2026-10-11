@@ -72,7 +72,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         ArrayConstructorContext, CallGraphCreatorContext, DeclarationsProcessorContext, CompileTimeEvaluatorContext,
         CodeGeneratorContext, VariablesContext, ForcedVariableContext, OptimizerContext, StackContext, StackBuilderContext {
 
-    public static final String REMOTE_PROTOCOL_VERSION = "v1";
+    public static final String REMOTE_PROTOCOL_VERSION = "v2";
 
     // Inputs, configurations, and tools
     private final CompilationPhase targetPhase;

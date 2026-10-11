@@ -359,17 +359,19 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         LogicString mlogFinished = function.getFnFinished().getMlogVariableName();
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
-        assembler.createWrite(LogicBoolean.FALSE, processor, mlogFinished);
+        if (async) {
+            assembler.createWrite(LogicBoolean.FALSE, processor, mlogFinished);
+            assembler.createWrite(LogicBoolean.TRUE, processor, LogicVariable.remoteCaller().getMlogVariableName());
+        } else {
+            assembler.createWrite(LogicBuiltIn.THIS, processor, LogicVariable.remoteCaller().getMlogVariableName());
+            assembler.createSet(LogicVariable.remoteWait(), LogicNumber.SUSPEND_WAIT);
+        }
         assembler.createWrite(LogicNumber.create(function.getRemoteIndex()), processor,
                 LogicString.createSimple(LogicBuiltIn.COUNTER.toMlog()));
 
         if (async) return LogicVoid.VOID;
 
-        LogicLabel label = assembler.createNextLabel();
-        assembler.createYieldExecution();
-        LogicVariable tmp = assembler.nextTemp();
-        assembler.createRead(tmp, processor, mlogFinished);
-        assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
+        assembler.createWait(LogicVariable.remoteWait());
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         retrieveFunctionParameters(function, parameters, arguments, false);

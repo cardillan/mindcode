@@ -264,7 +264,7 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
     /// The current implementation uses a very long wait (over 30,000 years)
     public void suspendExecution() {
         if (processor.isSupported(WAIT)) {
-            createWait(LogicNumber.create(processor, "1e12"));
+            createWait(LogicNumber.SUSPEND_WAIT);
         }
     }
 
@@ -272,7 +272,7 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
     /// or provide results.
     public void createYieldExecution() {
         if (processor.isSupported(WAIT)) {
-            createWait(globalCompilerProfile.isZeroWaitYields() ? LogicNumber.ZERO : LogicNumber.create(processor, "1e-15"));
+            createWait(globalCompilerProfile.isZeroWaitYields() ? LogicNumber.ZERO : LogicNumber.YIELD_WAIT);
         }
     }
 
@@ -345,5 +345,13 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
         } else {
             return LogicKeyword.INVALID;
         }
+    }
+
+    public void createLog(String message) {
+        List<LogicArgument> list = new ArrayList<>(Collections.nCopies(11, LogicNull.NULL));
+        list.set(0, LogicKeyword.create("info"));
+        list.set(1, LogicString.createRaw(message));
+        createInstruction(Opcode.LOG, list);
+
     }
 }

@@ -9,17 +9,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * **Breaking:** a new `internal` keyword has been added to the language and is reserved for future use. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
-* **Breaking:** the `err-runtime-check-failed` execution flag has been split into five separate flags: `err-stop-on-assert-bounds`, `err-stop-on-assert-equals`, `err-stop-on-assert-prints`, `err-stop-on-assert-type` and `err-stop-on-error`.
-* Added a `links` implicit global variable representing the blocks linked to the processor. List iteration loops and index-based access are supported with this array. Declaring another `links` variable shadows the implicit one.
+* Added a `links` implicit global variable representing an array of blocks linked to the processor. List iteration loops and index-based access are supported on this array. Declaring another `links` variable (global or local) shadows the implicit one.
 * Added support for instructions provided by the Mlog Dev Tools mod v0.11.6: `assert` and `asserttype`. 
 * Added the [`devtools` system library](/doc/syntax/SYSTEM-LIBRARY-DEVTOOLS.markdown). This library provides access to the Mlog Dev Tools mod's instructions not provided directly by the compiler (`breakpoint`, `profile`, `reset` and `snapshot`). The `breakpoint` instruction can be used to trigger variale dump in Mindcode's processor emulator.
+* Added a new `dump-variables-on-breakpoint` execution flag. When set, the processor emulator will dump all variables on an active `breakpoint` instruction and will contibue executing the code. 
 
 ### Changed
 
 * **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax ([#464](https://github.com/cardillan/mindcode/issues/464)).
 * Loop control variables declared within the loop are never reported as unused. 
+* Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code.  
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
-* Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.  
+* Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.
 * **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary. 
 * **Breaking:** the `err-runtime-check-failed` execution flag has been split into five separate flags: `err-stop-on-assert-bounds`, `err-stop-on-assert-equals`, `err-stop-on-assert-prints`, `err-stop-on-assert-type` and `err-stop-on-error`.
 

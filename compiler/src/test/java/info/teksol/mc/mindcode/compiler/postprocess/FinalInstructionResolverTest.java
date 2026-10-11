@@ -37,7 +37,9 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                         export a[10];
                         """,
                 """
-                        set *signature "0:v1"
+                        set *signature "0:v2"
+                        write 1e-15 *caller "*remotewait"
+                        set *caller false
                         wait 1e12
                         jump 1 always 0 0
                         end
@@ -103,11 +105,13 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                         """,
                 """
                         jump 3 always 0 0
-                        jump 9 always 0 0
+                        jump 11 always 0 0
                         draw triangle MAX .A 0 0 0 0
                         set MAX 10
                         set .A 20
-                        set *signature "3c05035f1bf6650b:v1"
+                        set *signature "3c05035f1bf6650b:v2"
+                        write 1e-15 *caller "*remotewait"
+                        set *caller false
                         wait 1e12
                         jump 6 always 0 0
                         end

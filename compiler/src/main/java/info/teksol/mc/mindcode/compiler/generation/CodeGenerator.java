@@ -200,7 +200,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
         addMissingPrintflush();
     }
 
-    public  LogicLabel getRemoteWaitLabel() {
+    public LogicLabel getRemoteWaitLabel() {
         return remoteWaitLabel;
     }
 
@@ -327,6 +327,8 @@ public class CodeGenerator extends CompilerMessageEmitter {
         }
         remoteWaitLabel = assembler.nextLabel().withoutStateTransfer();
         assembler.createLabel(remoteWaitLabel);
+        assembler.createWrite(LogicNumber.YIELD_WAIT, LogicVariable.remoteCaller(), LogicVariable.remoteWait().getMlogVariableName());
+        assembler.createSet(LogicVariable.remoteCaller(), LogicBoolean.FALSE);
         assembler.setSubcontextType(AstSubcontextType.BODY, 1.0);
         findBackgroundProcessFunction().ifPresent(functionCompiler::placeFunctionBody);
         assembler.suspendExecution();

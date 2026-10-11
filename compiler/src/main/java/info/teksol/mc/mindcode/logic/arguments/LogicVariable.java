@@ -33,6 +33,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static final String ARRAY_OFFSET = "*arroffset";
     public static final String FUNCTION_FINISHED_NAME = "*finished";
     public static final String REMOTE_WAIT_ADDRESS_NAME = "*waitaddr";
+    public static final String REMOTE_WAIT_NAME = "*remotewait";
+    public static final String REMOTE_CALLER_NAME = "*caller";
     public static final String PROGRAM_ID_NAME = "*id";
 
     protected final SourcePosition sourcePosition;
@@ -376,6 +378,14 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable remoteWaitAddr() {
         return new LogicVariable(EMPTY, ADDRESS, ValueMutability.IMMUTABLE, REMOTE_WAIT_ADDRESS_NAME,
                 REMOTE_WAIT_ADDRESS_NAME, null);
+    }
+
+    public static LogicVariable remoteWait() {
+        return new LogicVariable(EMPTY, ADDRESS, REMOTE_WAIT_NAME, REMOTE_WAIT_NAME, true, true, false);
+    }
+
+    public static LogicVariable remoteCaller() {
+        return new LogicVariable(EMPTY, ADDRESS, REMOTE_CALLER_NAME, REMOTE_CALLER_NAME, true, true, false);
     }
 
     public static LogicVariable preserved(String name) {

@@ -297,7 +297,9 @@ set ore-titanium @titanium
 set ore-thorium @thorium
 set sand-floor @sand
 set darksand @sand
-set *signature "0:v1"
+set *signature "0:v2"
+write 1e-15 *caller "*remotewait"
+set *caller false
 wait 1e12
 jump 9 always 0 0
 ```
