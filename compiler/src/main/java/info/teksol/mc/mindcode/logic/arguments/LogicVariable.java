@@ -11,11 +11,15 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static info.teksol.mc.common.SourcePosition.EMPTY;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
+import static info.teksol.mc.mindcode.logic.arguments.LogicVariable.Flags.*;
 
 @NullMarked
 public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress, FunctionParameter {
@@ -54,8 +58,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     // Copy constructor
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability,
-            String functionPrefix, String name, String fullName, String mlog, boolean isVolatile,
-            boolean noinit, boolean input, boolean output, boolean constant, boolean reference) {
+            String functionPrefix, String name, String fullName, String mlog, boolean isVolatile, boolean noinit,
+            boolean input, boolean output, boolean constant, boolean reference, boolean optional, boolean preserved) {
         super(argumentType, mutability);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = functionPrefix;
@@ -69,8 +73,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.output = output;
         this.constant = constant;
         this.reference = reference;
-        this.optional = false;
-        this.preserved = false;
+        this.optional = optional;
+        this.preserved = preserved;
     }
 
     // For block/parameter
@@ -113,29 +117,27 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     // Global/main
-    protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog,
-            boolean isVolatile, boolean noinit, boolean optional) {
-        super(argumentType, isVolatile ? ValueMutability.VOLATILE : ValueMutability.MUTABLE);
+    protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog, FlagSet flags) {
+        super(argumentType, flags.contains(Flags.fVolatile) ? ValueMutability.VOLATILE : ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = "";
         this.name = Objects.requireNonNull(name);
         this.mlog = mlog;
         this.fullName = name;
         this.blockType = null;
-        this.isVolatile = isVolatile;
-        this.noinit = noinit;
-        this.input = false;
-        this.output = false;
-        this.constant = false;
-        this.reference = false;
-        this.optional = optional;
-        this.preserved = false;
+        this.isVolatile = flags.contains(Flags.fVolatile);
+        this.noinit = flags.contains(Flags.fNoInit);
+        this.input = flags.contains(Flags.fInput);
+        this.output = flags.contains(Flags.fOutput);
+        this.constant = flags.contains(Flags.fConstant);
+        this.reference = flags.contains(Flags.fReference);
+        this.optional = flags.contains(Flags.fOptional);
+        this.preserved = flags.contains(Flags.fPreserved);
     }
 
-    // Local/parameter
+    // Local/function parameter
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String functionName,
-            String functionPrefix, String name, String mlog, boolean noinit, boolean input, boolean output,
-            boolean constant, boolean reference, boolean optional, boolean preserved) {
+            String functionPrefix, String name, String mlog, FlagSet flags) {
         super(argumentType, ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
@@ -149,14 +151,14 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.fullName = functionName + "." + name;
         this.mlog = mlog;
         this.blockType = null;
-        this.isVolatile = false;
-        this.noinit = noinit;
-        this.input = input;
-        this.output = output;
-        this.constant = constant;
-        this.reference = reference;
-        this.optional = optional;
-        this.preserved = preserved;
+        this.isVolatile = flags.contains(Flags.fVolatile);
+        this.noinit = flags.contains(Flags.fNoInit);
+        this.input = flags.contains(Flags.fInput);
+        this.output = flags.contains(Flags.fOutput);
+        this.constant = flags.contains(Flags.fConstant);
+        this.reference = flags.contains(Flags.fReference);
+        this.optional = flags.contains(Flags.fOptional);
+        this.preserved = flags.contains(Flags.fPreserved);
     }
 
     @Override
@@ -313,12 +315,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable global(AstIdentifier identifier, String mlog) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName(), mlog, false, false, false);
+                identifier.getName(), mlog, f());
     }
 
     public static LogicVariable global(AstIdentifier identifier, String mlog, boolean volatileVar, boolean noinit, boolean optional) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName(), mlog, volatileVar, noinit, optional);
+                identifier.getName(), mlog, f().set(fVolatile, volatileVar).set(fNoInit, noinit).set(fOptional, optional));
     }
 
     @SuppressWarnings("ConfusingMainMethod")
@@ -329,19 +331,20 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     @SuppressWarnings("ConfusingMainMethod")
     public static LogicVariable main(AstIdentifier identifier, String mlog, boolean noinit, boolean optional) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE,
-                identifier.getName(), mlog, false, noinit, optional);
+                identifier.getName(), mlog, f().set(fNoInit, noinit).set(fOptional, optional));
     }
 
     public static LogicVariable local(AstIdentifier identifier, MindcodeFunction function, String mlog, boolean noinit, boolean optional) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, function.getName(),
-                function.getPrefix(), identifier.getName(), mlog, noinit, false, false, false, false, optional, false);
+                function.getPrefix(), identifier.getName(), mlog, f().set(fNoInit, noinit).set(fOptional, optional));
     }
 
     public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function, String mlog, boolean preserved) {
         AstIdentifier identifier = parameter.getIdentifier();
         return new LogicVariable(identifier.sourcePosition(), FUNCTION_PARAMETER, function.getName(),
                 function.getPrefix(), identifier.getName(), mlog,
-                false, parameter.isInput(), parameter.isOutput(), parameter.isConstant(), parameter.isReference(), false, preserved);
+                f().set(fInput, parameter.isInput()).set(fOutput, parameter.isOutput()).set(fConstant, parameter.isConstant())
+                        .set(fReference, parameter.isReference()).set(fPreserved, preserved));
     }
 
     public static LogicVariable temporary(NameCreator nameCreator, int index) {
@@ -351,7 +354,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
         return new LogicVariable(function.getSourcePosition(), FUNCTION_RETVAL,
                 function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE_NAME,
-                mlog, true, false, true, false, false, false, function.isExport());
+                mlog, f(fNoInit, fOutput).set(fPreserved, function.isExport()));
     }
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
@@ -366,13 +369,13 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable fnArrayOffset(MindcodeFunction function, AstIdentifier identifier, String mlog) {
         return new LogicVariable(identifier.sourcePosition(), FUNCTION_ARRAYOFFSET, function.getName(),
-                function.getPrefix(), identifier.getName() + ARRAY_OFFSET, mlog, true, false, false, false, false, false, false);
+                function.getPrefix(), identifier.getName() + ARRAY_OFFSET, mlog, f(fNoInit));
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED_NAME,
-                mlog,false, false, true, false, false, false, true);
+                mlog,f(fOutput, fPreserved));
     }
 
     public static LogicVariable remoteWaitAddr() {
@@ -381,11 +384,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable remoteWait() {
-        return new LogicVariable(EMPTY, ADDRESS, REMOTE_WAIT_NAME, REMOTE_WAIT_NAME, true, true, false);
+        return new LogicVariable(EMPTY, ADDRESS, REMOTE_WAIT_NAME, REMOTE_WAIT_NAME, f(fVolatile, fNoInit));
     }
 
     public static LogicVariable remoteCaller() {
-        return new LogicVariable(EMPTY, ADDRESS, REMOTE_CALLER_NAME, REMOTE_CALLER_NAME, true, true, false);
+        return new LogicVariable(EMPTY, ADDRESS, REMOTE_CALLER_NAME, REMOTE_CALLER_NAME, f(fVolatile, fNoInit));
     }
 
     public static LogicVariable preserved(String name) {
@@ -393,17 +396,15 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable mlogVariable(String name) {
-        return new LogicVariable(EMPTY, MLOG_VARIABLE, name, name, true, true, false);
+        return new LogicVariable(EMPTY, MLOG_VARIABLE, name, name, f(fVolatile, fNoInit));
     }
 
     public static LogicVariable arrayAccess(String arrayName, String suffix, String mlog) {
-        return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
-                arrayName + suffix, mlog, false, true, true);
+        return new LogicVariable(EMPTY, GLOBAL_VARIABLE, arrayName + suffix, mlog, f(fNoInit, fOptional));
     }
 
     public static LogicVariable arrayReturn(String arrayName, String suffix, String mlog) {
-        return new LogicVariable(EMPTY, FUNCTION_RETADDR,
-                arrayName + suffix, mlog, false, true, false);
+        return new LogicVariable(EMPTY, FUNCTION_RETADDR, arrayName + suffix, mlog, f(fNoInit));
     }
 
     public static LogicVariable error(int index) {
@@ -435,7 +436,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 functionName, functionPrefix, functionPrefix + RETURN_VALUE_NAME,
-                functionPrefix + RETURN_VALUE_NAME, true, false, true, false, false, false, false);
+                functionPrefix + RETURN_VALUE_NAME, f(fNoInit, fOutput));
     }
 
     // ValueStore methods
@@ -464,7 +465,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public LogicVariable withType(ArgumentType argumentType) {
         return new LogicVariable(sourcePosition, argumentType, mutability, functionPrefix, name, fullName, mlog,
-                isVolatile, noinit, input, output, constant, reference);
+                isVolatile, noinit, input, output, constant, reference, optional, preserved);
     }
 
     public static class LogicTemp extends LogicVariable {
@@ -506,5 +507,46 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         public LogicVariable withType(ArgumentType argumentType) {
             return new LogicTemp(nameCreator, argumentType, index, name);
         }
+    }
+
+    protected enum Flags {
+        fVolatile,
+        fNoInit,
+        fInput,
+        fOutput,
+        fConstant,
+        fReference,
+        fOptional,
+        fPreserved,
+    }
+
+    protected static class FlagSet {
+        private final Set<Flags> flags = EnumSet.noneOf(Flags.class);
+
+        private FlagSet() {
+        }
+
+        public boolean contains(Flags flag) {
+            return flags.contains(flag);
+        }
+
+        public FlagSet set(Flags flag, boolean present) {
+            if (present) {
+                flags.add(flag);
+            } else {
+                flags.remove(flag);
+            }
+            return this;
+        }
+    }
+
+    static FlagSet f() {
+        return new FlagSet();
+    }
+
+    static FlagSet f(Flags... flags) {
+        FlagSet set = new FlagSet();
+        Collections.addAll(set.flags, flags);
+        return set;
     }
 }

@@ -91,7 +91,7 @@ The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), availabl
 
 To learn more about Mindustry Logic, you can find more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated September 2026)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated October 2026)
 
 You can also get help on these Discord servers:
 

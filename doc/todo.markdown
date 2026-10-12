@@ -15,6 +15,7 @@ Changes intended for the next regular release.
 * Large stack
 * `links` array
 * Mlog Dev Tools integration
+* Internal: enum for variable flags. When creating variables, a set of flags would be specified.
 
 * **Doing**
 
@@ -23,7 +24,6 @@ Changes intended for the next regular release.
 
 * **Planned**
 
-* Internal: enum for variable flags. When creating variables, a set of flags would be specified.
 * Compatibility test 2: verifies how Mindustry parses (numeric) literals.
 * String minification
   * Replacing icon names with the corresponding characters

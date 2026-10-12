@@ -84,9 +84,9 @@ When waiting for a remote call, the remote processor is by default idle. It is p
 
 When a remote call occurs while the background function still executes, the background process is terminated and the remote function starts executing immediately. There's no cleanup process, it is up to the programmer to make sure the background function can be safely terminated at any time and reentered when the next remote call ends.
 
-The background process must be contained in a function named `backgroundProcess`. The function declaration needs to have these properties:
+The background process must be contained in a function named `backgroundProcess`. The function needs to have these properties:
 
-1. No `remote`, `inline` or `noinline` keywords used in function declaration.
+1. No `export`, `inline` or `noinline` keywords used in function declaration.
 2. Return type of the function is `void`.
 3. The function has no parameters.
 4. The function is not recursive.
@@ -159,7 +159,7 @@ A module which is being requested for remote access may appear in only one `requ
 
 ### Accessing exported variables
 
-All variables and arrays [declared as `export`](SYNTAX-1-VARIABLES.markdown#exported-variables) in remotely requested modules are accessible to the main processor. The variables and array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random array access, the access mechanism is generated in the main processor code, meaning that random access to remote arrays has almost the same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
+All variables and arrays [declared as `export`](SYNTAX-1-VARIABLES.markdown#exported-variables) in remotely requested modules are accessible to the main processor. The variables and array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random array access, the access mechanism is generated in the main processor code, meaning that random access to remote arrays has almost the same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access.
 
 Exported variables are accessed as properties on bound processors, for example:
 
@@ -269,7 +269,7 @@ Using `verifySignature` ensures it is safe to call a remote function in the give
 * the processor doesn't contain code corresponding to the remote module, or the code is not compatible with an expected version (module signatures differ),
 * the processor contains the correct remote module code, but the initialization hasn't completed yet.
 
-It is possible to use several variables in the `remote` clause, in which case the remote module can be accessed though any of them. Mindcode doesn't make any assumptions about the identity of these processors (particularly whether they point to the same processor or not).
+It is possible to use several variables in the `remote` clause, in which case the remote module can be accessed though any of them. Mindcode doesn't make any assumptions about the identity of these processors (particularly whether they refer to the same processor or not).
 
 Processor references can also be stored in an array. However, individual array elements cannot be directly used to access the remote module. Instead, the reference needs to be stored to a bound processor variable first:
 

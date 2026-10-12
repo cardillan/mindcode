@@ -8,13 +8,14 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.GLOBAL_VARIABLE;
+import static info.teksol.mc.mindcode.logic.arguments.LogicVariable.Flags.*;
 
 @NullMarked
 public class LogicArrayElement extends LogicVariable {
     private @Nullable String elementName;
 
     protected LogicArrayElement(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog, boolean isVolatile) {
-        super(sourcePosition, argumentType, name, mlog, isVolatile, true, true);
+        super(sourcePosition, argumentType, name, mlog, f(fNoInit, fOptional).set(fVolatile, isVolatile));
     }
 
     public static LogicArrayElement arrayElement(AstIdentifier identifier, int index, String mlog, boolean isVolatile) {
