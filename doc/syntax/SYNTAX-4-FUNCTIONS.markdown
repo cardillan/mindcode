@@ -779,14 +779,14 @@ allocate stack in bank1[256...512];
 > [!NOTE]
 > When no range is given (e.g., `allocate stack in cell1`), full range of the given memory block is assumed.
 
-> [!WARN]
+> [!WARNING]
 > In older versions of Mindustry, external stack can only store numerical values. When a recursive function needs to store non-numerical values on the stack, the program will not execute correctly. At this point, Mindcode is not able to detect and report this situation.
 >
 > Note that parameters that are not modified by the function and are passed unchanged to the recursive calls are not stored on the stack.
 
 #### Internal stack
 
-Mindcode builds an internal stack when an external one is not declared. The internal stack is superior in supporting both numerical and non-numerical values, but it may occupy a significant amount of instruction space. When using an internal stack, it may be necessary to use the [`stack-depth` option](SYNTAX-5-OTHER.markdown#option-stack-depth) to specify the maximum depth of the stack to build.
+Mindcode builds an internal stack when an external one is not declared. The internal stack is superior in older Mindustry versions for supporting both numerical and non-numerical values, but it may occupy a significant amount of instruction space. When using an internal stack, it is necessary to use the [`stack-depth` option](SYNTAX-5-OTHER.markdown#option-stack-depth) to specify the maximum depth of the stack to build.
 
 ### Arrays in recursive functions
 

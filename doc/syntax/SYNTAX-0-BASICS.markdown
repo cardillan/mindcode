@@ -182,6 +182,7 @@ This is a list of Mindcode keywords:
 * `if`
 * `in`
 * `inline`
+* `internal`
 * `linked`
 * `loop`
 * `mlog`

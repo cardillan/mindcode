@@ -57,6 +57,7 @@ HEAP                    : 'heap' ;
 IF                      : 'if' ;
 IN                      : 'in' ;
 INLINE                  : 'inline' ;
+INTERNAL                : 'internal' ;
 LINKED                  : 'linked' ;
 LOOP                    : 'loop' ;
 MODULE                  : 'module' ;

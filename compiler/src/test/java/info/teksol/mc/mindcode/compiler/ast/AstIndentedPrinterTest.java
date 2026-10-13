@@ -90,11 +90,15 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         AstModule {
                             declaration = null,
                             statements = [
-                                AstAllocations{allocations = AstAllocation{type = STACK, memory = AstIdentifier{name = "bank1", external = false}, range = AstRange {
-                                    firstValue = AstLiteralDecimal{literal = "0", suppressWarning = false},
-                                    lastValue = AstLiteralDecimal{literal = "512", suppressWarning = false},
-                                    exclusive = true
-                                }}},
+                                AstAllocations{allocations = AstAllocation{type = STACK, parameters = AstExternalParameters {
+                                    memory = AstIdentifier{name = "bank1", external = false},
+                                    range = AstRange {
+                                        firstValue = AstLiteralDecimal{literal = "0", suppressWarning = false},
+                                        lastValue = AstLiteralDecimal{literal = "512", suppressWarning = false},
+                                        exclusive = true
+                                    },
+                                    startIndex = null
+                                }, inlinedSpecification = null}},
                                 AstFunctionDeclaration {
                                     identifier = AstIdentifier{name = "fib", external = false},
                                     dataType = VAR,

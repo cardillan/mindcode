@@ -21,11 +21,12 @@ public class AstExternalParameters extends AstFragment implements ExternalStorag
         this.startIndex = startIndex;
     }
 
-
+    @Override
     public AstIdentifier getMemory() {
         return memory;
     }
 
+    @Override
     public @Nullable AstRange getRange() {
         return range;
     }

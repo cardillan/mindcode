@@ -6,23 +6,30 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 
 @NullMarked
 @AstNode(printFlat = true)
-public class AstAllocation extends AstDeclaration implements ExternalStorage {
+public class AstAllocation extends AstDeclaration {
     public enum AllocationType { HEAP, STACK }
 
     private final AllocationType type;
-    private final AstIdentifier memory;
-    private final @Nullable AstRange range;
+    private final @Nullable AstExternalParameters parameters;
+    private final @Nullable List<AstExpression> inlinedSpecification;
 
-    public AstAllocation(SourcePosition sourcePosition, AllocationType type, AstIdentifier memory,
-            @Nullable AstRange range) {
-        super(sourcePosition, children(memory, range));
+    public AstAllocation(SourcePosition sourcePosition, AllocationType type, AstExternalParameters parameters) {
+        super(sourcePosition, children(parameters));
         this.type = type;
-        this.memory = memory;
-        this.range = range;
+        this.parameters = parameters;
+        this.inlinedSpecification = null;
+    }
+
+    public AstAllocation(SourcePosition sourcePosition, AllocationType type, List<AstExpression> inlinedSpecification) {
+        super(sourcePosition, children(inlinedSpecification));
+        this.type = type;
+        this.parameters = null;
+        this.inlinedSpecification = inlinedSpecification;
     }
 
     @Override
@@ -35,12 +42,12 @@ public class AstAllocation extends AstDeclaration implements ExternalStorage {
         return type;
     }
 
-    public AstIdentifier getMemory() {
-        return memory;
+    public @Nullable AstExternalParameters getParameters() {
+        return parameters;
     }
 
-    public @Nullable AstRange getRange() {
-        return range;
+    public @Nullable List<AstExpression> getInlinedSpecification() {
+        return inlinedSpecification;
     }
 
     @Override
@@ -48,14 +55,14 @@ public class AstAllocation extends AstDeclaration implements ExternalStorage {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstAllocation that = (AstAllocation) o;
-        return type == that.type && memory.equals(that.memory) && Objects.equals(range, that.range);
+        return type == that.type && Objects.equals(parameters, that.parameters) && Objects.equals(inlinedSpecification, that.inlinedSpecification);
     }
 
     @Override
     public int hashCode() {
         int result = type.hashCode();
-        result = 31 * result + memory.hashCode();
-        result = 31 * result + Objects.hashCode(range);
+        result = 31 * result + Objects.hashCode(parameters);
+        result = 31 * result + Objects.hashCode(inlinedSpecification);
         return result;
     }
 

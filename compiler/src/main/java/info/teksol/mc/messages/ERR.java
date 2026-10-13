@@ -93,6 +93,7 @@ public class ERR {
     public static final String EXT_STORAGE_EXCEEDED = "Not enough capacity in external storage for '%s'.";
     public static final String EXT_STORAGE_EXCEEDED_ARRAY = "Not enough capacity in external storage for array '%s' (required %d, available %d).";
     public static final String EXT_STORAGE_INVALID_ARRAY = "Cannot use '%s' as large storage: the array doesn't contain memory blocks, or the memory blocks differ in capacity.";
+    public static final String EXT_STORAGE_INVALID_INLINED_ARRAY = "Invalid large storage specification: the list doesn't contain memory blocks, or the memory blocks differ in capacity.";
     public static final String EXT_STORAGE_INVALID_MEMORY = "Cannot use '%s' as external storage.";
     public static final String EXT_STORAGE_INVALID_MEMORY_VALUE = "Cannot use value assigned to parameter '%s' as a memory for external storage.";
     public static final String EXT_STORAGE_INVALID_RANGE = "Empty or invalid external storage memory range.";

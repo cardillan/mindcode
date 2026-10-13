@@ -719,22 +719,32 @@ class AstBuilderTest extends AbstractAstBuilderTest {
             assertBuildsTo("""
                             allocate heap in cell1;
                             allocate stack in cell2[0 .. 63];
+                            allocate stack in (cell1 .. cell2);
                             """,
                     List.of(
                             new AstAllocations(EMPTY,
                                     List.of(
                                             new AstAllocation( EMPTY,
                                                     AstAllocation.AllocationType.HEAP,
-                                                    id("cell1"),
-                                                    null)
+                                                    new AstExternalParameters(EMPTY, id("cell1"), null, null)
+                                            )
                                     )
                             ),
                             new AstAllocations(EMPTY,
                                     List.of(
-                                            new AstAllocation(EMPTY,
+                                            new AstAllocation( EMPTY,
                                                     AstAllocation.AllocationType.STACK,
-                                                    id("cell2"),
-                                                    new AstRange(EMPTY, number(0), number(63), false))
+                                                    new AstExternalParameters(EMPTY, id("cell2"),
+                                                            new AstRange(EMPTY, number(0), number(63), false), null)
+                                            )
+                                    )
+                            ),
+                            new AstAllocations(EMPTY,
+                                    List.of(
+                                            new AstAllocation( EMPTY,
+                                                    AstAllocation.AllocationType.STACK,
+                                                    List.of(new AstRange(EMPTY, id("cell1"), id("cell2"), false))
+                                            )
                                     )
                             )
                     )
@@ -751,12 +761,16 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     List.of(
                                             new AstAllocation(EMPTY,
                                                     AstAllocation.AllocationType.HEAP,
-                                                    id("HEAPPTR"),
-                                                    new AstRange(EMPTY, number(0), number(64), true)),
+                                                    new AstExternalParameters(EMPTY,
+                                                            id("HEAPPTR"),
+                                                            new AstRange(EMPTY, number(0), number(64), true),
+                                                            null
+                                                    )
+                                            ),
                                             new AstAllocation(EMPTY,
                                                     AstAllocation.AllocationType.STACK,
-                                                    id("bank1"),
-                                                    null)
+                                                    new AstExternalParameters(EMPTY, id("bank1"), null, null)
+                                            )
                                     )
                             )
                     )
@@ -783,8 +797,11 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     List.of(
                                             new AstAllocation(EMPTY,
                                                     AstAllocation.AllocationType.HEAP,
-                                                    id("cell1"),
-                                                    new AstRange(EMPTY, id("MIN"), id("MAX"), false))
+                                                    new AstExternalParameters(EMPTY,
+                                                            id("cell1"),
+                                                            new AstRange(EMPTY, id("MIN"), id("MAX"), false),
+                                                            null)
+                                            )
                                     )
                             )
                     )

@@ -362,10 +362,16 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             case MindcodeLexer.STACK -> AstAllocation.AllocationType.STACK;
             default -> throw new MindcodeInternalError("Unsupported allocation type: " + ctx.type.getText());
         };
-        return new AstAllocation(pos(ctx),
-                type,
-                identifier(ctx.id),
-                visitAstRangeIfNonNull(ctx.range));
+
+        if (ctx.blocks != null) {
+            return new AstAllocation(pos(ctx), type, processInitialArrayValues(ctx.blocks));
+        } else {
+            return new AstAllocation(pos(ctx), type,
+                    new AstExternalParameters(pos(ctx),
+                            identifier(ctx.id),
+                            visitAstRangeIfNonNull(ctx.range),
+                            null));
+        }
     }
 
     @Override

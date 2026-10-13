@@ -8,7 +8,7 @@ import java.util.Objects;
 @NullMarked
 public interface ExternalStorage extends AstMindcodeNode {
 
-    AstIdentifier getMemory();
+    @Nullable AstIdentifier getMemory();
 
     @Nullable AstRange getRange();
 
