@@ -97,8 +97,9 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                         lastValue = AstLiteralDecimal{literal = "512", suppressWarning = false},
                                         exclusive = true
                                     },
-                                    startIndex = null
-                                }, inlinedSpecification = null}},
+                                    startIndex = null,
+                                    inlinedBlockList = null
+                                }}},
                                 AstFunctionDeclaration {
                                     identifier = AstIdentifier{name = "fib", external = false},
                                     dataType = VAR,

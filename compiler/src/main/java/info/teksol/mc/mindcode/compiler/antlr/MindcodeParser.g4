@@ -147,11 +147,12 @@ declModifier
     | modifier = CACHED
     | modifier = EXPORT
     | modifier = EXTERNAL
-    | modifier = EXTERNAL LPAREN memory = IDENTIFIER RPAREN
+    | modifier = EXTERNAL LPAREN blockList = identifierList RPAREN
     | modifier = EXTERNAL LPAREN blockRange = astRange RPAREN
     | modifier = EXTERNAL LPAREN memory = IDENTIFIER LBRACKET index = expression RBRACKET RPAREN
     | modifier = EXTERNAL LPAREN memory = IDENTIFIER LBRACKET range = astRange RBRACKET RPAREN
     | modifier = GUARDED
+    | modifier = INTERNAL
     | modifier = LINKED
     | modifier = LINKED LPAREN type = BUILTINIDENTIFIER RPAREN
     | modifier = MLOG LPAREN mlog = expressionList RPAREN
@@ -315,7 +316,8 @@ allocations
 
 astAllocation
     : type = (HEAP | STACK) IN id = IDENTIFIER (LBRACKET range = astRange RBRACKET)?
-    | type = (HEAP | STACK) IN blocks = initialValuesList
+    | type = (HEAP | STACK) IN LPAREN blockList = identifierList RPAREN
+    | type = (HEAP | STACK) IN LPAREN blockRange = astRange RPAREN
     ;
 
 // Function declarations

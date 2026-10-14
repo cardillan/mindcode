@@ -743,7 +743,9 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     List.of(
                                             new AstAllocation( EMPTY,
                                                     AstAllocation.AllocationType.STACK,
-                                                    List.of(new AstRange(EMPTY, id("cell1"), id("cell2"), false))
+                                                    new AstExternalParameters(EMPTY,
+                                                            List.of(new AstRange(EMPTY, id("cell1"), id("cell2"), false))
+                                                    )
                                             )
                                     )
                             )
@@ -995,28 +997,35 @@ class AstBuilderTest extends AbstractAstBuilderTest {
 
         @Test
         void buildsExternalVariablesWithMemory() {
-            AstIdentifier memory = id("cell1");
+            AstIdentifier cell1 = id("cell1");
+            AstIdentifier cell2 = id("cell2");
             assertBuildsTo("""
                             external(cell1) $a = 0;
                             external(cell1[1]) $b = 0;
                             external(cell1[0 ... 1]) $c = 0;
+                            external(cell1 .. cell2) $d = 0;
                             """,
                     List.of(
                             new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL,
-                                            new AstExternalParameters(EMPTY, memory, null, null))),
+                                            new AstExternalParameters(EMPTY, List.of(cell1)))),
                                     List.of(new AstVariableSpecification(EMPTY, ext("a"), l0))
                             ),
                             new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL,
-                                            new AstExternalParameters(EMPTY, memory, null, number(1)))),
+                                            new AstExternalParameters(EMPTY, cell1, null, number(1)))),
                                     List.of(new AstVariableSpecification(EMPTY, ext("b"), l0))
                             ),
                             new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL,
-                                            new AstExternalParameters(EMPTY, memory,
+                                            new AstExternalParameters(EMPTY, cell1,
                                                     new AstRange(EMPTY, l0, l1, true), null))),
                                     List.of(new AstVariableSpecification(EMPTY, ext("c"), l0))
+                            ),
+                            new AstVariablesDeclaration(EMPTY, null,
+                                    List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL,
+                                            new AstExternalParameters(EMPTY, List.of(new AstRange(EMPTY, cell1, cell2, false))))),
+                                    List.of(new AstVariableSpecification(EMPTY, ext("d"), l0))
                             )
                     )
             );

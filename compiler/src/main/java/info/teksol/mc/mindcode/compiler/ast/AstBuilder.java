@@ -172,8 +172,9 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return token != null ? identifier(token) : null;
     }
 
-    private List<AstIdentifier> identifiers(List<TerminalNode> tokens) {
-        return tokens.stream().map(TerminalNode::getSymbol).map(this::identifier).toList();
+    @SuppressWarnings("unchecked")
+    private <T extends AstExpression> List<T> identifiers(List<TerminalNode> tokens) {
+        return tokens.stream().map(TerminalNode::getSymbol).map(s -> (T) identifier(s)).toList();
     }
 
     private Operation operation(Token token) {
@@ -363,8 +364,12 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             default -> throw new MindcodeInternalError("Unsupported allocation type: " + ctx.type.getText());
         };
 
-        if (ctx.blocks != null) {
-            return new AstAllocation(pos(ctx), type, processInitialArrayValues(ctx.blocks));
+        if (ctx.blockList != null) {
+            return new AstAllocation(pos(ctx), type,
+                    new AstExternalParameters(pos(ctx), identifiers(ctx.blockList.IDENTIFIER())));
+        } else if (ctx.blockRange != null) {
+            return new AstAllocation(pos(ctx), type,
+                    new AstExternalParameters(pos(ctx),List.of(visitAstExpression(ctx.blockRange))));
         } else {
             return new AstAllocation(pos(ctx), type,
                     new AstExternalParameters(pos(ctx),
@@ -438,6 +443,10 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         if (modifier == Modifier.EXTERNAL && ctx.memory != null) {
             return new AstExternalParameters(pos(ctx), identifier(ctx.memory),
                     visitAstRangeIfNonNull(ctx.astRange()), visitAstExpressionIfNonNull(ctx.index));
+        } else if (modifier == Modifier.EXTERNAL && ctx.blockList != null) {
+            return new AstExternalParameters(pos(ctx), identifiers(ctx.blockList.IDENTIFIER()));
+        } else if (modifier == Modifier.EXTERNAL && ctx.blockRange != null) {
+            return new AstExternalParameters(pos(ctx), List.of(visitAstExpression(ctx.blockRange)));
         } else if (modifier == Modifier.REMOTE) {
             return new AstRemoteParameters(pos(ctx), identifier(ctx.processor));
         } else if (modifier == Modifier.MLOG) {

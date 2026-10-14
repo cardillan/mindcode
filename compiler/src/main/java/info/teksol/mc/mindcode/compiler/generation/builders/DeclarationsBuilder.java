@@ -73,7 +73,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 if (context.stackTracker().externalStack()) {
                     error(node, ERR.ALLOCATION_MULTIPLE_STACK);
                 } else {
-                    final Allocation allocation = resolveExternalStorage(node);
+                    final Allocation allocation = resolveExternalStorage(node.getParameters());
                     context.stackTracker().setStackMemory(allocation.memory, allocation.start, allocation.end);
                 }
             }
@@ -81,7 +81,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 if (context.heapAllocation() != null) {
                     error(node, ERR.ALLOCATION_MULTIPLE_HEAP);
                 } else {
-                    final Allocation allocation = resolveExternalStorage(node);
+                    final Allocation allocation = resolveExternalStorage(node.getParameters());
                     context.setHeapAllocation(node);
                     variables.setHeapTracker(allocation.createTracker(context));
                 }
@@ -397,6 +397,16 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return -1;
     }
 
+    private ValueStore resolveLinkedVariable(AstIdentifier identifier, @Nullable Modifiers modifiers) {
+        if (modifiers == null) {
+            return variables.resolveVariable(identifier, false, true);
+        } else {
+            LogicVariable variable = variables.createLinkedVariable(identifier, modifiers, identifier);
+            generateLinkGuard(variable, modifiers.contains(GUARDED));
+            return variable;
+        }
+    }
+
     private ValueStore createLinkedVariable(AstIdentifier identifier, Modifiers modifiers) {
         LogicVariable variable = variables.createLinkedVariable(identifier, modifiers, identifier);
         generateLinkGuard(variable, modifiers.contains(GUARDED));
@@ -412,7 +422,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return processInitialValuesLinked(specification.getExpressions(), modifiers);
     }
 
-    private List<ValueStore> processInitialValuesLinked(List<AstExpression> expressions, Modifiers modifiers) {
+    private List<ValueStore> processInitialValuesLinked(List<AstExpression> expressions, @Nullable Modifiers modifiers) {
         if (containsRange(expressions)) {
             if (expressions.size() != 1 || !(expressions.getFirst() instanceof AstRange range)) {
                 throw new MindcodeInternalError("A single range is expected.");
@@ -420,12 +430,12 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
             // We know all the identifiers in the list are valid
             return createLinkedIdentifiersList(this, range).stream()
-                    .map(identifier -> createLinkedVariable(identifier, modifiers)).toList();
+                    .map(identifier -> resolveLinkedVariable(identifier, modifiers)).toList();
         } else {
             return expressions.stream()
                     .map(node -> {
                         if (getLinkIdentifier(this, node) instanceof AstIdentifier identifier) {
-                            return createLinkedVariable(identifier, modifiers);
+                            return resolveLinkedVariable(identifier, modifiers);
                         } else {
                             processInLocalScope(() -> evaluate(node));  // To report errors in expressions
                             return LogicVariable.INVALID;
@@ -782,27 +792,31 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         }
     }
 
-    private Allocation resolveExternalStorage(AstAllocation node) {
-        if (node.getParameters() != null) return resolveExternalStorage(node.getParameters());
-
-        // Inlined specification
-        assert node.getInlinedSpecification() != null;
-
-        List<ValueStore> array = processInitialValuesLinked(node.getInlinedSpecification(), Modifiers.EMPTY);
-        List<LogicVariable> elements = array.stream().map(e -> (LogicVariable) e.unwrap()).toList();
-
-        int size = determineMemorySize(array);
-        if (size > 0) {
-            return new Allocation(elements, 0, size);
-        } else {
-            error(node, ERR.EXT_STORAGE_INVALID_INLINED_ARRAY);
-            return new Allocation(elements, 0, 63);
-        }
-    }
-
     // Resolves the external storage for stack, heap or external variable declarations.
     // Supports Large Storage (storage using an array of memory blocks of the same type)
     private Allocation resolveExternalStorage(AstExternalParameters node) {
+        if (node.getMemory() == null) {
+            assert node.getInlinedBlockList() != null;
+            List<ValueStore> values = processInitialValuesLinked(node.getInlinedBlockList(), null);
+
+            if (values.size() == 1 && values.getFirst() instanceof ArrayStore array && array.getArrayType() == ArrayStore.ArrayType.CONSTANT) {
+                int size = determineMemorySize(array.getElements());
+                if (size > 0) {
+                    List<LogicVariable> elements = array.getElements().stream().map(e -> (LogicVariable) e.unwrap()).toList();
+                    return new Allocation(elements, 0, size, array);
+                }
+                error(node.getMemory(), ERR.EXT_STORAGE_INVALID_ARRAY, array.getName());
+            } else if (values.stream().allMatch(e -> e.unwrap() instanceof LogicVariable)) {
+                int size = determineMemorySize(values);
+                if (size > 0) {
+                    List<LogicVariable> elements = values.stream().map(e -> (LogicVariable) e.unwrap()).toList();
+                    return new Allocation(elements, 0, size, null);
+                }
+            }
+            error(node, ERR.EXT_STORAGE_INVALID_INLINED_ARRAY);
+            return invalidAllocation();
+        }
+
         ValueStore memory = evaluate(node.getMemory());
         if (memory instanceof LogicVariable variable && (blockExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
             if (variable instanceof LogicParameter parameter) {
@@ -817,7 +831,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             if (startHeapIndex >= endHeapIndex) {
                 error(node, ERR.EXT_STORAGE_INVALID_RANGE);
             }
-            return new Allocation(List.of(variable), startHeapIndex, endHeapIndex);
+            return new Allocation(List.of(variable), startHeapIndex, endHeapIndex, null);
         } else if (memory instanceof ArrayStore array && array.getArrayType() == ArrayStore.ArrayType.CONSTANT) {
             int size = determineMemorySize(array.getElements());
             if (size > 0) {
@@ -825,14 +839,14 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                     error(node.getRangeOrIndex(), ERR.EXT_STORAGE_LARGE_RANGE);
                 }
                 List<LogicVariable> elements = array.getElements().stream().map(e -> (LogicVariable) e.unwrap()).toList();
-                return new Allocation(elements, 0, size);
+                return new Allocation(elements, 0, size, array);
             }
             error(node.getMemory(), ERR.EXT_STORAGE_INVALID_ARRAY, array.getName());
         } else {
             error(node.getMemory(), ERR.EXT_STORAGE_INVALID_MEMORY, node.getMemory().getName());
         }
 
-        return new Allocation(List.of(LogicVariable.INVALID), 0, 63);
+        return invalidAllocation();
     }
 
     // Determines the memory size of all blocks in a constant array. Returns the size if it is the same for all blocks,
@@ -856,7 +870,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return 0;
     }
 
-    private int getIndex(ExternalStorage node, boolean first, int defaultValue) {
+    private int getIndex(AstExternalParameters node, boolean first, int defaultValue) {
         AstRange range = node.getRange();
         AstExpression startIndex = node.getStartIndex();
         if (startIndex != null) {
@@ -885,9 +899,13 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return defaultValue;
     }
 
-    private record Allocation(List<LogicVariable> memory, int start, int end) {
+    private static Allocation invalidAllocation() {
+        return new Allocation(List.of(LogicVariable.INVALID), 0, Integer.MAX_VALUE, null);
+    }
+
+    private record Allocation(List<LogicVariable> memory, int start, int end, @Nullable ArrayStore memoryArray) {
         public HeapTracker createTracker(CodeGeneratorContext context) {
-            return HeapTracker.createTracker(context, memory.getFirst(), start, end);
+            return HeapTracker.createTracker(context, memory, start, end);
         }
     }
 
