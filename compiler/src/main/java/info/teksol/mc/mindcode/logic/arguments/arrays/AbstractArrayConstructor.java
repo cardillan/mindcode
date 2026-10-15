@@ -79,8 +79,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return "";
     }
 
-    @Override
-    public final int getSharedTableSize() {
+    protected final int getSharedTableSize() {
         return folded()
                 ? roundUpToEven(arrayStore.fullSize()) + 2 * flag(profile.isSymbolicLabels())
                 : 2 * arrayStore.fullSize() + flag(profile.isSymbolicLabels());

@@ -257,8 +257,15 @@ public class OptimizationContext extends CompilerMessageEmitter {
         this.sizeGoalForced = sizeGoalForced;
     }
 
-    public void setExpanded() {
+    public void setExpanded(boolean modified) {
         expanded = true;
+        if (modified) {
+            unreachableInstructions = null;
+            functionDataFlow = null;
+            rebuildAstContextTree();
+            clearDfoVariableStates();
+            clearLoopInvariants();
+        }
     }
 
     public boolean isExpanded() {
@@ -1347,10 +1354,6 @@ public class OptimizationContext extends CompilerMessageEmitter {
         deletions += instruction.getRealSize();
     }
 
-    public void forceUpdate() {
-        this.updated = true;
-    }
-
     /// Inserts a new instruction before given, existing instruction. The new instruction must be assigned
     /// an AST context suitable for its position in the program. An instruction must not be placed into the
     /// program twice; when an instruction truly needs to be duplicated, an independent copy with proper
@@ -1949,6 +1952,11 @@ public class OptimizationContext extends CompilerMessageEmitter {
             return instruction;
         }
 
+        @Override
+        public void accept(LogicInstruction instruction) {
+            addToContext(instruction);
+        }
+
         public void addToContext(LogicInstruction instruction) {
             instructions.add(instruction.withContext(Objects.requireNonNull(astContext)));
         }
@@ -1990,8 +1998,8 @@ public class OptimizationContext extends CompilerMessageEmitter {
             return instructions.removeLast();
         }
 
-        public @Nullable AstContext getAstContext() {
-            return astContext;
+        public AstContext getAstContext() {
+            return Objects.requireNonNull(astContext);
         }
 
         public AstContext getExistingAstContext() {

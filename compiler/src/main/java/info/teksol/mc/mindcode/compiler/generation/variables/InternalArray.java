@@ -76,7 +76,7 @@ public class InternalArray extends ElementsArrayStore {
         }
     }
 
-    public static InternalArray createConst(NameCreator nameCreator, @Nullable MindcodeFunction function, AstIdentifier identifier, List<ValueStore> elements) {
+    public static InternalArray createConst(NameCreator nameCreator, @Nullable MindcodeFunction function, AstIdentifier identifier, List<? extends ValueStore> elements) {
         List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
         return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
                 nameCreator.arrayBase(function, "", identifier.getName(), 0),

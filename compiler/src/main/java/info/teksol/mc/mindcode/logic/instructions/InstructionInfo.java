@@ -34,6 +34,12 @@ public enum InstructionInfo {
     /// table is actually folded.
     ARRAY_FOLDED(Boolean.FALSE),
 
+    /// Contains the instruction that should be injected into the array.
+    ARRAY_INJECTION(Optional.empty()),
+
+    /// Indicates the instruction has been injected into the jump table and needs to be removed.
+    ARRAY_INJECTED(Boolean.FALSE),
+
     /// This instruction is a compact-array access instruction, setting up the element variable name
     COMPACT_ACCESS_SOURCE(Boolean.FALSE),
 

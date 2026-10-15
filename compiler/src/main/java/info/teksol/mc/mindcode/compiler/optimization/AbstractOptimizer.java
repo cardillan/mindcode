@@ -207,10 +207,6 @@ abstract class AbstractOptimizer extends CompilerMessageEmitter implements Optim
             this(0, 0.0);
         }
 
-        public OptimizationEffect(int cost) {
-            this(cost, 0.0);
-        }
-
         public OptimizationEffect add(OptimizationEffect other) {
             return new OptimizationEffect(this.cost + other.cost, this.benefit + other.benefit);
         }

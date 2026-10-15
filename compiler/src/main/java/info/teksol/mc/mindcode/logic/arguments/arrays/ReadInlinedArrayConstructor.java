@@ -2,7 +2,9 @@ package info.teksol.mc.mindcode.logic.arguments.arrays;
 
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
+import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ReadArrInstruction;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import org.jspecify.annotations.NullMarked;
@@ -31,7 +33,14 @@ public class ReadInlinedArrayConstructor extends RegularInlinedArrayConstructor 
 
     @Override
     public SideEffects createSideEffects() {
-        return SideEffects.of(arrayElements(), List.of(instruction.getResult()), List.of());
+        if (hasInjection()) {
+            LogicInstruction ix = instruction.getArrayInjection().orElseThrow();
+            return SideEffects.reads(arrayElements()).plusReadsAndWrites(
+                    ix.getAllReads().filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList(),
+                    ix.getAllWrites().filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList());
+        } else {
+            return SideEffects.of(arrayElements(), List.of(instruction.getResult()), List.of());
+        }
     }
 
     @Override

@@ -58,6 +58,16 @@ public class LocalContextfulInstructionsCreator implements ContextfulInstruction
     }
 
     @Override
+    public AstContext getAstContext() {
+        return astContext;
+    }
+
+    @Override
+    public void accept(LogicInstruction instruction) {
+        consumer.accept(instruction.withContext(astContext));
+    }
+
+    @Override
     public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
         LogicInstruction instruction = processor.createInstruction(astContext, opcode, arguments);
         consumer.accept(instruction);

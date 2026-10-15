@@ -134,6 +134,14 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     //<editor-fold desc="Instruction Info getters/setters">
+    default boolean isArrayInjected() {
+        return (boolean) getInfo(InstructionInfo.ARRAY_INJECTED);
+    }
+
+    default LogicInstruction setArrayInjected(boolean injected) {
+        return setInfo(InstructionInfo.ARRAY_INJECTED, injected);
+    }
+
     default LogicLabel getMarker() {
         return (LogicLabel) getInfo(InstructionInfo.MARKER);
     }

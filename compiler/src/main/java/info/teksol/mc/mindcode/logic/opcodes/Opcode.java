@@ -100,7 +100,7 @@ public enum Opcode {
     /// They are removed from the final code.
     EMPTY           (NONE,   "empty",           0),
 
-    /// A target for jump, set address or goto instructions. Removed from the final code.
+    /// A target for jump, set address, or goto instructions. Removed from the final code.
     LABEL           (NONE,   "label",           0),
 
     /// Simple call. Replaced by an unconditional jump in the final code.

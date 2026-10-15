@@ -903,9 +903,9 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return new Allocation(List.of(LogicVariable.INVALID), 0, Integer.MAX_VALUE, null);
     }
 
-    private record Allocation(List<LogicVariable> memory, int start, int end, @Nullable ArrayStore memoryArray) {
+    private record Allocation(List<LogicVariable> memory, int start, int end, @Nullable ElementsArrayStore memoryArray) {
         public HeapTracker createTracker(CodeGeneratorContext context) {
-            return HeapTracker.createTracker(context, memory, start, end);
+            return HeapTracker.createTracker(context, memory, start, end, memoryArray);
         }
     }
 

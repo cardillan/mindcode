@@ -24,7 +24,6 @@ import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.BREAKPOINT;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
@@ -35,7 +34,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
 ///
 /// Labels and temporary variables may also be generated through CodeAssembler.
 @NullMarked
-public class CodeAssembler extends CompilerMessageEmitter implements ContextfulInstructionCreator, Consumer<LogicInstruction> {
+public class CodeAssembler extends CompilerMessageEmitter implements ContextfulInstructionCreator {
     private final GlobalCompilerProfile globalCompilerProfile;
     private final InstructionProcessor processor;
     private final Variables variables;
@@ -142,7 +141,7 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
 
     @Override
     public void accept(LogicInstruction instruction) {
-        addInstruction(instruction);
+        addInstruction(instruction.withContext(astContext));
     }
 
     /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.

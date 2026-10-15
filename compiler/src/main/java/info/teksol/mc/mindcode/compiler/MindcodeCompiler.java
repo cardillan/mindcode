@@ -357,7 +357,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         instructionProcessor.setResolutionPhase(true);
 
         // Run the program through the array expander again, as optimizations might have been inactive.
-        instructions = virtualInstructionResolver.resolveVirtualInstructions(instructions);
+        if (!virtualInstructionResolver.expanded()) {
+            instructions = new ArrayList<>(instructions);
+            virtualInstructionResolver.resolveVirtualInstructions(instructions);
+        }
 
         instructions = StackBuilder.buildStack(this, optimizationCoordinator, instructions);
 

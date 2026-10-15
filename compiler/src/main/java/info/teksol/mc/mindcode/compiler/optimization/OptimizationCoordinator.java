@@ -17,9 +17,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.*;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.util.TraceFile;
@@ -133,35 +131,11 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                     modified = optimizePhase(ITERATED, optimizers, ++passes);
                 }
 
-                if (virtualInstructionResolver.analyze(program)) {
-                    for (int index = 0; index < program.size(); index++) {
-                        LogicInstruction programIx = program.get(index);
-                        if (programIx instanceof ArrayAccessInstruction ix) {
-                            optimizationContext.removeInstruction(index);
-                            List<LogicInstruction> expanded = virtualInstructionResolver.expand(ix);
-                            for (LogicInstruction instruction : expanded) {
-                                optimizationContext.insertInstructionUnchecked(index++, instruction);
-                            }
-                            index--;
-                        } else if (programIx instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
-                            optimizationContext.removeInstruction(index);
-                            List<LogicInstruction> expanded = virtualInstructionResolver.expand(op);
-                            for (LogicInstruction instruction : expanded) {
-                                optimizationContext.insertInstructionUnchecked(index++, instruction);
-                            }
-                            index--;
-                        }
-                    }
-
-                    boolean generateEndSeparator = program.getLast().getOpcode() == Opcode.END;
-                    for (LogicInstruction instruction : virtualInstructionResolver.getJumpTables(generateEndSeparator)) {
-                        optimizationContext.insertInstructionUnchecked(program.size(), instruction);
-                    }
-                    modified = true;
-                    optimizationContext.setExpanded();
-
+                modified = virtualInstructionResolver.resolveVirtualInstructions(program);
+                if (modified) {
                     debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
                 }
+                optimizationContext.setExpanded(modified);
 
                 while (modified && passes <= globalProfile.getOptimizationPasses()) {
                     modified = optimizePhase(ITERATED, optimizers, ++passes);

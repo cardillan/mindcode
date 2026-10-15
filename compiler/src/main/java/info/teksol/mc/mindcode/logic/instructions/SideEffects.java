@@ -53,10 +53,17 @@ public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes,
         return !writes.isEmpty() || !resets.isEmpty();
     }
 
-    SideEffects plusWrites(List<LogicVariable> writes) {
+    public SideEffects plusWrites(List<LogicVariable> writes) {
         return this == SideEffects.NONE
                 ? new SideEffects(List.of(), writes, List.of(), writes)
                 : SideEffects.of(reads, this.writes.isEmpty() ? writes : union(this.writes, writes), resets);
+    }
+
+    public SideEffects plusReadsAndWrites(List<LogicVariable> reads, List<LogicVariable> writes) {
+        return this == SideEffects.NONE
+                ? new SideEffects(reads, writes, List.of(), union(reads, writes))
+                : SideEffects.of(this.reads.isEmpty() ? reads : union(this.reads, reads),
+                this.writes.isEmpty() ? writes : union(this.writes, writes), resets);
     }
 
     /// Creates a side effect which reads all variables from the list

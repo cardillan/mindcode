@@ -673,18 +673,17 @@ compiles into
 op rand *tmp0 5 0
 op rand *tmp1 5 0
 op rand *tmp2 5 0
-op shl *tmp4 *tmp0 1
-op add @counter *tmp4 5
-set *tmp3 "[red]"
+op shl *tmp3 *tmp0 1
+op add @counter *tmp3 5
+print "[red]"
 jump 14 always 0 0
-set *tmp3 "[green]"
+print "[green]"
 jump 14 always 0 0
-set *tmp3 "[blue]"
+print "[blue]"
 jump 14 always 0 0
-set *tmp3 "[crimson]"
+print "[crimson]"
 jump 14 always 0 0
-set *tmp3 "[gold]"
-print *tmp3
+print "[gold]"
 print *tmp0
 print *tmp1
 print *tmp2

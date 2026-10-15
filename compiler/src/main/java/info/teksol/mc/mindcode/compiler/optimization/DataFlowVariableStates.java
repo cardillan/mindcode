@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
@@ -457,7 +458,7 @@ class DataFlowVariableStates {
         public @Nullable LogicValue valueRead(LogicVariable variable, @Nullable LogicInstruction instruction, boolean reportUninitialized,
                 boolean ixReachable) {
             modifications++;
-            trace(() -> "Value read: " + variable.toMlog() + " (instance " + getId() + ")" + (ixReachable ? "" : " instruction unreachable)"));
+            trace(() -> "Value read: " + variable.toMlog() + " (instance " + getId() + (ixReachable ? ")" : " instruction unreachable)"));
 
             reads.put(variable, optimizer.getCounter());
 
@@ -768,6 +769,10 @@ class DataFlowVariableStates {
                     // TODO read instructions will depend on memory model
                     // isInstructionEqual(variableStates, this.instruction, ix);
                         false;
+
+                case ReadArrInstruction ix ->
+                        ix.getArray().getArrayType() == ArrayType.CONSTANT
+                                && isInstructionEqual(variableStates, this.instruction, ix);
 
                 case SensorInstruction ix when instructionProcessor.isDeterministic(ix) ->
                          isInstructionEqual(variableStates, this.instruction, ix);

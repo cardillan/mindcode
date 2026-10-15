@@ -691,29 +691,28 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                             param p = 0.9999999;
                             print(array[floor(p)]);
                             """,
+                    createInstruction(LABEL, "__start__"),
                     createInstruction(SET, "p", "0.9999999"),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "5", q("position 5:1: index out of bounds (0 to 5)")),
                     createInstruction(OP, "shl", tmp(4), "p", "1"),
                     createInstruction(MULTIJUMP, label(1), tmp(4), "0"),
                     createInstruction(MULTILABEL, label(1)),
-                    createInstruction(SET, tmp(3), ".array*0"),
-                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(PRINT, ".array*0"),
+                    createInstruction(JUMP, "__start__", "always"),
                     createInstruction(MULTILABEL, label(2)),
-                    createInstruction(SET, tmp(3), ".array*1"),
-                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(PRINT, ".array*1"),
+                    createInstruction(JUMP, "__start__", "always"),
                     createInstruction(MULTILABEL, label(3)),
-                    createInstruction(SET, tmp(3), ".array*2"),
-                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(PRINT, ".array*2"),
+                    createInstruction(JUMP, "__start__", "always"),
                     createInstruction(MULTILABEL, label(4)),
-                    createInstruction(SET, tmp(3), ".array*3"),
-                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(PRINT, ".array*3"),
+                    createInstruction(JUMP, "__start__", "always"),
                     createInstruction(MULTILABEL, label(5)),
-                    createInstruction(SET, tmp(3), ".array*4"),
-                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(PRINT, ".array*4"),
+                    createInstruction(JUMP, "__start__", "always"),
                     createInstruction(MULTILABEL, label(6)),
-                    createInstruction(SET, tmp(3), ".array*5"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(PRINT, tmp(3))
+                    createInstruction(PRINT, ".array*5")
             );
         }
 

@@ -52,6 +52,15 @@ class ArrayOptimizer extends BaseOptimizer {
             while (iterator.hasNext()) {
                 LogicInstruction instruction = iterator.next();
                 if (instruction instanceof ArrayAccessInstruction ix && ix.getArrayOrganization() != ArrayOrganization.LOOKUP) {
+                    if (ix instanceof ReadArrInstruction) {
+                        ix.setArrayInjection(Optional.empty());
+                        LogicInstruction next = iterator.peekValid();
+                        if (next != null && next.getSideEffects() == SideEffects.NONE && next.inputArgumentsStream().anyMatch(v -> v == ix.getResult())) {
+                            List<LogicInstruction> references = getVariableReferences(ix.getResult());
+                            if (List.of(ix, next).equals(references)) ix.setArrayInjection(Optional.of(next));
+                        }
+                    }
+
                     ArrayConstruction construction = computeArrayConstruction(ix);
                     ArrayOrganization organization = computeArrayOrganization(ix);
                     if (ix.getArrayConstruction() != construction || ix.getArrayOrganization() != organization) {
@@ -68,6 +77,10 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         return false;
+    }
+
+    private boolean canInject(LogicInstruction instruction) {
+        return !instruction.getOpcode().isVirtual() && instruction.getOpcode() != Opcode.JUMP;
     }
 
     private int lookupCapacity(LogicKeyword lookupType, Set<String> usedVariables) {

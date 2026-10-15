@@ -29,7 +29,6 @@ public class ArrayConstructorFactory {
             case SHORT -> compact ? new CompactShortArrayConstructor(context, instruction) : new RegularShortArrayConstructor(context, instruction);
             case LOOKUP -> new LookupArrayConstructor(context, instruction);
             case EXTERNAL -> new ExternalArrayConstructor(context, instruction);
-            case LARGE -> new LargeArrayConstructor(context, instruction);
 
             default -> throw new MindcodeInternalError("Unsupported array organization: " + instruction.getArrayOrganization());
         };

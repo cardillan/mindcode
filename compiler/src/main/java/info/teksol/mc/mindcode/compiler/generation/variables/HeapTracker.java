@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,15 +25,18 @@ public class HeapTracker extends CompilerMessageEmitter {
     private final NameCreator nameCreator;
     private final boolean heapAllocated;
     private final List<LogicVariable> heapStorage;
+    private final @Nullable ElementsArrayStore memoryArray;
     private final int[] currentHeapIndex;
     private final int[] endHeapIndex;
     private final int blockSize;
 
-    private HeapTracker(CodeGeneratorContext context, List<LogicVariable> heapStorage, int startHeapIndex, int endHeapIndex) {
+    private HeapTracker(CodeGeneratorContext context, List<LogicVariable> heapStorage, int startHeapIndex, int endHeapIndex,
+            @Nullable ElementsArrayStore memoryArray) {
         super(context.messageConsumer());
         this.processor = context.instructionProcessor();
         this.nameCreator = context.nameCreator();
         this.heapStorage = heapStorage;
+        this.memoryArray = memoryArray;
         this.currentHeapIndex = new int[heapStorage.size()];
         this.endHeapIndex = new int[heapStorage.size()];
         this.heapAllocated = true;
@@ -46,6 +50,7 @@ public class HeapTracker extends CompilerMessageEmitter {
         this.processor = context.instructionProcessor();
         this.nameCreator = context.nameCreator();
         this.heapStorage = List.of();
+        this.memoryArray = null;
         this.currentHeapIndex = new int[]{0};
         this.endHeapIndex = new int[]{Integer.MAX_VALUE};
         this.heapAllocated = false;
@@ -56,8 +61,9 @@ public class HeapTracker extends CompilerMessageEmitter {
         return new HeapTracker(context);
     }
 
-    public static HeapTracker createTracker(CodeGeneratorContext context, List<LogicVariable> heapMemory, int startHeapIndex, int endHeapIndex) {
-        return new HeapTracker(context, heapMemory, startHeapIndex, endHeapIndex);
+    public static HeapTracker createTracker(CodeGeneratorContext context, List<LogicVariable> heapMemory, int startHeapIndex, int endHeapIndex,
+            @Nullable ElementsArrayStore memoryArray) {
+        return new HeapTracker(context, heapMemory, startHeapIndex, endHeapIndex, memoryArray);
     }
 
     private int findFreeStorageIndex(int size) {
@@ -118,8 +124,11 @@ public class HeapTracker extends CompilerMessageEmitter {
                 error(identifier, ERR.EXT_STORAGE_EXCEEDED_ARRAY, identifier.getName(), size, memory.size() * blockSize);
             }
 
+            // Create an internal array of the memory blocks
+            InternalArray memoryArray = InternalArray.createConst(nameCreator, null, identifier, memory);
+
             return new LargeArray(identifier.sourcePosition(),
-                    nameCreator.arrayBase(null, "", identifier.getName(), 0), List.of(), null, 0);
+                    nameCreator.arrayBase(null, "", identifier.getName(), 0), memory, memoryArray, blockSize, size);
         } else {
             LogicVariable memory;
             List<ValueStore> elements;

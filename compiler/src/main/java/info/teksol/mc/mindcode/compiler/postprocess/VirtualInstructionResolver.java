@@ -8,11 +8,11 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.arguments.Operation.NOT_EQUAL;
 
@@ -30,27 +30,40 @@ public class VirtualInstructionResolver {
         this.processor = processor;
     }
 
-    public List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
-        // Already expanded, do not repeat
-        if (expanded) return program;
-
-        analyze(program);
-
-        List<LogicInstruction> expanded = program.stream()
-                .mapMulti(this::expandInstruction)
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        int skip = expanded.getLast().getOpcode() == Opcode.END ? 1 : 0;
-        jumpTables.values().stream()
-                .map(JumpTable::instructions)
-                .flatMap(Collection::stream)
-                .skip(skip)
-                .forEach(expanded::add);
-
+    public boolean expanded() {
         return expanded;
     }
 
-    public boolean analyze(List<LogicInstruction> program) {
+    private int index;
+
+    public boolean resolveVirtualInstructions(List<LogicInstruction> program) {
+        // Already expanded, do not repeat
+        if (!expanded && analyze(program)) {
+            for (index = 0; index < program.size(); index++) {
+                LogicInstruction ix = program.get(index);
+                if (ix instanceof ArrayAccessInstruction || ix instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
+                    program.remove(index);
+                    expandInstruction(ix, newIx -> program.add(index++, newIx));
+                    index--;
+                }
+            }
+
+            int skip = program.getLast().getOpcode() == Opcode.END ? 1 : 0;
+            jumpTables.values().stream()
+                    .map(JumpTable::instructions)
+                    .flatMap(Collection::stream)
+                    .skip(skip)
+                    .forEach(program::add);
+
+            program.removeIf(LogicInstruction::isArrayInjected);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean analyze(List<LogicInstruction> program) {
         if (expanded) return false;
         expanded = true;
 
@@ -62,6 +75,13 @@ public class VirtualInstructionResolver {
         boolean found = false;
         for (LogicInstruction instruction : program) {
             if (instruction instanceof ArrayAccessInstruction ix) {
+                // Remove invalid injections
+                ix.getArrayInjection().ifPresent(injection -> {
+                    if (CollectionUtils.indexOf(program, i -> i == injection) < 0) {
+                        ix.setArrayInjection(Optional.empty());
+                    }
+                });
+
                 ix.getArrayConstructor().generateJumpTable(jumpTables);
                 found = true;
             } else if (instruction instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
@@ -70,28 +90,6 @@ public class VirtualInstructionResolver {
         }
 
         return found;
-    }
-
-    public List<LogicInstruction> getJumpTables(boolean generateEndSeparator) {
-        return jumpTables.values().stream()
-                .map(JumpTable::instructions)
-                .flatMap(Collection::stream)
-                .skip(generateEndSeparator ? 1 : 0)
-                .collect(Collectors.toList());
-    }
-
-    public List<LogicInstruction> expand(ArrayAccessInstruction ix) {
-        List<LogicInstruction> result = new ArrayList<>();
-        ix.getArrayConstructor().expandInstruction(result::add, jumpTables);
-        return result;
-    }
-
-    public List<LogicInstruction> expand(OpInstruction op) {
-        List<LogicInstruction> result = new ArrayList<>();
-        LogicVariable tmp = processor.nextTemp();
-        result.add(op.withOperationAndResult(Operation.BITWISE_OR, tmp));
-        result.add(op.withOperands(NOT_EQUAL, tmp, LogicBoolean.FALSE));
-        return result;
     }
 
     private void expandInstruction(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {

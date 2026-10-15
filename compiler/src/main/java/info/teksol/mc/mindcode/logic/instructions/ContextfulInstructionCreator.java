@@ -1,12 +1,14 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
@@ -17,9 +19,11 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 /// The implementing class only needs to implement the non-specific instruction creation method. All the specific
 /// methods are inherited from the interface.
 @NullMarked
-public interface ContextfulInstructionCreator {
+public interface ContextfulInstructionCreator extends Consumer<LogicInstruction> {
 
     InstructionProcessor getProcessor();
+
+    AstContext getAstContext();
 
     /// Allocates a new temporary variable.
     ///
