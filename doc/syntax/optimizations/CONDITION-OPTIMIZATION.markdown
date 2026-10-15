@@ -17,13 +17,15 @@ The following preconditions need to be met for the optimization to take place:
 
 Constant folding only takes place when the optimization level is set to `advanced`.
 
-When both the condition and the operation each have one constant argument, these two constants can be folded. Folding is supported for addition, subtraction, multiplication and division. After folding, the non-constant argument in the condition is replaced with the non-constant argument of the operation, and the constant argument in the condition is updated.
+When both the condition and the operation each have one constant argument, these two constants can sometimes be folded. Folding is supported for addition, subtraction, multiplication, division, and integer division. After folding, the non-constant argument in the condition is replaced with the non-constant argument of the operation, and the constant argument in the condition is updated.
 
 The optimization doesn't take place when a precision loss may occur:
 * when the condition uses normal equality operators (`equal` or `notEqual`), a precision loss up to 10<sup>-7</sup> is allowed,
 * in other cases, no precision loss is allowed.
 
 Precision loss is detected by reversing the folding operation and retrieving back the term with a smaller absolute value. If this term is equal to its original value (with a difference smaller than the aforementioned limit in case of simple equality), no significant precision loss is deemed to occur.
+
+For integer division, the optimization is only performed when the divisor is positive and fits into a 32-bit integer, and the quotient times the divisor fits into safe integer range. No precision loss occurs in that case.  
 
 Example:
 
@@ -86,10 +88,18 @@ The following example demonstrates constant folding applied to multiplication an
 ```Mindcode
 #set remarks = comments;
 volatile x, y;
+
 /// Multiplication and division
 x = y * 2 >= 4;
 x = y / 2 >= 4;
 x = 2 / y >= 4;
+
+/// Integer division
+x = y \ 10 > 5;
+x = y \ 10 >= 5;
+x = y \ 10 < 5;
+x = y \ 10 <= 5;
+
 /// Precision error
 x = y - 0.1 >= 0.2;
 ```
@@ -101,6 +111,11 @@ compiles to:
 op greaterThanEq .x .y 2
 op greaterThanEq .x .y 8
 op lessThanEq .x .y 0.5
+# Integer division
+op greaterThanEq .x .y 60
+op greaterThanEq .x .y 50
+op lessThan .x .y 50
+op lessThan .x .y 60
 # Precision error
 op sub *tmp0 .y 0.1
 op greaterThanEq .x *tmp0 0.2

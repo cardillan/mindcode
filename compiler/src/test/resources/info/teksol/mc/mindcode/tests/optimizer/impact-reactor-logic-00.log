@@ -5392,6 +5392,121 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-4 ins
 
 Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1 instructions):
  
+    64 label *label157
+    65 op sub *tmp94 @tick :t_startup1
+    66 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label158 greaterThan :calc_charge_req:secs 30
++   67 jump *label158 greaterThanEq *tmp94 1860
+    68 sensor *tmp97 reactor1 @enabled
+    69 jump *label159 notEqual *tmp97 false
+    70 label *label158
+ 
+    82 label *label162
+    83 op sub *tmp94 @tick :t_startup2
+    84 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label163 greaterThan :calc_charge_req:secs 30
++   85 jump *label163 greaterThanEq *tmp94 1860
+    86 sensor *tmp97 reactor2 @enabled
+    87 jump *label164 notEqual *tmp97 false
+    88 label *label163
+ 
+   100 label *label167
+   101 op sub *tmp94 @tick :t_startup3
+   102 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label168 greaterThan :calc_charge_req:secs 30
++  103 jump *label168 greaterThanEq *tmp94 1860
+   104 sensor *tmp97 reactor3 @enabled
+   105 jump *label169 notEqual *tmp97 false
+   106 label *label168
+ 
+   118 label *label172
+   119 op sub *tmp94 @tick :t_startup4
+   120 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label173 greaterThan :calc_charge_req:secs 30
++  121 jump *label173 greaterThanEq *tmp94 1860
+   122 sensor *tmp97 reactor4 @enabled
+   123 jump *label174 notEqual *tmp97 false
+   124 label *label173
+ 
+   136 label *label177
+   137 op sub *tmp94 @tick :t_startup5
+   138 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label178 greaterThan :calc_charge_req:secs 30
++  139 jump *label178 greaterThanEq *tmp94 1860
+   140 sensor *tmp97 reactor5 @enabled
+   141 jump *label179 notEqual *tmp97 false
+   142 label *label178
+ 
+   200 print "STOP out of cryo\n"
+   201 jump *label212 always
+   202 label *label200
+-    * jump *label208 greaterThanEq :start_reactor:secs 30
++  203 jump *label208 greaterThanEq *tmp104 1800
+   204 label *label201
+   205 op sub *tmp94 @tick :t_startup1
+   206 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label202 greaterThan :calc_charge_req:secs 30
++  207 jump *label202 greaterThanEq *tmp94 1860
+   208 sensor *tmp97 reactor1 @enabled
+   209 jump *label203 notEqual *tmp97 false
+   210 label *label202
+ 
+   379 print "STOP out of cryo\n"
+   380 jump *label251 always
+   381 label *label239
+-    * jump *label247 greaterThanEq :start_reactor:secs 30
++  382 jump *label247 greaterThanEq *tmp104 1800
+   383 label *label240
+   384 op sub *tmp94 @tick :t_startup2
+   385 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label241 greaterThan :calc_charge_req:secs 30
++  386 jump *label241 greaterThanEq *tmp94 1860
+   387 sensor *tmp97 reactor2 @enabled
+   388 jump *label242 notEqual *tmp97 false
+   389 label *label241
+ 
+   586 print "STOP out of cryo\n"
+   587 jump *label290 always
+   588 label *label278
+-    * jump *label286 greaterThanEq :start_reactor:secs 30
++  589 jump *label286 greaterThanEq *tmp104 1800
+   590 label *label279
+   591 op sub *tmp94 @tick :t_startup3
+   592 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label280 greaterThan :calc_charge_req:secs 30
++  593 jump *label280 greaterThanEq *tmp94 1860
+   594 sensor *tmp97 reactor3 @enabled
+   595 jump *label281 notEqual *tmp97 false
+   596 label *label280
+ 
+   751 print "STOP out of cryo\n"
+   752 jump *label329 always
+   753 label *label317
+-    * jump *label325 greaterThanEq :start_reactor:secs 30
++  754 jump *label325 greaterThanEq *tmp104 1800
+   755 label *label318
+   756 op sub *tmp94 @tick :t_startup4
+   757 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label319 greaterThan :calc_charge_req:secs 30
++  758 jump *label319 greaterThanEq *tmp94 1860
+   759 sensor *tmp97 reactor4 @enabled
+   760 jump *label320 notEqual *tmp97 false
+   761 label *label319
+ 
+   916 print "STOP out of cryo\n"
+   917 jump *label368 always
+   918 label *label356
+-    * jump *label364 greaterThanEq :start_reactor:secs 30
++  919 jump *label364 greaterThanEq *tmp104 1800
+   920 label *label357
+   921 op sub *tmp94 @tick :t_startup5
+   922 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label358 greaterThan :calc_charge_req:secs 30
++  923 jump *label358 greaterThanEq *tmp94 1860
+   924 sensor *tmp97 reactor5 @enabled
+   925 jump *label359 notEqual *tmp97 false
+   926 label *label358
+ 
   1094 print "\n"
   1095 label *label49
   1096 label *label42
@@ -5643,7 +5758,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label157
     58 op sub *tmp94 @tick :t_startup1
     59 op idiv :calc_charge_req:secs *tmp94 60
-    60 jump *label158 greaterThan :calc_charge_req:secs 30
+    60 jump *label158 greaterThanEq *tmp94 1860
  
     64 set :calc_charge_req*retval 0
     65 jump *label161 always
@@ -5658,7 +5773,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label162
     73 op sub *tmp94 @tick :t_startup2
     74 op idiv :calc_charge_req:secs *tmp94 60
-    75 jump *label163 greaterThan :calc_charge_req:secs 30
+    75 jump *label163 greaterThanEq *tmp94 1860
  
     79 set :calc_charge_req*retval 0
     80 jump *label166 always
@@ -5673,7 +5788,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label167
     88 op sub *tmp94 @tick :t_startup3
     89 op idiv :calc_charge_req:secs *tmp94 60
-    90 jump *label168 greaterThan :calc_charge_req:secs 30
+    90 jump *label168 greaterThanEq *tmp94 1860
  
     94 set :calc_charge_req*retval 0
     95 jump *label171 always
@@ -5688,7 +5803,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label172
    103 op sub *tmp94 @tick :t_startup4
    104 op idiv :calc_charge_req:secs *tmp94 60
-   105 jump *label173 greaterThan :calc_charge_req:secs 30
+   105 jump *label173 greaterThanEq *tmp94 1860
  
    109 set :calc_charge_req*retval 0
    110 jump *label176 always
@@ -5703,7 +5818,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label177
    118 op sub *tmp94 @tick :t_startup5
    119 op idiv :calc_charge_req:secs *tmp94 60
-   120 jump *label178 greaterThan :calc_charge_req:secs 30
+   120 jump *label178 greaterThanEq *tmp94 1860
  
    124 set :calc_charge_req*retval 0
    125 jump *label181 always
@@ -5732,11 +5847,11 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    175 jump *label212 always
    176 label *label200
-   177 jump *label208 greaterThanEq :start_reactor:secs 30
+   177 jump *label208 greaterThanEq *tmp104 1800
 -    * label *label201
    178 op sub *tmp94 @tick :t_startup1
    179 op idiv :calc_charge_req:secs *tmp94 60
-   180 jump *label202 greaterThan :calc_charge_req:secs 30
+   180 jump *label202 greaterThanEq *tmp94 1860
  
    184 set :calc_charge_req*retval 0
    185 jump *label205 always
@@ -5769,11 +5884,11 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    345 jump *label251 always
    346 label *label239
-   347 jump *label247 greaterThanEq :start_reactor:secs 30
+   347 jump *label247 greaterThanEq *tmp104 1800
 -    * label *label240
    348 op sub *tmp94 @tick :t_startup2
    349 op idiv :calc_charge_req:secs *tmp94 60
-   350 jump *label241 greaterThan :calc_charge_req:secs 30
+   350 jump *label241 greaterThanEq *tmp94 1860
  
    354 set :calc_charge_req*retval 0
    355 jump *label244 always
@@ -5816,11 +5931,11 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    539 jump *label290 always
    540 label *label278
-   541 jump *label286 greaterThanEq :start_reactor:secs 30
+   541 jump *label286 greaterThanEq *tmp104 1800
 -    * label *label279
    542 op sub *tmp94 @tick :t_startup3
    543 op idiv :calc_charge_req:secs *tmp94 60
-   544 jump *label280 greaterThan :calc_charge_req:secs 30
+   544 jump *label280 greaterThanEq *tmp94 1860
  
    548 set :calc_charge_req*retval 0
    549 jump *label283 always
@@ -5844,11 +5959,11 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    697 jump *label329 always
    698 label *label317
-   699 jump *label325 greaterThanEq :start_reactor:secs 30
+   699 jump *label325 greaterThanEq *tmp104 1800
 -    * label *label318
    700 op sub *tmp94 @tick :t_startup4
    701 op idiv :calc_charge_req:secs *tmp94 60
-   702 jump *label319 greaterThan :calc_charge_req:secs 30
+   702 jump *label319 greaterThanEq *tmp94 1860
  
    706 set :calc_charge_req*retval 0
    707 jump *label322 always
@@ -5872,11 +5987,11 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    855 jump *label368 always
    856 label *label356
-   857 jump *label364 greaterThanEq :start_reactor:secs 30
+   857 jump *label364 greaterThanEq *tmp104 1800
 -    * label *label357
    858 op sub *tmp94 @tick :t_startup5
    859 op idiv :calc_charge_req:secs *tmp94 60
-   860 jump *label358 greaterThan :calc_charge_req:secs 30
+   860 jump *label358 greaterThanEq *tmp94 1860
  
    864 set :calc_charge_req*retval 0
    865 jump *label361 always
@@ -5993,7 +6108,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label212 always
 +  175 jump *label229 always
    176 label *label200
-   177 jump *label208 greaterThanEq :start_reactor:secs 30
+   177 jump *label208 greaterThanEq *tmp104 1800
    178 op sub *tmp94 @tick :t_startup1
  
    195 control enabled reactor1 false
@@ -6055,7 +6170,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label251 always
 +  344 jump *label268 always
    345 label *label239
-   346 jump *label247 greaterThanEq :start_reactor:secs 30
+   346 jump *label247 greaterThanEq *tmp104 1800
    347 op sub *tmp94 @tick :t_startup2
  
    364 control enabled reactor2 false
@@ -6117,7 +6232,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label290 always
 +  538 jump *label307 always
    539 label *label278
-   540 jump *label286 greaterThanEq :start_reactor:secs 30
+   540 jump *label286 greaterThanEq *tmp104 1800
    541 op sub *tmp94 @tick :t_startup3
  
    558 control enabled reactor3 false
@@ -6179,7 +6294,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label329 always
 +  696 jump *label346 always
    697 label *label317
-   698 jump *label325 greaterThanEq :start_reactor:secs 30
+   698 jump *label325 greaterThanEq *tmp104 1800
    699 op sub *tmp94 @tick :t_startup4
  
    716 control enabled reactor4 false
@@ -6241,7 +6356,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label368 always
 +  854 jump *label385 always
    855 label *label356
-   856 jump *label364 greaterThanEq :start_reactor:secs 30
+   856 jump *label364 greaterThanEq *tmp104 1800
    857 op sub *tmp94 @tick :t_startup5
  
    874 control enabled reactor5 false
@@ -6448,7 +6563,7 @@ label *label11
 op or :emerg_shutdown :check_radar*retval *tmp4
 op sub *tmp20 @tick :t_startup1
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label158 greaterThan :calc_charge_req:secs 30
+jump *label158 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor1 @enabled
 jump *label159 notEqual *tmp21 false
 label *label158
@@ -6463,7 +6578,7 @@ label *label161
 set .START_POWER_REQ :calc_charge_req*retval
 op sub *tmp20 @tick :t_startup2
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label163 greaterThan :calc_charge_req:secs 30
+jump *label163 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor2 @enabled
 jump *label164 notEqual *tmp21 false
 label *label163
@@ -6478,7 +6593,7 @@ label *label166
 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 op sub *tmp20 @tick :t_startup3
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label168 greaterThan :calc_charge_req:secs 30
+jump *label168 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor3 @enabled
 jump *label169 notEqual *tmp21 false
 label *label168
@@ -6493,7 +6608,7 @@ label *label171
 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 op sub *tmp20 @tick :t_startup4
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label173 greaterThan :calc_charge_req:secs 30
+jump *label173 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor4 @enabled
 jump *label174 notEqual *tmp21 false
 label *label173
@@ -6508,7 +6623,7 @@ label *label176
 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 op sub *tmp20 @tick :t_startup5
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label178 greaterThan :calc_charge_req:secs 30
+jump *label178 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor5 @enabled
 jump *label179 notEqual *tmp21 false
 label *label178
@@ -6561,10 +6676,10 @@ control enabled reactor1 false
 print "STOP out of cryo\n"
 jump *label229 always
 label *label200
-jump *label208 greaterThanEq :start_reactor:secs 30
+jump *label208 greaterThanEq *tmp23 1800
 op sub *tmp20 @tick :t_startup1
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label202 greaterThan :calc_charge_req:secs 30
+jump *label202 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor1 @enabled
 jump *label203 notEqual *tmp21 false
 label *label202
@@ -6721,10 +6836,10 @@ control enabled reactor2 false
 print "STOP out of cryo\n"
 jump *label268 always
 label *label239
-jump *label247 greaterThanEq :start_reactor:secs 30
+jump *label247 greaterThanEq *tmp23 1800
 op sub *tmp20 @tick :t_startup2
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label241 greaterThan :calc_charge_req:secs 30
+jump *label241 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor2 @enabled
 jump *label242 notEqual *tmp21 false
 label *label241
@@ -6905,10 +7020,10 @@ control enabled reactor3 false
 print "STOP out of cryo\n"
 jump *label307 always
 label *label278
-jump *label286 greaterThanEq :start_reactor:secs 30
+jump *label286 greaterThanEq *tmp23 1800
 op sub *tmp20 @tick :t_startup3
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label280 greaterThan :calc_charge_req:secs 30
+jump *label280 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor3 @enabled
 jump *label281 notEqual *tmp21 false
 label *label280
@@ -7053,10 +7168,10 @@ control enabled reactor4 false
 print "STOP out of cryo\n"
 jump *label346 always
 label *label317
-jump *label325 greaterThanEq :start_reactor:secs 30
+jump *label325 greaterThanEq *tmp23 1800
 op sub *tmp20 @tick :t_startup4
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label319 greaterThan :calc_charge_req:secs 30
+jump *label319 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor4 @enabled
 jump *label320 notEqual *tmp21 false
 label *label319
@@ -7201,10 +7316,10 @@ control enabled reactor5 false
 print "STOP out of cryo\n"
 jump *label385 always
 label *label356
-jump *label364 greaterThanEq :start_reactor:secs 30
+jump *label364 greaterThanEq *tmp23 1800
 op sub *tmp20 @tick :t_startup5
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label358 greaterThan :calc_charge_req:secs 30
+jump *label358 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor5 @enabled
 jump *label359 notEqual *tmp21 false
 label *label358

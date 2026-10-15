@@ -844,6 +844,11 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
     16 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
     17 op idiv :testAndSetMultiples:i *tmp30 2
     18 label *label44
+-    * jump *label48 greaterThan :testAndSetMultiples:i 250
++   19 jump *label48 greaterThanEq *tmp30 502
+    20 label *label45
+    21 op idiv *tmp35 :testAndSetMultiples:i 48
+    22 op mod *tmp37 :testAndSetMultiples:i 48
  
     32 label *label49
     33 label *label50
@@ -862,6 +867,11 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
     51 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
     52 op idiv :testAndSetMultiples:i *tmp30 2
     53 label *label55
+-    * jump *label59 greaterThan :testAndSetMultiples:i 250
++   54 jump *label59 greaterThanEq *tmp30 502
+    55 label *label56
+    56 op idiv *tmp35 :testAndSetMultiples:i 48
+    57 op mod *tmp37 :testAndSetMultiples:i 48
  
     67 label *label60
     68 label *label61
@@ -909,7 +919,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 -    * op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 -    * op idiv :testAndSetMultiples:i *tmp30 2
 -    * label *label44
--    * jump *label48 greaterThan :testAndSetMultiples:i 250
+-    * jump *label48 greaterThanEq *tmp30 502
 -    * label *label45
 -    * op idiv *tmp35 :testAndSetMultiples:i 48
 -    * op mod *tmp37 :testAndSetMultiples:i 48
@@ -943,7 +953,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 -    * op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 -    * op idiv :testAndSetMultiples:i *tmp30 2
 -    * label *label55
--    * jump *label59 greaterThan :testAndSetMultiples:i 250
+-    * jump *label59 greaterThanEq *tmp30 502
 -    * label *label56
 -    * op idiv *tmp35 :testAndSetMultiples:i 48
 -    * op mod *tmp37 :testAndSetMultiples:i 48
@@ -981,7 +991,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +   14 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +   15 op idiv :testAndSetMultiples:i *tmp30 2
 +   16 label *label67
-+   17 jump *label71 greaterThan :testAndSetMultiples:i 250
++   17 jump *label71 greaterThanEq *tmp30 502
 +   18 label *label68
 +   19 op idiv *tmp35 :testAndSetMultiples:i 48
 +   20 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1015,7 +1025,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +   48 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +   49 op idiv :testAndSetMultiples:i *tmp30 2
 +   50 label *label80
-+   51 jump *label84 greaterThan :testAndSetMultiples:i 250
++   51 jump *label84 greaterThanEq *tmp30 502
 +   52 label *label81
 +   53 op idiv *tmp35 :testAndSetMultiples:i 48
 +   54 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1050,7 +1060,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +   83 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +   84 op idiv :testAndSetMultiples:i *tmp30 2
 +   85 label *label94
-+   86 jump *label98 greaterThan :testAndSetMultiples:i 250
++   86 jump *label98 greaterThanEq *tmp30 502
 +   87 label *label95
 +   88 op idiv *tmp35 :testAndSetMultiples:i 48
 +   89 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1084,7 +1094,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  117 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  118 op idiv :testAndSetMultiples:i *tmp30 2
 +  119 label *label107
-+  120 jump *label111 greaterThan :testAndSetMultiples:i 250
++  120 jump *label111 greaterThanEq *tmp30 502
 +  121 label *label108
 +  122 op idiv *tmp35 :testAndSetMultiples:i 48
 +  123 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1119,7 +1129,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  152 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  153 op idiv :testAndSetMultiples:i *tmp30 2
 +  154 label *label121
-+  155 jump *label125 greaterThan :testAndSetMultiples:i 250
++  155 jump *label125 greaterThanEq *tmp30 502
 +  156 label *label122
 +  157 op idiv *tmp35 :testAndSetMultiples:i 48
 +  158 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1153,7 +1163,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  186 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  187 op idiv :testAndSetMultiples:i *tmp30 2
 +  188 label *label134
-+  189 jump *label138 greaterThan :testAndSetMultiples:i 250
++  189 jump *label138 greaterThanEq *tmp30 502
 +  190 label *label135
 +  191 op idiv *tmp35 :testAndSetMultiples:i 48
 +  192 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1188,7 +1198,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  221 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  222 op idiv :testAndSetMultiples:i *tmp30 2
 +  223 label *label148
-+  224 jump *label152 greaterThan :testAndSetMultiples:i 250
++  224 jump *label152 greaterThanEq *tmp30 502
 +  225 label *label149
 +  226 op idiv *tmp35 :testAndSetMultiples:i 48
 +  227 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1222,7 +1232,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  255 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  256 op idiv :testAndSetMultiples:i *tmp30 2
 +  257 label *label161
-+  258 jump *label165 greaterThan :testAndSetMultiples:i 250
++  258 jump *label165 greaterThanEq *tmp30 502
 +  259 label *label162
 +  260 op idiv *tmp35 :testAndSetMultiples:i 48
 +  261 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1274,8 +1284,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +   14 op mul *tmp30 5 5
 +   15 op idiv :testAndSetMultiples:i 25 2
     16 label *label67
--    * jump *label71 greaterThan :testAndSetMultiples:i 250
-+   17 jump *label71 greaterThan 12 250
+-    * jump *label71 greaterThanEq *tmp30 502
++   17 jump *label71 greaterThanEq 25 502
     18 label *label68
     19 op idiv *tmp35 :testAndSetMultiples:i 48
     20 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1318,8 +1328,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +   48 op mul *tmp30 7 7
 +   49 op idiv :testAndSetMultiples:i 49 2
     50 label *label80
--    * jump *label84 greaterThan :testAndSetMultiples:i 250
-+   51 jump *label84 greaterThan 24 250
+-    * jump *label84 greaterThanEq *tmp30 502
++   51 jump *label84 greaterThanEq 49 502
     52 label *label81
     53 op idiv *tmp35 :testAndSetMultiples:i 48
     54 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1363,8 +1373,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +   83 op mul *tmp30 11 11
 +   84 op idiv :testAndSetMultiples:i 121 2
     85 label *label94
--    * jump *label98 greaterThan :testAndSetMultiples:i 250
-+   86 jump *label98 greaterThan 60 250
+-    * jump *label98 greaterThanEq *tmp30 502
++   86 jump *label98 greaterThanEq 121 502
     87 label *label95
     88 op idiv *tmp35 :testAndSetMultiples:i 48
     89 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1407,8 +1417,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  117 op mul *tmp30 13 13
 +  118 op idiv :testAndSetMultiples:i 169 2
    119 label *label107
--    * jump *label111 greaterThan :testAndSetMultiples:i 250
-+  120 jump *label111 greaterThan 84 250
+-    * jump *label111 greaterThanEq *tmp30 502
++  120 jump *label111 greaterThanEq 169 502
    121 label *label108
    122 op idiv *tmp35 :testAndSetMultiples:i 48
    123 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1452,8 +1462,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  152 op mul *tmp30 17 17
 +  153 op idiv :testAndSetMultiples:i 289 2
    154 label *label121
--    * jump *label125 greaterThan :testAndSetMultiples:i 250
-+  155 jump *label125 greaterThan 144 250
+-    * jump *label125 greaterThanEq *tmp30 502
++  155 jump *label125 greaterThanEq 289 502
    156 label *label122
    157 op idiv *tmp35 :testAndSetMultiples:i 48
    158 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1496,8 +1506,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  186 op mul *tmp30 19 19
 +  187 op idiv :testAndSetMultiples:i 361 2
    188 label *label134
--    * jump *label138 greaterThan :testAndSetMultiples:i 250
-+  189 jump *label138 greaterThan 180 250
+-    * jump *label138 greaterThanEq *tmp30 502
++  189 jump *label138 greaterThanEq 361 502
    190 label *label135
    191 op idiv *tmp35 :testAndSetMultiples:i 48
    192 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1541,8 +1551,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  221 op mul *tmp30 23 23
 +  222 op idiv :testAndSetMultiples:i 529 2
    223 label *label148
--    * jump *label152 greaterThan :testAndSetMultiples:i 250
-+  224 jump *label152 greaterThan 264 250
+-    * jump *label152 greaterThanEq *tmp30 502
++  224 jump *label152 greaterThanEq 529 502
    225 label *label149
    226 op idiv *tmp35 :testAndSetMultiples:i 48
    227 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1585,8 +1595,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  255 op mul *tmp30 25 25
 +  256 op idiv :testAndSetMultiples:i 625 2
    257 label *label161
--    * jump *label165 greaterThan :testAndSetMultiples:i 250
-+  258 jump *label165 greaterThan 312 250
+-    * jump *label165 greaterThanEq *tmp30 502
++  258 jump *label165 greaterThanEq 625 502
    259 label *label162
    260 op idiv *tmp35 :testAndSetMultiples:i 48
    261 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1635,7 +1645,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 5 5
      9 op idiv :testAndSetMultiples:i 25 2
     10 label *label67
-    11 jump *label71 greaterThan 12 250
+    11 jump *label71 greaterThanEq 25 502
  
     28 op add :sumPrimesUpTo:sum 5 5
     29 label *label75
@@ -1654,7 +1664,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 7 7
     37 op idiv :testAndSetMultiples:i 49 2
     38 label *label80
-    39 jump *label84 greaterThan 24 250
+    39 jump *label84 greaterThanEq 49 502
  
     56 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
     57 label *label88
@@ -1674,7 +1684,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 11 11
     66 op idiv :testAndSetMultiples:i 121 2
     67 label *label94
-    68 jump *label98 greaterThan 60 250
+    68 jump *label98 greaterThanEq 121 502
  
     85 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
     86 label *label102
@@ -1693,7 +1703,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 13 13
     94 op idiv :testAndSetMultiples:i 169 2
     95 label *label107
-    96 jump *label111 greaterThan 84 250
+    96 jump *label111 greaterThanEq 169 502
  
    113 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
    114 label *label115
@@ -1713,7 +1723,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 17 17
    123 op idiv :testAndSetMultiples:i 289 2
    124 label *label121
-   125 jump *label125 greaterThan 144 250
+   125 jump *label125 greaterThanEq 289 502
  
    142 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
    143 label *label129
@@ -1732,7 +1742,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 19 19
    151 op idiv :testAndSetMultiples:i 361 2
    152 label *label134
-   153 jump *label138 greaterThan 180 250
+   153 jump *label138 greaterThanEq 361 502
  
    170 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
    171 label *label142
@@ -1752,7 +1762,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 23 23
    180 op idiv :testAndSetMultiples:i 529 2
    181 label *label148
-   182 jump *label152 greaterThan 264 250
+   182 jump *label152 greaterThanEq 529 502
  
    199 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
    200 label *label156
@@ -1771,14 +1781,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 25 25
    208 op idiv :testAndSetMultiples:i 625 2
    209 label *label161
-   210 jump *label165 greaterThan 312 250
+   210 jump *label165 greaterThanEq 625 502
 
 Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 instructions):
  
      8 jump *label72 notEqual :getBit*retval false
      9 op idiv :testAndSetMultiples:i 25 2
     10 label *label67
--    * jump *label71 greaterThan 12 250
+-    * jump *label71 greaterThanEq 25 502
     11 label *label68
     12 op idiv *tmp35 :testAndSetMultiples:i 48
     13 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1786,7 +1796,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
     35 jump *label85 notEqual :getBit*retval false
     36 op idiv :testAndSetMultiples:i 49 2
     37 label *label80
--    * jump *label84 greaterThan 24 250
+-    * jump *label84 greaterThanEq 49 502
     38 label *label81
     39 op idiv *tmp35 :testAndSetMultiples:i 48
     40 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1794,7 +1804,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
     63 jump *label99 notEqual :getBit*retval false
     64 op idiv :testAndSetMultiples:i 121 2
     65 label *label94
--    * jump *label98 greaterThan 60 250
+-    * jump *label98 greaterThanEq 121 502
     66 label *label95
     67 op idiv *tmp35 :testAndSetMultiples:i 48
     68 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1802,7 +1812,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
     90 jump *label112 notEqual :getBit*retval false
     91 op idiv :testAndSetMultiples:i 169 2
     92 label *label107
--    * jump *label111 greaterThan 84 250
+-    * jump *label111 greaterThanEq 169 502
     93 label *label108
     94 op idiv *tmp35 :testAndSetMultiples:i 48
     95 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1810,7 +1820,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    118 jump *label126 notEqual :getBit*retval false
    119 op idiv :testAndSetMultiples:i 289 2
    120 label *label121
--    * jump *label125 greaterThan 144 250
+-    * jump *label125 greaterThanEq 289 502
    121 label *label122
    122 op idiv *tmp35 :testAndSetMultiples:i 48
    123 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1818,7 +1828,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    145 jump *label139 notEqual :getBit*retval false
    146 op idiv :testAndSetMultiples:i 361 2
    147 label *label134
--    * jump *label138 greaterThan 180 250
+-    * jump *label138 greaterThanEq 361 502
    148 label *label135
    149 op idiv *tmp35 :testAndSetMultiples:i 48
    150 op mod *tmp37 :testAndSetMultiples:i 48
@@ -1826,7 +1836,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    173 jump *label153 notEqual :getBit*retval false
    174 op idiv :testAndSetMultiples:i 529 2
    175 label *label148
--    * jump *label152 greaterThan 264 250
+-    * jump *label152 greaterThanEq 529 502
 +  176 jump *label152 always
    177 label *label149
    178 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1835,7 +1845,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    201 jump *label166 notEqual :getBit*retval false
    202 op idiv :testAndSetMultiples:i 625 2
    203 label *label161
--    * jump *label165 greaterThan 312 250
+-    * jump *label165 greaterThanEq 625 502
 +  204 jump *label165 always
    205 label *label162
    206 op idiv *tmp35 :testAndSetMultiples:i 48

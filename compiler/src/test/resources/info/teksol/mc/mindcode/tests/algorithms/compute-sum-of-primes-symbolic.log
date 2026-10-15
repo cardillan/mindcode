@@ -842,6 +842,11 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
     19 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
     20 op idiv :testAndSetMultiples:i *tmp30 2
     21 label *label39
+-    * jump *label43 greaterThan :testAndSetMultiples:i 250
++   22 jump *label43 greaterThanEq *tmp30 502
+    23 label *label40
+    24 # "Function: def setBit(in bitIndex)"
+    25 op idiv *tmp35 :testAndSetMultiples:i 48
  
     36 label *label44
     37 label *label45
@@ -860,6 +865,11 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
     57 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
     58 op idiv :testAndSetMultiples:i *tmp30 2
     59 label *label50
+-    * jump *label54 greaterThan :testAndSetMultiples:i 250
++   60 jump *label54 greaterThanEq *tmp30 502
+    61 label *label51
+    62 # "Function: def setBit(in bitIndex)"
+    63 op idiv *tmp35 :testAndSetMultiples:i 48
  
     74 label *label55
     75 label *label56
@@ -910,7 +920,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 -    * op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 -    * op idiv :testAndSetMultiples:i *tmp30 2
 -    * label *label39
--    * jump *label43 greaterThan :testAndSetMultiples:i 250
+-    * jump *label43 greaterThanEq *tmp30 502
 -    * label *label40
 -    * # "Function: def setBit(in bitIndex)"
 -    * op idiv *tmp35 :testAndSetMultiples:i 48
@@ -947,7 +957,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 -    * op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 -    * op idiv :testAndSetMultiples:i *tmp30 2
 -    * label *label50
--    * jump *label54 greaterThan :testAndSetMultiples:i 250
+-    * jump *label54 greaterThanEq *tmp30 502
 -    * label *label51
 -    * # "Function: def setBit(in bitIndex)"
 -    * op idiv *tmp35 :testAndSetMultiples:i 48
@@ -988,7 +998,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +   17 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +   18 op idiv :testAndSetMultiples:i *tmp30 2
 +   19 label *label62
-+   20 jump *label66 greaterThan :testAndSetMultiples:i 250
++   20 jump *label66 greaterThanEq *tmp30 502
 +   21 label *label63
 +   22 # "Function: def setBit(in bitIndex)"
 +   23 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1025,7 +1035,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +   54 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +   55 op idiv :testAndSetMultiples:i *tmp30 2
 +   56 label *label75
-+   57 jump *label79 greaterThan :testAndSetMultiples:i 250
++   57 jump *label79 greaterThanEq *tmp30 502
 +   58 label *label76
 +   59 # "Function: def setBit(in bitIndex)"
 +   60 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1063,7 +1073,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +   92 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +   93 op idiv :testAndSetMultiples:i *tmp30 2
 +   94 label *label89
-+   95 jump *label93 greaterThan :testAndSetMultiples:i 250
++   95 jump *label93 greaterThanEq *tmp30 502
 +   96 label *label90
 +   97 # "Function: def setBit(in bitIndex)"
 +   98 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1100,7 +1110,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  129 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  130 op idiv :testAndSetMultiples:i *tmp30 2
 +  131 label *label102
-+  132 jump *label106 greaterThan :testAndSetMultiples:i 250
++  132 jump *label106 greaterThanEq *tmp30 502
 +  133 label *label103
 +  134 # "Function: def setBit(in bitIndex)"
 +  135 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1138,7 +1148,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  167 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  168 op idiv :testAndSetMultiples:i *tmp30 2
 +  169 label *label116
-+  170 jump *label120 greaterThan :testAndSetMultiples:i 250
++  170 jump *label120 greaterThanEq *tmp30 502
 +  171 label *label117
 +  172 # "Function: def setBit(in bitIndex)"
 +  173 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1175,7 +1185,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  204 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  205 op idiv :testAndSetMultiples:i *tmp30 2
 +  206 label *label129
-+  207 jump *label133 greaterThan :testAndSetMultiples:i 250
++  207 jump *label133 greaterThanEq *tmp30 502
 +  208 label *label130
 +  209 # "Function: def setBit(in bitIndex)"
 +  210 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1213,7 +1223,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  242 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  243 op idiv :testAndSetMultiples:i *tmp30 2
 +  244 label *label143
-+  245 jump *label147 greaterThan :testAndSetMultiples:i 250
++  245 jump *label147 greaterThanEq *tmp30 502
 +  246 label *label144
 +  247 # "Function: def setBit(in bitIndex)"
 +  248 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1250,7 +1260,7 @@ Modifications by Unroll loop at line 29:5 (+125 instructions):
 +  279 op mul *tmp30 :sumPrimesUpTo:i :sumPrimesUpTo:i
 +  280 op idiv :testAndSetMultiples:i *tmp30 2
 +  281 label *label156
-+  282 jump *label160 greaterThan :testAndSetMultiples:i 250
++  282 jump *label160 greaterThanEq *tmp30 502
 +  283 label *label157
 +  284 # "Function: def setBit(in bitIndex)"
 +  285 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1304,8 +1314,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +   17 op mul *tmp30 5 5
 +   18 op idiv :testAndSetMultiples:i 25 2
     19 label *label62
--    * jump *label66 greaterThan :testAndSetMultiples:i 250
-+   20 jump *label66 greaterThan 12 250
+-    * jump *label66 greaterThanEq *tmp30 502
++   20 jump *label66 greaterThanEq 25 502
     21 label *label63
     22 # "Function: def setBit(in bitIndex)"
     23 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1350,8 +1360,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +   54 op mul *tmp30 7 7
 +   55 op idiv :testAndSetMultiples:i 49 2
     56 label *label75
--    * jump *label79 greaterThan :testAndSetMultiples:i 250
-+   57 jump *label79 greaterThan 24 250
+-    * jump *label79 greaterThanEq *tmp30 502
++   57 jump *label79 greaterThanEq 49 502
     58 label *label76
     59 # "Function: def setBit(in bitIndex)"
     60 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1397,8 +1407,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +   92 op mul *tmp30 11 11
 +   93 op idiv :testAndSetMultiples:i 121 2
     94 label *label89
--    * jump *label93 greaterThan :testAndSetMultiples:i 250
-+   95 jump *label93 greaterThan 60 250
+-    * jump *label93 greaterThanEq *tmp30 502
++   95 jump *label93 greaterThanEq 121 502
     96 label *label90
     97 # "Function: def setBit(in bitIndex)"
     98 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1443,8 +1453,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  129 op mul *tmp30 13 13
 +  130 op idiv :testAndSetMultiples:i 169 2
    131 label *label102
--    * jump *label106 greaterThan :testAndSetMultiples:i 250
-+  132 jump *label106 greaterThan 84 250
+-    * jump *label106 greaterThanEq *tmp30 502
++  132 jump *label106 greaterThanEq 169 502
    133 label *label103
    134 # "Function: def setBit(in bitIndex)"
    135 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1490,8 +1500,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  167 op mul *tmp30 17 17
 +  168 op idiv :testAndSetMultiples:i 289 2
    169 label *label116
--    * jump *label120 greaterThan :testAndSetMultiples:i 250
-+  170 jump *label120 greaterThan 144 250
+-    * jump *label120 greaterThanEq *tmp30 502
++  170 jump *label120 greaterThanEq 289 502
    171 label *label117
    172 # "Function: def setBit(in bitIndex)"
    173 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1536,8 +1546,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  204 op mul *tmp30 19 19
 +  205 op idiv :testAndSetMultiples:i 361 2
    206 label *label129
--    * jump *label133 greaterThan :testAndSetMultiples:i 250
-+  207 jump *label133 greaterThan 180 250
+-    * jump *label133 greaterThanEq *tmp30 502
++  207 jump *label133 greaterThanEq 361 502
    208 label *label130
    209 # "Function: def setBit(in bitIndex)"
    210 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1583,8 +1593,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  242 op mul *tmp30 23 23
 +  243 op idiv :testAndSetMultiples:i 529 2
    244 label *label143
--    * jump *label147 greaterThan :testAndSetMultiples:i 250
-+  245 jump *label147 greaterThan 264 250
+-    * jump *label147 greaterThanEq *tmp30 502
++  245 jump *label147 greaterThanEq 529 502
    246 label *label144
    247 # "Function: def setBit(in bitIndex)"
    248 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1629,8 +1639,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +  279 op mul *tmp30 25 25
 +  280 op idiv :testAndSetMultiples:i 625 2
    281 label *label156
--    * jump *label160 greaterThan :testAndSetMultiples:i 250
-+  282 jump *label160 greaterThan 312 250
+-    * jump *label160 greaterThanEq *tmp30 502
++  282 jump *label160 greaterThanEq 625 502
    283 label *label157
    284 # "Function: def setBit(in bitIndex)"
    285 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1682,7 +1692,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 5 5
     12 op idiv :testAndSetMultiples:i 25 2
     13 label *label62
-    14 jump *label66 greaterThan 12 250
+    14 jump *label66 greaterThanEq 25 502
  
     32 op add :sumPrimesUpTo:sum 5 5
     33 label *label70
@@ -1703,7 +1713,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 7 7
     43 op idiv :testAndSetMultiples:i 49 2
     44 label *label75
-    45 jump *label79 greaterThan 24 250
+    45 jump *label79 greaterThanEq 49 502
  
     63 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
     64 label *label83
@@ -1725,7 +1735,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 11 11
     75 op idiv :testAndSetMultiples:i 121 2
     76 label *label89
-    77 jump *label93 greaterThan 60 250
+    77 jump *label93 greaterThanEq 121 502
  
     95 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
     96 label *label97
@@ -1746,7 +1756,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 13 13
    106 op idiv :testAndSetMultiples:i 169 2
    107 label *label102
-   108 jump *label106 greaterThan 84 250
+   108 jump *label106 greaterThanEq 169 502
  
    126 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
    127 label *label110
@@ -1768,7 +1778,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 17 17
    138 op idiv :testAndSetMultiples:i 289 2
    139 label *label116
-   140 jump *label120 greaterThan 144 250
+   140 jump *label120 greaterThanEq 289 502
  
    158 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
    159 label *label124
@@ -1789,7 +1799,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 19 19
    169 op idiv :testAndSetMultiples:i 361 2
    170 label *label129
-   171 jump *label133 greaterThan 180 250
+   171 jump *label133 greaterThanEq 361 502
  
    189 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
    190 label *label137
@@ -1811,7 +1821,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 23 23
    201 op idiv :testAndSetMultiples:i 529 2
    202 label *label143
-   203 jump *label147 greaterThan 264 250
+   203 jump *label147 greaterThanEq 529 502
  
    221 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
    222 label *label151
@@ -1832,14 +1842,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 -    * op mul *tmp30 25 25
    232 op idiv :testAndSetMultiples:i 625 2
    233 label *label156
-   234 jump *label160 greaterThan 312 250
+   234 jump *label160 greaterThanEq 625 502
 
 Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 instructions):
  
     11 jump *label67 notEqual :getBit*retval false
     12 op idiv :testAndSetMultiples:i 25 2
     13 label *label62
--    * jump *label66 greaterThan 12 250
+-    * jump *label66 greaterThanEq 25 502
     14 label *label63
     15 # "Function: def setBit(in bitIndex)"
     16 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1847,7 +1857,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
     41 jump *label80 notEqual :getBit*retval false
     42 op idiv :testAndSetMultiples:i 49 2
     43 label *label75
--    * jump *label79 greaterThan 24 250
+-    * jump *label79 greaterThanEq 49 502
     44 label *label76
     45 # "Function: def setBit(in bitIndex)"
     46 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1855,7 +1865,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
     72 jump *label94 notEqual :getBit*retval false
     73 op idiv :testAndSetMultiples:i 121 2
     74 label *label89
--    * jump *label93 greaterThan 60 250
+-    * jump *label93 greaterThanEq 121 502
     75 label *label90
     76 # "Function: def setBit(in bitIndex)"
     77 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1863,7 +1873,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    102 jump *label107 notEqual :getBit*retval false
    103 op idiv :testAndSetMultiples:i 169 2
    104 label *label102
--    * jump *label106 greaterThan 84 250
+-    * jump *label106 greaterThanEq 169 502
    105 label *label103
    106 # "Function: def setBit(in bitIndex)"
    107 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1871,7 +1881,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    133 jump *label121 notEqual :getBit*retval false
    134 op idiv :testAndSetMultiples:i 289 2
    135 label *label116
--    * jump *label120 greaterThan 144 250
+-    * jump *label120 greaterThanEq 289 502
    136 label *label117
    137 # "Function: def setBit(in bitIndex)"
    138 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1879,7 +1889,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    163 jump *label134 notEqual :getBit*retval false
    164 op idiv :testAndSetMultiples:i 361 2
    165 label *label129
--    * jump *label133 greaterThan 180 250
+-    * jump *label133 greaterThanEq 361 502
    166 label *label130
    167 # "Function: def setBit(in bitIndex)"
    168 op idiv *tmp35 :testAndSetMultiples:i 48
@@ -1887,7 +1897,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    194 jump *label148 notEqual :getBit*retval false
    195 op idiv :testAndSetMultiples:i 529 2
    196 label *label143
--    * jump *label147 greaterThan 264 250
+-    * jump *label147 greaterThanEq 529 502
 +  197 jump *label147 always
    198 label *label144
    199 # "Function: def setBit(in bitIndex)"
@@ -1896,7 +1906,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-7 ins
    225 jump *label161 notEqual :getBit*retval false
    226 op idiv :testAndSetMultiples:i 625 2
    227 label *label156
--    * jump *label160 greaterThan 312 250
+-    * jump *label160 greaterThanEq 625 502
 +  228 jump *label160 always
    229 label *label157
    230 # "Function: def setBit(in bitIndex)"

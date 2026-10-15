@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for instructions provided by the Mlog Dev Tools mod v0.11.6: `assert` and `asserttype`. 
 * Added the [`devtools` system library](/doc/syntax/SYSTEM-LIBRARY-DEVTOOLS.markdown). This library provides access to the Mlog Dev Tools mod's instructions not provided directly by the compiler (`breakpoint`, `profile`, `reset` and `snapshot`). The `breakpoint` instruction can be used to trigger variale dump in Mindcode's processor emulator.
 * Added a new `dump-variables-on-breakpoint` execution flag. When set, the processor emulator will dump all variables on an active `breakpoint` instruction and will contibue executing the code. 
+* Added constant folding for the integer division (`\`) to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown).
 
 ### Changed
 

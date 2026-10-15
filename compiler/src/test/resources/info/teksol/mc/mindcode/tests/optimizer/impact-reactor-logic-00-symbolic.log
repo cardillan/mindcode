@@ -5369,6 +5369,126 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-4 ins
 
 Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1 instructions):
  
+    67 # "Function: def calc_charge_req(in reactor, in time)"
+    68 op sub *tmp94 @tick :t_startup1
+    69 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label139 greaterThan :calc_charge_req:secs 30
++   70 jump *label139 greaterThanEq *tmp94 1860
+    71 sensor *tmp97 reactor1 @enabled
+    72 jump *label140 notEqual *tmp97 false
+    73 label *label139
+ 
+    86 # "Function: def calc_charge_req(in reactor, in time)"
+    87 op sub *tmp94 @tick :t_startup2
+    88 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label144 greaterThan :calc_charge_req:secs 30
++   89 jump *label144 greaterThanEq *tmp94 1860
+    90 sensor *tmp97 reactor2 @enabled
+    91 jump *label145 notEqual *tmp97 false
+    92 label *label144
+ 
+   105 # "Function: def calc_charge_req(in reactor, in time)"
+   106 op sub *tmp94 @tick :t_startup3
+   107 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label149 greaterThan :calc_charge_req:secs 30
++  108 jump *label149 greaterThanEq *tmp94 1860
+   109 sensor *tmp97 reactor3 @enabled
+   110 jump *label150 notEqual *tmp97 false
+   111 label *label149
+ 
+   124 # "Function: def calc_charge_req(in reactor, in time)"
+   125 op sub *tmp94 @tick :t_startup4
+   126 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label154 greaterThan :calc_charge_req:secs 30
++  127 jump *label154 greaterThanEq *tmp94 1860
+   128 sensor *tmp97 reactor4 @enabled
+   129 jump *label155 notEqual *tmp97 false
+   130 label *label154
+ 
+   143 # "Function: def calc_charge_req(in reactor, in time)"
+   144 op sub *tmp94 @tick :t_startup5
+   145 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label159 greaterThan :calc_charge_req:secs 30
++  146 jump *label159 greaterThanEq *tmp94 1860
+   147 sensor *tmp97 reactor5 @enabled
+   148 jump *label160 notEqual *tmp97 false
+   149 label *label159
+ 
+   208 print "STOP out of cryo\n"
+   209 jump *label193 always
+   210 label *label181
+-    * jump *label189 greaterThanEq :start_reactor:secs 30
++  211 jump *label189 greaterThanEq *tmp104 1800
+   212 label *label182
+   213 # "Function: def calc_charge_req(in reactor, in time)"
+   214 op sub *tmp94 @tick :t_startup1
+   215 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label183 greaterThan :calc_charge_req:secs 30
++  216 jump *label183 greaterThanEq *tmp94 1860
+   217 sensor *tmp97 reactor1 @enabled
+   218 jump *label184 notEqual *tmp97 false
+   219 label *label183
+ 
+   390 print "STOP out of cryo\n"
+   391 jump *label232 always
+   392 label *label220
+-    * jump *label228 greaterThanEq :start_reactor:secs 30
++  393 jump *label228 greaterThanEq *tmp104 1800
+   394 label *label221
+   395 # "Function: def calc_charge_req(in reactor, in time)"
+   396 op sub *tmp94 @tick :t_startup2
+   397 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label222 greaterThan :calc_charge_req:secs 30
++  398 jump *label222 greaterThanEq *tmp94 1860
+   399 sensor *tmp97 reactor2 @enabled
+   400 jump *label223 notEqual *tmp97 false
+   401 label *label222
+ 
+   601 print "STOP out of cryo\n"
+   602 jump *label271 always
+   603 label *label259
+-    * jump *label267 greaterThanEq :start_reactor:secs 30
++  604 jump *label267 greaterThanEq *tmp104 1800
+   605 label *label260
+   606 # "Function: def calc_charge_req(in reactor, in time)"
+   607 op sub *tmp94 @tick :t_startup3
+   608 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label261 greaterThan :calc_charge_req:secs 30
++  609 jump *label261 greaterThanEq *tmp94 1860
+   610 sensor *tmp97 reactor3 @enabled
+   611 jump *label262 notEqual *tmp97 false
+   612 label *label261
+ 
+   768 print "STOP out of cryo\n"
+   769 jump *label310 always
+   770 label *label298
+-    * jump *label306 greaterThanEq :start_reactor:secs 30
++  771 jump *label306 greaterThanEq *tmp104 1800
+   772 label *label299
+   773 # "Function: def calc_charge_req(in reactor, in time)"
+   774 op sub *tmp94 @tick :t_startup4
+   775 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label300 greaterThan :calc_charge_req:secs 30
++  776 jump *label300 greaterThanEq *tmp94 1860
+   777 sensor *tmp97 reactor4 @enabled
+   778 jump *label301 notEqual *tmp97 false
+   779 label *label300
+ 
+   935 print "STOP out of cryo\n"
+   936 jump *label349 always
+   937 label *label337
+-    * jump *label345 greaterThanEq :start_reactor:secs 30
++  938 jump *label345 greaterThanEq *tmp104 1800
+   939 label *label338
+   940 # "Function: def calc_charge_req(in reactor, in time)"
+   941 op sub *tmp94 @tick :t_startup5
+   942 op idiv :calc_charge_req:secs *tmp94 60
+-    * jump *label339 greaterThan :calc_charge_req:secs 30
++  943 jump *label339 greaterThanEq *tmp94 1860
+   944 sensor *tmp97 reactor5 @enabled
+   945 jump *label340 notEqual *tmp97 false
+   946 label *label339
+ 
   1116 print "\n"
   1117 label *label34
   1118 label *label27
@@ -5711,7 +5831,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    183 jump *label193 always
    184 label *label181
-   185 jump *label189 greaterThanEq :start_reactor:secs 30
+   185 jump *label189 greaterThanEq *tmp104 1800
 -    * label *label182
    186 # "Function: def calc_charge_req(in reactor, in time)"
    187 op sub *tmp94 @tick :t_startup1
@@ -5748,7 +5868,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    356 jump *label232 always
    357 label *label220
-   358 jump *label228 greaterThanEq :start_reactor:secs 30
+   358 jump *label228 greaterThanEq *tmp104 1800
 -    * label *label221
    359 # "Function: def calc_charge_req(in reactor, in time)"
    360 op sub *tmp94 @tick :t_startup2
@@ -5795,7 +5915,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    554 jump *label271 always
    555 label *label259
-   556 jump *label267 greaterThanEq :start_reactor:secs 30
+   556 jump *label267 greaterThanEq *tmp104 1800
 -    * label *label260
    557 # "Function: def calc_charge_req(in reactor, in time)"
    558 op sub *tmp94 @tick :t_startup3
@@ -5823,7 +5943,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    714 jump *label310 always
    715 label *label298
-   716 jump *label306 greaterThanEq :start_reactor:secs 30
+   716 jump *label306 greaterThanEq *tmp104 1800
 -    * label *label299
    717 # "Function: def calc_charge_req(in reactor, in time)"
    718 op sub *tmp94 @tick :t_startup4
@@ -5851,7 +5971,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
    874 jump *label349 always
    875 label *label337
-   876 jump *label345 greaterThanEq :start_reactor:secs 30
+   876 jump *label345 greaterThanEq *tmp104 1800
 -    * label *label338
    877 # "Function: def calc_charge_req(in reactor, in time)"
    878 op sub *tmp94 @tick :t_startup5
@@ -5975,7 +6095,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label193 always
 +  183 jump *label210 always
    184 label *label181
-   185 jump *label189 greaterThanEq :start_reactor:secs 30
+   185 jump *label189 greaterThanEq *tmp104 1800
    186 # "Function: def calc_charge_req(in reactor, in time)"
  
    204 control enabled reactor1 false
@@ -6037,7 +6157,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label232 always
 +  355 jump *label249 always
    356 label *label220
-   357 jump *label228 greaterThanEq :start_reactor:secs 30
+   357 jump *label228 greaterThanEq *tmp104 1800
    358 # "Function: def calc_charge_req(in reactor, in time)"
  
    376 control enabled reactor2 false
@@ -6099,7 +6219,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label271 always
 +  553 jump *label288 always
    554 label *label259
-   555 jump *label267 greaterThanEq :start_reactor:secs 30
+   555 jump *label267 greaterThanEq *tmp104 1800
    556 # "Function: def calc_charge_req(in reactor, in time)"
  
    574 control enabled reactor3 false
@@ -6161,7 +6281,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label310 always
 +  713 jump *label327 always
    714 label *label298
-   715 jump *label306 greaterThanEq :start_reactor:secs 30
+   715 jump *label306 greaterThanEq *tmp104 1800
    716 # "Function: def calc_charge_req(in reactor, in time)"
  
    734 control enabled reactor4 false
@@ -6223,7 +6343,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label349 always
 +  873 jump *label366 always
    874 label *label337
-   875 jump *label345 greaterThanEq :start_reactor:secs 30
+   875 jump *label345 greaterThanEq *tmp104 1800
    876 # "Function: def calc_charge_req(in reactor, in time)"
  
    894 control enabled reactor5 false
@@ -6433,7 +6553,7 @@ op or :emerg_shutdown :check_radar*retval *tmp4
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup1
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label139 greaterThan :calc_charge_req:secs 30
+jump *label139 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor1 @enabled
 jump *label140 notEqual *tmp21 false
 label *label139
@@ -6449,7 +6569,7 @@ set .START_POWER_REQ :calc_charge_req*retval
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup2
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label144 greaterThan :calc_charge_req:secs 30
+jump *label144 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor2 @enabled
 jump *label145 notEqual *tmp21 false
 label *label144
@@ -6465,7 +6585,7 @@ op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup3
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label149 greaterThan :calc_charge_req:secs 30
+jump *label149 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor3 @enabled
 jump *label150 notEqual *tmp21 false
 label *label149
@@ -6481,7 +6601,7 @@ op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup4
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label154 greaterThan :calc_charge_req:secs 30
+jump *label154 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor4 @enabled
 jump *label155 notEqual *tmp21 false
 label *label154
@@ -6497,7 +6617,7 @@ op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup5
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label159 greaterThan :calc_charge_req:secs 30
+jump *label159 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor5 @enabled
 jump *label160 notEqual *tmp21 false
 label *label159
@@ -6551,11 +6671,11 @@ control enabled reactor1 false
 print "STOP out of cryo\n"
 jump *label210 always
 label *label181
-jump *label189 greaterThanEq :start_reactor:secs 30
+jump *label189 greaterThanEq *tmp23 1800
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup1
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label183 greaterThan :calc_charge_req:secs 30
+jump *label183 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor1 @enabled
 jump *label184 notEqual *tmp21 false
 label *label183
@@ -6714,11 +6834,11 @@ control enabled reactor2 false
 print "STOP out of cryo\n"
 jump *label249 always
 label *label220
-jump *label228 greaterThanEq :start_reactor:secs 30
+jump *label228 greaterThanEq *tmp23 1800
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup2
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label222 greaterThan :calc_charge_req:secs 30
+jump *label222 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor2 @enabled
 jump *label223 notEqual *tmp21 false
 label *label222
@@ -6902,11 +7022,11 @@ control enabled reactor3 false
 print "STOP out of cryo\n"
 jump *label288 always
 label *label259
-jump *label267 greaterThanEq :start_reactor:secs 30
+jump *label267 greaterThanEq *tmp23 1800
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup3
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label261 greaterThan :calc_charge_req:secs 30
+jump *label261 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor3 @enabled
 jump *label262 notEqual *tmp21 false
 label *label261
@@ -7052,11 +7172,11 @@ control enabled reactor4 false
 print "STOP out of cryo\n"
 jump *label327 always
 label *label298
-jump *label306 greaterThanEq :start_reactor:secs 30
+jump *label306 greaterThanEq *tmp23 1800
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup4
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label300 greaterThan :calc_charge_req:secs 30
+jump *label300 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor4 @enabled
 jump *label301 notEqual *tmp21 false
 label *label300
@@ -7202,11 +7322,11 @@ control enabled reactor5 false
 print "STOP out of cryo\n"
 jump *label366 always
 label *label337
-jump *label345 greaterThanEq :start_reactor:secs 30
+jump *label345 greaterThanEq *tmp23 1800
 # "Function: def calc_charge_req(in reactor, in time)"
 op sub *tmp20 @tick :t_startup5
 op idiv :calc_charge_req:secs *tmp20 60
-jump *label339 greaterThan :calc_charge_req:secs 30
+jump *label339 greaterThanEq *tmp20 1860
 sensor *tmp21 reactor5 @enabled
 jump *label340 notEqual *tmp21 false
 label *label339

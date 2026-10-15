@@ -39,24 +39,25 @@ class ConditionOptimizer extends BaseOptimizer {
                             && findDefiningInstruction(logicIterator, cond, variable) instanceof OpInstruction oper
                             && !oper.isUpdating() && oper.getResult().equals(variable)) {
 
-                        Operation operation = oper.getOperation();
-                        if (advanced(cond) && canFoldConstants(operation)) {
-                            foldConstants(logicIterator, cond, oper, condArgs);
-                        } else if (operation.isCondition(true) && canInjectCondition(cond, oper)) {
-                            // We've already verified we can support strictNotEqual here
-                            Condition opCondition = operation.toExistingCondition(true);
-                            Condition newCondition = cond.getCondition() == Condition.EQUAL ? opCondition.inverse(true) : opCondition;
-                            logicIterator.set(cond.withOperands(newCondition, oper.getX(), oper.getY()));
+                        // Try folding first
+                        if (!advanced(cond) || !foldConstants(logicIterator, cond, oper, condArgs)) {
+                            Operation operation = oper.getOperation();
+                            if (operation.isCondition(true) && canInjectCondition(cond, oper)) {
+                                // We've already verified we can support strictNotEqual here
+                                Condition opCondition = operation.toExistingCondition(true);
+                                Condition newCondition = cond.getCondition() == Condition.EQUAL ? opCondition.inverse(true) : opCondition;
+                                logicIterator.set(cond.withOperands(newCondition, oper.getX(), oper.getY()));
 
-                            if (getVariableReferences(variable).size() == 1) {
-                                removeInstruction(oper);
+                                if (getVariableReferences(variable).size() == 1) {
+                                    removeInstruction(oper);
+                                }
+                            } else if (operation == Operation.STRICT_NOT_EQUAL && cond.isPlainComparison()) {
+                                // Invert both operation and condition
+                                replaceInstruction(oper, oper.withOperands(Operation.STRICT_EQUAL, oper.getX(), oper.getY()));
+                                logicIterator.set(cond.invert(getGlobalProfile()));
+                            } else if (cond instanceof OpInstruction next){
+                                tryMergeOperations(logicIterator, oper, next);
                             }
-                        } else if (operation == Operation.STRICT_NOT_EQUAL && cond.isPlainComparison()) {
-                            // Invert both operation and condition
-                            replaceInstruction(oper, oper.withOperands(Operation.STRICT_EQUAL, oper.getX(), oper.getY()));
-                            logicIterator.set(cond.invert(getGlobalProfile()));
-                        } else if (cond instanceof OpInstruction next){
-                            tryMergeOperations(logicIterator, oper, next);
                         }
                     }
                 }
@@ -118,52 +119,89 @@ class ConditionOptimizer extends BaseOptimizer {
         return null;
     }
 
-    private boolean canFoldConstants(Operation operation) {
-        return switch (operation) {
+    private boolean canFoldConstants(OpInstruction operation, Condition condition) {
+        return switch (operation.getOperation()) {
             case ADD, SUB, MUL, DIV -> true;
+            case IDIV -> switch (condition){
+                case LESS_THAN, GREATER_THAN, LESS_THAN_EQ, GREATER_THAN_EQ ->
+                        operation.getY().isNumericConstant() && operation.getY().isInteger() && operation.getY().getIntValue() > 0;
+                default -> false;
+            };
             default -> false;
         };
     }
 
-    private void foldConstants(LogicIterator logicIterator, ConditionalInstruction cond, OpInstruction oper,
+    private boolean foldConstants(LogicIterator logicIterator, ConditionalInstruction cond, OpInstruction oper,
             Tuple2<LogicValue, LogicValue> condArgs) {
+        if (!canFoldConstants(oper, cond.getCondition())) return false;
+
         Tuple2<LogicValue, LogicValue> operArgs = extractConstantOperand(oper);
         if (operArgs.e1().isNumericLiteral() && operArgs.e2() instanceof LogicVariable operVar) {
             // Number is first in a non-commutative condition --> swap
             boolean condSwapped = !cond.getCondition().isCommutative() && condArgs.e1() == cond.getX();
             // Number is first in a non-commutative operation --> swap
             boolean operSwapped = !oper.getOperation().isCommutative() && operArgs.e1() == oper.getX();
-            double condValue = condArgs.e1().getDoubleValue();
-            double operValue = operArgs.e1().getDoubleValue();
+
+            // The condition has a form of x <operation> a <condition> b, where x is a variable and a, b are constants
+            double a = operArgs.e1().getDoubleValue();
+            double b = condArgs.e1().getDoubleValue();
             double comparison, control;
-            double min = abs(condValue) < abs(operValue) ? condValue : operValue;
+            double min = abs(b) < abs(a) ? b : a;
+            Condition condition = condSwapped ^ operSwapped ? cond.getCondition().opposite() : cond.getCondition();
 
             switch (oper.getOperation()) {
                 case ADD -> {
-                    comparison = condValue - operValue;
-                    control = abs(condValue) < abs(operValue) ? comparison + operValue : condValue - comparison;
+                    comparison = b - a;
+                    control = abs(b) < abs(a) ? comparison + a : b - comparison;
                 }
                 case MUL -> {
-                    comparison = condValue / operValue;
-                    control = abs(condValue) < abs(operValue) ? comparison * operValue : condValue / comparison;
+                    comparison = b / a;
+                    control = abs(b) < abs(a) ? comparison * a : b / comparison;
                 }
                 case SUB -> {
                     if (operSwapped) {
-                        comparison = operValue - condValue;
-                        control = abs(condValue) < abs(operValue) ? operValue - comparison : comparison + condValue;
+                        comparison = a - b;
+                        control = abs(b) < abs(a) ? a - comparison : comparison + b;
                     } else {
-                        comparison = condValue + operValue;
-                        control = abs(condValue) < abs(operValue) ? comparison - operValue : comparison - condValue;
+                        comparison = b + a;
+                        control = abs(b) < abs(a) ? comparison - a : comparison - b;
                     }
                 }
                 case DIV -> {
                     if (operSwapped) {
-                        comparison = operValue / condValue;
-                        control = abs(condValue) < abs(operValue) ? operValue / comparison : comparison * condValue;
+                        comparison = a / b;
+                        control = abs(b) < abs(a) ? a / comparison : comparison * b;
                     } else {
-                        comparison = condValue * operValue;
-                        control = abs(condValue) < abs(operValue) ? comparison / operValue : comparison / condValue;
+                        comparison = b * a;
+                        control = abs(b) < abs(a) ? comparison / a : comparison / b;
                     }
+                }
+                case IDIV -> {
+                    // The condition in general has the form of x \ a < b, for different operators
+                    // The condition value must be an integer; can be negative though
+
+                    if (operSwapped ||b != (int) b || a != (int) a || a <= 0 || Math.abs((b + 1) * a) > 1L << 52) return false;
+                    Condition c = condSwapped ? cond.getCondition().opposite() : cond.getCondition();
+
+                    if (b >= 0) {
+                        switch (c) {
+                            case LESS_THAN ->       { condition = Condition.LESS_THAN; comparison = a * b; }
+                            case LESS_THAN_EQ ->    { condition = Condition.LESS_THAN; comparison = a * (b + 1); }
+                            case GREATER_THAN ->    { condition = Condition.GREATER_THAN_EQ; comparison = a * (b + 1); }
+                            case GREATER_THAN_EQ -> { condition = Condition.GREATER_THAN_EQ; comparison = a * b; }
+                            default -> throw new IllegalStateException("Unexpected condition.");
+                        }
+                    } else {
+                        switch (c) {
+                            case LESS_THAN ->       { condition = Condition.LESS_THAN_EQ; comparison = a * (b + 1); }
+                            case LESS_THAN_EQ ->    { condition = Condition.LESS_THAN_EQ; comparison = a * b; }
+                            case GREATER_THAN ->    { condition = Condition.GREATER_THAN; comparison = a * b; }
+                            case GREATER_THAN_EQ -> { condition = Condition.GREATER_THAN; comparison = a * (b + 1); }
+                            default -> throw new IllegalStateException("Unexpected condition.");
+                        }
+                    }
+                    // Can't get a precision error here
+                    control = min;
                 }
                 default -> throw new IllegalStateException();
             }
@@ -171,18 +209,20 @@ class ConditionOptimizer extends BaseOptimizer {
             // Precision check
             // Note: strict equality can never get here
             double limit = cond.getCondition().isEquality() ? 1e-7 : 0;
-            if (abs(control - min) > limit) return;
+            if (abs(control - min) > limit) return false;
 
             Optional<LogicLiteral> literal = instructionProcessor.createLiteral(SourcePosition.EMPTY,
                     comparison, false);
 
             if (literal.isPresent()) {
-                Condition condition = condSwapped ^ operSwapped ? cond.getCondition().opposite() : cond.getCondition();
                 logicIterator.set(cond.withOperands(condition, operVar, literal.get()));
                 if (getVariableReferences(oper.getResult()).size() == 1) {
                     removeInstruction(oper);
                 }
+                return true;
             }
         }
+
+        return false;
     }
 }

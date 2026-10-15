@@ -4,7 +4,7 @@ detector-00.mnd:                                  120   0E3BEC8B5680A194   E4E2D
 factory-monitor-00.mnd:                           325   863D948F911F2E7A   011AC6AB7BF47DFA
 factory-monitor-silicon-00.mnd:                   269   92331871E01FEB02   F39B9F9108ADA440
 factory-monitor-surge-alloy-00.mnd:               174   B570A56D64509A07   2EE8C543B503FB68
-impact-reactor-logic-00.mnd:                      854   76EAE225FB4E0441   3A7D0963B7D71707
+impact-reactor-logic-00.mnd:                      854   76EAE225FB4E0441   B5F24411C6832D65
 instant-overdrive-dome-01.mnd:                    853   FC2767B9BB219136   A97B735BBECE0926
 item-counter-00.mnd:                               90   DBF0CE14BD53EC86   33FB26CA9E08B5A5
 item-counter-micro-00.mnd:                        128   AB81229C62913E11   1E5DED430A1A8B95
