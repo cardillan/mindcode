@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -27,7 +27,7 @@ public abstract class RegularSharedArrayConstructor extends SharedArrayConstruct
 
         String baseName = arrayStore.getName();
         proc = LogicVariable.arrayAccess(baseName, "*proc", nameCreator.arrayAccess(baseName, "proc"));
-        shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
+        shared = arrayStore.getArrayType() == ArrayType.REMOTE_SHARED;
     }
 
     @Override

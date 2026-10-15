@@ -4,7 +4,6 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
@@ -312,16 +311,15 @@ class ExpressionOptimizer extends BaseOptimizer {
     private void processReadArrInstruction(LogicIterator logicIterator, ReadArrInstruction ix) {
         ArrayStore arrayStore = ix.getArray().getArrayStore();
         if (ix.getIndex().isNumericConstant() && arrayStore.optimizeElementAccess()) {
-            List<ValueStore> elements = arrayStore.getElements();
             if (!ix.getIndex().isLong()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
-            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= elements.size()) {
-                error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= arrayStore.size()) {
+                error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, arrayStore.size() - 1);
             } else {
                 LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
                         ix.getAstContext(), logicIterator::add);
                 logicIterator.remove();
-                elements.get(ix.getIndex().getIntValue()).readValue(creator, ix.getResult());
+                arrayStore.getElement(creator, ix.getIndex().getIntValue()).readValue(creator, ix.getResult());
             }
         }
     }
@@ -420,16 +418,15 @@ class ExpressionOptimizer extends BaseOptimizer {
     private void processWriteArrInstruction(LogicIterator logicIterator, WriteArrInstruction ix) {
         ArrayStore arrayStore = ix.getArray().getArrayStore();
         if (ix.getIndex().isNumericConstant() && arrayStore.optimizeElementAccess()) {
-            List<ValueStore> elements = arrayStore.getElements();
             if (!ix.getIndex().isLong()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
-            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= elements.size()) {
-                error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= arrayStore.size()) {
+                error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, arrayStore.size() - 1);
             } else {
                 LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
                         ix.getAstContext(), logicIterator::add);
                 logicIterator.remove();
-                elements.get(ix.getIndex().getIntValue()).setValue(creator, ix.getValue());
+                arrayStore.getElement(creator, ix.getIndex().getIntValue()).setValue(creator, ix.getValue());
             }
         }
     }

@@ -1,10 +1,8 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.List;
 
 /// A wrapper around ArrayStore to allow using ArrayStore instances as instruction arguments
 @NullMarked
@@ -22,21 +20,21 @@ public class LogicArray extends AbstractArgument {
         return array;
     }
 
+    public ArrayType getArrayType() {
+        return array.getArrayType();
+    }
+
     @Override
     public String toMlog() {
         return mlog;
     }
 
-    public List<ValueStore> getElements() {
-        return array.getElements();
+    public int size() {
+        return array.size();
     }
 
-    public int getSize() {
-        return array.getSize();
-    }
-
-    public int getFullSize() {
-        return array.getFullSize();
+    public int fullSize() {
+        return array.fullSize();
     }
 
     public boolean isDeclaredRemote() {

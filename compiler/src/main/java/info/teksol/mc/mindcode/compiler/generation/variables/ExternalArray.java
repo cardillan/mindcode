@@ -1,59 +1,33 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 
 @NullMarked
-public class ExternalArray extends AbstractArrayStore {
+public class ExternalArray extends ElementsArrayStore {
     private final LogicVariable memory;
     private final LogicNumber startOffsetNumber;
-    private final LogicArray logicArray;
 
     public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int startOffset,
-            @Nullable ArrayStore masterArray, List<ValueStore> elements) {
-        super(sourcePosition, name, startOffset, elements.size(), masterArray, elements);
+            @Nullable ElementsArrayStore masterArray, List<ValueStore> elements) {
+        super(sourcePosition, name, ArrayType.EXTERNAL, startOffset, elements.size(), masterArray, elements, false);
         this.memory = memory;
         this.startOffsetNumber = LogicNumber.create(startOffset);
-        logicArray = LogicArray.create(this);
     }
 
     @Override
     public boolean valid() {
         return true;
-    }
-
-    @Override
-    public boolean isDeclaredRemote() {
-        return false;
-    }
-
-    @Override
-    public ArrayType getArrayType() {
-        return ArrayType.EXTERNAL;
-    }
-
-    @Override
-    public LogicArray getLogicArray() {
-        return logicArray;
-    }
-
-    @Override
-    public @Nullable MindcodeFunction getFunction() {
-        return null;
-    }
-
-    @Override
-    public LogicValue getArrayOffset() {
-        return LogicNumber.ZERO;
     }
 
     @Override
@@ -76,11 +50,6 @@ public class ExternalArray extends AbstractArrayStore {
     }
 
     @Override
-    public ArrayStore nonrecursive() {
-        return this;
-    }
-
-    @Override
     public ValueStore getElement(ContextfulInstructionCreator creator, int index) {
         return elements.get(index);
     }
@@ -90,78 +59,16 @@ public class ExternalArray extends AbstractArrayStore {
             boolean safeAccess) {
         if (startOffset == 0) {
             LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
-            return new ExternalArrayElement(sourcePosition, fixedIndex, creator.nextTemp(), safeAccess);
+            return new ArrayElement(sourcePosition, logicArray, fixedIndex, creator.nextTemp(), safeAccess);
         } else {
             LogicVariable actualIndex = creator.nextTemp();
             creator.createOp(Operation.ADD, actualIndex, index.getValue(creator), startOffsetNumber);
-            return new ExternalArrayElement(sourcePosition, actualIndex, creator.nextTemp(), safeAccess);
+            return new ArrayElement(sourcePosition, logicArray, actualIndex, creator.nextTemp(), safeAccess);
         }
     }
 
     @Override
     public ExternalArray withSourcePosition(SourcePosition sourcePosition) {
-        return new ExternalArray(sourcePosition, name, memory, startOffset, getMasterArray(), elements);
-    }
-
-    private class ExternalArrayElement implements ValueStore {
-        private final SourcePosition sourcePosition;
-        private final LogicValue index;
-        private final LogicVariable transferVariable;
-        private final boolean safeAccess;
-
-        public ExternalArrayElement(SourcePosition sourcePosition, LogicValue index, LogicVariable transferVariable,
-                boolean safeAccess) {
-            this.sourcePosition = sourcePosition;
-            this.index = index;
-            this.transferVariable = transferVariable;
-            this.safeAccess = safeAccess;
-        }
-
-        @Override
-        public boolean isComplex() {
-            return true;
-        }
-
-        @Override
-        public boolean isLvalue() {
-            return true;
-        }
-
-        @Override
-        public LogicValue getValue(ContextfulInstructionCreator creator) {
-            creator.createReadArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
-            return transferVariable;
-        }
-
-        @Override
-        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-            creator.createReadArr(target, logicArray, index).setSafeAccess(safeAccess);
-        }
-
-        @Override
-        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
-            creator.createWriteArr(value, logicArray, index).setSafeAccess(safeAccess);
-        }
-
-        @Override
-        public SourcePosition sourcePosition() {
-            return sourcePosition;
-        }
-
-        @Override
-        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
-            valueSetter.accept(transferVariable);
-            creator.createWriteArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
-        }
-
-        @Override
-        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
-            return transferVariable;
-        }
-
-        @Override
-        public void storeValue(ContextfulInstructionCreator creator) {
-            creator.createWriteArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
-        }
+        return new ExternalArray(sourcePosition, name, memory, startOffset, (ElementsArrayStore) masterArray, elements);
     }
 }

@@ -18,26 +18,22 @@ import java.util.stream.IntStream;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 
 @NullMarked
-public class InternalArray extends AbstractArrayStore {
+public class InternalArray extends ElementsArrayStore {
     private final LogicKeyword lookupType;
-    private final ArrayType arrayType;
     private final LogicValue arrayOffset;
     private final boolean declaredRemote;
     private final @Nullable MindcodeFunction function;
     private final @Nullable LogicVariable processor;      // Actual processor in case of shared arrays
-    private final LogicArray logicArray;
 
     private InternalArray(SourcePosition sourcePosition, LogicKeyword lookupType, String name, boolean declaredRemote,
             @Nullable MindcodeFunction function, @Nullable LogicVariable processor, LogicValue arrayOffset, int startOffset, int size,
-            List<ValueStore> elements, @Nullable ArrayStore masterArray, ArrayType arrayType, boolean subarray) {
-        super(sourcePosition, name, startOffset, size, masterArray, elements);
+            List<ValueStore> elements, @Nullable ElementsArrayStore masterArray, ArrayType arrayType, boolean subarray) {
+        super(sourcePosition, name, arrayType, startOffset, size, masterArray, elements, subarray);
         this.lookupType = lookupType;
         this.processor = processor;
         this.function = function;
         this.declaredRemote = declaredRemote;
-        this.arrayType = arrayType;
         this.arrayOffset = arrayOffset;
-        logicArray = subarray ? LogicArray.create(this, startOffset, startOffset + elements.size()) : LogicArray.create(this);
     }
 
     public static InternalArray create(InstructionProcessor instructionProcessor, ArrayNameCreator nameCreator,
@@ -111,16 +107,6 @@ public class InternalArray extends AbstractArrayStore {
     }
 
     @Override
-    public ArrayType getArrayType() {
-        return arrayType;
-    }
-
-    @Override
-    public LogicArray getLogicArray() {
-        return logicArray;
-    }
-
-    @Override
     public @Nullable MindcodeFunction getFunction() {
         return function;
     }
@@ -144,14 +130,14 @@ public class InternalArray extends AbstractArrayStore {
     @Override
     public ArrayStore offset(int offset) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + offset,
-                size, elements, getMasterArray(), arrayType, getMasterArray().getSize() != getSize());
+                size, elements, getMasterArray(), arrayType, getMasterArray().size() != size());
     }
 
     @Override
     public ArrayStore nonrecursive() {
         return hasArrayOffset()
                 ? new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, LogicNumber.ZERO, startOffset,
-                        size, elements.subList(0, size), getMasterArray(), arrayType, getMasterArray().getSize() != getSize())
+                        size, elements.subList(0, size), getMasterArray(), arrayType, getMasterArray().size() != size())
                 : this;
     }
 
@@ -162,7 +148,7 @@ public class InternalArray extends AbstractArrayStore {
     @Override
     public ValueStore getElement(ContextfulInstructionCreator creator, int index) {
         if (hasArrayOffset()) {
-            return new InternalArrayElement(sourcePosition, LogicNumber.create(index), creator.nextTemp(), true);
+            return new ArrayElement(sourcePosition, logicArray, LogicNumber.create(index), creator.nextTemp(), true);
         } else {
             return elements.get(index);
         }
@@ -172,75 +158,13 @@ public class InternalArray extends AbstractArrayStore {
     public ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index,
             boolean safeAccess) {
         LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
-        return new InternalArrayElement(sourcePosition, fixedIndex, creator.nextTemp(), safeAccess);
+        return new ArrayElement(sourcePosition, logicArray, fixedIndex, creator.nextTemp(), safeAccess);
     }
 
     @Override
     public InternalArray withSourcePosition(SourcePosition sourcePosition) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset,
-                startOffset, size, elements, masterArray, arrayType, getMasterArray().getSize() != getSize());
-    }
-
-    public class InternalArrayElement implements ValueStore {
-        private final SourcePosition sourcePosition;
-        private final LogicValue index;
-        private final LogicVariable transferVariable;
-        private final boolean safeAccess;
-
-        private InternalArrayElement(SourcePosition sourcePosition, LogicValue index, LogicVariable transferVariable,
-                boolean safeAccess) {
-            this.sourcePosition = sourcePosition;
-            this.index = index;
-            this.transferVariable = transferVariable;
-            this.safeAccess = safeAccess;
-        }
-
-        @Override
-        public boolean isComplex() {
-            return true;
-        }
-
-        @Override
-        public boolean isLvalue() {
-            return arrayType != ArrayType.CONSTANT;
-        }
-
-        @Override
-        public LogicValue getValue(ContextfulInstructionCreator creator) {
-            creator.createReadArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
-            return transferVariable;
-        }
-
-        @Override
-        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-            creator.createReadArr(target, logicArray, index).setSafeAccess(safeAccess);
-        }
-
-        @Override
-        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
-            creator.createWriteArr(value, logicArray, index).setSafeAccess(safeAccess);
-        }
-
-        @Override
-        public SourcePosition sourcePosition() {
-            return sourcePosition;
-        }
-
-        @Override
-        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
-            valueSetter.accept(transferVariable);
-            creator.createWriteArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
-        }
-
-        @Override
-        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
-            return transferVariable;
-        }
-
-        @Override
-        public void storeValue(ContextfulInstructionCreator creator) {
-            creator.createWriteArr(transferVariable, logicArray, index).setSafeAccess(safeAccess);
-        }
+                startOffset, size, elements, (ElementsArrayStore) masterArray, arrayType, getMasterArray().size() != size());
     }
 
     private static ValueStore constantWrap(ValueStore valueStore) {

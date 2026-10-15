@@ -21,8 +21,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-import static info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore.ArrayType.EXTERNAL;
-import static info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore.ArrayType.INTERNAL;
+import static info.teksol.mc.mindcode.compiler.generation.variables.ArrayType.*;
 import static info.teksol.mc.mindcode.logic.arguments.LogicNull.NULL;
 import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
@@ -152,28 +151,29 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
 
     private ValueStore applyArrayOperation(AstExpression node, ArrayStore target, ValueStore eval,
             @Nullable Operation operation, boolean returnPriorValue) {
-        if (operation != null || !(eval instanceof ArrayStore source) || source.getSize() < 0 || target.getSize() < 0) {
+        if (operation != null || !(eval instanceof ArrayStore source) || source.size() < 0 || target.size() < 0) {
             error(node, ERR.ARRAY_UNSUPPORTED_OPERATION);
             return target;
         }
 
-        int size = target.getSize();
+        int size = target.size();
 
-        if (size != source.getSize()) {
+        if (size != source.size()) {
             error(node, ERR.ARRAY_ASSIGNMENT_SIZE_MISMATCH, target.getName(), size,
-                    source.getName(), source.getSize());
+                    source.getName(), source.size());
             return target;
         }
 
         if (size >= node.getProfile().getArrayIterationThreshold() || source.hasArrayOffset() || target.hasArrayOffset() ||
-                source.getArrayType() == EXTERNAL && target.getArrayType() == EXTERNAL) {
+                (source.getArrayType() == EXTERNAL || source.getArrayType() == LARGE) &&
+                (target.getArrayType() == EXTERNAL || target.getArrayType() == LARGE)) {
             copyArraysUsingLoop(node, target, source);
         } else if (source.getArrayType() == INTERNAL && target.getArrayType() == INTERNAL) {
             copyInternalArrays(target, source);
         } else {
             // One external, one internal. Can't be the same array.
             for (int i = 0; i < size; i++) {
-                target.getElements().get(i).copyFrom(assembler, source.getElements().get(i));
+                target.getElement(assembler, i).copyFrom(assembler, source.getElement(assembler,i));
             }
         }
 
@@ -181,23 +181,23 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
     }
 
     private void copyInternalArrays(ArrayStore target, ArrayStore source) {
-        int size = target.getSize();
+        int size = target.size();
         if (target.getStartOffset() <= source.getStartOffset()) {
             // Forward direction
             for (int i = 0; i < size; i++) {
-                target.getElements().get(i).copyFrom(assembler, source.getElements().get(i));
+                target.getElement(assembler, i).copyFrom(assembler, source.getElement(assembler,i));
             }
         } else {
             // Reverse direction
             for (int i = size - 1; i >= 0; i--) {
-                target.getElements().get(i).copyFrom(assembler, source.getElements().get(i));
+                target.getElement(assembler, i).copyFrom(assembler, source.getElement(assembler,i));
             }
         }
     }
 
     private void copyArraysUsingLoop(AstExpression node, ArrayStore target, ArrayStore source) {
         boolean reverse = target.getStartOffset() > source.getStartOffset();
-        int size = target.getSize();
+        int size = target.size();
 
         LogicVariable index = assembler.nextTemp().withType(ArgumentType.LOCAL_VARIABLE);
         if (reverse) {

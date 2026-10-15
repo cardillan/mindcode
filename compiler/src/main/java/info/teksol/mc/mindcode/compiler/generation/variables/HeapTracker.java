@@ -118,11 +118,8 @@ public class HeapTracker extends CompilerMessageEmitter {
                 error(identifier, ERR.EXT_STORAGE_EXCEEDED_ARRAY, identifier.getName(), size, memory.size() * blockSize);
             }
 
-            List<ValueStore> elements = Collections.nCopies(size, new ExternalVariable(identifier.sourcePosition(),
-                    LogicVariable.INVALID, LogicVariable.INVALID, LogicVariable.INVALID));
-
-            return new ExternalArray(identifier.sourcePosition(),
-                    nameCreator.arrayBase(null, "", identifier.getName(), 0), LogicVariable.INVALID, 0, null, elements);
+            return new LargeArray(identifier.sourcePosition(),
+                    nameCreator.arrayBase(null, "", identifier.getName(), 0), List.of(), null, 0);
         } else {
             LogicVariable memory;
             List<ValueStore> elements;

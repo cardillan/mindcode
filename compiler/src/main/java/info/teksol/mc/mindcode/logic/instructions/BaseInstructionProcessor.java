@@ -233,6 +233,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     public void setupArrayAccessInstruction(ArrayAccessInstruction instruction) {
         switch (instruction.getArray().getArrayStore().getArrayType()) {
             case EXTERNAL -> instruction.setArrayOrganization(ArrayOrganization.EXTERNAL, ArrayConstruction.REGULAR);
+            case LARGE -> instruction.setArrayOrganization(ArrayOrganization.LARGE, ArrayConstruction.REGULAR);
             case CONSTANT -> instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR)
                     .setArrayFolded(isSupported(SELECT));
 

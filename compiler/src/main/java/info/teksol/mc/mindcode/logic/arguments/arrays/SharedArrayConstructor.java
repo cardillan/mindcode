@@ -68,7 +68,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             creator.createLabel(startLabel).setMarker(startLabel);
             LogicVariable jumpValue = folded ? processor.nextTemp() : arrayInd;
             if (folded) {
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
                 creator.createOp(Operation.MOD, jumpValue, arrayInd, modulo);
             }
             creator.createMultiJump(firstLabel, jumpValue, LogicNumber.ZERO, marker);
@@ -78,8 +78,8 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         List<LogicLabel> branchLabels = new ArrayList<>();
         if (folded) {
             LogicNumber limit = useTextTables
-                    ? LogicNumber.create((arrayStore.getFullSize() + 1) / 2)
-                    : LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
+                    ? LogicNumber.create((arrayStore.fullSize() + 1) / 2)
+                    : LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
             generateFoldedJumpTable(creator, firstLabel, marker,
                     arrayInd, limit, arrayElem, createExit, false, branchLabels, _ -> {});
         } else {
@@ -135,7 +135,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             creator.createOp(Operation.SHL, branchIndex, index, LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
             LogicVariable branch = folded ? creator.nextTemp() : branchIndex;
             if (folded) {
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
                 creator.createOp(Operation.MOD, branch, branchIndex, modulo);
             }
             creator.createMultiCall(jumpTable.label(), branch, jumpTable.marker())

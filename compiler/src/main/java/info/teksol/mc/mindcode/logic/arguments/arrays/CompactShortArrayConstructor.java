@@ -29,7 +29,7 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
 
         NameCreator nameCreator = context.nameCreator();
         String baseName = arrayStore.getName();
-        arraySize = arrayStore.getFullSize();
+        arraySize = arrayStore.fullSize();
         useSelects = processor.isSupported(Opcode.SELECT);
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
 

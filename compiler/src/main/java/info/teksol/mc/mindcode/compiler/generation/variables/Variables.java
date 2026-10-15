@@ -347,9 +347,9 @@ public class Variables extends CompilerMessageEmitter {
     }
 
     private boolean matches(ArrayStore array, List<ValueStore> initialValues) {
-        if (array.getFullSize() != initialValues.size()) return false;
-        for (int i = 0; i < array.getFullSize(); i++) {
-            if (!array.getElements().get(i).unwrap().equals(initialValues.get(i))) return false;
+        if (array.fullSize() != initialValues.size() || !(array instanceof ElementsArrayStore arr)) return false;
+        for (int i = 0; i < array.fullSize(); i++) {
+            if (!arr.getElements().get(i).unwrap().equals(initialValues.get(i))) return false;
         }
         return true;
     }
@@ -735,7 +735,7 @@ public class Variables extends CompilerMessageEmitter {
         switch (unwrapped) {
             case LogicVariable variable -> verifyMlogConflict(variable, variable.sourcePosition());
             case InternalArray array -> {
-                if (array.getArrayType() == ArrayStore.ArrayType.INTERNAL) {
+                if (array.getArrayType() == ArrayType.INTERNAL) {
                     array.getElements().stream().filter(LogicVariable.class::isInstance)
                             .map(LogicVariable.class::cast).forEach(variable -> verifyMlogConflict(variable, array.sourcePosition()));
                 }

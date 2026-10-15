@@ -10,8 +10,6 @@ import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
-
 @NullMarked
 public interface ArrayStore extends ValueStore {
 
@@ -19,12 +17,11 @@ public interface ArrayStore extends ValueStore {
 
     String getName();
 
-    /// Size of the array. -1 for a dynamically sized array.
-    int getSize();
+    /// Logical size of the array. -1 for a dynamically sized array.
+    int size();
 
-    default int getFullSize() {
-        return getElements().size();
-    }
+    /// The physical size of the array (differs from the logical size for local arrays in recursive functions). -1 for a dynamically sized array.
+    int fullSize();
 
     ArrayStore getMasterArray();
 
@@ -44,12 +41,12 @@ public interface ArrayStore extends ValueStore {
         return getArrayOffset() != LogicNumber.ZERO;
     }
 
-    List<ValueStore> getElements();
-
     ArrayStore subarray(SourcePosition sourcePosition, int start, int end);
 
     ArrayStore offset(int offset);
 
+    /// When a recursive function is turned non-recursive, the local arrays need to be replaced with their non-recursive
+    /// variants too. This function provides the non-recursive variant of this array store.
     ArrayStore nonrecursive();
 
     ValueStore getElement(ContextfulInstructionCreator creator, int index);
@@ -73,25 +70,4 @@ public interface ArrayStore extends ValueStore {
     /// it is the offset inside the backing array. For external arrays, it is always the offset inside the external
     /// memory block.
     int getStartOffset();
-
-    enum ArrayType {
-        /// Residing in the current processor.
-        /// Even arrays declared `remote` are internal within the current module
-        INTERNAL,
-
-        /// Constant array elements, no variables involved
-        CONSTANT,
-
-        /// The array of local linked blocks
-        LINKS,
-
-        /// Residing in a memory cell or memory bank
-        EXTERNAL,
-
-        /// Residing in a remote processor
-        REMOTE,
-
-        /// Residing in remote processors, multiplexed
-        REMOTE_SHARED,
-    }
 }

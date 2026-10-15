@@ -41,7 +41,7 @@ public class SingleElementArrayConstructor extends TablelessArrayConstructor {
         generateBoundsCheck(astContext, consumer, instruction.getIndex());
 
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
-        ValueStore element = arrayStore.getElements().getFirst();
+        ValueStore element = arrayStore.getElement(creator, 0);
         switch (instruction) {
             case ReadArrInstruction rix -> element.readValue(creator, rix.getResult());
             case WriteArrInstruction wix -> element.setValue(creator, wix.getValue());

@@ -59,8 +59,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             ValueStore expression = variables.findVariable(id.getName(), true);
             if (expression instanceof LinkArray) return Integer.MIN_VALUE;
             if (expression instanceof ArrayStore arrayStore &&
-                    (!arrayStore.optimizeElementAccess() || arrayStore.getSize() >= group.getProfile().getArrayIterationThreshold())) {
-                return arrayStore.getSize();
+                    (!arrayStore.optimizeElementAccess() || arrayStore.size() >= group.getProfile().getArrayIterationThreshold())) {
+                return arrayStore.size();
             }
         }
         return 0;
@@ -513,9 +513,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                         error(value, ERR.FOR_EACH_INVALID_LINKS);
                         return LogicVariable.INVALID;
                     }
-                    case ArrayStore arrayStore -> {
+                    case ElementsArrayStore arrayStore -> {
                         if (arrayStore.hasArrayOffset()) {
-                            int n = arrayStore.getSize();
+                            int n = arrayStore.size();
                             values.addAll(0, Collections.nCopies(n, LogicVariable.INVALID));
                             for (int i = 0; i < n; i++) {
                                 int index = descending ? n - 1 - i : i;

@@ -103,7 +103,7 @@ public class InitStackInstruction extends BaseInstruction {
 
             // Setup array indexes
             recursiveFunctions.stream().flatMap(f -> f.getArrays().stream())
-                    .forEach(a -> creator.createSet((LogicVariable) a.getArrayOffset(), LogicNumber.create(-a.getSize())));
+                    .forEach(a -> creator.createSet((LogicVariable) a.getArrayOffset(), LogicNumber.create(-a.size())));
         }
     }
 }

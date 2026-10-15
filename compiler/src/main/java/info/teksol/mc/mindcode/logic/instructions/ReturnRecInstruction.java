@@ -63,7 +63,7 @@ public class ReturnRecInstruction extends BaseInstruction {
         MindcodeFunction function = getExistingFunction();
         function.getArrays().forEach(array -> {
             if (array.getArrayOffset() instanceof LogicVariable offset) {
-                creator.createOp(SUB, offset, offset, LogicNumber.create(array.getSize()));
+                creator.createOp(SUB, offset, offset, LogicNumber.create(array.size()));
             }
         });
         if (externalStack) {

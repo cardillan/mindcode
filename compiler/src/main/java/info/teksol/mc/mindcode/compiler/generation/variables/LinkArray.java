@@ -2,13 +2,13 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
@@ -16,48 +16,20 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 @NullMarked
 public class LinkArray extends AbstractArrayStore {
     private final LogicNumber startOffsetNumber;
-    private final LogicArray logicArray;
 
     public LinkArray(String name) {
-        super(SourcePosition.EMPTY, name, 0, -1, null, List.of());
+        super(SourcePosition.EMPTY, name, ArrayType.LINKS, 0, -1, null, false);
         this.startOffsetNumber = LogicNumber.create(startOffset);
-        logicArray = LogicArray.create(this);
     }
 
     private LinkArray(SourcePosition sourcePosition, String name, int startOffset, ArrayStore masterArray) {
-        super(sourcePosition, name, startOffset, -1, masterArray, List.of());
+        super(sourcePosition, name, ArrayType.LINKS, startOffset, -1, masterArray, false);
         this.startOffsetNumber = LogicNumber.create(startOffset);
-        logicArray = LogicArray.create(this);
     }
 
     @Override
     public boolean valid() {
         return true;
-    }
-
-    @Override
-    public boolean isDeclaredRemote() {
-        return false;
-    }
-
-    @Override
-    public ArrayType getArrayType() {
-        return ArrayType.LINKS;
-    }
-
-    @Override
-    public LogicArray getLogicArray() {
-        return logicArray;
-    }
-
-    @Override
-    public @Nullable MindcodeFunction getFunction() {
-        return null;
-    }
-
-    @Override
-    public LogicValue getArrayOffset() {
-        return LogicNumber.ZERO;
     }
 
     @Override
@@ -68,11 +40,6 @@ public class LinkArray extends AbstractArrayStore {
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
         return new LinkArray(sourcePosition, name, startOffset + start, this);
-    }
-
-    @Override
-    public ArrayStore nonrecursive() {
-        return this;
     }
 
     @Override

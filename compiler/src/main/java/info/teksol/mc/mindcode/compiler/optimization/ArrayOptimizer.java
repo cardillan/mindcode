@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -116,9 +116,9 @@ class ArrayOptimizer extends BaseOptimizer {
         List<ArrayAccessInstruction> arrayInstructions = instructionStream()
                 .filter(ArrayAccessInstruction.class::isInstance)
                 .map(ArrayAccessInstruction.class::cast)
-                .filter(ix -> ix.getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.INTERNAL
+                .filter(ix -> ix.getArray().getArrayStore().getArrayType() == ArrayType.INTERNAL
                         && ix.getArrayOrganization().supportsLookup() && !ix.getArray().isDeclaredRemote()
-                        && ix.getArray().getArrayStore().getMasterArray().getFullSize() >= MIN_LOOKUP_CAPACITY)
+                        && ix.getArray().getArrayStore().getMasterArray().fullSize() >= MIN_LOOKUP_CAPACITY)
                 .toList();
 
         if (arrayInstructions.isEmpty()) return;
@@ -148,9 +148,9 @@ class ArrayOptimizer extends BaseOptimizer {
             int capacity = lookupCapacity.remove(lookupType);
 
             String selected = arrays.entrySet().stream()
-                    .filter(e -> e.getValue().getFirst().getArray().getArrayStore().getMasterArray().getFullSize() <= capacity)
+                    .filter(e -> e.getValue().getFirst().getArray().getArrayStore().getMasterArray().fullSize() <= capacity)
                     .max(Comparator.comparingInt(
-                            (Map.Entry<String, List<ArrayAccessInstruction>> e) -> e.getValue().getFirst().getArray().getFullSize())
+                            (Map.Entry<String, List<ArrayAccessInstruction>> e) -> e.getValue().getFirst().getArray().fullSize())
                             .thenComparingDouble(e -> arrayWeights.get(e.getKey())))
                     .map(Map.Entry::getKey)
                     .orElse(null);
@@ -168,7 +168,7 @@ class ArrayOptimizer extends BaseOptimizer {
     }
 
     private ArrayConstruction computeArrayConstruction(ArrayAccessInstruction ix) {
-        if (ix.getArray().getArrayStore().getFullSize() == 1) {
+        if (ix.getArray().getArrayStore().fullSize() == 1) {
             return ArrayConstruction.REGULAR;
         } else if (ix.getArrayOrganization().isInlined() && !ix.getArrayConstructor().folded()
                 && !ix.isCompactAccessSource() && !ix.isCompactAccessTarget()) {
@@ -179,7 +179,7 @@ class ArrayOptimizer extends BaseOptimizer {
     }
 
     private ArrayOrganization computeArrayOrganization(ArrayAccessInstruction ix) {
-        return switch (ix.getArray().getArrayStore().getFullSize()) {
+        return switch (ix.getArray().getArrayStore().fullSize()) {
             case 1 -> ArrayOrganization.SINGLE;
             case 2 -> selectSupported && getGlobalProfile().useShortArrays() ? ArrayOrganization.SHORT : ix.getArrayOrganization();
             default -> ix.getArrayOrganization();
@@ -435,7 +435,7 @@ class ArrayOptimizer extends BaseOptimizer {
 
         @Override
         public boolean canApply(ArrayAccessInstruction instruction) {
-            return instruction.getArray().getFullSize() <= limit && instruction.getArrayOrganization().canInlineShort();
+            return instruction.getArray().fullSize() <= limit && instruction.getArrayOrganization().canInlineShort();
         }
 
         @Override

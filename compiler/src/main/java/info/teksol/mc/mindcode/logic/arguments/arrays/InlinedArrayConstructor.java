@@ -53,7 +53,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 generateBoundsCheck(astContext, consumer, instruction.getIndex());
                 creator.createOp(Operation.SHL, tmp1, index, LogicNumber.ONE).setNonNegativeInt(index);
                 LogicVariable tmp2 = creator.nextTemp();
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
                 creator.createOp(Operation.MOD, tmp2, tmp1, modulo);
                 tmp = tmp2;
             } else {
@@ -75,7 +75,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
             Runnable createExit = () -> creator.createJumpUnconditional(finalLabel);
             if (folded()) {
-                LogicNumber limit = LogicNumber.create((arrayStore.getFullSize() + 1) / 2);
+                LogicNumber limit = LogicNumber.create((arrayStore.fullSize() + 1) / 2);
                 generateFoldedJumpTable(creator, firstLabel, marker, index, limit, arrayElem,
                         createExit, true, branchLabels, ix -> ix.setNonNegativeIntTable(index));
             } else {
@@ -90,13 +90,13 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     protected final int inlinedTableSize() {
-        return (folded() ? roundUpToEven(arrayStore.getFullSize()) : 2 * arrayStore.getFullSize()) - 1;
+        return (folded() ? roundUpToEven(arrayStore.fullSize()) : 2 * arrayStore.fullSize()) - 1;
     }
 
     protected final double inlinedTableStepsSavings() {
         // The last jump in an inlined jump table is eliminated
         // Hit twice as often for even-sized folded arrays, or with text tables
-        boolean even = arrayStore.getFullSize() % 2 == 0;
-        return (folded() && (even || useTextTables) ? 2.0 : 1.0) / arrayStore.getFullSize();
+        boolean even = arrayStore.fullSize() % 2 == 0;
+        return (folded() && (even || useTextTables) ? 2.0 : 1.0) / arrayStore.fullSize();
     }
 }

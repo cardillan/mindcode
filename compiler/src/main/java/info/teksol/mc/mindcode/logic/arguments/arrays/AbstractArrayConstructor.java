@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.logic.arguments.arrays;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ElementsArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -30,7 +30,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected final ArrayAccessInstruction instruction;
     protected final ArrayConstruction arrayConstruction;
     protected final AccessType accessType;
-    protected final ArrayStore arrayStore;
+    protected final ElementsArrayStore arrayStore;
     protected final boolean useTextTables;
 
     public AbstractArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
@@ -40,7 +40,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         this.instruction = instruction;
         this.arrayConstruction = instruction.getArrayConstruction();
         this.accessType = instruction.getAccessType();
-        this.arrayStore = instruction.getArray().getArrayStore();
+        this.arrayStore = (ElementsArrayStore) instruction.getArray().getArrayStore();
         this.useTextTables = instruction.getLocalProfile().useTextJumpTables();
 
         instruction.resetIndirectVariables();
@@ -82,8 +82,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     @Override
     public final int getSharedTableSize() {
         return folded()
-                ? roundUpToEven(arrayStore.getFullSize()) + 2 * flag(profile.isSymbolicLabels())
-                : 2 * arrayStore.getFullSize() + flag(profile.isSymbolicLabels());
+                ? roundUpToEven(arrayStore.fullSize()) + 2 * flag(profile.isSymbolicLabels())
+                : 2 * arrayStore.fullSize() + flag(profile.isSymbolicLabels());
     }
 
     protected void computeSharedJumpTableSize(@Nullable Map<String, Integer> sharedStructures) {
@@ -130,7 +130,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index) {
         if (!profile.isBoundaryChecks() || instruction.isSafeAccess()) return;
 
-        int maxIndex = arrayStore.getSize() - 1;
+        int maxIndex = arrayStore.size() - 1;
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
 
         LogicInstruction instruction = processor.createAssertBounds(astContext, LogicKeyword.create("multiple"), LogicNumber.create(1),

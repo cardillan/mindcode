@@ -2,16 +2,21 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.logic.arguments.LogicArray;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-
-import java.util.List;
 
 /// Represents an array (internal or external). Provides means for accessing array elements statically or dynamically.
 @NullMarked
 public abstract class AbstractArrayStore extends CompoundValueStore implements ArrayStore {
     /// Name of the array
     protected final String name;
+
+    ///  Type of the array
+    protected final ArrayType arrayType;
 
     /// The starting offset of the array: used with subarrays or external arrays starting at a non-zero index
     protected final int startOffset;
@@ -20,19 +25,50 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
     /// recursive function, in which case the starting element is floating.
     protected final int size;
 
-    /// Contains the master array
+    /// Contains the master array: source of the subarray
     protected final @Nullable ArrayStore masterArray;
 
-    /// Actual list of elements
-    protected final List<ValueStore> elements;
+    protected final LogicArray logicArray;
 
-    public AbstractArrayStore(SourcePosition sourcePosition, String name, int startOffset, int size, @Nullable ArrayStore masterArray, List<ValueStore> elements) {
+    public AbstractArrayStore(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size,
+            @Nullable ArrayStore masterArray, boolean subarray) {
         super(sourcePosition, ERR.ARRAY_FORBIDDEN);
         this.name = name;
+        this.arrayType = arrayType;
         this.startOffset = startOffset;
         this.size = size;
-        this.elements = elements;
         this.masterArray = masterArray;
+        this.logicArray = subarray ? LogicArray.create(this, startOffset, startOffset + size) : LogicArray.create(this);
+    }
+
+    @Override
+    public ArrayType getArrayType() {
+        return arrayType;
+    }
+
+    @Override
+    public boolean isDeclaredRemote() {
+        return false;
+    }
+
+    @Override
+    public LogicValue getArrayOffset() {
+        return LogicNumber.ZERO;
+    }
+
+    @Override
+    public ArrayStore nonrecursive() {
+        return this;
+    }
+
+    @Override
+    public @Nullable MindcodeFunction getFunction() {
+        return null;
+    }
+
+    @Override
+    public LogicArray getLogicArray() {
+        return logicArray;
     }
 
     public ArrayStore getMasterArray() {
@@ -55,12 +91,11 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return size;
     }
 
-    @Override
-    public List<ValueStore> getElements() {
-        return elements;
+    public int fullSize() {
+        return size;
     }
 }

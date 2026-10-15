@@ -385,7 +385,7 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
             if (valueStore instanceof LinkArray) {
                 return new AstBuiltInIdentifier(node.sourcePosition(), "@links").setProfile(identifier.getProfile());
             } else if (valueStore instanceof ArrayStore array) {
-                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.getSize())).setProfile(identifier.getProfile());
+                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.size())).setProfile(identifier.getProfile());
             }
         }
 

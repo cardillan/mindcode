@@ -24,7 +24,7 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
 
     public RegularShortArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
         super(context, instruction);
-        arraySize = arrayStore.getFullSize();
+        arraySize = arrayStore.fullSize();
         useSelects = processor.isSupported(Opcode.SELECT);
         int limit = useSelects ? 4 : 3;
         if (arraySize < 2 || arraySize > limit) throw new MindcodeInternalError("Expected array of size 2 to " + limit);

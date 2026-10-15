@@ -11,6 +11,7 @@ public enum ArrayOrganization {
     SHORT,
     LOOKUP,
     EXTERNAL,
+    LARGE,
     ;
 
     private final String name;

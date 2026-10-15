@@ -520,8 +520,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                     array.getElement(assembler, i).setValue(assembler, initialValues.get(i).getValue(assembler));
                 }
 
-                if (modifiers.containsAny(EXPORT, VOLATILE)) {
-                    array.getElements().stream()
+                if (modifiers.containsAny(EXPORT, VOLATILE) && array instanceof InternalArray internalArray) {
+                    internalArray.getElements().stream()
                             .filter(LogicVariable.class::isInstance)
                             .map(LogicVariable.class::cast)
                             .forEach(context::addForcedVariable);
@@ -799,7 +799,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             assert node.getInlinedBlockList() != null;
             List<ValueStore> values = processInitialValuesLinked(node.getInlinedBlockList(), null);
 
-            if (values.size() == 1 && values.getFirst() instanceof ArrayStore array && array.getArrayType() == ArrayStore.ArrayType.CONSTANT) {
+            if (values.size() == 1 && values.getFirst() instanceof ElementsArrayStore array && array.getArrayType() == ArrayType.CONSTANT) {
                 int size = determineMemorySize(array.getElements());
                 if (size > 0) {
                     List<LogicVariable> elements = array.getElements().stream().map(e -> (LogicVariable) e.unwrap()).toList();
@@ -832,7 +832,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 error(node, ERR.EXT_STORAGE_INVALID_RANGE);
             }
             return new Allocation(List.of(variable), startHeapIndex, endHeapIndex, null);
-        } else if (memory instanceof ArrayStore array && array.getArrayType() == ArrayStore.ArrayType.CONSTANT) {
+        } else if (memory instanceof ElementsArrayStore array && array.getArrayType() == ArrayType.CONSTANT) {
             int size = determineMemorySize(array.getElements());
             if (size > 0) {
                 if (node.hasRangeOrIndex()) {

@@ -141,16 +141,14 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
         ValueStore index = evaluate(node.getIndex());
 
         if (index instanceof LogicReadable number && number.isNumericConstant()) {
-            List<? extends ValueStore> elements = array.getElements();
-
             if (!number.isLong()) {
                 assembler.error(((SourceElement)number).sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
                 return LogicVariable.INVALID;
-            } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
-                assembler.error(((SourceElement)number).sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+            } else if (number.getIntValue() < 0 || number.getIntValue() >= array.size()) {
+                assembler.error(((SourceElement)number).sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, array.size() - 1);
                 return LogicVariable.INVALID;
             } else {
-                return elements.get(number.getIntValue());
+                return array.getElement(assembler, number.getIntValue());
             }
         }
 
@@ -159,11 +157,11 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
     }
 
     private ValueStore storeSubarrayAccess(AstSubarray node, ArrayStore array) {
-        if (array.getSize() < 0) {
+        if (array.size() < 0) {
             error(node.getArray(), ERR.ARRAY_UNSUPPORTED_OPERATION);
             return LogicVariable.INVALID;
         } else {
-            IntRange range = parseSubarrayRange(node, array.getSize());
+            IntRange range = parseSubarrayRange(node, array.size());
             return range == null ? LogicVariable.INVALID : array.subarray(node.sourcePosition(), range.min(), range.max() + 1);
         }
     }

@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.logic.arguments.arrays;
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
-import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
 import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
 import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.LogicArray;
@@ -54,11 +54,11 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
 
     private String describeInstruction(ArrayAccessInstruction ix, String test) {
         return String.format("%s: %s, %s, %s, %s, size %d", test,
-                ix.getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED
+                ix.getArray().getArrayStore().getArrayType() == ArrayType.REMOTE_SHARED
                         ? "shared"
                         : ix.getArray().isDeclaredRemote() ? "remote" : "local",
                 ix.getArrayOrganization(), ix.getArrayConstruction(),
-                ix.isArrayFolded() ? "folded" : "unfolded", ix.getArray().getSize());
+                ix.isArrayFolded() ? "folded" : "unfolded", ix.getArray().size());
     }
 
     private void testInstruction(ArrayAccessInstruction ix) {
@@ -89,7 +89,7 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
                 + jumpTableInstructions.stream().filter(i -> i.getOpcode() == Opcode.MULTILABEL).count();
 
         boolean inlined = ix.getArrayOrganization() == ArrayOrganization.INLINED;
-        boolean singleBranch = ix.getArray().getFullSize() <= (ix.isArrayFolded() ? 2 : 1);
+        boolean singleBranch = ix.getArray().fullSize() <= (ix.isArrayFolded() ? 2 : 1);
         long generatedSteps = multiLabels > 0
                 ? generatedSize + generatedSharedSize - 2 * (multiLabels - 1) + (inlined && !singleBranch ? 1 : 0) // Compensate for the missing last jump in an inlined table
                 : generatedSize + generatedSharedSize;

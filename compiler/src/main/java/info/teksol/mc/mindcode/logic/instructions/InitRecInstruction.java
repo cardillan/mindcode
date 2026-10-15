@@ -115,12 +115,12 @@ public class InitRecInstruction extends BaseInstruction {
         Optional<ArrayStore> array = getExistingFunction().getArrays().stream().filter(a -> a.getArrayOffset() instanceof LogicVariable).findAny();
         if (array.isPresent() && stackTracker.externalStack() && getLocalProfile().getErrorReporting() != RuntimeErrorReporting.NONE) {
             ArrayStore a = array.get();
-            int limit = a.getFullSize();
+            int limit = a.fullSize();
             String errorMessage = String.format("%s: stack overflow error", function.getDeclaration().sourcePosition().formatForMlog());
 
             // We need lessThan here, because the array offset hasn't been increased yet
             LogicInstruction assertInstruction = processor.createAssertBounds(astContext, LogicKeyword.create("decimal"), LogicNumber.ONE,
-                    LogicNumber.create(-a.getSize()), Condition.LESS_THAN_EQ,
+                    LogicNumber.create(-a.size()), Condition.LESS_THAN_EQ,
                     a.getArrayOffset(), Condition.LESS_THAN, LogicNumber.create(limit),
                     LogicString.createRaw(errorMessage)).setStackOverflowCheck();
             assertInstruction.resolve(processor, consumer);
@@ -128,7 +128,7 @@ public class InitRecInstruction extends BaseInstruction {
 
         function.getArrays().forEach(a -> {
             if (a.getArrayOffset() instanceof LogicVariable offset) {
-                creator.createOp(ADD, offset, offset, LogicNumber.create(a.getSize()));
+                creator.createOp(ADD, offset, offset, LogicNumber.create(a.size()));
             }
         });
     }

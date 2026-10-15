@@ -55,7 +55,7 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
             ValueStore valueStore = variables.findVariable(identifier.getName(), true);
             if (valueStore instanceof LinkArray) {
                 error(identifier, ERR.ARGUMENT_LINKS_REQUIRES_REF);
-            } else if (valueStore instanceof ArrayStore array) {
+            } else if (valueStore instanceof ElementsArrayStore array) {
                 expandArray(argument, array, consumer);
             } else {
                 consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier, argument.hasRefModifier()));
@@ -74,7 +74,7 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
                 error(argument, ERR.ARGUMENT_LINKS_REQUIRES_REF);
             }
 
-            if (value instanceof ArrayStore array && !argument.isReference()) {
+            if (value instanceof ElementsArrayStore array && !argument.isReference()) {
                 expandArray(argument, array, consumer);
             } else {
                 consumer.accept(wrapArgumentValue(argument, value));
@@ -84,7 +84,7 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
         }
     }
 
-    protected void expandArray(AstFunctionArgument argument, ArrayStore array, Consumer<FunctionArgument> consumer) {
+    protected void expandArray(AstFunctionArgument argument, ElementsArrayStore array, Consumer<FunctionArgument> consumer) {
         array.getElements().stream().map(value -> wrapArgumentValue(argument, value)).forEach(consumer);
     }
 
