@@ -1591,12 +1591,12 @@ public class OptimizationContext extends CompilerMessageEmitter {
 
         /// Returns the next non-empty instruction without advancing the cursor.
         /// @return the next non-empty instruction
-        public @Nullable LogicInstruction peekValid() {
+        public @Nullable LogicInstruction peekValid(int index) {
             checkClosed();
             for (int i = cursor; i < program.size(); i++) {
                 LogicInstruction instruction = program.get(i);
                 if (!matcher.test(instruction)) break;
-                if (instruction.getOpcode() != Opcode.EMPTY) return instruction;
+                if (instruction.getOpcode() != Opcode.EMPTY && index-- <= 0) return instruction;
             }
             return null;
         }

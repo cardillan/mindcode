@@ -52,12 +52,28 @@ class ArrayOptimizer extends BaseOptimizer {
             while (iterator.hasNext()) {
                 LogicInstruction instruction = iterator.next();
                 if (instruction instanceof ArrayAccessInstruction ix && ix.getArrayOrganization() != ArrayOrganization.LOOKUP) {
-                    if (ix instanceof ReadArrInstruction) {
-                        ix.setArrayInjection(Optional.empty());
-                        LogicInstruction next = iterator.peekValid();
-                        if (next != null && next.getSideEffects() == SideEffects.NONE && next.inputArgumentsStream().anyMatch(v -> v == ix.getResult())) {
-                            List<LogicInstruction> references = getVariableReferences(ix.getResult());
-                            if (List.of(ix, next).equals(references)) ix.setArrayInjection(Optional.of(next));
+                    if (ix.getArrayOrganization() == ArrayOrganization.INLINED && ix instanceof ReadArrInstruction rix) {
+                        List<LogicInstruction> injections = List.of();
+                        LogicInstruction next = iterator.peekValid(0);
+                        if (next != null && canInject(next) && next.inputArgumentsStream().anyMatch(v -> v == rix.getResult())) {
+                            LogicInstruction second;
+                            if (selfUpdate(next) && next.getResult() == ix.getResult()
+                                    && iterator.peekValid(1) instanceof WriteArrInstruction wix
+                                    && wix.getValue() == ix.getResult() && wix.getArray() == ix.getArray()
+                                    && wix.getIndex() == ix.getIndex() && wix.getIndex() != ix.getResult()) {
+                                second = wix;
+                            } else {
+                                second = null;
+                            }
+
+                            if (getVariableReferences(ix.getResult()).stream().noneMatch(i -> i != rix && i != next && i != second)) {
+                                injections = second == null ? List.of(next) : List.of(next, second);
+                            }
+                        }
+
+                        if (!injections.equals(ix.getArrayInjections())) {
+                            ix = instructionProcessor.copy(rix).setArrayInjections(injections);
+                            iterator.set(ix);
                         }
                     }
 
@@ -80,7 +96,11 @@ class ArrayOptimizer extends BaseOptimizer {
     }
 
     private boolean canInject(LogicInstruction instruction) {
-        return !instruction.getOpcode().isVirtual() && instruction.getOpcode() != Opcode.JUMP;
+        return !instruction.getOpcode().isVirtual() && instruction.getOpcode() != Opcode.JUMP && instruction.getRealSize() == 1;
+    }
+
+    private boolean selfUpdate(LogicInstruction instruction) {
+        return instruction instanceof LogicResultInstruction res && res.inputArgumentsStream().anyMatch(v -> v == res.getResult());
     }
 
     private int lookupCapacity(LogicKeyword lookupType, Set<String> usedVariables) {
@@ -182,6 +202,8 @@ class ArrayOptimizer extends BaseOptimizer {
 
     private ArrayConstruction computeArrayConstruction(ArrayAccessInstruction ix) {
         if (ix.getArray().getArrayStore().fullSize() == 1) {
+            return ArrayConstruction.REGULAR;
+        } else if (ix.getArrayOrganization().isInlined() && ix.getArrayInjections().size() == 2) {
             return ArrayConstruction.REGULAR;
         } else if (ix.getArrayOrganization().isInlined() && !ix.getArrayConstructor().folded()
                 && !ix.isCompactAccessSource() && !ix.isCompactAccessTarget()) {

@@ -6,7 +6,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Optional;
+import java.util.List;
 
 @NullMarked
 public interface ArrayAccessInstruction extends LogicInstruction {
@@ -71,14 +71,13 @@ public interface ArrayAccessInstruction extends LogicInstruction {
         return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_FOLDED, folded);
     }
 
-    default Optional<LogicInstruction> getArrayInjection() {
+    default List<LogicInstruction> getArrayInjections() {
         //noinspection unchecked
-        return (Optional<LogicInstruction>) getInfo(InstructionInfo.ARRAY_INJECTION);
+        return (List<LogicInstruction>) getInfo(InstructionInfo.ARRAY_INJECTIONS);
     }
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    default LogicInstruction setArrayInjection(Optional<LogicInstruction> arrayInjection) {
-        return setInfo(InstructionInfo.ARRAY_INJECTION, arrayInjection);
+    default ArrayAccessInstruction setArrayInjections(List<LogicInstruction> arrayInjection) {
+        return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_INJECTIONS, arrayInjection);
     }
 
     ArrayAccessInstruction setArrayOrganization(ArrayOrganization arrayOrganization, ArrayConstruction arrayConstruction);

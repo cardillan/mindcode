@@ -34,10 +34,13 @@ public class ReadInlinedArrayConstructor extends RegularInlinedArrayConstructor 
     @Override
     public SideEffects createSideEffects() {
         if (hasInjection()) {
-            LogicInstruction ix = instruction.getArrayInjection().orElseThrow();
-            return SideEffects.reads(arrayElements()).plusReadsAndWrites(
-                    ix.getAllReads().filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList(),
-                    ix.getAllWrites().filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList());
+            SideEffects sideEffects = SideEffects.reads(arrayElements());
+            for (LogicInstruction ix : instruction.getArrayInjections()) {
+                sideEffects = sideEffects.plusReadsAndWrites(
+                        ix.getAllReads().filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList(),
+                        ix.getAllWrites().filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList());
+            }
+            return sideEffects;
         } else {
             return SideEffects.of(arrayElements(), List.of(instruction.getResult()), List.of());
         }

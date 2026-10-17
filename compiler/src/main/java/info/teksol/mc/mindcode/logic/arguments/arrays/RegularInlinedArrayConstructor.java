@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -21,22 +22,26 @@ public abstract class RegularInlinedArrayConstructor extends InlinedArrayConstru
         super(context, instruction, arrayElem);
     }
 
-    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        int checkSize = boundsCheckSize();
-        return folded()
-                ? checkSize + offsetInstructions() + inlinedTableSize() + 1 + 2 * flag(!useTextTables)
-                : checkSize + offsetInstructions() + inlinedTableSize() + 1 + flag(!useTextTables);
+    protected boolean hasInjection() {
+        return !folded()
+                && (arrayStore.getArrayType() == ArrayType.INTERNAL || arrayStore.getArrayType() == ArrayType.CONSTANT)
+                && accessType == ArrayAccessInstruction.AccessType.READ
+                && !instruction.getArrayInjections().isEmpty();
     }
 
-    protected boolean hasInjection() {
-        return !folded() && instruction.getArrayInjection().isPresent() && accessType == ArrayAccessInstruction.AccessType.READ
-                && arrayStore.getElements().stream().allMatch(e -> e.unwrap() instanceof LogicValue);
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        int checkSize = boundsCheckSize();
+        int injectionSavings = hasInjection() ? instruction.getArrayInjections().stream().mapToInt(ix -> ix.getSharedSize(sharedStructures)).sum() : 0;
+        return folded()
+                ? checkSize + offsetInstructions() + inlinedTableSize() + 1 + 2 * flag(!useTextTables) - injectionSavings
+                : checkSize + offsetInstructions() + inlinedTableSize() + 1 + flag(!useTextTables) - injectionSavings;
     }
 
     @Override
     public double getExecutionSteps() {
         int checkSteps = boundsCheckExecutionSteps();
-        int injectionSavings = hasInjection() ? 1 : 0;
+        double injectionSavings = hasInjection() ? instruction.getArrayInjections().stream().mapToDouble(
+                ix -> ix instanceof ArrayAccessInstruction a ? a.getExecutionSteps() : 1).sum() : 0;
         return checkSteps + offsetInstructions() + (useTextTables ? 3 : 4 + flag(folded())) - inlinedTableStepsSavings() - injectionSavings;
     }
 
@@ -44,8 +49,8 @@ public abstract class RegularInlinedArrayConstructor extends InlinedArrayConstru
     protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
         if (hasInjection()) {
             LogicVariable result = Objects.requireNonNull(instruction.getResult());
-            LogicInstruction original = instruction.getArrayInjection().orElseThrow();
-            original.setArrayInjected(true);
+            LogicInstruction original = instruction.getArrayInjections().getFirst();
+            instruction.getArrayInjections().forEach(ix -> ix.setArrayInjected(true));
             return (creator, element) -> {
                 LogicInstruction ix = processor.replaceAllArgs(original, result, (LogicValue) element.unwrap()).setArrayInjected(false);
                 creator.accept(ix);

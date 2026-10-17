@@ -11,7 +11,10 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.logic.arguments.Operation.NOT_EQUAL;
@@ -41,6 +44,8 @@ public class VirtualInstructionResolver {
         if (!expanded && analyze(program)) {
             for (index = 0; index < program.size(); index++) {
                 LogicInstruction ix = program.get(index);
+                if (ix.isArrayInjected()) continue;
+
                 if (ix instanceof ArrayAccessInstruction || ix instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
                     program.remove(index);
                     expandInstruction(ix, newIx -> program.add(index++, newIx));
@@ -67,20 +72,13 @@ public class VirtualInstructionResolver {
         if (expanded) return false;
         expanded = true;
 
-        // Subarray support (separate processing for read/write):
-        // 1. Gather all array access instructions
-        // 2. Group by array name, find min/max index per array
-        // 3. Build the jump table for the resulting range, remember to adjust offset
-
         boolean found = false;
         for (LogicInstruction instruction : program) {
             if (instruction instanceof ArrayAccessInstruction ix) {
                 // Remove invalid injections
-                ix.getArrayInjection().ifPresent(injection -> {
-                    if (CollectionUtils.indexOf(program, i -> i == injection) < 0) {
-                        ix.setArrayInjection(Optional.empty());
-                    }
-                });
+                if (ix.getArrayInjections().stream().anyMatch(inj -> CollectionUtils.indexOf(program, i -> i == inj) < 0)) {
+                    ix.setArrayInjections(List.of());
+                }
 
                 ix.getArrayConstructor().generateJumpTable(jumpTables);
                 found = true;

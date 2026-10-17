@@ -52,7 +52,7 @@ class JumpStraightening extends BaseOptimizer {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump
                         && jump.getCondition().hasInverse(getGlobalProfile())
-                        && iterator.hasNext() && iterator.peekValid() instanceof JumpInstruction next
+                        && iterator.hasNext() && iterator.peekValid(0) instanceof JumpInstruction next
                         && effectivelyUnconditional(jump, next)) {
 
                     if (next.getAstContext() == jump.getAstContext() || phase.breaksContextStructure()) {

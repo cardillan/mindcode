@@ -35,7 +35,7 @@ public enum InstructionInfo {
     ARRAY_FOLDED(Boolean.FALSE),
 
     /// Contains the instruction that should be injected into the array.
-    ARRAY_INJECTION(Optional.empty()),
+    ARRAY_INJECTIONS(List.of()),
 
     /// Indicates the instruction has been injected into the jump table and needs to be removed.
     ARRAY_INJECTED(Boolean.FALSE),

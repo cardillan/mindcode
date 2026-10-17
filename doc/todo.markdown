@@ -16,19 +16,23 @@ Changes intended for the next regular release.
 * `links` array
 * Mlog Dev Tools integration
 * Internal: enum for variable flags. When creating variables, a set of flags would be specified.
+* Large arrays
+* Array code injection optimization (partial)
 
 * **Doing**
 
 * Large arrays
-  * Nested for loops for list-iteration loops 
+  * Nested for loops for list-iteration loops
+  * Subarrays
 
 * **Planned**
 
+* Allow using linked arrays in the `remote require` clause.
+* If expression telescoping optimization
 * Compatibility test 2: verifies how Mindustry parses (numeric) literals.
 * String minification
   * Replacing icon names with the corresponding characters
-  * Choosing a shorter representation for colors (e.g., replace `[lightgray]` with `[#bfbfbf]`, or `[#ffd700]` with `[gold]`). Replace a RGB color with a close enough named color.
-* If expression telescoping optimization
+  * Choosing a shorter representation for colors (e.g., replace `[lightgray]` with `[#bfbfbf]`, or `[#ffd700]` with `[gold]`). Replace an RGB color with a close enough named color.
 * Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
 * After updating a processor via MlogWatcher, download the processor's content again and compare to determine whether Mindustry parsing causes some changes; if so, it is an error.
   * Update MlogWatcher to automatically return the new processor content.
@@ -49,10 +53,6 @@ Changes intended for the next regular release.
 * Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
 * Invoke properties on any expression, including arrays.
-* Allow using linked arrays in the `remote require` clause.
-
-* Array code injection optimization (?)
-  * Lower priority due to the availability of external arrays
 
 * **Quick ideas**
 
@@ -71,8 +71,6 @@ These are topics that I'm spending time thinking about. Some of these should app
   * "Natural" types
   * Structures/records, including arrays of structures
   * Modules as objects/classes
-  * Invoke properties on any expression, including arrays.
-  * Allow using linked arrays in the `remote require` clause.
   * Enums
   * Local structures
   * Function pointers/array pointers
@@ -81,7 +79,6 @@ These are topics that I'm spending time thinking about. Some of these should app
 
 * Supersized arrays. Stores parts of the array in different lookup variables, and the rest in a regular `@counter` table. Needs a text-based jump table, might require extension of text-based jump tables for label-enabled mlog.
 * Shared element name tables. All arrays in a remote module would use the same naming convention for all elements (say, `*arr` + index). When accessing remote arrays from different modules, a shared table might be built in the local processor, maybe even without an overhead.
-* Segmented arrays. Parts of the same array would be stored in different processors. Needs a specific remote module, but it could be part of the system library. The array access would compute the index of the processor to read the data from.
 
 ## Active
 

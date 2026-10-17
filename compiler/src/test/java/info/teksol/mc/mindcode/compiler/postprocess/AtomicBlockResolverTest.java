@@ -575,25 +575,19 @@ class AtomicBlockResolverTest {
                     """
                             wait 0.01667                            # 1.000 ticks for atomic execution of 2 steps at 2 ipt
                             read *tmp0 cell1 0
-                            op shl *tmp2 *tmp0 1
-                            op add @counter *tmp2 4
-                            set .x*elem ".x*0"
+                            op shl *tmp1 *tmp0 1
+                            op add @counter *tmp1 4
+                            op add .x*0 .x*0 1
                             jump 13 always 0 0
-                            set .x*elem ".x*1"
+                            op add .x*1 .x*1 1
                             jump 13 always 0 0
-                            set .x*elem ".x*2"
+                            op add .x*2 .x*2 1
                             jump 13 always 0 0
-                            set .x*elem ".x*3"
+                            op add .x*3 .x*3 1
                             jump 13 always 0 0
-                            set .x*elem ".x*4"
-                            read *tmp1 @this .x*elem
-                            op add *tmp1 *tmp1 1
-                            write *tmp1 @this .x*elem               # The last atomic section instruction
+                            op add .x*4 .x*4 1                      # The last atomic section instruction
                             print .x*0
-                            end
-                            draw triangle .x*1 .x*2 .x*3 .x*4 0 0
-                            print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
+                            """
             );
         }
 
@@ -798,27 +792,21 @@ class AtomicBlockResolverTest {
                             print(x[0]);
                             """,
                     """
-                            wait 0.075                              # 4.500 ticks for atomic execution of 9 steps at 2 ipt
+                            wait 0.05                               # 3.000 ticks for atomic execution of 6 steps at 2 ipt
                             read *tmp0 cell1 0
-                            op shl *tmp2 *tmp0 1
-                            op add @counter *tmp2 4
-                            set .x*elem ".x*0"
+                            op shl *tmp1 *tmp0 1
+                            op add @counter *tmp1 4
+                            op add .x*0 .x*0 1
                             jump 13 always 0 0
-                            set .x*elem ".x*1"
+                            op add .x*1 .x*1 1
                             jump 13 always 0 0
-                            set .x*elem ".x*2"
+                            op add .x*2 .x*2 1
                             jump 13 always 0 0
-                            set .x*elem ".x*3"
+                            op add .x*3 .x*3 1
                             jump 13 always 0 0
-                            set .x*elem ".x*4"
-                            read *tmp1 @this .x*elem
-                            op add *tmp1 *tmp1 1
-                            write *tmp1 @this .x*elem               # The last atomic section instruction
+                            op add .x*4 .x*4 1                      # The last atomic section instruction
                             print .x*0
-                            end
-                            draw triangle .x*1 .x*2 .x*3 .x*4 0 0
-                            print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
+                            """
             );
         }
 

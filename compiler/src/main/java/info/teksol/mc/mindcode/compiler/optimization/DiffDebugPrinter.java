@@ -221,6 +221,7 @@ public class DiffDebugPrinter implements DebugPrinter {
                     str.append(':').append(aai.getArrayConstruction().getName());
                     if (aai.isCompactAccessSource()) str.append(":src");
                     if (aai.isCompactAccessTarget()) str.append(":dst");
+                    if (!aai.getArrayInjections().isEmpty()) str.append(":inj+").append(aai.getArrayInjections().size());
                     str.append('>');
                 }
             }
