@@ -1,12 +1,12 @@
 <script lang="ts">
 	import TabsOutput, { type OutputTabName } from './TabsOutput.svelte';
-	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
+	import type { CompileResponseMessage, RunResult, SourceRange } from '#lib/api.js';
 	import CompilerMessages from './CompilerMessages.svelte';
 	import EditorLayoutTabs, { type CollapsibleTabsMode } from './EditorLayoutTabs.svelte';
 	import { TabsTrigger } from './ui/tabs';
 	import TabsContent from './ui/tabs/tabs-content.svelte';
 	import type { Snippet } from 'svelte';
-	import type { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
+	import type { InputEditorStore, OutputEditorStore } from '#lib/editors.svelte.js';
 
 	let {
 		inputLabel,

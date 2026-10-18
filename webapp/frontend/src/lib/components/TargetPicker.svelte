@@ -7,7 +7,7 @@
 		type GameVersion,
 		type LocalCompilerTarget,
 		type ProcessorType
-	} from '$lib/stores.svelte';
+	} from '#lib/stores.svelte.js';
 	import { untrack } from 'svelte';
 	import * as Select from './ui/select';
 

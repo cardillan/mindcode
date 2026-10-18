@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getThemeContext } from '$lib/stores.svelte';
+	import { getThemeContext } from '#lib/stores.svelte.js';
 	import CircleCheckIcon from '@lucide/svelte/icons/circle-check';
 	import InfoIcon from '@lucide/svelte/icons/info';
 	import Loader2Icon from '@lucide/svelte/icons/loader-2';

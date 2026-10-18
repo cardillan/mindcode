@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as Tabs from '$lib/components/ui/tabs';
-	import * as ButtonGroup from '$lib/components/ui/button-group';
+	import * as Tabs from '#lib/components/ui/tabs/index.js';
+	import * as ButtonGroup from '#lib/components/ui/button-group/index.js';
 	import type { ComponentProps, Snippet } from 'svelte';
 	import { ChevronsDownUp, ChevronsUpDown, Maximize2, Minimize2 } from '@lucide/svelte';
 	import EditorActionButton from './EditorActionButton.svelte';

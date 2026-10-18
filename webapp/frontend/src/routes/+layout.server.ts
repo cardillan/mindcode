@@ -1,4 +1,4 @@
-import { getVersionString } from '$lib/server';
+import { getVersionString } from '#lib/server.js';
 
 export const prerender = true;
 

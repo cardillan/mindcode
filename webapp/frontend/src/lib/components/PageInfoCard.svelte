@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import * as Collapsible from './ui/collapsible';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { ChevronDown } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 

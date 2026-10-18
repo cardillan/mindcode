@@ -1,27 +1,27 @@
 <script lang="ts">
-	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
+	import { mlogLanguageExtension } from '#lib/grammars/mlog_language.js';
 	import { Code, Play, Trash2 } from '@lucide/svelte';
 
-	import EditorLayout from '$lib/components/EditorLayout.svelte';
-	import ControlBar from '$lib/components/ControlBar.svelte';
-	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
+	import EditorLayout from '#lib/components/EditorLayout.svelte';
+	import ControlBar from '#lib/components/ControlBar.svelte';
+	import BottomActionBar from '#lib/components/BottomActionBar.svelte';
 	import {
 		ApiError,
 		ApiHandler,
 		type CompileResponseMessage,
 		type RunResult,
 		type SourceRange
-	} from '$lib/api';
-	import { mindcode } from '$lib/grammars/mindcode_language';
-	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
-	import { jumpToRange, updateEditor } from '$lib/codemirror';
-	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import TargetPicker from '$lib/components/TargetPicker.svelte';
-	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
-	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
-	import { getSettingsContext } from '$lib/settings.svelte';
-	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
-	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
+	} from '#lib/api.js';
+	import { mindcode } from '#lib/grammars/mindcode_language.js';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '#lib/stores.svelte.js';
+	import { jumpToRange, updateEditor } from '#lib/codemirror.js';
+	import ProjectLinks from '#lib/components/ProjectLinks.svelte';
+	import TargetPicker from '#lib/components/TargetPicker.svelte';
+	import EditorActionButton from '#lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '#lib/editors.svelte.js';
+	import { getSettingsContext } from '#lib/settings.svelte.js';
+	import type { OutputTabName } from '#lib/components/TabsOutput.svelte';
+	import PageInfoCard from '#lib/components/PageInfoCard.svelte';
 	import { tick } from 'svelte';
 	import { toast } from 'svelte-sonner';
 

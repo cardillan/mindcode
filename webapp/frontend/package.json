@@ -37,6 +37,7 @@
 		"@lucide/svelte": "^1.57.0",
 		"@sveltejs/adapter-static": "^4.0.0",
 		"@sveltejs/kit": "^3.1.0",
+		"@sveltejs/load-config": "^0.2.2",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@tailwindcss/vite": "^4.3.3",
 		"@types/node": "~22.19.13",
@@ -63,5 +64,9 @@
 		"vaul-svelte": "^1.0.0-next.7",
 		"vite": "^8.3.4",
 		"vitest": "^5.0.3"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
 	}
 }

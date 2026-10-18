@@ -1,14 +1,14 @@
 <script lang="ts">
 	import './layout.css';
 	import { page } from '$app/state';
-	import * as Select from '$lib/components/ui/select';
-	import { setThemeContext } from '$lib/stores.svelte.js';
-	import { setSettingsContext } from '$lib/settings.svelte.js';
-	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { foldChevronDownId, foldChevronRightId } from '$lib/codemirror.js';
+	import * as Select from '#lib/components/ui/select/index.js';
+	import { setThemeContext } from '#lib/stores.svelte.js';
+	import { setSettingsContext } from '#lib/settings.svelte.js';
+	import * as Tooltip from '#lib/components/ui/tooltip/index.js';
+	import { foldChevronDownId, foldChevronRightId } from '#lib/codemirror.js';
 	import { ChevronDown, ChevronRight } from '@lucide/svelte';
-	import { Toaster } from '$lib/components/ui/sonner';
-	import SettingsButton from '$lib/components/SettingsButton.svelte';
+	import { Toaster } from '#lib/components/ui/sonner/index.js';
+	import SettingsButton from '#lib/components/SettingsButton.svelte';
 	import { resolve } from '$app/paths';
 
 	interface Tool {

@@ -25,7 +25,7 @@ import {
 import type { Attachment } from 'svelte/attachments';
 import { mount, unmount, untrack } from 'svelte';
 import { Annotation, EditorState, Transaction, type Extension } from '@codemirror/state';
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { page } from '$app/state';
 import type { ApiHandler, Sample } from './api';
 import {

@@ -6,21 +6,21 @@
 		type CompileResponseMessage,
 		type RunResult,
 		type SourceRange
-	} from '$lib/api';
-	import { schemacode } from '$lib/grammars/schemacode_language';
-	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
-	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import { jumpToRange, updateEditor } from '$lib/codemirror';
-	import TargetPicker from '$lib/components/TargetPicker.svelte';
-	import ControlBar from '$lib/components/ControlBar.svelte';
-	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
-	import EditorLayout from '$lib/components/EditorLayout.svelte';
-	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
-	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
-	import { getSettingsContext } from '$lib/settings.svelte';
+	} from '#lib/api.js';
+	import { schemacode } from '#lib/grammars/schemacode_language.js';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '#lib/stores.svelte.js';
+	import ProjectLinks from '#lib/components/ProjectLinks.svelte';
+	import { jumpToRange, updateEditor } from '#lib/codemirror.js';
+	import TargetPicker from '#lib/components/TargetPicker.svelte';
+	import ControlBar from '#lib/components/ControlBar.svelte';
+	import BottomActionBar from '#lib/components/BottomActionBar.svelte';
+	import EditorLayout from '#lib/components/EditorLayout.svelte';
+	import EditorActionButton from '#lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '#lib/editors.svelte.js';
+	import { getSettingsContext } from '#lib/settings.svelte.js';
 	import { EditorView } from 'codemirror';
-	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
-	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
+	import type { OutputTabName } from '#lib/components/TabsOutput.svelte';
+	import PageInfoCard from '#lib/components/PageInfoCard.svelte';
 	import { tick } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { resolve } from '$app/paths';
@@ -119,13 +119,17 @@
 	<PageInfoCard cardId="schematics-decompiler" heading="About Schematics Decompiler">
 		<p class="mb-2">
 			Here you can decompile schematics copied from Mindustry into Schemacode, a schema definition
-			language, which can then be modified and compiled back into a schema again. Press the <strong
-				>Export</strong
-			>
-			button on a Mindustry schematic, choose <strong>Copy to clipboard</strong> and paste the text
-			into the left pane. Then press <strong>Decompile</strong>. You can compile the Schematic
-			definition back to Mindustry schematics on the
-			<a href={resolve('/schematics')} class="text-primary underline">Schematics Builder</a> page.
+			language, which can then be modified and compiled back into a schema again. Press the
+			<strong>Export</strong>
+			button on a Mindustry schematic, choose
+			<strong>Copy to clipboard</strong>
+			and paste the text into the left pane. Then press
+			<strong>Decompile</strong>
+			. You can compile the Schematic definition back to Mindustry schematics on the
+
+			<a href={resolve('schematics')} class="text-primary underline">Schematics Builder</a>
+
+			page.
 		</p>
 		<p>If your schematic contains processor(s), the code is decompiled into mlog.</p>
 	</PageInfoCard>
@@ -138,9 +142,8 @@
 				{ label: 'Decompile and Run', onclick: () => handleDecompile(true), icon: Play }
 			]}
 			loading={encodedEditor.isLoading || loadingAction !== null}
+			><TargetPicker {compilerTarget} /></ControlBar
 		>
-			<TargetPicker {compilerTarget} />
-		</ControlBar>
 	</div>
 
 	<!-- Mobile: Samples and Settings -->
