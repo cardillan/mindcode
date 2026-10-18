@@ -10,7 +10,7 @@ const e = 101,
 	newline = 10,
 	carriageReturn = 13;
 
-export const endCall = new ExternalTokenizer((input, stack) => {
+export const endCall = new ExternalTokenizer((input) => {
 	if (input.next == e && input.peek(1) == n && input.peek(2) == d) {
 		let pos = 3;
 		let ch = input.peek(pos);

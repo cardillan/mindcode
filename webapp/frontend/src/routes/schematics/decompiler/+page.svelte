@@ -23,6 +23,7 @@
 	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
 	import { tick } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import { resolve } from '$app/paths';
 
 	const theme = getThemeContext();
 	const settings = getSettingsContext();
@@ -124,7 +125,7 @@
 			button on a Mindustry schematic, choose <strong>Copy to clipboard</strong> and paste the text
 			into the left pane. Then press <strong>Decompile</strong>. You can compile the Schematic
 			definition back to Mindustry schematics on the
-			<a href="/schematics" class="text-primary underline">Schematics Builder</a> page.
+			<a href={resolve('/schematics')} class="text-primary underline">Schematics Builder</a> page.
 		</p>
 		<p>If your schematic contains processor(s), the code is decompiled into mlog.</p>
 	</PageInfoCard>

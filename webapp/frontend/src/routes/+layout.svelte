@@ -9,11 +9,12 @@
 	import { ChevronDown, ChevronRight } from '@lucide/svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import SettingsButton from '$lib/components/SettingsButton.svelte';
+	import { resolve } from '$app/paths';
 
 	interface Tool {
 		value: string;
 		label: string;
-		path: string;
+		path: Parameters<typeof resolve>[0];
 	}
 
 	let { children, data } = $props();
@@ -72,8 +73,8 @@
 						{tools.find((t) => t.value === currentTool)?.label || 'Select tool...'}
 					</Select.Trigger>
 					<Select.Content>
-						{#each tools as tool}
-							<a href={tool.path}>
+						{#each tools as tool (tool.path)}
+							<a href={resolve(tool.path)}>
 								<Select.Item value={tool.value}>{tool.label}</Select.Item>
 							</a>
 						{/each}

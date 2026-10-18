@@ -30,6 +30,7 @@
 	import { MlogWatcherStore } from '$lib/mlog_watcher';
 	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
 	import { toast } from 'svelte-sonner';
+	import { resolve } from '$app/paths';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -143,7 +144,8 @@
 			the <strong>Import schematics...</strong> button. If your schematics contain processors, you
 			can specify code for the processor using either Mindustry Logic or Mindcode. You can also
 			decompile an existing schematics using the
-			<a href="/decompiler" class="text-primary underline">Decompiler</a> and modify the resulting code.
+			<a href={resolve('/decompiler')} class="text-primary underline">Decompiler</a> and modify the resulting
+			code.
 		</p>
 	</PageInfoCard>
 	<!-- Control Bar (Desktop) -->

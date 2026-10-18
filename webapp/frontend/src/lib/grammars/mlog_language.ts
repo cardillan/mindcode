@@ -73,7 +73,7 @@ export const mlogLanguage = LRLanguage.define({
 
 export const mlogLanguageExtension = new LanguageSupport(mlogLanguage, [
 	lineNumbers({
-		formatNumber(lineNo, state) {
+		formatNumber(lineNo) {
 			return (lineNo - 1).toString();
 		}
 	})
