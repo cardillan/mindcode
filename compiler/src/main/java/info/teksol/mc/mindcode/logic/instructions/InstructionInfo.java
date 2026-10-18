@@ -37,8 +37,8 @@ public enum InstructionInfo {
     /// Contains the instruction that should be injected into the array.
     ARRAY_INJECTIONS(List.of()),
 
-    /// Indicates the instruction has been injected into the jump table and needs to be removed.
-    ARRAY_INJECTED(Boolean.FALSE),
+    /// Contains the instruction this instruction has been injected into
+    ARRAY_INJECTED_INTO(List.of()),
 
     /// This instruction is a compact-array access instruction, setting up the element variable name
     COMPACT_ACCESS_SOURCE(Boolean.FALSE),

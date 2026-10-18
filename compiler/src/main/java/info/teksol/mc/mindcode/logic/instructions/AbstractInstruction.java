@@ -67,6 +67,9 @@ public abstract class AbstractInstruction implements LogicInstruction {
         return (T) this;
     }
 
+    static final Set<InstructionInfo> UPDATING = EnumSet.of(
+            InstructionInfo.CALL_RETURN, InstructionInfo.JUMP_TO_RETURN);
+
     /// Called whenever info is updated
     protected void updateInfo(Set<InstructionInfo> types) {
         // Nothing
@@ -123,9 +126,10 @@ public abstract class AbstractInstruction implements LogicInstruction {
         return astContext.findTopContextOfTypes(contextTypes);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object getInfo(InstructionInfo instructionInfo) {
-        return info.getOrDefault(instructionInfo, instructionInfo.getDefaultValue());
+    public <T> T getInfo(InstructionInfo instructionInfo) {
+        return (T) info.getOrDefault(instructionInfo, instructionInfo.getDefaultValue());
     }
 
     @Override

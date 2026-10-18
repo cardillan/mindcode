@@ -163,73 +163,57 @@ Example of a lookup array:
 ```Mindcode
 #set syntax = strict;
 
-const SIZE = 10;
-param LIMIT = 100;
-
-linked message1;
+const SIZE = 5;
 var array[SIZE];
 
 begin
-    for var out a in array do a = 0; end;
-
-    for var i in 0 ... LIMIT do
-        countDigits(i);
+    for var i in 0 ... 100 do
+        array[floor(rand(SIZE))] += array[floor(rand(SIZE))] + 1;
     end;
 
-    print(array[0]);
-    for var i in 1 ... SIZE do
-        print("-", array[i]);
+    for var a in array do
+        println(a);
     end;
-    printflush(message1);
-end;
-
-void countDigits(number)
-    do
-        array[number % 10]++;
-        number \= 10;
-    while number > 0;
 end;
 ```
 
 compiles to:
 
 ```mlog
-set LIMIT 100
-set water 0
-set slag 0
-set oil 0
-set cryofluid 0
-set neoplasm 0
-set hydrogen 0
-set ozone 0
-set cyanogen 0
-set gallium 0
-set nitrogen 0
 set :i 0
-jump 24 greaterThanEq 0 LIMIT
-set :countDigits:number :i
-op mod *tmp0 :countDigits:number 10
-lookup liquid *tmp2 *tmp0
-sensor .array*elem *tmp2 @name
-read *tmp1 @this .array*elem
-op add *tmp1 *tmp1 1
-write *tmp1 @this .array*elem
-op idiv :countDigits:number :countDigits:number 10
-jump 14 greaterThan :countDigits:number 0
+op rand *tmp0 5 0
+op rand *tmp1 5 0
+read @counter "\u000c\n\u0008\u0006\u0004" *tmp1
+op add *tmp2 green 1                    # Origin: 3, keys: 4
+jump 13 always 0 0
+op add *tmp2 malis 1                    # Origin: 3, keys: 3
+jump 13 always 0 0
+op add *tmp2 crux 1                     # Origin: 3, keys: 2
+jump 13 always 0 0
+op add *tmp2 sharded 1                  # Origin: 3, keys: 1
+jump 13 always 0 0
+op add *tmp2 derelict 1                 # Origin: 3, keys: 0
+read @counter "\u0016\u0014\u0012\u0010\u000e" *tmp0
+op add *tmp3 green *tmp2                # Origin: 13, keys: 4
+jump 23 always 0 0
+op add *tmp3 malis *tmp2                # Origin: 13, keys: 3
+jump 23 always 0 0
+op add *tmp3 crux *tmp2                 # Origin: 13, keys: 2
+jump 23 always 0 0
+op add *tmp3 sharded *tmp2              # Origin: 13, keys: 1
+jump 23 always 0 0
+op add *tmp3 derelict *tmp2             # Origin: 13, keys: 0
+lookup team *tmp4 *tmp0
+sensor .array*elem *tmp4 @name
+write *tmp3 @this .array*elem
 op add :i :i 1
-jump 13 lessThan :i LIMIT
-print water
-print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
-format slag
-format oil
-format cryofluid
-format neoplasm
-format hydrogen
-format ozone
-format cyanogen
-format gallium
-print nitrogen
-printflush message1
+jump 1 lessThan :i 100
+print derelict
+print "\n{0}\n{0}\n{0}\n{0}\n"
+format sharded
+format crux
+format malis
+format green
 ```
 
 ## Text-based table dispatch

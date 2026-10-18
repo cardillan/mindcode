@@ -3,9 +3,9 @@ array-reversion.mnd:                                3        3     100.0%   38B9
 base64-decode.mnd:                                 62      384      85.5%   BDD246AE230D839E   9B1C28769F3019DB
 compute-recursive-fibonacci.mnd:                   49     2468      98.0%   BDE1C81A7769E0CB   35187B89817999FF
 compute-sum-of-primes.mnd:                        426     1876      99.8%   B6615E97E02F94A9   A4C6A6EAA213F4FB
-digit-counts.mnd:                                  37     1846     100.0%   4395C6D90051BC6D   4448EBFA842CDFAF
+digit-counts.mnd:                                  53     1636     100.0%   4395C6D90051BC6D   AA5CDAEE6D5FA0F5
 memory-read-write.mnd:                              4        4     100.0%   D9539CC21D8111B7   30633B28AE9D9EDA
-pascal-triangle.mnd:                               46     1189      93.5%   954D9E65ED4E6EF0   65D1641BF86F1261
+pascal-triangle.mnd:                               79     1291      97.5%   954D9E65ED4E6EF0   5A9B9AE451B52834
 sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1B1A6B8B97AF2   BF6FAAA1C7E12B28
 sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   53DDEE9795DA7DF1
 sorting with insert-sort.mnd:                      26    26063     100.0%   0AF6F57A5EBA45E2   51DF283BB6DAF739

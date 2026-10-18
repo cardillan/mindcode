@@ -24,6 +24,9 @@ Changes intended for the next regular release.
 * Large arrays
   * Nested for loops for list-iteration loops
   * Subarrays
+* Evaluate constant compiler-generated assertions (assertbounds for now)
+  * Remove on success
+  * Produce error (warning?) on failure 
 
 * **Planned**
 

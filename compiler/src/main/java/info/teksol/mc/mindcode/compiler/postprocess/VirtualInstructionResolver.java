@@ -8,7 +8,6 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
@@ -44,9 +43,9 @@ public class VirtualInstructionResolver {
         if (!expanded && analyze(program)) {
             for (index = 0; index < program.size(); index++) {
                 LogicInstruction ix = program.get(index);
-                if (ix.isArrayInjected()) continue;
-
-                if (ix instanceof ArrayAccessInstruction || ix instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
+                if (ix.getArrayInjectedInto() != null) {
+                    program.remove(index--);
+                } else if (ix instanceof ArrayAccessInstruction || ix instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
                     program.remove(index);
                     expandInstruction(ix, newIx -> program.add(index++, newIx));
                     index--;
@@ -60,8 +59,6 @@ public class VirtualInstructionResolver {
                     .skip(skip)
                     .forEach(program::add);
 
-            program.removeIf(LogicInstruction::isArrayInjected);
-
             return true;
         } else {
             return false;
@@ -74,12 +71,7 @@ public class VirtualInstructionResolver {
 
         boolean found = false;
         for (LogicInstruction instruction : program) {
-            if (instruction instanceof ArrayAccessInstruction ix) {
-                // Remove invalid injections
-                if (ix.getArrayInjections().stream().anyMatch(inj -> CollectionUtils.indexOf(program, i -> i == inj) < 0)) {
-                    ix.setArrayInjections(List.of());
-                }
-
+            if (instruction instanceof ArrayAccessInstruction ix && ix.getArrayInjectedInto() == null) {
                 ix.getArrayConstructor().generateJumpTable(jumpTables);
                 found = true;
             } else if (instruction instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {

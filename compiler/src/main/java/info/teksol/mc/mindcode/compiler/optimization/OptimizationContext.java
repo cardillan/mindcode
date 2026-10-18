@@ -1244,6 +1244,13 @@ public class OptimizationContext extends CompilerMessageEmitter {
         if (instruction instanceof LabelInstruction label) {
             addLabelInstruction(label);
         }
+        if (instruction.getArrayInjectedInto() instanceof ArrayAccessInstruction aix) {
+            if (aix.getArrayInjections().isEmpty()) aix.setArrayInjections(new ArrayList<>());
+            aix.getArrayInjections().add(instruction);
+        }
+        if (instruction instanceof ArrayAccessInstruction aix) {
+            aix.getArrayInjections().forEach(ix -> ix.setArrayInjectedInto(instruction));
+        }
         addReferences(instruction);
 
         instruction.outputArgumentsStream()
@@ -1256,6 +1263,12 @@ public class OptimizationContext extends CompilerMessageEmitter {
         variableStates.remove(instruction);
         if (instruction instanceof LabelInstruction label) {
             removeLabelInstruction(label);
+        }
+        if (instruction.getArrayInjectedInto() instanceof ArrayAccessInstruction aix) {
+            aix.getArrayInjections().removeIf(i -> i == instruction);
+        }
+        if (instruction instanceof ArrayAccessInstruction aix) {
+            aix.getArrayInjections().forEach(ix -> ix.setArrayInjectedInto(null));
         }
         removeReferences(instruction);
 
@@ -2212,7 +2225,11 @@ public class OptimizationContext extends CompilerMessageEmitter {
         }
 
         private LogicInstruction remapContextAndLabels(Map<LogicLabel, LogicLabel> labelMap, Map<AstContext, AstContext> contextMap, LogicInstruction ix) {
-            return instructionProcessor.replaceLabels(ix.withContext(contextMap.get(ix.getAstContext())), labelMap);
+            LogicInstruction newIx = instructionProcessor.replaceLabels(ix.withContext(contextMap.get(ix.getAstContext())), labelMap);
+            if (newIx instanceof ArrayAccessInstruction aix) {
+                aix.setArrayInjections(List.of()).setArrayInjectedInto(null);
+            }
+            return newIx;
         }
     }
     //</editor-fold>

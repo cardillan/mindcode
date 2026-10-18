@@ -100,6 +100,7 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
                             foo();
                             a = "B"; b = d;
                             print(a, b[p]);
+                            stopProcessor();
                         end;
                         
                         noinline def foo()

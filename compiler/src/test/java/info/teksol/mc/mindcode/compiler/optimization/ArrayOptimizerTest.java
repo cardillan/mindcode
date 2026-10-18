@@ -83,6 +83,7 @@ class ArrayOptimizerTest {
         @Test
         void inlinesSmallArrays3() {
             assertCompilesTo("""
+                            #set array-optimization = basic;
                             var array[3];
                             param p = 0;
                             
@@ -276,6 +277,7 @@ class ArrayOptimizerTest {
         @Test
         void inlinesRegularArrays() {
             assertCompilesTo("""
+                            #set array-optimization = basic;
                             #set builtin-evaluation = none;
                             #set use-text-jump-tables = false;
                             var array[5];
@@ -354,6 +356,7 @@ class ArrayOptimizerTest {
         @Test
         void inlinesSmallArrays2() {
             assertCompilesTo("""
+                            #set array-optimization = basic;
                             var array[2];
                             param p = 0;
                             
@@ -374,6 +377,7 @@ class ArrayOptimizerTest {
         @Test
         void inlinesSmallArrays3() {
             assertCompilesTo("""
+                            #set array-optimization = basic;
                             #set builtin-evaluation = none;
                             var array[3];
                             param p = 0;
@@ -468,6 +472,7 @@ class ArrayOptimizerTest {
         @Test
         void convertsToLookupArrays() {
             assertCompilesTo("""
+                            #set array-optimization = basic;
                             var array[5];
                             param p = 0;
                             
@@ -480,7 +485,6 @@ class ArrayOptimizerTest {
                     createInstruction(SENSOR, ".array*elem", tmp(2), "@name"),
                     createInstruction(READ, tmp(0), "@this", ".array*elem"),
                     createInstruction(OP, "add", tmp(1), tmp(0), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(WRITE, tmp(1), "@this", ".array*elem"),
                     createInstruction(PRINT, "derelict"),
                     createInstruction(PRINT, "sharded"),
@@ -493,6 +497,7 @@ class ArrayOptimizerTest {
         @Test
         void convertsFiveLookupArrays() {
             assertCompilesTo("""
+                            #set array-optimization = basic;
                             var a[5], b[5], c[5], d[5], e[5];
                             param p = 0;
                             
@@ -509,35 +514,30 @@ class ArrayOptimizerTest {
                     createInstruction(SENSOR, ".a*elem", tmp(10), "@name"),
                     createInstruction(READ, tmp(0), "@this", ".a*elem"),
                     createInstruction(OP, "add", tmp(1), tmp(0), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
                     createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(LOOKUP, "liquid", tmp(12), "p"),
                     createInstruction(SENSOR, ".b*elem", tmp(12), "@name"),
                     createInstruction(READ, tmp(2), "@this", ".b*elem"),
                     createInstruction(OP, "add", tmp(3), tmp(2), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(WRITE, tmp(3), "@this", ".b*elem"),
                     createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(LOOKUP, "item", tmp(14), "p"),
                     createInstruction(SENSOR, ".c*elem", tmp(14), "@name"),
                     createInstruction(READ, tmp(4), "@this", ".c*elem"),
                     createInstruction(OP, "add", tmp(5), tmp(4), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(WRITE, tmp(5), "@this", ".c*elem"),
                     createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(LOOKUP, "unit", tmp(16), "p"),
                     createInstruction(SENSOR, ".d*elem", tmp(16), "@name"),
                     createInstruction(READ, tmp(6), "@this", ".d*elem"),
                     createInstruction(OP, "add", tmp(7), tmp(6), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(WRITE, tmp(7), "@this", ".d*elem"),
                     createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(LOOKUP, "block", tmp(18), "p"),
                     createInstruction(SENSOR, ".e*elem", tmp(18), "@name"),
                     createInstruction(READ, tmp(8), "@this", ".e*elem"),
                     createInstruction(OP, "add", tmp(9), tmp(8), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(WRITE, tmp(9), "@this", ".e*elem"),
                     createInstruction(PRINT, "derelict"),
                     createInstruction(PRINT, "water"),
@@ -596,10 +596,8 @@ class ArrayOptimizerTest {
                     createInstruction(LOOKUP, "team", tmp(6), "p"),
                     createInstruction(SENSOR, ".a*elem", tmp(6), "@name"),
                     createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 5:1: index out of bounds (0 to 4)")),
                     createInstruction(READ, tmp(2), "@this", ".a*elem"),
                     createInstruction(PRINT, tmp(2)),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 5:1: index out of bounds (0 to 4)")),
                     createInstruction(READ, tmp(4), "@this", ".b*elem"),
                     createInstruction(PRINT, tmp(4))
             );

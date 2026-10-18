@@ -10,7 +10,6 @@ import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -60,10 +59,7 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
 
     @Override
     public SideEffects createSideEffects() {
-        return switch (accessType) {
-            case READ -> SideEffects.of(arrayElements(), List.of(arrayElem), List.of());
-            case WRITE -> SideEffects.of(List.of(), List.of(arrayElem), arrayElements());
-        };
+        return createNameBasedSideEffects();
     }
 
     @Override

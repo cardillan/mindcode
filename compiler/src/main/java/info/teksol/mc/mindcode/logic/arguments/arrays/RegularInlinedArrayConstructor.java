@@ -49,10 +49,11 @@ public abstract class RegularInlinedArrayConstructor extends InlinedArrayConstru
     protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
         if (hasInjection()) {
             LogicVariable result = Objects.requireNonNull(instruction.getResult());
-            LogicInstruction original = instruction.getArrayInjections().getFirst();
-            instruction.getArrayInjections().forEach(ix -> ix.setArrayInjected(true));
+            LogicInstruction original = instruction.getArrayInjections().stream()
+                    .filter(ix -> !(ix instanceof ArrayAccessInstruction)).findFirst().orElseThrow();
+
             return (creator, element) -> {
-                LogicInstruction ix = processor.replaceAllArgs(original, result, (LogicValue) element.unwrap()).setArrayInjected(false);
+                LogicInstruction ix = processor.replaceAllArgs(original, result, (LogicValue) element.unwrap());
                 creator.accept(ix);
             };
         } else {

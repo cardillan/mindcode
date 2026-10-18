@@ -4,29 +4,39 @@
      1 instruction eliminated by Jump Normalization (8 iterations).
      1 instruction eliminated by Condition Optimization (9 iterations).
      1 instruction eliminated by Single Step Elimination (9 iterations).
-    18 instructions eliminated by Expression Optimization (6 iterations).
-    31 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
+   171 instructions eliminated by Expression Optimization (6 iterations).
+    31 instructions eliminated by Data Flow Optimization (4 passes, 17 iterations).
        2 loop conditions were partially rotated.
-    27 instructions added by Loop Unrolling (8 iterations).
+   173 instructions added by Loop Unrolling (10 iterations).
      2 loops unrolled by Loop Unrolling.
-     2 instructions eliminated by Array Optimization (8 iterations).
+    28 instructions added by Array Optimization (10 iterations).
+     1 array improved by Array Optimization.
      8 instructions eliminated by Print Merging.
-    38 instructions after optimizations.
+    52 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 942):
+    Inject array access to 'array' at line 17:5                  size   +15, benefit     1312.5, efficiency     87.500
+    Inject array access to 'array' at line 26:9                  size   +16, benefit       27.5, efficiency      1.719
   * Unroll iteration loop at line 7:5                            size   -49, benefit       49.0, efficiency   Infinity (-20 instructions)
 
-Pass 2: speed optimization selection (cost limit 963):
-  * Unroll loop at line 25:5                                     size   +19, benefit      450.0, efficiency     23.684 (+37 instructions)
+Pass 1: speed optimization selection (cost limit 962):
+  * Inject array access to 'array' at line 17:5                  size   +15, benefit     1312.5, efficiency     87.500 (+15 instructions)
+    Inject array access to 'array' at line 26:9                  size   +16, benefit       27.5, efficiency      1.719
+
+Pass 1: speed optimization selection (cost limit 947):
+  * Inject array access to 'array' at line 26:9                  size   +16, benefit       27.5, efficiency      1.719 (+16 instructions)
+
+Pass 2: speed optimization selection (cost limit 932):
+  * Unroll loop at line 25:5                                     size    +3, benefit      450.0, efficiency    150.000 (+174 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
     60 op mod *tmp1 :countDigits:number 10
     61 set *tmp2 *tmp1
-    62 readarr<internal:folded:compact:src> *tmp3 .array[] *tmp2
+    62 readarr<internal:folded:compact> *tmp3 .array[] *tmp2
 -    * set *tmp4 *tmp3
     63 op add *tmp3 *tmp3 1
-    64 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
+    64 writearr<internal:folded:compact> *tmp3 .array[] *tmp2
     65 op idiv :countDigits:number :countDigits:number 10
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
@@ -37,13 +47,13 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
 -    * op mod *tmp1 :countDigits:number 10
 -    * set *tmp2 *tmp1
 +   60 op mod *tmp2 :countDigits:number 10
-    61 readarr<internal:folded:compact:src> *tmp3 .array[] *tmp2
+    61 readarr<internal:folded:compact> *tmp3 .array[] *tmp2
     62 op add *tmp3 *tmp3 1
-    63 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
+    63 writearr<internal:folded:compact> *tmp3 .array[] *tmp2
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
-    63 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
+    63 writearr<internal:folded:compact> *tmp3 .array[] *tmp2
     64 op idiv :countDigits:number :countDigits:number 10
     65 label *label19
 -    * op greaterThan *tmp5 :countDigits:number 0
@@ -53,71 +63,94 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
     68 label *label17
     69 label *label15
 
+Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-15 instructions):
+ 
+    58 set :countDigits:number :i
+    59 label *label18
+    60 op mod *tmp2 :countDigits:number 10
+-    * readarr<internal:folded:compact> *tmp3 .array[] *tmp2
++   61 readarr<lookup:liquid> *tmp3 .array[] *tmp2
+    62 op add *tmp3 *tmp3 1
+-    * writearr<internal:folded:compact> *tmp3 .array[] *tmp2
++   63 writearr<lookup:liquid> *tmp3 .array[] *tmp2
+    64 op idiv :countDigits:number :countDigits:number 10
+    65 label *label19
+    66 jump *label18 greaterThan :countDigits:number 0
+ 
+    77 jump *label24 greaterThanEq :printArray:i 10
+    78 set *tmp7 :printArray:i
+    79 print "-"
+-    * readarr<internal:folded:compact> *tmp9 .array[] *tmp7
++   80 readarr<lookup:liquid> *tmp9 .array[] *tmp7
+    81 print *tmp9
+    82 label *label23
+    83 op add :printArray:i :printArray:i 1
+
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-10 instructions):
      0 set LIMIT 100
--    * set :a water
+-    * set :a .array*0
      1 setaddr *tmp0 *label4
      2 jump *label1 always
      3 multilabel *label4 (m:marker0)
--    * set water :a
--    * set :a slag
-+    4 set water 0
+-    * set .array*0 :a
+-    * set :a .array*1
++    4 set .array*0 0
      5 setaddr *tmp0 *label5
      6 jump *label1 always
      7 multilabel *label5 (m:marker0)
--    * set slag :a
--    * set :a oil
-+    8 set slag 0
+-    * set .array*1 :a
+-    * set :a .array*2
++    8 set .array*1 0
      9 setaddr *tmp0 *label6
     10 jump *label1 always
     11 multilabel *label6 (m:marker0)
--    * set oil :a
--    * set :a cryofluid
-+   12 set oil 0
+-    * set .array*2 :a
+-    * set :a .array*3
++   12 set .array*2 0
     13 setaddr *tmp0 *label7
     14 jump *label1 always
     15 multilabel *label7 (m:marker0)
--    * set cryofluid :a
--    * set :a neoplasm
-+   16 set cryofluid 0
+-    * set .array*3 :a
+-    * set :a .array*4
++   16 set .array*3 0
     17 setaddr *tmp0 *label8
     18 jump *label1 always
     19 multilabel *label8 (m:marker0)
--    * set neoplasm :a
--    * set :a hydrogen
-+   20 set neoplasm 0
+-    * set .array*4 :a
+-    * set :a .array*5
++   20 set .array*4 0
     21 setaddr *tmp0 *label9
     22 jump *label1 always
     23 multilabel *label9 (m:marker0)
--    * set hydrogen :a
--    * set :a ozone
-+   24 set hydrogen 0
+-    * set .array*5 :a
+-    * set :a .array*6
++   24 set .array*5 0
     25 setaddr *tmp0 *label10
     26 jump *label1 always
     27 multilabel *label10 (m:marker0)
--    * set ozone :a
--    * set :a cyanogen
-+   28 set ozone 0
+-    * set .array*6 :a
+-    * set :a .array*7
++   28 set .array*6 0
     29 setaddr *tmp0 *label11
     30 jump *label1 always
     31 multilabel *label11 (m:marker0)
--    * set cyanogen :a
--    * set :a gallium
-+   32 set cyanogen 0
+-    * set .array*7 :a
+-    * set :a .array*8
++   32 set .array*7 0
     33 setaddr *tmp0 *label12
     34 jump *label1 always
     35 multilabel *label12 (m:marker0)
--    * set gallium :a
--    * set :a nitrogen
-+   36 set gallium 0
+-    * set .array*8 :a
+-    * set :a .array*9
++   36 set .array*8 0
     37 setaddr *tmp0 *label13
     38 label *label1
     39 set :a 0
     40 label *label2
     41 multijump *tmp0 0 0 (m:marker0)
     42 multilabel *label13 (m:marker0)
--    * set nitrogen :a
-+   43 set nitrogen 0
+-    * set .array*9 :a
++   43 set .array*9 0
     44 label *label3
     45 set :i 0
     46 label *label14
@@ -125,15 +158,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     67 jump *label24 greaterThanEq :printArray:i 10
     68 set *tmp7 :printArray:i
     69 print "-"
--    * readarr<internal:folded:compact> *tmp9 .array[] *tmp7
-+   70 readarr<internal:folded:compact> *tmp9 .array[] :printArray:i
+-    * readarr<lookup:liquid> *tmp9 .array[] *tmp7
++   70 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
     71 print *tmp9
     72 label *label23
     73 op add :printArray:i :printArray:i 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
-    36 set gallium 0
+    36 set .array*8 0
     37 setaddr *tmp0 *label13
     38 label *label1
 -    * set :a 0
@@ -146,31 +179,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     66 jump *label24 greaterThanEq :printArray:i 10
 -    * set *tmp7 :printArray:i
     67 print "-"
-    68 readarr<internal:folded:compact> *tmp9 .array[] :printArray:i
+    68 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
     69 print *tmp9
-
-Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-12 instructions):
- 
-    47 set :countDigits:number :i
-    48 label *label18
-    49 op mod *tmp2 :countDigits:number 10
--    * readarr<internal:folded:compact:src> *tmp3 .array[] *tmp2
-+   50 readarr<lookup:liquid> *tmp3 .array[] *tmp2
-    51 op add *tmp3 *tmp3 1
--    * writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
-+   52 writearr<lookup:liquid> *tmp3 .array[] *tmp2
-    53 op idiv :countDigits:number :countDigits:number 10
-    54 label *label19
-    55 jump *label18 greaterThan :countDigits:number 0
- 
-    65 label *label22
-    66 jump *label24 greaterThanEq :printArray:i 10
-    67 print "-"
--    * readarr<internal:folded:compact> *tmp9 .array[] :printArray:i
-+   68 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-    69 print *tmp9
-    70 label *label23
-    71 op add :printArray:i :printArray:i 1
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -189,7 +199,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
 +   61 jump *label25 lessThan :i LIMIT
     62 label *label16
     63 assertflush *tmp6
-    64 print water
+    64 print .array*0
     65 set :printArray:i 1
     66 label *label22
     67 jump *label24 greaterThanEq :printArray:i 10
@@ -210,76 +220,76 @@ Modifications by Unroll iteration loop at line 7:5 (-20 instructions):
 -    * setaddr *tmp0 *label4
 -    * jump *label1 always
 -    * multilabel *label4 (m:marker0)
--    * set water 0
+-    * set .array*0 0
 -    * setaddr *tmp0 *label5
 -    * jump *label1 always
 -    * multilabel *label5 (m:marker0)
--    * set slag 0
+-    * set .array*1 0
 -    * setaddr *tmp0 *label6
 -    * jump *label1 always
 -    * multilabel *label6 (m:marker0)
--    * set oil 0
+-    * set .array*2 0
 -    * setaddr *tmp0 *label7
 -    * jump *label1 always
 -    * multilabel *label7 (m:marker0)
--    * set cryofluid 0
+-    * set .array*3 0
 -    * setaddr *tmp0 *label8
 -    * jump *label1 always
 -    * multilabel *label8 (m:marker0)
--    * set neoplasm 0
+-    * set .array*4 0
 -    * setaddr *tmp0 *label9
 -    * jump *label1 always
 -    * multilabel *label9 (m:marker0)
--    * set hydrogen 0
+-    * set .array*5 0
 -    * setaddr *tmp0 *label10
 -    * jump *label1 always
 -    * multilabel *label10 (m:marker0)
--    * set ozone 0
+-    * set .array*6 0
 -    * setaddr *tmp0 *label11
 -    * jump *label1 always
 -    * multilabel *label11 (m:marker0)
--    * set cyanogen 0
+-    * set .array*7 0
 -    * setaddr *tmp0 *label12
 -    * jump *label1 always
 -    * multilabel *label12 (m:marker0)
--    * set gallium 0
+-    * set .array*8 0
 -    * setaddr *tmp0 *label13
 -    * label *label1
 -    * label *label2
 -    * multijump *tmp0 0 0 (m:marker0)
 -    * multilabel *label13 (m:marker0)
--    * set nitrogen 0
+-    * set .array*9 0
 -    * label *label3
 +    1 label *label27
 +    2 label *label28
-+    3 set water 0
++    3 set .array*0 0
 +    4 label *label31
 +    5 label *label32
-+    6 set slag 0
++    6 set .array*1 0
 +    7 label *label35
 +    8 label *label36
-+    9 set oil 0
++    9 set .array*2 0
 +   10 label *label39
 +   11 label *label40
-+   12 set cryofluid 0
++   12 set .array*3 0
 +   13 label *label43
 +   14 label *label44
-+   15 set neoplasm 0
++   15 set .array*4 0
 +   16 label *label47
 +   17 label *label48
-+   18 set hydrogen 0
++   18 set .array*5 0
 +   19 label *label51
 +   20 label *label52
-+   21 set ozone 0
++   21 set .array*6 0
 +   22 label *label55
 +   23 label *label56
-+   24 set cyanogen 0
++   24 set .array*7 0
 +   25 label *label59
 +   26 label *label60
-+   27 set gallium 0
++   27 set .array*8 0
 +   28 label *label63
 +   29 label *label64
-+   30 set nitrogen 0
++   30 set .array*9 0
 +   31 label *label3
     32 set :i 0
     33 label *label14
@@ -296,7 +306,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     36 set :countDigits:number :i
     37 label *label18
  
-    52 print water
+    52 print .array*0
     53 set :printArray:i 1
     54 label *label22
 -    * jump *label24 greaterThanEq :printArray:i 10
@@ -305,26 +315,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     57 print "-"
     58 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
 
+Modifications by Inject array access to 'array' at line 17:5 (+15 instructions):
+ 
+    36 set :countDigits:number :i
+    37 label *label18
+    38 op mod *tmp2 :countDigits:number 10
+-    * readarr<lookup:liquid> *tmp3 .array[] *tmp2
+-    * op add *tmp3 *tmp3 1
+-    * writearr<lookup:liquid> *tmp3 .array[] *tmp2
++   39 readarr<inlined:regular:inj+2> *tmp3 .array[] *tmp2
++   40 > op add *tmp3 *tmp3 1
++   41 > writearr<lookup:liquid> *tmp3 .array[] *tmp2
+    42 op idiv :countDigits:number :countDigits:number 10
+    43 label *label19
+    44 jump *label18 greaterThan :countDigits:number 0
+
+Modifications by Inject array access to 'array' at line 26:9 (+7 instructions):
+ 
+    55 jump *label24 greaterThanEq 1 10
+    56 label *label26
+    57 print "-"
+-    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
+-    * print *tmp9
++   58 readarr<inlined:regular:inj+10> *tmp9 .array[] :printArray:i
++   59 print *tmp9
+    60 label *label23
+    61 op add :printArray:i :printArray:i 1
+    62 jump *label26 lessThan :printArray:i 10
+
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
-    52 print water
+    52 print .array*0
     53 set :printArray:i 1
     54 label *label22
 -    * jump *label24 greaterThanEq 1 10
     55 label *label26
     56 print "-"
-    57 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
+    57 readarr<inlined:regular:inj+10> *tmp9 .array[] :printArray:i
 
-Modifications by Unroll loop at line 25:5 (+47 instructions):
+Modifications by Unroll loop at line 25:5 (+193 instructions):
  
     50 label *label16
     51 assertflush *tmp6
-    52 print water
+    52 print .array*0
 -    * set :printArray:i 1
 -    * label *label22
 -    * label *label26
 -    * print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
+-    * readarr<inlined:regular:inj+10> *tmp9 .array[] :printArray:i
 -    * print *tmp9
 -    * label *label23
 -    * op add :printArray:i :printArray:i 1
@@ -333,47 +371,47 @@ Modifications by Unroll loop at line 25:5 (+47 instructions):
 +   53 set :printArray:i 1
 +   54 label *label68
 +   55 print "-"
-+   56 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   56 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   57 print *tmp9
 +   58 label *label69
 +   59 op add :printArray:i :printArray:i 1
 +   60 print "-"
-+   61 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   61 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   62 print *tmp9
 +   63 label *label70
 +   64 op add :printArray:i :printArray:i 1
 +   65 print "-"
-+   66 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   66 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   67 print *tmp9
 +   68 label *label71
 +   69 op add :printArray:i :printArray:i 1
 +   70 print "-"
-+   71 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   71 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   72 print *tmp9
 +   73 label *label72
 +   74 op add :printArray:i :printArray:i 1
 +   75 print "-"
-+   76 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   76 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   77 print *tmp9
 +   78 label *label73
 +   79 op add :printArray:i :printArray:i 1
 +   80 print "-"
-+   81 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   81 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   82 print *tmp9
 +   83 label *label74
 +   84 op add :printArray:i :printArray:i 1
 +   85 print "-"
-+   86 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   86 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   87 print *tmp9
 +   88 label *label75
 +   89 op add :printArray:i :printArray:i 1
 +   90 print "-"
-+   91 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   91 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   92 print *tmp9
 +   93 label *label76
 +   94 op add :printArray:i :printArray:i 1
 +   95 print "-"
-+   96 readarr<lookup:liquid> *tmp9 .array[] :printArray:i
++   96 readarr<inlined:regular> *tmp9 .array[] :printArray:i
 +   97 print *tmp9
 +   98 label *label77
 +   99 op add :printArray:i :printArray:i 1
@@ -387,64 +425,64 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     53 set :printArray:i 1
     54 label *label68
     55 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   56 readarr<lookup:liquid> *tmp9 .array[] 1
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   56 readarr<inlined:regular> *tmp9 .array[] 1
     57 print *tmp9
     58 label *label69
 -    * op add :printArray:i :printArray:i 1
 +   59 op add :printArray:i 1 1
     60 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   61 readarr<lookup:liquid> *tmp9 .array[] 2
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   61 readarr<inlined:regular> *tmp9 .array[] 2
     62 print *tmp9
     63 label *label70
 -    * op add :printArray:i :printArray:i 1
 +   64 op add :printArray:i 2 1
     65 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   66 readarr<lookup:liquid> *tmp9 .array[] 3
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   66 readarr<inlined:regular> *tmp9 .array[] 3
     67 print *tmp9
     68 label *label71
 -    * op add :printArray:i :printArray:i 1
 +   69 op add :printArray:i 3 1
     70 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   71 readarr<lookup:liquid> *tmp9 .array[] 4
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   71 readarr<inlined:regular> *tmp9 .array[] 4
     72 print *tmp9
     73 label *label72
 -    * op add :printArray:i :printArray:i 1
 +   74 op add :printArray:i 4 1
     75 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   76 readarr<lookup:liquid> *tmp9 .array[] 5
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   76 readarr<inlined:regular> *tmp9 .array[] 5
     77 print *tmp9
     78 label *label73
 -    * op add :printArray:i :printArray:i 1
 +   79 op add :printArray:i 5 1
     80 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   81 readarr<lookup:liquid> *tmp9 .array[] 6
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   81 readarr<inlined:regular> *tmp9 .array[] 6
     82 print *tmp9
     83 label *label74
 -    * op add :printArray:i :printArray:i 1
 +   84 op add :printArray:i 6 1
     85 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   86 readarr<lookup:liquid> *tmp9 .array[] 7
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   86 readarr<inlined:regular> *tmp9 .array[] 7
     87 print *tmp9
     88 label *label75
 -    * op add :printArray:i :printArray:i 1
 +   89 op add :printArray:i 7 1
     90 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   91 readarr<lookup:liquid> *tmp9 .array[] 8
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   91 readarr<inlined:regular> *tmp9 .array[] 8
     92 print *tmp9
     93 label *label76
 -    * op add :printArray:i :printArray:i 1
 +   94 op add :printArray:i 8 1
     95 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] :printArray:i
-+   96 readarr<lookup:liquid> *tmp9 .array[] 9
+-    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
++   96 readarr<inlined:regular> *tmp9 .array[] 9
     97 print *tmp9
     98 label *label77
 -    * op add :printArray:i :printArray:i 1
@@ -457,51 +495,51 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
  
     50 label *label16
     51 assertflush *tmp6
-    52 print water
+    52 print .array*0
 -    * set :printArray:i 1
     53 label *label68
     54 print "-"
-    55 readarr<lookup:liquid> *tmp9 .array[] 1
+    55 readarr<inlined:regular> *tmp9 .array[] 1
     56 print *tmp9
     57 label *label69
 -    * op add :printArray:i 1 1
     58 print "-"
-    59 readarr<lookup:liquid> *tmp9 .array[] 2
+    59 readarr<inlined:regular> *tmp9 .array[] 2
     60 print *tmp9
     61 label *label70
 -    * op add :printArray:i 2 1
     62 print "-"
-    63 readarr<lookup:liquid> *tmp9 .array[] 3
+    63 readarr<inlined:regular> *tmp9 .array[] 3
     64 print *tmp9
     65 label *label71
 -    * op add :printArray:i 3 1
     66 print "-"
-    67 readarr<lookup:liquid> *tmp9 .array[] 4
+    67 readarr<inlined:regular> *tmp9 .array[] 4
     68 print *tmp9
     69 label *label72
 -    * op add :printArray:i 4 1
     70 print "-"
-    71 readarr<lookup:liquid> *tmp9 .array[] 5
+    71 readarr<inlined:regular> *tmp9 .array[] 5
     72 print *tmp9
     73 label *label73
 -    * op add :printArray:i 5 1
     74 print "-"
-    75 readarr<lookup:liquid> *tmp9 .array[] 6
+    75 readarr<inlined:regular> *tmp9 .array[] 6
     76 print *tmp9
     77 label *label74
 -    * op add :printArray:i 6 1
     78 print "-"
-    79 readarr<lookup:liquid> *tmp9 .array[] 7
+    79 readarr<inlined:regular> *tmp9 .array[] 7
     80 print *tmp9
     81 label *label75
 -    * op add :printArray:i 7 1
     82 print "-"
-    83 readarr<lookup:liquid> *tmp9 .array[] 8
+    83 readarr<inlined:regular> *tmp9 .array[] 8
     84 print *tmp9
     85 label *label76
 -    * op add :printArray:i 8 1
     86 print "-"
-    87 readarr<lookup:liquid> *tmp9 .array[] 9
+    87 readarr<inlined:regular> *tmp9 .array[] 9
     88 print *tmp9
     89 label *label77
 -    * op add :printArray:i 9 1
@@ -509,53 +547,53 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     91 label *label21
     92 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
 
-Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1 (-18 instructions):
+Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1 (-171 instructions):
  
-    52 print water
+    52 print .array*0
     53 label *label68
     54 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 1
-+   55 set *tmp9 slag
+-    * readarr<inlined:regular> *tmp9 .array[] 1
++   55 set *tmp9 .array*1
     56 print *tmp9
     57 label *label69
     58 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 2
-+   59 set *tmp9 oil
+-    * readarr<inlined:regular> *tmp9 .array[] 2
++   59 set *tmp9 .array*2
     60 print *tmp9
     61 label *label70
     62 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 3
-+   63 set *tmp9 cryofluid
+-    * readarr<inlined:regular> *tmp9 .array[] 3
++   63 set *tmp9 .array*3
     64 print *tmp9
     65 label *label71
     66 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 4
-+   67 set *tmp9 neoplasm
+-    * readarr<inlined:regular> *tmp9 .array[] 4
++   67 set *tmp9 .array*4
     68 print *tmp9
     69 label *label72
     70 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 5
-+   71 set *tmp9 hydrogen
+-    * readarr<inlined:regular> *tmp9 .array[] 5
++   71 set *tmp9 .array*5
     72 print *tmp9
     73 label *label73
     74 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 6
-+   75 set *tmp9 ozone
+-    * readarr<inlined:regular> *tmp9 .array[] 6
++   75 set *tmp9 .array*6
     76 print *tmp9
     77 label *label74
     78 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 7
-+   79 set *tmp9 cyanogen
+-    * readarr<inlined:regular> *tmp9 .array[] 7
++   79 set *tmp9 .array*7
     80 print *tmp9
     81 label *label75
     82 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 8
-+   83 set *tmp9 gallium
+-    * readarr<inlined:regular> *tmp9 .array[] 8
++   83 set *tmp9 .array*8
     84 print *tmp9
     85 label *label76
     86 print "-"
--    * readarr<lookup:liquid> *tmp9 .array[] 9
-+   87 set *tmp9 nitrogen
+-    * readarr<inlined:regular> *tmp9 .array[] 9
++   87 set *tmp9 .array*9
     88 print *tmp9
     89 label *label77
     90 label *label24
@@ -564,167 +602,193 @@ Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
     53 label *label68
     54 print "-"
-    55 set *tmp9 slag
+    55 set *tmp9 .array*1
 -    * print *tmp9
-+   56 print slag
++   56 print .array*1
     57 label *label69
     58 print "-"
-    59 set *tmp9 oil
+    59 set *tmp9 .array*2
 -    * print *tmp9
-+   60 print oil
++   60 print .array*2
     61 label *label70
     62 print "-"
-    63 set *tmp9 cryofluid
+    63 set *tmp9 .array*3
 -    * print *tmp9
-+   64 print cryofluid
++   64 print .array*3
     65 label *label71
     66 print "-"
-    67 set *tmp9 neoplasm
+    67 set *tmp9 .array*4
 -    * print *tmp9
-+   68 print neoplasm
++   68 print .array*4
     69 label *label72
     70 print "-"
-    71 set *tmp9 hydrogen
+    71 set *tmp9 .array*5
 -    * print *tmp9
-+   72 print hydrogen
++   72 print .array*5
     73 label *label73
     74 print "-"
-    75 set *tmp9 ozone
+    75 set *tmp9 .array*6
 -    * print *tmp9
-+   76 print ozone
++   76 print .array*6
     77 label *label74
     78 print "-"
-    79 set *tmp9 cyanogen
+    79 set *tmp9 .array*7
 -    * print *tmp9
-+   80 print cyanogen
++   80 print .array*7
     81 label *label75
     82 print "-"
-    83 set *tmp9 gallium
+    83 set *tmp9 .array*8
 -    * print *tmp9
-+   84 print gallium
++   84 print .array*8
     85 label *label76
     86 print "-"
-    87 set *tmp9 nitrogen
+    87 set *tmp9 .array*9
 -    * print *tmp9
-+   88 print nitrogen
++   88 print .array*9
     89 label *label77
     90 label *label24
     91 label *label21
 
 Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-9 instructions):
  
-    52 print water
+    52 print .array*0
     53 label *label68
     54 print "-"
--    * set *tmp9 slag
-    55 print slag
+-    * set *tmp9 .array*1
+    55 print .array*1
     56 label *label69
     57 print "-"
--    * set *tmp9 oil
-    58 print oil
+-    * set *tmp9 .array*2
+    58 print .array*2
     59 label *label70
     60 print "-"
--    * set *tmp9 cryofluid
-    61 print cryofluid
+-    * set *tmp9 .array*3
+    61 print .array*3
     62 label *label71
     63 print "-"
--    * set *tmp9 neoplasm
-    64 print neoplasm
+-    * set *tmp9 .array*4
+    64 print .array*4
     65 label *label72
     66 print "-"
--    * set *tmp9 hydrogen
-    67 print hydrogen
+-    * set *tmp9 .array*5
+    67 print .array*5
     68 label *label73
     69 print "-"
--    * set *tmp9 ozone
-    70 print ozone
+-    * set *tmp9 .array*6
+    70 print .array*6
     71 label *label74
     72 print "-"
--    * set *tmp9 cyanogen
-    73 print cyanogen
+-    * set *tmp9 .array*7
+    73 print .array*7
     74 label *label75
     75 print "-"
--    * set *tmp9 gallium
-    76 print gallium
+-    * set *tmp9 .array*8
+    76 print .array*8
     77 label *label76
     78 print "-"
--    * set *tmp9 nitrogen
-    79 print nitrogen
+-    * set *tmp9 .array*9
+    79 print .array*9
     80 label *label77
     81 label *label24
 
-Modifications by Virtual Instruction Expansion:
+Modifications by Virtual Instruction Expansion (-1 instructions):
  
     36 set :countDigits:number :i
     37 label *label18
     38 op mod *tmp2 :countDigits:number 10
--    * readarr<lookup:liquid> *tmp3 .array[] *tmp2
+-    * readarr<inlined:regular:inj+2> *tmp3 .array[] *tmp2
+-    * > op add *tmp3 *tmp3 1
+-    * > writearr<lookup:liquid> *tmp3 .array[] *tmp2
 +   39 assertbounds multiple 1 0 lessThanEq *tmp2 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
-+   40 lookup liquid *tmp10 *tmp2
-+   41 sensor .array*elem *tmp10 @name
-+   42 read *tmp3 @this .array*elem
-    43 op add *tmp3 *tmp3 1
--    * writearr<lookup:liquid> *tmp3 .array[] *tmp2
-+   44 assertbounds multiple 1 0 lessThanEq *tmp2 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
-+   45 write *tmp3 @this .array*elem
-    46 op idiv :countDigits:number :countDigits:number 10
-    47 label *label19
-    48 jump *label18 greaterThan :countDigits:number 0
++   40 multijump *tmp2 0 0 (m:marker1)
++   41 multilabel *label79 (m:marker1)
++   42 > op add .array*9 .array*9 1
++   43 jump *label78 always
++   44 multilabel *label80 (m:marker1)
++   45 > op add .array*8 .array*8 1
++   46 jump *label78 always
++   47 multilabel *label81 (m:marker1)
++   48 > op add .array*7 .array*7 1
++   49 jump *label78 always
++   50 multilabel *label82 (m:marker1)
++   51 > op add .array*6 .array*6 1
++   52 jump *label78 always
++   53 multilabel *label83 (m:marker1)
++   54 > op add .array*5 .array*5 1
++   55 jump *label78 always
++   56 multilabel *label84 (m:marker1)
++   57 > op add .array*4 .array*4 1
++   58 jump *label78 always
++   59 multilabel *label85 (m:marker1)
++   60 > op add .array*3 .array*3 1
++   61 jump *label78 always
++   62 multilabel *label86 (m:marker1)
++   63 > op add .array*2 .array*2 1
++   64 jump *label78 always
++   65 multilabel *label87 (m:marker1)
++   66 > op add .array*1 .array*1 1
++   67 jump *label78 always
++   68 multilabel *label88 (m:marker1)
++   69 > op add .array*0 .array*0 1
++   70 label *label78
+    71 op idiv :countDigits:number :countDigits:number 10
+    72 label *label19
+    73 jump *label18 greaterThan :countDigits:number 0
 
 Modifications by Jumps phase, Single Step Elimination, pass 7, iteration 1 (-1 instructions):
  
-    47 print "-"
-    48 print nitrogen
-    49 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
+    72 print "-"
+    73 print .array*9
+    74 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
-    28 label *label16
-    29 assertflush *tmp6
-    30 print water
+    53 label *label16
+    54 assertflush *tmp6
+    55 print .array*0
 -    * print "-"
--    * print slag
+-    * print .array*1
 -    * print "-"
--    * print oil
+-    * print .array*2
 -    * print "-"
--    * print cryofluid
+-    * print .array*3
 -    * print "-"
--    * print neoplasm
+-    * print .array*4
 -    * print "-"
--    * print hydrogen
+-    * print .array*5
 -    * print "-"
--    * print ozone
+-    * print .array*6
 -    * print "-"
--    * print cyanogen
+-    * print .array*7
 -    * print "-"
--    * print gallium
+-    * print .array*8
 -    * print "-"
-+   31 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
-+   32 format slag
-+   33 format oil
-+   34 format cryofluid
-+   35 format neoplasm
-+   36 format hydrogen
-+   37 format ozone
-+   38 format cyanogen
-+   39 format gallium
-    40 print nitrogen
-    41 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
++   56 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
++   57 format .array*1
++   58 format .array*2
++   59 format .array*3
++   60 format .array*4
++   61 format .array*5
++   62 format .array*6
++   63 format .array*7
++   64 format .array*8
+    65 print .array*9
+    66 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
 
 Final code before resolving virtual instructions:
 
 set LIMIT 100
-set water 0
-set slag 0
-set oil 0
-set cryofluid 0
-set neoplasm 0
-set hydrogen 0
-set ozone 0
-set cyanogen 0
-set gallium 0
-set nitrogen 0
+set .array*0 0
+set .array*1 0
+set .array*2 0
+set .array*3 0
+set .array*4 0
+set .array*5 0
+set .array*6 0
+set .array*7 0
+set .array*8 0
+set .array*9 0
 set :i 0
 jump *label16 greaterThanEq 0 LIMIT
 label *label25
@@ -732,27 +796,52 @@ set :countDigits:number :i
 label *label18
 op mod *tmp0 :countDigits:number 10
 assertbounds multiple 1 0 lessThanEq *tmp0 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
-lookup liquid *tmp3 *tmp0
-sensor .array*elem *tmp3 @name
-read *tmp1 @this .array*elem
-op add *tmp1 *tmp1 1
-assertbounds multiple 1 0 lessThanEq *tmp0 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
-write *tmp1 @this .array*elem
+multijump *tmp0 0 0
+multilabel *label79
+op add .array*9 .array*9 1              # Origin: 15, keys: 9
+jump *label78 always
+multilabel *label80
+op add .array*8 .array*8 1              # Origin: 15, keys: 8
+jump *label78 always
+multilabel *label81
+op add .array*7 .array*7 1              # Origin: 15, keys: 7
+jump *label78 always
+multilabel *label82
+op add .array*6 .array*6 1              # Origin: 15, keys: 6
+jump *label78 always
+multilabel *label83
+op add .array*5 .array*5 1              # Origin: 15, keys: 5
+jump *label78 always
+multilabel *label84
+op add .array*4 .array*4 1              # Origin: 15, keys: 4
+jump *label78 always
+multilabel *label85
+op add .array*3 .array*3 1              # Origin: 15, keys: 3
+jump *label78 always
+multilabel *label86
+op add .array*2 .array*2 1              # Origin: 15, keys: 2
+jump *label78 always
+multilabel *label87
+op add .array*1 .array*1 1              # Origin: 15, keys: 1
+jump *label78 always
+multilabel *label88
+op add .array*0 .array*0 1              # Origin: 15, keys: 0
+label *label78
 op idiv :countDigits:number :countDigits:number 10
 jump *label18 greaterThan :countDigits:number 0
 op add :i :i 1
 jump *label25 lessThan :i LIMIT
 label *label16
-assertflush *tmp2
-print water
+assertflush *tmp1
+print .array*0
 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
-format slag
-format oil
-format cryofluid
-format neoplasm
-format hydrogen
-format ozone
-format cyanogen
-format gallium
-print nitrogen
-assertprints *tmp2 "10-20-20-20-20-20-20-20-20-20" "digit counts"
+format .array*1
+format .array*2
+format .array*3
+format .array*4
+format .array*5
+format .array*6
+format .array*7
+format .array*8
+print .array*9
+assertprints *tmp1 "10-20-20-20-20-20-20-20-20-20" "digit counts"

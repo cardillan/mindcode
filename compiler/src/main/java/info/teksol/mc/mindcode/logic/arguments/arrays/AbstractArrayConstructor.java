@@ -127,7 +127,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index) {
-        if (!profile.isBoundaryChecks() || instruction.isSafeAccess()) return;
+        if (!profile.isBoundaryChecks() || instruction.isSafeAccess() || skipCompactLookup()) return;
 
         int maxIndex = arrayStore.size() - 1;
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
@@ -141,6 +141,19 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     protected boolean skipCompactLookup() {
         return arrayConstruction == ArrayConstruction.COMPACT && instruction.isCompactAccessTarget();
+    }
+
+    // COMPACT/LOOKUP ARRAYS
+    //
+    // Compact and lookup arrays generate the variable name to access elements.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public SideEffects createNameBasedSideEffects() {
+        boolean injected = !instruction.getArrayInjections().isEmpty() || instruction.getArrayInjectedInto() != null;
+        return switch (accessType) {
+            case READ -> SideEffects.of(arrayElements(), injected ? List.of() : List.of(getElementNameVariable()), List.of());
+            case WRITE -> SideEffects.of(List.of(), injected ? List.of() : List.of(getElementNameVariable()), arrayElements());
+        };
     }
 
     // UNFOLDED TABLE

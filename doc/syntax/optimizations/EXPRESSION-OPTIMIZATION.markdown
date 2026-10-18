@@ -9,8 +9,6 @@ Some instructions perform implicit integer conversions on their argument(s). Whe
 Currently, only array indexes are handled in this way. When a `floor()` function is used on an array index, the corresponding `op floor` instruction may be removed (assuming the value isn't used anywhere else). Example:
 
 ```Mindcode
-#set use-text-jump-tables = false;
-
 volatile var a[6];
 printchar(a[floor(rand(length(a)))]);
 ```
@@ -19,12 +17,18 @@ compiles to:
 
 ```mlog
 op rand *tmp0 6 0
-lookup team *tmp2 *tmp0
-sensor .a*elem *tmp2 @name
-read *tmp1 @this .a*elem
-printchar *tmp1
-end
-draw triangle derelict sharded crux malis green blue
+read @counter "\u000c\n\u0008\u0006\u0004\u0002" *tmp0
+printchar .a*5                          # Origin: 1, keys: 5
+jump 0 always 0 0
+printchar .a*4                          # Origin: 1, keys: 4
+jump 0 always 0 0
+printchar .a*3                          # Origin: 1, keys: 3
+jump 0 always 0 0
+printchar .a*2                          # Origin: 1, keys: 2
+jump 0 always 0 0
+printchar .a*1                          # Origin: 1, keys: 1
+jump 0 always 0 0
+printchar .a*0                          # Origin: 1, keys: 0
 ```
 
 ## The `lookup` instruction

@@ -34,7 +34,7 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     ArrayAccessInstruction withArray(LogicArray array);
 
     default ArrayOrganization getArrayOrganization() {
-        return (ArrayOrganization) getInfo(InstructionInfo.ARRAY_ORGANIZATION);
+        return getInfo(InstructionInfo.ARRAY_ORGANIZATION);
     }
 
     default ArrayAccessInstruction setArrayOrganization(ArrayOrganization arrayOrganization) {
@@ -42,7 +42,7 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     }
 
     default ArrayConstruction getArrayConstruction() {
-        return (ArrayConstruction) getInfo(InstructionInfo.ARRAY_CONSTRUCTION);
+        return getInfo(InstructionInfo.ARRAY_CONSTRUCTION);
     }
 
     default ArrayAccessInstruction setArrayConstruction(ArrayConstruction arrayConstruction) {
@@ -50,7 +50,7 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     }
 
     default LogicKeyword getArrayLookupType() {
-        return (LogicKeyword) getInfo(InstructionInfo.ARRAY_LOOKUP_TYPE);
+        return getInfo(InstructionInfo.ARRAY_LOOKUP_TYPE);
     }
 
     default ArrayAccessInstruction setArrayLookupType(LogicKeyword arrayLookupType) {
@@ -61,7 +61,7 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     /// possible, the flag is ignored otherwise. `ArrayConstructor.folded()` indicates whether the
     /// table is actually folded.
     default boolean isArrayFolded() {
-        return (boolean) getInfo(InstructionInfo.ARRAY_FOLDED);
+        return getInfo(InstructionInfo.ARRAY_FOLDED);
     }
 
     /// Sets the status of @counter table folding request. The table will only be folded when
@@ -72,8 +72,7 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     }
 
     default List<LogicInstruction> getArrayInjections() {
-        //noinspection unchecked
-        return (List<LogicInstruction>) getInfo(InstructionInfo.ARRAY_INJECTIONS);
+        return getInfo(InstructionInfo.ARRAY_INJECTIONS);
     }
 
     default ArrayAccessInstruction setArrayInjections(List<LogicInstruction> arrayInjection) {
@@ -83,7 +82,7 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     ArrayAccessInstruction setArrayOrganization(ArrayOrganization arrayOrganization, ArrayConstruction arrayConstruction);
 
     default boolean isCompactAccessSource() {
-        return (boolean) getInfo(InstructionInfo.COMPACT_ACCESS_SOURCE);
+        return getInfo(InstructionInfo.COMPACT_ACCESS_SOURCE);
     }
 
     default ArrayAccessInstruction setCompactAccessSource() {
@@ -91,7 +90,7 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     }
 
     default boolean isCompactAccessTarget() {
-        return (boolean) getInfo(InstructionInfo.COMPACT_ACCESS_TARGET);
+        return getInfo(InstructionInfo.COMPACT_ACCESS_TARGET);
     }
 
     default ArrayAccessInstruction setCompactAccessTarget() {

@@ -38,6 +38,8 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
         if (!skipCompactLookup()) {
             AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
+            generateBoundsCheck(astContext, consumer, instruction.getIndex());
+
             LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
             LogicLabel finalLabel = processor.nextLabel();
@@ -46,11 +48,9 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
             LogicValue index = computeIndex(creator);
             LogicVariable tmp;
             if (useTextTables) {
-                generateBoundsCheck(astContext, consumer, instruction.getIndex());
                 tmp = LogicVariable.INVALID;  // Won't be used
             } else if (folded()) {
                 LogicVariable tmp1 = creator.nextTemp();
-                generateBoundsCheck(astContext, consumer, instruction.getIndex());
                 creator.createOp(Operation.SHL, tmp1, index, LogicNumber.ONE).setNonNegativeInt(index);
                 LogicVariable tmp2 = creator.nextTemp();
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
@@ -58,7 +58,6 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 tmp = tmp2;
             } else {
                 tmp = creator.nextTemp();
-                generateBoundsCheck(astContext, consumer, instruction.getIndex());
                 creator.createOp(Operation.SHL, tmp, index, LogicNumber.ONE).setNonNegativeInt(index);
             }
 

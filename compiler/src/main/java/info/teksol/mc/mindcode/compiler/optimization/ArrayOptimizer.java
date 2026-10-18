@@ -52,31 +52,6 @@ class ArrayOptimizer extends BaseOptimizer {
             while (iterator.hasNext()) {
                 LogicInstruction instruction = iterator.next();
                 if (instruction instanceof ArrayAccessInstruction ix && ix.getArrayOrganization() != ArrayOrganization.LOOKUP) {
-                    if (ix.getArrayOrganization() == ArrayOrganization.INLINED && ix instanceof ReadArrInstruction rix) {
-                        List<LogicInstruction> injections = List.of();
-                        LogicInstruction next = iterator.peekValid(0);
-                        if (next != null && canInject(next) && next.inputArgumentsStream().anyMatch(v -> v == rix.getResult())) {
-                            LogicInstruction second;
-                            if (selfUpdate(next) && next.getResult() == ix.getResult()
-                                    && iterator.peekValid(1) instanceof WriteArrInstruction wix
-                                    && wix.getValue() == ix.getResult() && wix.getArray() == ix.getArray()
-                                    && wix.getIndex() == ix.getIndex() && wix.getIndex() != ix.getResult()) {
-                                second = wix;
-                            } else {
-                                second = null;
-                            }
-
-                            if (getVariableReferences(ix.getResult()).stream().noneMatch(i -> i != rix && i != next && i != second)) {
-                                injections = second == null ? List.of(next) : List.of(next, second);
-                            }
-                        }
-
-                        if (!injections.equals(ix.getArrayInjections())) {
-                            ix = instructionProcessor.copy(rix).setArrayInjections(injections);
-                            iterator.set(ix);
-                        }
-                    }
-
                     ArrayConstruction construction = computeArrayConstruction(ix);
                     ArrayOrganization organization = computeArrayOrganization(ix);
                     if (ix.getArrayConstruction() != construction || ix.getArrayOrganization() != organization) {
@@ -93,14 +68,6 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         return false;
-    }
-
-    private boolean canInject(LogicInstruction instruction) {
-        return !instruction.getOpcode().isVirtual() && instruction.getOpcode() != Opcode.JUMP && instruction.getRealSize() == 1;
-    }
-
-    private boolean selfUpdate(LogicInstruction instruction) {
-        return instruction instanceof LogicResultInstruction res && res.inputArgumentsStream().anyMatch(v -> v == res.getResult());
     }
 
     private int lookupCapacity(LogicKeyword lookupType, Set<String> usedVariables) {
@@ -150,6 +117,7 @@ class ArrayOptimizer extends BaseOptimizer {
                 .filter(ArrayAccessInstruction.class::isInstance)
                 .map(ArrayAccessInstruction.class::cast)
                 .filter(ix -> ix.getArray().getArrayStore().getArrayType() == ArrayType.INTERNAL
+                        && ix.getArrayInjections().isEmpty()
                         && ix.getArrayOrganization().supportsLookup() && !ix.getArray().isDeclaredRemote()
                         && ix.getArray().getArrayStore().getMasterArray().fullSize() >= MIN_LOOKUP_CAPACITY)
                 .toList();
@@ -191,10 +159,12 @@ class ArrayOptimizer extends BaseOptimizer {
             if (selected != null) {
                 List<ArrayAccessInstruction> instructions = arrays.remove(selected);
                 for (var ix : instructions) {
-                    ArrayAccessInstruction copy = instructionProcessor.copy(ix)
-                            .setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
-                            .setArrayLookupType(lookupType);
-                    replaceInstruction(ix, copy);
+                    if (ix.getArrayInjections().isEmpty()) {
+                        ArrayAccessInstruction copy = instructionProcessor.copy(ix)
+                                .setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
+                                .setArrayLookupType(lookupType);
+                        replaceInstruction(ix, copy);
+                    }
                 }
             }
         }
@@ -214,6 +184,8 @@ class ArrayOptimizer extends BaseOptimizer {
     }
 
     private ArrayOrganization computeArrayOrganization(ArrayAccessInstruction ix) {
+        if (!ix.getArrayInjections().isEmpty()) return ix.getArrayOrganization();
+
         return switch (ix.getArray().getArrayStore().fullSize()) {
             case 1 -> ArrayOrganization.SINGLE;
             case 2 -> selectSupported && getGlobalProfile().useShortArrays() ? ArrayOrganization.SHORT : ix.getArrayOrganization();
@@ -239,12 +211,13 @@ class ArrayOptimizer extends BaseOptimizer {
         ArrayOptimization inlining = new InliningArrayOptimization();
         ArrayOptimization inliningFolding = new InliningFoldingArrayOptimization();
         ArrayOptimization inliningShort = new InliningShortArrayOptimization();
+        ArrayOptimization injecting = new InjectingArrayOptimization();
 
         List<ArrayOptimization> allOptimizations = selectSupported ? List.of(unfolding, promoting, inlining, inliningFolding, inliningShort)
                 : List.of(unfolding, promoting, inlining, inliningShort);
-        List<ArrayOptimization> inliningOptimizations = selectSupported ? List.of(inlining, inliningFolding, inliningShort)
+        List<ArrayOptimization> inliningOptimizations = selectSupported ? List.of(inlining, inliningFolding, inliningShort, injecting)
                 : List.of(inlining, inliningShort);
-        List<ArrayOptimization> inlinedOptimizations = List.of(unfolding, promoting);
+        List<ArrayOptimization> inlinedOptimizations = List.of(unfolding, promoting, injecting);
 
         List<OptimizationAction> actions = new ArrayList<>();
 
@@ -321,7 +294,7 @@ class ArrayOptimizer extends BaseOptimizer {
 
             if (indexes.length == instructions.size()) {
                 for (int i = 0; i < indexes.length; i++) {
-                    LogicInstruction copy = optimizationPlan.optimization.apply(instructions.get(i));
+                    LogicInstruction copy = optimizationPlan.optimization.apply(instructions.get(i), true);
                     replaceInstruction(indexes[i], copy);
                     updatedArrays.add(instructions.get(i).getArray().getArrayStore().getName());
                 }
@@ -345,7 +318,7 @@ class ArrayOptimizer extends BaseOptimizer {
 
     private ArrayOptimizationPlan evaluateOptimization(ArrayAccessInstruction original, ArrayOptimization optimization) {
         if (optimization.canApply(original)) {
-            ArrayAccessInstruction optimized = optimization.apply(original);
+            ArrayAccessInstruction optimized = optimization.apply(original, false);
             OptimizationEffect effect = OptimizationEffect.fromComparison(original, optimized);
             return new ArrayOptimizationPlan(List.of(original), optimization, effect);
         } else {
@@ -360,8 +333,10 @@ class ArrayOptimizer extends BaseOptimizer {
         List<ArrayAccessInstruction> affectedInstructions = new ArrayList<>();
 
         for (ArrayAccessInstruction original : instructions) {
+            if (original.getArrayInjectedInto() != null) continue;
+
             if (optimization.canApply(original)) {
-                ArrayAccessInstruction optimized = optimization.apply(original);
+                ArrayAccessInstruction optimized = optimization.apply(original, false);
                 OptimizationEffect effect = OptimizationEffect.fromComparison(original, optimized, originalStructures, optimizedStructures);
                 totalEffect = totalEffect.add(effect);
                 affectedInstructions.add(original);
@@ -384,7 +359,7 @@ class ArrayOptimizer extends BaseOptimizer {
 
     private interface ArrayOptimization {
         boolean canApply(ArrayAccessInstruction instruction);
-        ArrayAccessInstruction apply(ArrayAccessInstruction instruction);
+        ArrayAccessInstruction apply(ArrayAccessInstruction instruction, boolean realizing);
         String name();
     }
 
@@ -401,7 +376,7 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         @Override
-        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction) {
+        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction, boolean realizing) {
             return instructionProcessor.copy(instruction).setArrayFolded(false);
         }
 
@@ -419,7 +394,7 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         @Override
-        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction) {
+        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction, boolean realizing) {
             return instructionProcessor.copy(instruction).setArrayConstruction(ArrayConstruction.REGULAR);
         }
 
@@ -436,7 +411,7 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         @Override
-        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction) {
+        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction, boolean realizing) {
             return instructionProcessor.copy(instruction).setArrayOrganization(instruction.getArrayOrganization().inline());
         }
 
@@ -454,7 +429,7 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         @Override
-        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction) {
+        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction, boolean realizing) {
             return instructionProcessor.copy(instruction).setArrayOrganization(instruction.getArrayOrganization().inline())
                     .setArrayFolded(true);
         }
@@ -474,13 +449,81 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         @Override
-        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction) {
+        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction, boolean realizing) {
             return instructionProcessor.copy(instruction).setArrayOrganization(instruction.getArrayOrganization().inlineShort());
         }
 
         @Override
         public String name() {
             return "Inline short";
+        }
+    }
+
+    private class InjectingArrayOptimization implements ArrayOptimization {
+
+        @Override
+        public boolean canApply(ArrayAccessInstruction instruction) {
+            return switch (instruction.getArrayOrganization()) {
+                case INTERNAL, INLINED, LOOKUP, SHORT -> advanced(instruction) && !findInjections(instruction).isEmpty();
+                default -> false;
+            };
+        }
+
+        @Override
+        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction, boolean realizing) {
+            List<LogicInstruction> injections = findInjections(instruction);
+            if (realizing) {
+                injections.replaceAll(ix ->
+                    replaceInstruction(ix, instructionProcessor.copy(ix).setArrayInjectedInto(instruction)));
+            }
+            return (ArrayAccessInstruction) instructionProcessor.copy(instruction)
+                    .setArrayOrganization(ArrayOrganization.INLINED, ArrayConstruction.REGULAR)
+                    .setArrayInjections(injections)
+                    .setArrayFolded(false)
+                    .resetCompactAccess();
+        }
+
+        @Override
+        public String name() {
+            return "Inject";
+        }
+
+        private List<LogicInstruction> findInjections(ArrayAccessInstruction instruction) {
+            if (!(instruction instanceof ReadArrInstruction)) return List.of();
+
+            try (OptimizationContext.LogicIterator iterator = createIteratorAtInstruction(instruction)) {
+                if (iterator.next() instanceof ReadArrInstruction ix) {
+                    LogicInstruction next = iterator.peekValid(0);
+                    if (next != null && canInject(next) && next.inputArgumentsStream().anyMatch(v -> v == ix.getResult())) {
+                        LogicInstruction second;
+                        if (selfUpdate(next) && next.getResult() == ix.getResult()
+                                && iterator.peekValid(1) instanceof WriteArrInstruction wix
+                                && wix.getValue() == ix.getResult() && wix.getArray() == ix.getArray()
+                                && wix.getIndex() == ix.getIndex() && wix.getIndex() != ix.getResult()) {
+                            second = wix;
+                        } else {
+                            second = null;
+                        }
+
+                        if (getVariableReferences(ix.getResult()).stream().noneMatch(i -> i != ix && i != next && i != second)) {
+                            ArrayList<LogicInstruction> injections = new ArrayList<>();
+                            injections.add(next);
+                            if (second != null) injections.add(second);
+                            return injections;
+                        }
+                    }
+                }
+
+                return List.of();
+            }
+        }
+
+        private boolean canInject(LogicInstruction instruction) {
+            return !instruction.getOpcode().isVirtual() && instruction.getOpcode() != Opcode.JUMP && instruction.getRealSize() == 1;
+        }
+
+        private boolean selfUpdate(LogicInstruction instruction) {
+            return instruction instanceof LogicResultInstruction res && res.inputArgumentsStream().anyMatch(v -> v == res.getResult());
         }
     }
 }

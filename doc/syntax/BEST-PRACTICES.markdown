@@ -625,16 +625,16 @@ produces
 # Pay closer attention to sections of the program manipulating @counter
     set .x 0
     # List iteration loop (5 instructions per iteration)
-    set :a derelict
+    set :a .array*0
     op add *tmp0 @counter 1
     jump label_12 always 0 0
-    set :a sharded
+    set :a .array*1
     op add *tmp0 @counter 1
     jump label_12 always 0 0
-    set :a crux
+    set :a .array*2
     op add *tmp0 @counter 1
     jump label_12 always 0 0
-    set :a malis
+    set :a .array*3
     set *tmp0 null
     label_12:
         op add .x .x :a
@@ -643,10 +643,16 @@ produces
     # Index-based access (6 instructions per iteration)
     set :i 0
 label_16:
-            lookup team *tmp2 :i
-            sensor .array*elem *tmp2 @name
-            read *tmp1 @this .array*elem
-        op add .y .y *tmp1
+        op shl *tmp1 :i 1
+        op add @counter @counter *tmp1
+        op add .y .y .array*0
+        jump label_25 always 0 0
+        op add .y .y .array*1
+        jump label_25 always 0 0
+        op add .y .y .array*2
+        jump label_25 always 0 0
+        op add .y .y .array*3
+    label_25:
     op add :i :i 1
     jump label_16 lessThan :i 4
     print .x
@@ -683,22 +689,22 @@ produces
 # Pay closer attention to sections of the program manipulating @counter
     # List iteration loop (7 instructions per iteration)
     set :y water
-    set :z copper
+    set :z .c*0
     op add *tmp0 @counter 1
     jump label_18 always 0 0
     set derelict :x
     set :y slag
-    set :z lead
+    set :z .c*1
     op add *tmp0 @counter 1
     jump label_18 always 0 0
     set sharded :x
     set :y oil
-    set :z metaglass
+    set :z .c*2
     op add *tmp0 @counter 1
     jump label_18 always 0 0
     set crux :x
     set :y cryofluid
-    set :z graphite
+    set :z .c*3
     set *tmp0 null
     label_18:
         op add :x :y :z
@@ -707,16 +713,22 @@ produces
     # Index-based access (12 instructions per iteration)
     set :i 0
 label_22:
-            lookup liquid *tmp4 :i
-            sensor .b*elem *tmp4 @name
+            lookup liquid *tmp3 :i
+            sensor .b*elem *tmp3 @name
             read *tmp1 @this .b*elem
-            lookup item *tmp5 :i
-            sensor .c*elem *tmp5 @name
-            read *tmp2 @this .c*elem
-        op add *tmp3 *tmp1 *tmp2
-            lookup team *tmp6 :i
-            sensor .a*elem *tmp6 @name
-            write *tmp3 @this .a*elem
+        op shl *tmp4 :i 1
+        op add @counter @counter *tmp4
+        op add *tmp2 *tmp1 .c*0
+        jump label_34 always 0 0
+        op add *tmp2 *tmp1 .c*1
+        jump label_34 always 0 0
+        op add *tmp2 *tmp1 .c*2
+        jump label_34 always 0 0
+        op add *tmp2 *tmp1 .c*3
+    label_34:
+            lookup team *tmp5 :i
+            sensor .a*elem *tmp5 @name
+            write *tmp2 @this .a*elem
     op add :i :i 1
     jump label_22 lessThan :i 4
     print derelict

@@ -591,13 +591,14 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         void handlesElseIfArray3() {
             assertCompilesTo("""
                             #set target = 7.0;
+                            #set array-optimization = basic;
 
                             var array[3];
                             param p = 0.9999999;
                             print(array[floor(p)]);
                             """,
                     createInstruction(SET, "p", "0.9999999"),
-                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "2", q("position 5:1: index out of bounds (0 to 2)")),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "2", q("position 6:1: index out of bounds (0 to 2)")),
                     createInstruction(JUMP, label(0), "greaterThanEq", "p", "1"),
                     createInstruction(SET, tmp(3), ".array*0"),
                     createInstruction(JUMP, label(1), "always"),

@@ -210,6 +210,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         } else {
             str.append("    * ");       // Deleted line -- no number
         }
+        if (instruction.getArrayInjectedInto() != null) str.append("> ");
         str.append(instruction.getMlogOpcode());
         if (instruction instanceof ArrayAccessInstruction aai) {
             switch (aai.getArrayOrganization()) {

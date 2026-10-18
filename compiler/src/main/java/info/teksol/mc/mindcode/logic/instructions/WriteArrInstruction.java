@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static info.teksol.mc.mindcode.logic.instructions.InstructionInfo.*;
+
 @NullMarked
 public class WriteArrInstruction extends BaseInstruction implements ArrayAccessInstruction {
     private @Nullable ArrayConstructor arrayConstructor;
@@ -36,10 +38,13 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
         return this;
     }
 
+    // NOTE: the same code must be present in ReadArrInstrution and WriteArrInstruction
+    private static final Set<InstructionInfo> updateConstruction = Set.of(ARRAY_ORGANIZATION, ARRAY_CONSTRUCTION, ARRAY_INJECTIONS,
+            ARRAY_INJECTED_INTO, COMPACT_ACCESS_SOURCE, COMPACT_ACCESS_TARGET);
+
     @Override
     protected void updateInfo(Set<InstructionInfo> types) {
-        if (types.contains(InstructionInfo.ARRAY_ORGANIZATION) || types.contains(InstructionInfo.ARRAY_CONSTRUCTION)
-               && !astContext.matches(AstSubcontextType.MOCK)) {
+        if (types.stream().anyMatch(updateConstruction::contains) && !astContext.matches(AstSubcontextType.MOCK)) {
             arrayConstructor = ArrayConstructorFactory.create(this);
             // Changing array organization alters side effects
             setSideEffects(arrayConstructor.createSideEffects());

@@ -18,7 +18,7 @@ processesAssertBounds:                              5        5     100.0%   BC52
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   30633B28AE9D9EDA
 processesCaseExpressions:                           6        4      66.7%   0A6F2A75C193B958   381E5D60588F2DF8
-processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   E873FE9C8A0C250A
+processesGlobalVariableDataFlow:                   35       23      65.7%   8956353364BD23D8   8860CDDBB8B08A65
 processesTranslatedCaseExpressions:                 3        3     100.0%   5324DB4ECE283002   0D17E6361D558759
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   390D9807D47731B0
 recursive-calls-ext.mnd:                          132      228      99.2%   9CB0965E0E62F089   3A16A84C3ACDEC0F

@@ -53,10 +53,7 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
 
     @Override
     public SideEffects createSideEffects() {
-        return switch (accessType) {
-            case READ -> SideEffects.of(arrayElements(), List.of(arrayElem), List.of());
-            case WRITE -> SideEffects.of(List.of(), List.of(arrayElem), arrayElements());
-        };
+        return createNameBasedSideEffects();
     }
 
     @Override

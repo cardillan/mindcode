@@ -73,6 +73,16 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     81 label *label19
     82 set :reverse:t :reverse:i
 
+Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-13 instructions):
+     0 set :i 0
+     1 label *label1
+     2 jump *label3 greaterThanEq :i 10
+-    * writearr<internal:folded:compact> :i .array[] :i
++    3 writearr<lookup:liquid> :i .array[] :i
+     4 label *label2
+     5 op add :i :i 1
+     6 jump *label1 always
+
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     13 jump *label5 always
@@ -354,16 +364,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1
     82 label *label6
     83 multijump *tmp3 0 0 (m:marker0)
     84 multilabel *label17 (m:marker0)
-
-Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-13 instructions):
-     0 set :i 0
-     1 label *label1
-     2 jump *label3 greaterThanEq :i 10
--    * writearr<internal:folded:compact> :i .array[] :i
-+    3 writearr<lookup:liquid> :i .array[] :i
-     4 label *label2
-     5 op add :i :i 1
-     6 jump *label1 always
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
      0 set :i 0

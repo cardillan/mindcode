@@ -37,7 +37,7 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction withContext(AstContext context);
 
-    Object getInfo(InstructionInfo instructionInfo);
+    <T> T getInfo(InstructionInfo instructionInfo);
 
     LogicInstruction setInfo(InstructionInfo instructionInfo, Object value);
 
@@ -134,16 +134,17 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     //<editor-fold desc="Instruction Info getters/setters">
-    default boolean isArrayInjected() {
-        return (boolean) getInfo(InstructionInfo.ARRAY_INJECTED);
+    default @Nullable LogicInstruction getArrayInjectedInto() {
+        List<LogicInstruction> list = getInfo(InstructionInfo.ARRAY_INJECTED_INTO);
+        return list.isEmpty() ? null : list.getFirst();
     }
 
-    default LogicInstruction setArrayInjected(boolean injected) {
-        return setInfo(InstructionInfo.ARRAY_INJECTED, injected);
+    default LogicInstruction setArrayInjectedInto(@Nullable LogicInstruction target) {
+        return setInfo(InstructionInfo.ARRAY_INJECTED_INTO, target == null ? List.of() : List.of(target));
     }
 
     default LogicLabel getMarker() {
-        return (LogicLabel) getInfo(InstructionInfo.MARKER);
+        return getInfo(InstructionInfo.MARKER);
     }
 
     default LogicInstruction setMarker(LogicLabel marker) {
@@ -151,11 +152,11 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default LogicLabel getHoistId() {
-        return (LogicLabel) getInfo(InstructionInfo.HOIST_ID);
+        return getInfo(InstructionInfo.HOIST_ID);
     }
 
     default boolean isHoisted() {
-        return (boolean) getInfo(InstructionInfo.HOISTED);
+        return getInfo(InstructionInfo.HOISTED);
     }
 
     default LogicInstruction setHoisted(boolean hoisted) {
@@ -172,16 +173,15 @@ public interface LogicInstruction extends MlogInstruction {
 
     /// Provides side effects of this instruction
     default SideEffects getSideEffects() {
-        return (SideEffects) getInfo(InstructionInfo.SIDE_EFFECTS);
+        return getInfo(InstructionInfo.SIDE_EFFECTS);
     }
 
     default LogicInstruction setSideEffects(SideEffects sideEffects) {
         return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
     }
 
-    @SuppressWarnings("unchecked")
     default List<LogicVariable> getIndirectVariables() {
-        return (List<LogicVariable>) getInfo(InstructionInfo.INDIRECT_VARIABLES);
+        return getInfo(InstructionInfo.INDIRECT_VARIABLES);
     }
 
     default LogicInstruction setIndirectVariables(List<LogicVariable> indirectVariables) {
@@ -193,7 +193,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default boolean isTargetGuard() {
-        return (boolean) getInfo(InstructionInfo.TARGET_GUARD);
+        return getInfo(InstructionInfo.TARGET_GUARD);
     }
 
     default LogicInstruction setTargetGuard(boolean targetGuard) {
@@ -201,7 +201,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default String getComment() {
-        return (String) getInfo(InstructionInfo.COMMENT);
+        return getInfo(InstructionInfo.COMMENT);
     }
 
     default LogicInstruction setComment(String comment) {
@@ -215,9 +215,8 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.COMMENT, ix.getComment());
     }
 
-    @SuppressWarnings("unchecked")
     default List<LogicLabel> getJumpTable() {
-        return (List<LogicLabel>) getInfo(InstructionInfo.JUMP_TABLE);
+        return getInfo(InstructionInfo.JUMP_TABLE);
     }
 
     default LogicInstruction setJumpTable(List<LogicLabel> jumpTable) {
@@ -225,7 +224,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default boolean isJumpTarget() {
-        return (boolean) getInfo(InstructionInfo.JUMP_TARGET);
+        return getInfo(InstructionInfo.JUMP_TARGET);
     }
 
     default LogicInstruction setJumpTarget() {
@@ -237,7 +236,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default LogicLabel getCallReturn() {
-        return (LogicLabel) getInfo(InstructionInfo.CALL_RETURN);
+        return getInfo(InstructionInfo.CALL_RETURN);
     }
 
     default LogicInstruction setCallReturn(LogicLabel callReturn) {
@@ -245,8 +244,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default Optional<LogicInstruction> getJumpToReturn() {
-        //noinspection unchecked
-        return (Optional<LogicInstruction>) getInfo(InstructionInfo.JUMP_TO_RETURN);
+        return getInfo(InstructionInfo.JUMP_TO_RETURN);
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -255,7 +253,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default boolean isFallThrough() {
-        return (boolean) getInfo(InstructionInfo.FALL_THROUGH);
+        return getInfo(InstructionInfo.FALL_THROUGH);
     }
 
     default LogicInstruction setFallThrough(boolean fallThrough) {
@@ -263,7 +261,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default boolean isFixedMultilabel() {
-        return (boolean) getInfo(InstructionInfo.FIXED_MULTILABEL);
+        return getInfo(InstructionInfo.FIXED_MULTILABEL);
     }
 
     default LogicInstruction setFixedMultilabel(boolean fixedMultilabel) {
@@ -271,7 +269,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default boolean isAtomicWait() {
-        return (boolean) getInfo(InstructionInfo.ATOMIC_WAIT);
+        return getInfo(InstructionInfo.ATOMIC_WAIT);
     }
 
     default LogicInstruction setAtomicWait(boolean atomicWait) {
@@ -279,7 +277,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default LogicValue getNonNegativeInt() {
-        return (LogicValue) getInfo(InstructionInfo.NON_NEGATIVE_INT);
+        return getInfo(InstructionInfo.NON_NEGATIVE_INT);
     }
 
     default LogicInstruction setNonNegativeInt(LogicValue nonNegative) {
@@ -287,7 +285,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default LogicValue getNonNegativeIntTable() {
-        return (LogicValue) getInfo(InstructionInfo.NON_NEGATIVE_INT_TABLE);
+        return getInfo(InstructionInfo.NON_NEGATIVE_INT_TABLE);
     }
 
     default LogicInstruction setNonNegativeIntTable(LogicValue nonNegative) {
@@ -295,7 +293,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default boolean isSafeAccess() {
-        return (boolean) getInfo(InstructionInfo.SAFE_ACCESS);
+        return getInfo(InstructionInfo.SAFE_ACCESS);
     }
 
     default LogicInstruction setSafeAccess(boolean safeAccess) {
@@ -303,7 +301,7 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default boolean isStackOverflowCheck() {
-        return (boolean) getInfo(InstructionInfo.STACK_OVERFLOW_CHECK);
+        return getInfo(InstructionInfo.STACK_OVERFLOW_CHECK);
     }
 
     default LogicInstruction setStackOverflowCheck() {
