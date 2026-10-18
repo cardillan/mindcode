@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-// The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
-// compiler, makes optimizations and passes them onto the next optimizer.
+// The optimizations are written to the log file in the order of declaration, which is kept for historical reasons.
+// The actual order of performing these optimizations is specified in the OptimizationPhase enum.
 @NullMarked
 public enum Optimization {
     TEMP_VARIABLES_ELIMINATION("Temp Variables Elimination",

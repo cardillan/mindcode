@@ -6,20 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.20.0 – Unreleased
 
+### Fixed
+
+* Fixed wrong boundary runtime checks generation for subarrays and external arrays with non-zero start index position.    
+
 ### Added
 
 * **Breaking:** a new `internal` keyword has been added to the language and is reserved for future use. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added a `links` implicit global variable representing an array of blocks linked to the processor. List iteration loops and index-based access are supported on this array. Declaring another `links` variable (global or local) shadows the implicit one.
-* Added support for instructions provided by the Mlog Dev Tools mod v0.11.6: `assert` and `asserttype`. 
-* Added the [`devtools` system library](/doc/syntax/SYSTEM-LIBRARY-DEVTOOLS.markdown). This library provides access to the Mlog Dev Tools mod's instructions not provided directly by the compiler (`breakpoint`, `profile`, `reset` and `snapshot`). The `breakpoint` instruction can be used to trigger variale dump in Mindcode's processor emulator.
-* Added a new `dump-variables-on-breakpoint` execution flag. When set, the processor emulator will dump all variables on an active `breakpoint` instruction and will contibue executing the code. 
 * Added constant folding for the integer division (`\`) to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown).
+* Added the `assertbounds` instruction evaluation to [Jump Normalization](doc/syntax/optimizations/JUMP-NORMALIZATION.markdown). Instructions that always produce a success are removed, while instructions that always produce a failure are reported as errors.
+* Added support for instructions provided by the Mlog Dev Tools mod v0.11.6: `assert` and `asserttype`.
+* Added the [`devtools` system library](/doc/syntax/SYSTEM-LIBRARY-DEVTOOLS.markdown). This library provides access to the Mlog Dev Tools mod's instructions not provided directly by the compiler (`breakpoint`, `profile`, `reset` and `snapshot`). The `breakpoint` instruction can be used to trigger variale dump in Mindcode's processor emulator.
+* Added a new `dump-variables-on-breakpoint` execution flag. When set, the processor emulator will dump all variables on an active `breakpoint` instruction and will contibue executing the code.
 
 ### Changed
 
 * **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax ([#464](https://github.com/cardillan/mindcode/issues/464)).
 * Loop control variables declared within the loop are never reported as unused. 
-* Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code.  
+* Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code ([#483](https://github.com/cardillan/mindcode/issues/483)).
+* **Breaking:** the remote call protocol version was increased to 2. Both main and remote processors' code must be recompiled to use the new version. 
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
 * Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.
 * **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary. 

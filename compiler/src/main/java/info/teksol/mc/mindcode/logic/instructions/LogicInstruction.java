@@ -307,5 +307,13 @@ public interface LogicInstruction extends MlogInstruction {
     default LogicInstruction setStackOverflowCheck() {
         return setInfo(InstructionInfo.STACK_OVERFLOW_CHECK, true);
     }
+
+    default boolean isRuntimeError() {
+        return getInfo(InstructionInfo.RUNTIME_ERROR);
+    }
+
+    default LogicInstruction setRuntimeError() {
+        return setInfo(InstructionInfo.RUNTIME_ERROR, true);
+    }
     //</editor-fold>
 }

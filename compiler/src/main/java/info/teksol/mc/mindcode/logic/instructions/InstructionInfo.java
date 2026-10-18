@@ -101,6 +101,9 @@ public enum InstructionInfo {
 
     /// This is an AssertBounds instruction checking a stack overflow. No lower bounds check is necessary.
     STACK_OVERFLOW_CHECK(Boolean.FALSE),
+
+    /// This instruction results in a runtime error and has already been reported.
+    RUNTIME_ERROR(Boolean.FALSE),
     ;
 
     public final Object defaultValue;

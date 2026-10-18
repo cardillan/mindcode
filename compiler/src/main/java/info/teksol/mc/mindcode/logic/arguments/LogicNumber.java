@@ -10,6 +10,16 @@ import java.util.Objects;
 
 @NullMarked
 public class LogicNumber extends AbstractArgument implements LogicLiteral {
+    private static final int cacheLow = -64;
+    private static final int cacheHigh = 64;
+    private static final int cacheSize = cacheHigh - cacheLow + 1;
+    private static final LogicNumber[] cache = new LogicNumber[cacheSize];
+    static {
+        for (int i = 0; i < cacheSize; i++) {
+            cache[i] = new LogicNumber(SourcePosition.EMPTY, String.valueOf(cacheLow + i), cacheLow + i);
+        }
+    }
+
     public static final LogicNumber ZERO = create(0);
     public static final LogicNumber ONE = create(1);
     public static final LogicNumber TWO = create(2);
@@ -107,7 +117,9 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     }
 
     public static LogicNumber create(int value) {
-        return new LogicNumber(SourcePosition.EMPTY, String.valueOf(value), value);
+        return value >= cacheLow && value <= cacheHigh
+                ? cache[value - cacheLow]
+                : new LogicNumber(SourcePosition.EMPTY, String.valueOf(value), value);
     }
 
     public static LogicNumber create(long value) {

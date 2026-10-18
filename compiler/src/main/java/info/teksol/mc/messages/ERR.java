@@ -219,6 +219,7 @@ public class ERR {
     public static final String RETURN_MISSING_VALUE = "Missing return value in 'return' statement.";
     public static final String RETURN_OUTSIDE_FUNCTION = "'return' statement outside a function.";
     public static final String RETURN_VALUE_IN_VOID_FUNCTION = "Cannot return a value from a 'void' function.";
+    public static final String RUNTIME_CHECK_FAILED = "Runtime check always fails: %s, value %s.";
     public static final String SCOPE_CODE_OUTSIDE_CODE_BLOCK = "Code outside a main code block or function.";
     public static final String SCOPE_DECLARATION_WITHIN_CODE_BLOCK = "Statement or declaration not allowed within a main code block or function.";
     public static final String SETLOCAL_NOT_USED = "The '#setlocal' directive must precede a statement or an expression.";

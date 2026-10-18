@@ -133,8 +133,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
 
         LogicInstruction instruction = processor.createAssertBounds(astContext, LogicKeyword.create("multiple"), LogicNumber.create(1),
-                LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ,
-                LogicNumber.create(maxIndex), LogicString.createRaw(errorMessage));
+                LogicNumber.create(arrayStore.getStartOffset()), Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ,
+                LogicNumber.create(arrayStore.getStartOffset() + maxIndex), LogicString.createRaw(errorMessage));
         instruction.setNonNegativeInt(index);
         consumer.accept(instruction);
     }

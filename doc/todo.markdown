@@ -18,15 +18,18 @@ Changes intended for the next regular release.
 * Internal: enum for variable flags. When creating variables, a set of flags would be specified.
 * Large arrays
 * Array code injection optimization (partial)
+* Evaluate constant compiler-generated assertions (assertbounds for now)
+  * Remove on success
+  * Produce error (warning?) on failure
 
 * **Doing**
 
 * Large arrays
   * Nested for loops for list-iteration loops
   * Subarrays
-* Evaluate constant compiler-generated assertions (assertbounds for now)
-  * Remove on success
-  * Produce error (warning?) on failure 
+* Convert constant case statements to jumps!!! 
+* `items`, `liquids`, `blocks` and `unitTypes` arrays
+* Remove lookup/sensor id in front of case statements
 
 * **Planned**
 
