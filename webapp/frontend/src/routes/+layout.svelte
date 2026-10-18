@@ -54,11 +54,11 @@
 </template>
 
 <Toaster
-		richColors
-		position="top-center"
-		toastOptions={{
-    duration: 5000
-  }}
+	richColors
+	position="top-center"
+	toastOptions={{
+		duration: 5000
+	}}
 />
 
 <div class="flex min-h-screen flex-col bg-background text-foreground">

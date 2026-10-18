@@ -1,8 +1,5 @@
 type CommonErrorCodes =
-	| 'invalid_arguments'
-	| 'internal_error'
-	| 'unknown_method'
-	| 'unsupported_method_version';
+	'invalid_arguments' | 'internal_error' | 'unknown_method' | 'unsupported_method_version';
 
 export type ErrorCode =
 	| 'invalid_arguments'
