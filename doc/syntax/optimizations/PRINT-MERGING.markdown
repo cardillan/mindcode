@@ -1,17 +1,17 @@
 # Print Merging
 
-This optimization merges two or more print instructions taking a string literal as an argument. The print instructions will get merged even if they aren't consecutive, assuming there aren't instructions that could break the print sequence (`jump`, `label` or `print <variable>`).
+This optimization merges two or more print instructions taking a string literal as an argument. The print instructions will get merged even if they aren't consecutive, assuming there aren't any instructions that could break the print sequence (`jump`, `label` or `print <variable>`).
 
 Effectively, this optimization eliminates a `print` instruction by turning this
 
 ```Mindcode
-println("Items: ", items);
+println("Items: ", itemCount);
 println("Time: ", @time);
 ```
 into this:
 
 ```Mindcode
-print("Items: ", items);
+print("Items: ", itemCount);
 print("\nTime: ", @time, "\n");
 ```
 

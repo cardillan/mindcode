@@ -61,7 +61,13 @@ public class Variables extends CompilerMessageEmitter {
         putVariable("@@TARGET_MAJOR", LogicNumber.create(globalProfile.getProcessorVersion().major));
         putVariable("@@TARGET_MINOR", LogicNumber.create(globalProfile.getProcessorVersion().minor));
         putVariable("@@PROCESSOR_TYPE", LogicString.createSimple(globalProfile.getProcessorType().code()));
-        defaultVariables.put("links", new LinkArray("links"));
+        defaultVariables.put("links", BuiltInArray.createLinks("links"));
+        defaultVariables.put("items", BuiltInArray.createItems("items"));
+        defaultVariables.put("allItems", BuiltInArray.createAllItems("allItems"));
+        defaultVariables.put("unitTypes", BuiltInArray.createUnitTypes("unitTypes"));
+        defaultVariables.put("liquids", BuiltInArray.createLiquids("liquids"));
+        defaultVariables.put("blocks", BuiltInArray.createBlocks("blocks"));
+        defaultVariables.put("teams", BuiltInArray.createTeams("teams"));
     }
 
     public boolean hasSchematicLinks() {

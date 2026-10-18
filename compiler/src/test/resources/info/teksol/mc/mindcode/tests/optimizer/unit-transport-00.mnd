@@ -657,7 +657,7 @@ while true do
             end;
 
             // Do not count discarded unit items as in transit
-            items = @unit.@totalItems;
+            var items = @unit.@totalItems;
             items_in_transit += items;
 
             // Quit using this unit: move it to the core and unload whatever it's carrying

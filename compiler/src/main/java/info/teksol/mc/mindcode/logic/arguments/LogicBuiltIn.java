@@ -28,6 +28,11 @@ public class LogicBuiltIn extends LogicVariable {
     public static final LogicBuiltIn THIS_Y = create("@thisy", false);
     public static final LogicBuiltIn TYPE = create("@type", false);
     public static final LogicBuiltIn SIZE = create("@size", false);
+    public static final LogicBuiltIn ITEM_COUNT = create("@itemCount", false);
+    public static final LogicBuiltIn LIQUID_COUNT = create("@liquidCount", false);
+    public static final LogicBuiltIn UNIT_COUNT = create("@unitCount", false);
+    public static final LogicBuiltIn BLOCK_COUNT = create("@blockCount", false);
+    public static final LogicBuiltIn TEAM_COUNT = create("@teamCount", false);
 
     private final @Nullable MindustryContent object;
 

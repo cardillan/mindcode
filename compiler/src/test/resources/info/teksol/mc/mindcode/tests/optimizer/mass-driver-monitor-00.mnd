@@ -115,7 +115,7 @@ while SWITCH.@enabled == 0 do
 
             x = x + 16;
 
-            items = driver.@totalItems;
+            var items = driver.@totalItems;
 
             maxx = max(MEMORY[n], items);
             MEMORY[n] = maxx;

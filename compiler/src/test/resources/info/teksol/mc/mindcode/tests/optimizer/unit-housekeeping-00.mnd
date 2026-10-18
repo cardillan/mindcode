@@ -44,10 +44,10 @@ while true do
             end;
         end;
 
-        controlled = @unit.@controlled;
-        flag = @unit.@flag;
-        items = @unit.@totalItems;
-        item = @unit.@firstItem;
+        var controlled = @unit.@controlled;
+        var flag = @unit.@flag;
+        var items = @unit.@totalItems;
+        var item = @unit.@firstItem;
 
         // Do not count being controlled by this as
         if @unit.@controller == @this then

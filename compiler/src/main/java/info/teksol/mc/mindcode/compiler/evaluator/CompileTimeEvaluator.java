@@ -6,14 +6,17 @@ import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.LogicOperation;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.LinkArray;
+import info.teksol.mc.mindcode.compiler.generation.variables.BuiltInArray;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
+import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
@@ -382,8 +385,12 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
     private AstMindcodeNode evaluateLength(AstFunctionCall node, boolean local) {
         if (node.getArguments().size() == 1 && node.getArgument(0).getExpression() instanceof AstIdentifier identifier) {
             ValueStore valueStore = variables.resolveVariable(identifier, local, true);
-            if (valueStore instanceof LinkArray) {
-                return new AstBuiltInIdentifier(node.sourcePosition(), "@links").setProfile(identifier.getProfile());
+            if (valueStore instanceof BuiltInArray array) {
+                return switch(array.getCount()) {
+                    case LogicBuiltIn b -> new AstBuiltInIdentifier(node.sourcePosition(), b.toMlog()).setProfile(identifier.getProfile());
+                    case LogicNumber n -> new AstLiteralDecimal(node.sourcePosition(), String.valueOf(n.getIntValue()));
+                    default -> throw new MindcodeInternalError("Unexpected array count: " + array.getCount() + " (" + array.getClass() + ")");
+                };
             } else if (valueStore instanceof ArrayStore array) {
                 return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.size())).setProfile(identifier.getProfile());
             }

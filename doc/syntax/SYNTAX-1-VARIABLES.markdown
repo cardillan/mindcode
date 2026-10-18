@@ -269,6 +269,20 @@ There are no name restrictions on explicitly declared variables, except the `$` 
 
 When a main or local variable has the same name as a global variable, the global variable is said to be _shadowed_ and cannot be accessed in the corresponding code block.
 
+## Built-in variables
+
+Mindcode provides several built-in variables, all representing various arrays. List iteration loops and index-based access are supported on these arrays. Declaring another variable (global or local) with the same name shadows the built-in one. 
+
+| Array       | Content                                |
+|-------------|----------------------------------------|
+| `links`     | blocks linked to the current processor |
+| `items`     | all Serpulo items                      |
+| `allItems`  | all items                              | 
+| `unitTypes` | all unit types                         |
+| `liquids`   | all liquids                            |
+| `blocks`    | all blocks                             |
+| `teams`     | all teams                              |
+
 ## Heap
 
 Heap provides default storage for external variables and needs to be declared before an external variable without explicit storage specification is declared or implicitly created. Heap is declared using this syntax:

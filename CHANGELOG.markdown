@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * **Breaking:** a new `internal` keyword has been added to the language and is reserved for future use. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
-* Added a `links` implicit global variable representing an array of blocks linked to the processor. List iteration loops and index-based access are supported on this array. Declaring another `links` variable (global or local) shadows the implicit one.
+* **Breaking:** added [built-in arrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-variables) named `links`, `blocks`, `liquids`,  `unitTypes`, `items`, `allItems` and `teams`. List iteration loops and index-based access are supported on these arrays. Declaring another variable (global or local) with the same name shadows the built-in one. Code using these names for variables without declaration in relaxed syntax mode will fail to compile. 
 * Added constant folding for the integer division (`\`) to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown).
 * Added the `assertbounds` instruction evaluation to [Jump Normalization](doc/syntax/optimizations/JUMP-NORMALIZATION.markdown). Instructions that always produce a success are removed, while instructions that always produce a failure are reported as errors.
 * Added support for instructions provided by the Mlog Dev Tools mod v0.11.6: `assert` and `asserttype`.

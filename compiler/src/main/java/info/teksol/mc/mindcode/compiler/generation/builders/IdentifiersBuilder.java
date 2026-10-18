@@ -144,7 +144,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
             if (!number.isLong()) {
                 assembler.error(((SourceElement)number).sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
                 return LogicVariable.INVALID;
-            } else if (number.getIntValue() < 0 || number.getIntValue() >= array.size()) {
+            } else if (number.getIntValue() < 0 || array.size() >= 0 && number.getIntValue() >= array.size()) {
                 assembler.error(((SourceElement)number).sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, array.size() - 1);
                 return LogicVariable.INVALID;
             } else {

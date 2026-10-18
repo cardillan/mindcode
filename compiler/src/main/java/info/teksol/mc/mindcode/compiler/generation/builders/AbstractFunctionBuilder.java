@@ -53,7 +53,7 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
         if (!argument.hasModifier() && argument.getExpression() instanceof AstIdentifier identifier) {
             // If it is an array, expand it right here
             ValueStore valueStore = variables.findVariable(identifier.getName(), true);
-            if (valueStore instanceof LinkArray) {
+            if (valueStore instanceof BuiltInArray) {
                 error(identifier, ERR.ARGUMENT_LINKS_REQUIRES_REF);
             } else if (valueStore instanceof ElementsArrayStore array) {
                 expandArray(argument, array, consumer);
@@ -70,7 +70,7 @@ public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
             final ValueStore value = evaluate(Objects.requireNonNull(argument.getExpression()));
             if (value == LogicVoid.VOID) {
                 warn(argument, ERR.VOID_ARGUMENT);
-            } else if (value instanceof LinkArray) {
+            } else if (value instanceof BuiltInArray) {
                 error(argument, ERR.ARGUMENT_LINKS_REQUIRES_REF);
             }
 

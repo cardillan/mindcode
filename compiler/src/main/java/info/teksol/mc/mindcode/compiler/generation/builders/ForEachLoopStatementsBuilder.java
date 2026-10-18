@@ -35,7 +35,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     public ValueStore visitForEachLoopStatement(AstForEachLoopStatement node) {
         int iterations = computeRangedForLoopIterations(node);
         if (iterations == Integer.MIN_VALUE) {
-            buildLinkArrayForLoop(node);
+            buildBuiltInArrayForLoop(node);
         } else if (iterations > 0) {
             buildRangedForLoop(node, iterations);
         } else {
@@ -57,7 +57,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         // TODO support subarrays
         if (group.getValues().getExpressions().getFirst() instanceof AstIdentifier id) {
             ValueStore expression = variables.findVariable(id.getName(), true);
-            if (expression instanceof LinkArray) return Integer.MIN_VALUE;
+            if (expression instanceof BuiltInArray) return Integer.MIN_VALUE;
             if (expression instanceof ArrayStore arrayStore &&
                     (!arrayStore.optimizeElementAccess() || arrayStore.size() >= group.getProfile().getArrayIterationThreshold())) {
                 return arrayStore.size();
@@ -66,7 +66,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         return 0;
     }
 
-    private void buildLinkArrayForLoop(AstForEachLoopStatement node) {
+    private void buildBuiltInArrayForLoop(AstForEachLoopStatement node) {
         if (node.getIteratorGroups().size() > 1) {
             error(node.getIteratorGroups().get(1), ERR.FOR_EACH_INVALID_LINKS);
         }
@@ -80,13 +80,15 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
         // Creates all variables as needed
         List<ListIterator> iterators = new ArrayList<>();
-        List<ArrayStore> arrays = new ArrayList<>();
+        List<BuiltInArray> arrays = new ArrayList<>();
 
         node.getIteratorGroups().forEach(group -> {
             iterators.add(processIterator(group, group.getIterators().getFirst()));
             AstIdentifier id = (AstIdentifier) group.getValues().getExpressions().getFirst();
-            arrays.add((ArrayStore) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
+            arrays.add((BuiltInArray) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
         });
+
+        BuiltInArray arr = arrays.getFirst();
 
         // Report out iterators
         iterators.stream().filter(it -> it.out).forEach(iterator -> error(iterator.var, ERR.LVALUE_CANNOT_ASSIGN_TO_ITERATOR));
@@ -94,9 +96,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         boolean descending = iterators.getFirst().descending;
 
         LogicValue start = descending
-                ? assembler.createOp(Operation.SUB, assembler.nextTemp(), LogicBuiltIn.LINKS, LogicNumber.ONE).getResult()
+                ? assembler.createOp(Operation.SUB, assembler.nextTemp(), arr.getCount(), LogicNumber.ONE).getResult()
                 : LogicNumber.ZERO;
-        LogicValue limit = descending ? LogicNumber.ZERO : LogicBuiltIn.LINKS;
+        LogicValue limit = descending ? LogicNumber.ZERO : arr.getCount();
         LogicVariable loopControlVariable = assembler.nextTemp();
         loopControlVariable.setValue(assembler, start);
 
@@ -509,7 +511,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                         omitErrors = true;
                         return INACTIVE_VALUE;
                     }
-                    case LinkArray linkArray -> {
+                    case BuiltInArray _ -> {
                         error(value, ERR.FOR_EACH_INVALID_LINKS);
                         return LogicVariable.INVALID;
                     }
