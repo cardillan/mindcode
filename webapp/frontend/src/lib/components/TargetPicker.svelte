@@ -92,7 +92,7 @@
 		{gameVersions[gameVersion] || 'Select Target'}
 	</Select.Trigger>
 	<Select.Content>
-		{#each Object.entries(gameVersions) as [key, label]}
+		{#each Object.entries(gameVersions) as [key, label] (key)}
 			<Select.Item value={key}>{label}</Select.Item>
 		{/each}
 	</Select.Content>
@@ -104,7 +104,7 @@
 			{processorTypes[processorType] || 'Select Processor'}
 		</Select.Trigger>
 		<Select.Content>
-			{#each allowedProcessorTypes[gameVersion] as processorType}
+			{#each allowedProcessorTypes[gameVersion] as processorType (processorType)}
 				<Select.Item value={processorType}>{processorTypes[processorType]}</Select.Item>
 			{/each}
 		</Select.Content>

@@ -108,7 +108,6 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y_interactive_supports_focus -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="cm-search border-b border-border bg-background/95 px-3 py-1.5 text-xs backdrop-blur-sm"

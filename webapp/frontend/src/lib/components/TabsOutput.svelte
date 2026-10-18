@@ -128,7 +128,7 @@
 							{#if hasCompilerMessages}
 								<Select.Item value="compiler-messages">Compiler messages</Select.Item>
 							{/if}
-							{#each processorTabs as tab}
+							{#each processorTabs as tab (tab.id)}
 								<Select.Item value={tab.id}>{tab.label}</Select.Item>
 							{/each}
 						</Select.Content>

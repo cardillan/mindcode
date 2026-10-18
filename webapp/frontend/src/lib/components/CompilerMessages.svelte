@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable svelte/no-navigation-without-resolve */
 	import type { CompileResponseMessage, SourceRange } from '$lib/api';
 
 	let {
@@ -39,7 +40,7 @@
 
 		{#if errors.length > 0}
 			<ul class="list-inside list-disc">
-				{#each errors as error}
+				{#each errors as error (error)}
 					<li class="text-destructive">
 						{#if error.range}
 							{@render messageItem('Error', error.range)}
@@ -65,7 +66,7 @@
 
 		{#if warnings.length > 0}
 			<ul class="list-inside list-disc">
-				{#each warnings as warning}
+				{#each warnings as warning (warning)}
 					<li class="text-yellow-600 dark:text-yellow-400">
 						{#if warning.range}
 							{@render messageItem('Warning', warning.range)}
@@ -78,7 +79,7 @@
 
 		{#if infos.length > 0}
 			<ul class="list-inside list-disc">
-				{#each infos as info}
+				{#each infos as info (info)}
 					<li>{info.message}</li>
 				{/each}
 			</ul>

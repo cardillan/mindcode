@@ -87,6 +87,7 @@ export async function syncUrl({
 	compilerTarget?: string;
 	replaceState?: boolean;
 }) {
+	// eslint-disable-next-line svelte/prefer-svelte-reactivity
 	const url = new URL(page.url);
 
 	if (
@@ -103,6 +104,7 @@ export async function syncUrl({
 		updateParams(url.searchParams, compilerTargetKey, compilerTarget);
 	}
 
+	// eslint-disable-next-line svelte/no-navigation-without-resolve
 	await goto(url, { replaceState, noScroll: true, keepFocus: true });
 }
 

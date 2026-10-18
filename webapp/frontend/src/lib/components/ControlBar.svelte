@@ -22,7 +22,7 @@
 </script>
 
 <div class="mb-4 flex flex-wrap items-center gap-2">
-	{#each primaryActions as action}
+	{#each primaryActions as action (action)}
 		<Button
 			variant={action.variant || 'default'}
 			size="default"

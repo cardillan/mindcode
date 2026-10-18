@@ -68,6 +68,7 @@ export class InputEditorStore {
 	sourceId = $state<string | null>(this.#id);
 
 	constructor({ api, theme, samples = [], extensions = [], settings }: InputEditorStoreOptions) {
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity
 		const sampleIds = new Set(samples.map((s) => s.id));
 		// handle editor creation and destruction
 		$effect.pre(() => {
