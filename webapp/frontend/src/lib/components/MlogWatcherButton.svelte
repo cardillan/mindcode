@@ -1,15 +1,20 @@
 <script lang="ts">
-	import type {MlogWatcherStore} from '$lib/mlog_watcher';
-	import {Check, CircleAlert, Cpu, LoaderCircle} from '@lucide/svelte';
+	import type { MlogWatcherStore } from '$lib/mlog_watcher';
+	import { Check, CircleAlert, Cpu, LoaderCircle } from '@lucide/svelte';
 	import EditorActionButton from './EditorActionButton.svelte';
-	import {toast} from 'svelte-sonner';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		channel,
 		getText,
 		disabled = false,
 		schematic = false
-	}: { channel: MlogWatcherStore; getText: () => string; disabled?: boolean; schematic?: boolean } = $props();
+	}: {
+		channel: MlogWatcherStore;
+		getText: () => string;
+		disabled?: boolean;
+		schematic?: boolean;
+	} = $props();
 
 	let status = $state<'idle' | 'sent' | 'loading' | 'error'>('idle');
 	// using ReturnType to avoid issues caused by @types/node
@@ -98,7 +103,7 @@
 
 <EditorActionButton
 	tooltip={status === 'sent' ? 'Sent!' : 'Send to MlogWatcher'}
-	onClick={schematic ? sendSchematicToMlogWatcher : sendToMlogWatcher }
+	onClick={schematic ? sendSchematicToMlogWatcher : sendToMlogWatcher}
 	{disabled}
 >
 	{#if status === 'sent'}
