@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MlogWatcherStore } from '$lib/mlog_watcher';
+	import type { MlogWatcherStore } from '#lib/mlog_watcher/index.js';
 	import { Check, CircleAlert, Cpu, LoaderCircle } from '@lucide/svelte';
 	import EditorActionButton from './EditorActionButton.svelte';
 	import { toast } from 'svelte-sonner';

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import * as Tabs from '$lib/components/ui/tabs';
-	import * as Card from '$lib/components/ui/card';
+	import * as Tabs from '#lib/components/ui/tabs/index.js';
+	import * as Card from '#lib/components/ui/card/index.js';
 	import CopyButton from './CopyButton.svelte';
 	import CompilerMessages from './CompilerMessages.svelte';
-	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
+	import type { CompileResponseMessage, RunResult, SourceRange } from '#lib/api.js';
 	import { Textarea } from './ui/textarea';
 	import * as Select from './ui/select';
 	import { type Snippet } from 'svelte';

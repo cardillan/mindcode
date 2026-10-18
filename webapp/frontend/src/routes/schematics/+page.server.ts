@@ -1,4 +1,4 @@
-import { getSchemacodeSamples } from '$lib/server';
+import { getSchemacodeSamples } from '#lib/server.js';
 
 export const load = async () => {
 	const samples = await getSchemacodeSamples();

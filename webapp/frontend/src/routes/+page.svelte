@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
+	import { mlogLanguageExtension } from '#lib/grammars/mlog_language.js';
 	import { setDiagnostics } from '@codemirror/lint';
 	import { tick, untrack } from 'svelte';
 	import { Code, Play, Trash2 } from '@lucide/svelte';
 
-	import EditorLayout from '$lib/components/EditorLayout.svelte';
-	import ControlBar from '$lib/components/ControlBar.svelte';
-	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
+	import EditorLayout from '#lib/components/EditorLayout.svelte';
+	import ControlBar from '#lib/components/ControlBar.svelte';
+	import BottomActionBar from '#lib/components/BottomActionBar.svelte';
 	import {
 		ApiError,
 		ApiHandler,
@@ -14,26 +14,26 @@
 		type RunResult,
 		type Sample,
 		type SourceRange
-	} from '$lib/api';
-	import { mindcode } from '$lib/grammars/mindcode_language';
+	} from '#lib/api.js';
+	import { mindcode } from '#lib/grammars/mindcode_language.js';
 	import type { PageProps } from './$types';
 	import {
 		compileMessagesToDiagnostics,
 		jumpToRange,
 		updateDocId,
 		updateEditor
-	} from '$lib/codemirror';
-	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
-	import { getSettingsContext } from '$lib/settings.svelte';
-	import TargetPicker from '$lib/components/TargetPicker.svelte';
-	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
+	} from '#lib/codemirror.js';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '#lib/stores.svelte.js';
+	import { getSettingsContext } from '#lib/settings.svelte.js';
+	import TargetPicker from '#lib/components/TargetPicker.svelte';
+	import ProjectLinks from '#lib/components/ProjectLinks.svelte';
 	import { Compartment } from '@codemirror/state';
-	import SamplePicker from '$lib/components/SamplePicker.svelte';
-	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
-	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
-	import { MlogWatcherStore } from '$lib/mlog_watcher';
-	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
-	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
+	import SamplePicker from '#lib/components/SamplePicker.svelte';
+	import EditorActionButton from '#lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '#lib/editors.svelte.js';
+	import { MlogWatcherStore } from '#lib/mlog_watcher/index.js';
+	import MlogWatcherButton from '#lib/components/MlogWatcherButton.svelte';
+	import type { OutputTabName } from '#lib/components/TabsOutput.svelte';
 	import { toast } from 'svelte-sonner';
 
 	let { data }: PageProps = $props();

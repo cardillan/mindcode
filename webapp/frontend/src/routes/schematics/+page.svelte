@@ -9,26 +9,26 @@
 		type RunResult,
 		type Sample,
 		type SourceRange
-	} from '$lib/api';
-	import { schemacode } from '$lib/grammars/schemacode_language';
+	} from '#lib/api.js';
+	import { schemacode } from '#lib/grammars/schemacode_language.js';
 	import type { PageProps } from './$types';
 	import { setDiagnostics } from '@codemirror/lint';
-	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
-	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
-	import TargetPicker from '$lib/components/TargetPicker.svelte';
-	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import ControlBar from '$lib/components/ControlBar.svelte';
-	import SamplePicker from '$lib/components/SamplePicker.svelte';
-	import EditorLayout from '$lib/components/EditorLayout.svelte';
-	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
-	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
-	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
-	import { getSettingsContext } from '$lib/settings.svelte';
+	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '#lib/codemirror.js';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '#lib/stores.svelte.js';
+	import TargetPicker from '#lib/components/TargetPicker.svelte';
+	import ProjectLinks from '#lib/components/ProjectLinks.svelte';
+	import ControlBar from '#lib/components/ControlBar.svelte';
+	import SamplePicker from '#lib/components/SamplePicker.svelte';
+	import EditorLayout from '#lib/components/EditorLayout.svelte';
+	import BottomActionBar from '#lib/components/BottomActionBar.svelte';
+	import EditorActionButton from '#lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '#lib/editors.svelte.js';
+	import { getSettingsContext } from '#lib/settings.svelte.js';
 	import { EditorView } from 'codemirror';
-	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
-	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
-	import { MlogWatcherStore } from '$lib/mlog_watcher';
-	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
+	import type { OutputTabName } from '#lib/components/TabsOutput.svelte';
+	import PageInfoCard from '#lib/components/PageInfoCard.svelte';
+	import { MlogWatcherStore } from '#lib/mlog_watcher/index.js';
+	import MlogWatcherButton from '#lib/components/MlogWatcherButton.svelte';
 	import { toast } from 'svelte-sonner';
 	import { resolve } from '$app/paths';
 
@@ -140,12 +140,17 @@
 			Here you can compile a schematics definition written in <a
 				href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
 				class="text-primary underline">Schemacode</a
-			>, a schema definition language, into a text representation to be pasted into Mindustry using
-			the <strong>Import schematics...</strong> button. If your schematics contain processors, you
-			can specify code for the processor using either Mindustry Logic or Mindcode. You can also
-			decompile an existing schematics using the
-			<a href={resolve('/decompiler')} class="text-primary underline">Decompiler</a> and modify the resulting
-			code.
+			>
+
+			, a schema definition language, into a text representation to be pasted into Mindustry using
+			the
+			<strong>Import schematics...</strong>
+			button. If your schematics contain processors, you can specify code for the processor using either
+			Mindustry Logic or Mindcode. You can also decompile an existing schematics using the
+
+			<a href={resolve('decompiler')} class="text-primary underline">Decompiler</a>
+
+			and modify the resulting code.
 		</p>
 	</PageInfoCard>
 	<!-- Control Bar (Desktop) -->
@@ -169,8 +174,10 @@
 	</div>
 
 	<!-- Mobile: Samples and Settings -->
+
 	<div class="flex shrink-0 flex-wrap items-center gap-2 md:hidden">
 		<TargetPicker {compilerTarget} />
+
 		<SamplePicker
 			samples={data.samples}
 			onSelect={selectSample}

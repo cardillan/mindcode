@@ -1,4 +1,4 @@
-import { getMindcodeSamples } from '$lib/server';
+import { getMindcodeSamples } from '#lib/server.js';
 
 export const load = async () => {
 	const samples = await getMindcodeSamples();

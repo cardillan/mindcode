@@ -1,7 +1,7 @@
 import { page } from '$app/state';
 import { getContext, setContext } from 'svelte';
 import { goto } from '$app/navigation';
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 const validProcessors = ['none', 'm', 'l', 'h', 'w'] as const;
 
@@ -88,7 +88,7 @@ export async function syncUrl({
 	replaceState?: boolean;
 }) {
 	// eslint-disable-next-line svelte/prefer-svelte-reactivity
-	const url = new URL(page.url);
+	const url = new URL(page.url.href);
 
 	if (
 		(sourceId === undefined || url.searchParams.get(sourceIdKey) === sourceId) &&
@@ -105,7 +105,7 @@ export async function syncUrl({
 	}
 
 	// eslint-disable-next-line svelte/no-navigation-without-resolve
-	await goto(url, { replaceState, noScroll: true, keepFocus: true });
+	await goto(url, { replaceState, reset: false });
 }
 
 export class ThemeStore {

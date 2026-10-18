@@ -5,7 +5,7 @@
 	import { Input } from './ui/input';
 	import { Label } from './ui/label';
 	import { Separator } from './ui/separator';
-	import { getSettingsContext } from '$lib/settings.svelte';
+	import { getSettingsContext } from '#lib/settings.svelte.js';
 	import Switch from './ui/switch/switch.svelte';
 
 	const settings = getSettingsContext();

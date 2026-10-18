@@ -1,6 +1,6 @@
 <script lang="ts">
 	/* eslint-disable svelte/no-navigation-without-resolve */
-	import type { CompileResponseMessage, SourceRange } from '$lib/api';
+	import type { CompileResponseMessage, SourceRange } from '#lib/api.js';
 
 	let {
 		errors = [],

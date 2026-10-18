@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { getContext, setContext, tick } from 'svelte';
 import { toast } from 'svelte-sonner';
 
