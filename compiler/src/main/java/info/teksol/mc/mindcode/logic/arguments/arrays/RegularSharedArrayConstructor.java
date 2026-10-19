@@ -6,13 +6,11 @@ import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 @NullMarked
@@ -57,7 +55,7 @@ public abstract class RegularSharedArrayConstructor extends SharedArrayConstruct
     }
 
     @Override
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
+    protected BranchCreator branchCreator() {
         return regularBranchCreator();
     }
 

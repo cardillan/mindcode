@@ -46,7 +46,7 @@ public class ExternalArray extends ElementsArrayStore {
 
     @Override
     public ArrayStore offset(int offset) {
-        return new ExternalArray(sourcePosition, name, memory, startOffset + offset, getMasterArray(), elements);
+        return new ExternalArray(sourcePosition, name, memory, startOffset + offset, (ElementsArrayStore) masterArray, elements);
     }
 
     @Override

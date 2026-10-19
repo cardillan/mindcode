@@ -124,20 +124,20 @@ public class InternalArray extends ElementsArrayStore {
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + start,
-                end - start, elements.subList(start, end), getMasterArray(), arrayType, true);
+                end - start, elements.subList(start, end), (ElementsArrayStore) masterArray, arrayType, true);
     }
 
     @Override
     public ArrayStore offset(int offset) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + offset,
-                size, elements, getMasterArray(), arrayType, getMasterArray().size() != size());
+                size, elements, (ElementsArrayStore) masterArray, arrayType, masterArray.size() != size());
     }
 
     @Override
     public ArrayStore nonrecursive() {
         return hasArrayOffset()
                 ? new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, LogicNumber.ZERO, startOffset,
-                        size, elements.subList(0, size), getMasterArray(), arrayType, getMasterArray().size() != size())
+                        size, elements.subList(0, size), (ElementsArrayStore) masterArray, arrayType, masterArray.size() != size())
                 : this;
     }
 
@@ -164,7 +164,7 @@ public class InternalArray extends ElementsArrayStore {
     @Override
     public InternalArray withSourcePosition(SourcePosition sourcePosition) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset,
-                startOffset, size, elements, (ElementsArrayStore) masterArray, arrayType, getMasterArray().size() != size());
+                startOffset, size, elements, (ElementsArrayStore) masterArray, arrayType, masterArray.size() != size());
     }
 
     private static ValueStore constantWrap(ValueStore valueStore) {

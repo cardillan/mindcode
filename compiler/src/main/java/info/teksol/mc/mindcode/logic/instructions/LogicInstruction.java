@@ -84,7 +84,7 @@ public interface LogicInstruction extends MlogInstruction {
 
     default Stream<LogicArgument> getAllArguments() {
         List<LogicVariable> all = getSideEffects().all();
-        return all.isEmpty() ? inputOutputArgumentsStream() : Stream.concat(inputArgumentsStream(), all.stream());
+        return all.isEmpty() ? inputOutputArgumentsStream() : Stream.concat(inputOutputArgumentsStream(), all.stream());
     }
 
     /// Indicates the instruction is real - produces an actual code. Non-real (virtual) instructions

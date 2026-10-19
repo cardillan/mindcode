@@ -11,7 +11,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -67,7 +66,7 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
         return arrayElem;
     }
 
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
+    protected BranchCreator branchCreator() {
         return compactBranchCreator();
     }
 

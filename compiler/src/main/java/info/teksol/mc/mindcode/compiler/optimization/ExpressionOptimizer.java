@@ -42,11 +42,14 @@ class ExpressionOptimizer extends BaseOptimizer {
                         && optimizationContext.findDefiningInstruction(next, variable) instanceof OpInstruction op
                         && op.getOperation() == Operation.FLOOR
                         && op.getResult().equals(variable)) {
-                    next = instructionProcessor.replaceAllArgs(next, variable, op.getX());
-                    if (next instanceof AssertBoundsInstruction) {
-                        next = instructionProcessor.replaceAllArgs(next, LogicKeyword.create("multiple"), LogicKeyword.create("decimal"));
+                    LogicInstruction newIx = instructionProcessor.replaceAllArgs(next, variable, op.getX());
+                    if (newIx instanceof AssertBoundsInstruction) {
+                        newIx = instructionProcessor.replaceAllArgs(newIx, LogicKeyword.create("multiple"), LogicKeyword.create("decimal"));
                     }
-                    it.set(next);
+                    if (newIx != next) {
+                        it.set(newIx);
+                        next = newIx;
+                    }
                     optimizationContext.replaceAllInstructionArguments(ix -> variable.equals(ix.getNonNegativeIntTable()), variable, op.getX());
                 }
 

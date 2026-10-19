@@ -1,18 +1,20 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
+import info.teksol.mc.mindcode.compiler.generation.variables.ElementsArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.WriteArrInstruction;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiConsumer;
+import java.util.Optional;
 import java.util.function.Function;
 
 @NullMarked
@@ -46,16 +48,39 @@ public abstract class RegularInlinedArrayConstructor extends InlinedArrayConstru
     }
 
     @Override
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
+    protected BranchCreator branchCreator() {
         if (hasInjection()) {
-            LogicVariable result = Objects.requireNonNull(instruction.getResult());
-            LogicInstruction original = instruction.getArrayInjections().stream()
-                    .filter(ix -> !(ix instanceof ArrayAccessInstruction)).findFirst().orElseThrow();
+            LogicVariable readVar = Objects.requireNonNull(instruction.getResult());
+            Optional<LogicInstruction> update = instruction.getArrayInjections().stream()
+                    .filter(ix -> !(ix instanceof ArrayAccessInstruction)).findFirst();
+            Optional<WriteArrInstruction> write = instruction.getArrayInjections().stream()
+                    .filter(WriteArrInstruction.class::isInstance).map(WriteArrInstruction.class::cast).findFirst();
 
-            return (creator, element) -> {
-                LogicInstruction ix = processor.replaceAllArgs(original, result, (LogicValue) element.unwrap());
-                creator.accept(ix);
-            };
+            if (update.isEmpty() || write.isPresent() && !write.get().getValue().equals(readVar)) {
+                assert write.isPresent();
+                ElementsArrayStore writeArray = (ElementsArrayStore) write.get().getArray().getArrayStore();
+                LogicVariable writeVar = (LogicVariable) write.get().getValue();
+                if (update.isPresent()) {
+                    return (creator, element, index) -> {
+                        LogicValue readElem = (LogicValue) element.unwrap();
+                        LogicValue writeElem = (LogicValue) writeArray.getElements().get(index).unwrap();
+                        LogicInstruction ix = processor.replaceArgs(update.get(), Map.of(readVar, readElem, writeVar, writeElem)).setArrayInjectedInto(null);
+                        creator.accept(ix);
+                    };
+                } else {
+                    return (creator, element, index) -> {
+                        LogicVariable readElem = (LogicVariable) element.unwrap();
+                        LogicVariable writeElem = (LogicVariable) writeArray.getElements().get(index).unwrap();
+                        creator.createSet(writeElem, readElem);
+                    };
+                }
+            } else {
+                assert update.isPresent();
+                return (creator, element, index) -> {
+                    LogicInstruction ix = processor.replaceAllArgs(update.get(), readVar, (LogicValue) element.unwrap()).setArrayInjectedInto(null);
+                    creator.accept(ix);
+                };
+            }
         } else {
             return regularBranchCreator();
         }

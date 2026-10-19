@@ -28,6 +28,15 @@ public class LargeArray extends AbstractArrayStore {
         this.blockSizeNumber = LogicNumber.create(blockSize);
     }
 
+    private LargeArray(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size, ArrayStore masterArray,
+            boolean subarray, List<LogicVariable> memoryBlocks, ArrayStore memoryArray, int blockSize, LogicNumber blockSizeNumber) {
+        super(sourcePosition, name, arrayType, startOffset, size, masterArray, subarray);
+        this.memoryBlocks = memoryBlocks;
+        this.memoryArray = memoryArray;
+        this.blockSize = blockSize;
+        this.blockSizeNumber = blockSizeNumber;
+    }
+
     @Override
     public boolean valid() {
         return true;
@@ -71,7 +80,8 @@ public class LargeArray extends AbstractArrayStore {
 
     @Override
     public LargeArray withSourcePosition(SourcePosition sourcePosition) {
-        return new LargeArray(sourcePosition, name, memoryBlocks, memoryArray, blockSize, size);
+        return new LargeArray(sourcePosition, name, arrayType, startOffset, size, masterArray, false,
+                memoryBlocks, memoryArray, blockSize, blockSizeNumber);
     }
 
     public class LargeArrayElement implements ValueStore {

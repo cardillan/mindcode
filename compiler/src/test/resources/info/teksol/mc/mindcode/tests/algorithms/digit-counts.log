@@ -702,34 +702,34 @@ Modifications by Virtual Instruction Expansion (-1 instructions):
 +   39 assertbounds multiple 1 0 lessThanEq *tmp2 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
 +   40 multijump *tmp2 0 0 (m:marker1)
 +   41 multilabel *label79 (m:marker1)
-+   42 > op add .array*9 .array*9 1
++   42 op add .array*9 .array*9 1
 +   43 jump *label78 always
 +   44 multilabel *label80 (m:marker1)
-+   45 > op add .array*8 .array*8 1
++   45 op add .array*8 .array*8 1
 +   46 jump *label78 always
 +   47 multilabel *label81 (m:marker1)
-+   48 > op add .array*7 .array*7 1
++   48 op add .array*7 .array*7 1
 +   49 jump *label78 always
 +   50 multilabel *label82 (m:marker1)
-+   51 > op add .array*6 .array*6 1
++   51 op add .array*6 .array*6 1
 +   52 jump *label78 always
 +   53 multilabel *label83 (m:marker1)
-+   54 > op add .array*5 .array*5 1
++   54 op add .array*5 .array*5 1
 +   55 jump *label78 always
 +   56 multilabel *label84 (m:marker1)
-+   57 > op add .array*4 .array*4 1
++   57 op add .array*4 .array*4 1
 +   58 jump *label78 always
 +   59 multilabel *label85 (m:marker1)
-+   60 > op add .array*3 .array*3 1
++   60 op add .array*3 .array*3 1
 +   61 jump *label78 always
 +   62 multilabel *label86 (m:marker1)
-+   63 > op add .array*2 .array*2 1
++   63 op add .array*2 .array*2 1
 +   64 jump *label78 always
 +   65 multilabel *label87 (m:marker1)
-+   66 > op add .array*1 .array*1 1
++   66 op add .array*1 .array*1 1
 +   67 jump *label78 always
 +   68 multilabel *label88 (m:marker1)
-+   69 > op add .array*0 .array*0 1
++   69 op add .array*0 .array*0 1
 +   70 label *label78
     71 op idiv :countDigits:number :countDigits:number 10
     72 label *label19

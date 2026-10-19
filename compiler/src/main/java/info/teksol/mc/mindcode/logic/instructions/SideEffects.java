@@ -4,8 +4,10 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /// Contains information about instruction's side effects and applies it when necessary. A side effect causes
@@ -102,15 +104,15 @@ public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes,
     }
 
     private static List<LogicVariable> union(List<LogicVariable> list1, List<LogicVariable> list2) {
-        List<LogicVariable> union = new java.util.ArrayList<>(list1);
+        Set<LogicVariable> union = new LinkedHashSet<>(list1);
         union.addAll(list2);
-        return union;
+        return List.copyOf(union);
     }
 
     private static List<LogicVariable> union(List<LogicVariable> list1, List<LogicVariable> list2, List<LogicVariable> list3) {
-        List<LogicVariable> union = new java.util.ArrayList<>(list1);
+        Set<LogicVariable> union = new LinkedHashSet<>(list1);
         union.addAll(list2);
         union.addAll(list3);
-        return union;
+        return List.copyOf(union);
     }
 }

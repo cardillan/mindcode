@@ -2,18 +2,23 @@
      4 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instruction eliminated by Dead Code Elimination (4 iterations).
      1 instruction eliminated by Single Step Elimination (6 iterations).
-     5 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+     5 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
        3 loop conditions were partially rotated.
-    25 instructions added by Array Optimization (5 iterations).
+    36 instructions added by Array Optimization (6 iterations).
      2 arrays improved by Array Optimization.
-    78 instructions after optimizations.
+    89 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 952):
-  * Inject array access to 'previousLine' at line 18:50          size   +16, benefit      687.5, efficiency     42.969 (+16 instructions)
+  * Inject array access to 'previousLine' at line 18:50          size   +13, benefit     2562.5, efficiency    197.115 (+13 instructions)
     Inject array access to 'currentLine' at line 24:13           size   +16, benefit      687.5, efficiency     42.969
+    Inject array access to 'currentLine' at line 25:13           size   +16, benefit      687.5, efficiency     42.969
 
-Pass 1: speed optimization selection (cost limit 936):
+Pass 1: speed optimization selection (cost limit 939):
   * Inject array access to 'currentLine' at line 24:13           size   +16, benefit      687.5, efficiency     42.969 (+18 instructions)
+    Inject array access to 'currentLine' at line 25:13           size   +16, benefit      687.5, efficiency     42.969
+
+Pass 1: speed optimization selection (cost limit 921):
+  * Inject array access to 'currentLine' at line 25:13           size   +14, benefit     1937.5, efficiency    138.393 (+14 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -204,18 +209,20 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     41 assertequals 1023 :total "Sum of Pascal triangle"
     42 stop
 
-Modifications by Inject array access to 'previousLine' at line 18:50 (+16 instructions):
+Modifications by Inject array access to 'previousLine' at line 18:50 (+13 instructions):
  
     13 label *label11
     14 op sub *tmp4 :j 1
     15 readarr<lookup:item> *tmp5 .previousLine[] *tmp4
 -    * readarr<lookup:item> *tmp7 .previousLine[] :j
 -    * op add *tmp8 *tmp5 *tmp7
-+   16 readarr<inlined:regular:inj+1> *tmp7 .previousLine[] :j
+-    * writearr<lookup:liquid> *tmp8 .currentLine[] :j
++   16 readarr<inlined:regular:inj+2> *tmp7 .previousLine[] :j
 +   17 > op add *tmp8 *tmp5 *tmp7
-    18 writearr<lookup:liquid> *tmp8 .currentLine[] :j
++   18 > writearr<lookup:liquid> *tmp8 .currentLine[] :j
     19 label *label5
     20 op add :j :j 1
+    21 jump *label11 lessThanEq :j :lineLength
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -256,15 +263,28 @@ Modifications by Inject array access to 'currentLine' at line 24:13 (+16 instruc
     32 writearr<lookup:item> *tmp18 .previousLine[] :c
     33 label *label8
 
+Modifications by Inject array access to 'currentLine' at line 25:13 (+14 instructions):
+ 
+    28 label *label12
+    29 readarr<inlined:regular:inj+1> *tmp14 .currentLine[] :c
+    30 > op add :total :total *tmp14
+-    * readarr<lookup:liquid> *tmp18 .currentLine[] :c
+-    * writearr<lookup:item> *tmp18 .previousLine[] :c
++   31 readarr<inlined:regular:inj+1> *tmp18 .currentLine[] :c
++   32 > writearr<lookup:item> *tmp18 .previousLine[] :c
+    33 label *label8
+    34 op add :c :c 1
+    35 jump *label12 lessThan :c :lineLength
+
 Modifications by Virtual Instruction Expansion (-3 instructions):
  
     12 jump *label6 greaterThan 1 :lineLength
     13 label *label11
     14 op sub *tmp4 :j 1
 -    * readarr<lookup:item> *tmp5 .previousLine[] *tmp4
--    * readarr<inlined:regular:inj+1> *tmp7 .previousLine[] :j
+-    * readarr<inlined:regular:inj+2> *tmp7 .previousLine[] :j
 -    * > op add *tmp8 *tmp5 *tmp7
--    * writearr<lookup:liquid> *tmp8 .currentLine[] :j
+-    * > writearr<lookup:liquid> *tmp8 .currentLine[] :j
 +   15 assertbounds multiple 1 0 lessThanEq *tmp4 lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
 +   16 lookup item *tmp19 *tmp4
 +   17 sensor .previousLine*elem *tmp19 @name
@@ -272,106 +292,126 @@ Modifications by Virtual Instruction Expansion (-3 instructions):
 +   19 assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
 +   20 multijump :j 0 0 (m:marker0)
 +   21 multilabel *label14 (m:marker0)
-+   22 > op add *tmp8 *tmp5 silicon
++   22 op add nitrogen *tmp5 silicon
 +   23 jump *label13 always
 +   24 multilabel *label15 (m:marker0)
-+   25 > op add *tmp8 *tmp5 scrap
++   25 op add gallium *tmp5 scrap
 +   26 jump *label13 always
 +   27 multilabel *label16 (m:marker0)
-+   28 > op add *tmp8 *tmp5 thorium
++   28 op add cyanogen *tmp5 thorium
 +   29 jump *label13 always
 +   30 multilabel *label17 (m:marker0)
-+   31 > op add *tmp8 *tmp5 titanium
++   31 op add ozone *tmp5 titanium
 +   32 jump *label13 always
 +   33 multilabel *label18 (m:marker0)
-+   34 > op add *tmp8 *tmp5 coal
++   34 op add hydrogen *tmp5 coal
 +   35 jump *label13 always
 +   36 multilabel *label19 (m:marker0)
-+   37 > op add *tmp8 *tmp5 sand
++   37 op add neoplasm *tmp5 sand
 +   38 jump *label13 always
 +   39 multilabel *label20 (m:marker0)
-+   40 > op add *tmp8 *tmp5 graphite
++   40 op add cryofluid *tmp5 graphite
 +   41 jump *label13 always
 +   42 multilabel *label21 (m:marker0)
-+   43 > op add *tmp8 *tmp5 metaglass
++   43 op add oil *tmp5 metaglass
 +   44 jump *label13 always
 +   45 multilabel *label22 (m:marker0)
-+   46 > op add *tmp8 *tmp5 lead
++   46 op add slag *tmp5 lead
 +   47 jump *label13 always
 +   48 multilabel *label23 (m:marker0)
-+   49 > op add *tmp8 *tmp5 copper
++   49 op add water *tmp5 copper
 +   50 label *label13
-+   51 assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:13: index out of bounds (0 to 9)"
-+   52 lookup liquid *tmp20 :j
-+   53 sensor .currentLine*elem *tmp20 @name
-+   54 write *tmp8 @this .currentLine*elem
-    55 label *label5
-    56 op add :j :j 1
-    57 jump *label11 lessThanEq :j :lineLength
-    58 label *label6
+    51 label *label5
+    52 op add :j :j 1
+    53 jump *label11 lessThanEq :j :lineLength
+    54 label *label6
 -    * writearr<lookup:liquid> 1 .currentLine[] :lineLength
-+   59 assertbounds multiple 1 0 lessThanEq :lineLength lessThanEq 9 "position 20:9: index out of bounds (0 to 9)"
-+   60 lookup liquid *tmp21 :lineLength
-+   61 sensor .currentLine*elem *tmp21 @name
-+   62 write 1 @this .currentLine*elem
-    63 op add :lineLength :lineLength 1
-    64 set :c 0
-    65 label *label7
-    66 jump *label9 greaterThanEq 0 :lineLength
-    67 label *label12
++   55 assertbounds multiple 1 0 lessThanEq :lineLength lessThanEq 9 "position 20:9: index out of bounds (0 to 9)"
++   56 lookup liquid *tmp20 :lineLength
++   57 sensor .currentLine*elem *tmp20 @name
++   58 write 1 @this .currentLine*elem
+    59 op add :lineLength :lineLength 1
+    60 set :c 0
+    61 label *label7
+    62 jump *label9 greaterThanEq 0 :lineLength
+    63 label *label12
 -    * readarr<inlined:regular:inj+1> *tmp14 .currentLine[] :c
 -    * > op add :total :total *tmp14
--    * readarr<lookup:liquid> *tmp18 .currentLine[] :c
--    * writearr<lookup:item> *tmp18 .previousLine[] :c
-+   68 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 24:13: index out of bounds (0 to 9)"
-+   69 multijump :c 0 0 (m:marker1)
-+   70 multilabel *label25 (m:marker1)
-+   71 > op add :total :total nitrogen
-+   72 jump *label24 always
-+   73 multilabel *label26 (m:marker1)
-+   74 > op add :total :total gallium
-+   75 jump *label24 always
-+   76 multilabel *label27 (m:marker1)
-+   77 > op add :total :total cyanogen
-+   78 jump *label24 always
-+   79 multilabel *label28 (m:marker1)
-+   80 > op add :total :total ozone
-+   81 jump *label24 always
-+   82 multilabel *label29 (m:marker1)
-+   83 > op add :total :total hydrogen
-+   84 jump *label24 always
-+   85 multilabel *label30 (m:marker1)
-+   86 > op add :total :total neoplasm
-+   87 jump *label24 always
-+   88 multilabel *label31 (m:marker1)
-+   89 > op add :total :total cryofluid
-+   90 jump *label24 always
-+   91 multilabel *label32 (m:marker1)
-+   92 > op add :total :total oil
-+   93 jump *label24 always
-+   94 multilabel *label33 (m:marker1)
-+   95 > op add :total :total slag
-+   96 jump *label24 always
-+   97 multilabel *label34 (m:marker1)
-+   98 > op add :total :total water
-+   99 label *label24
-+  100 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
-+  101 lookup liquid *tmp22 :c
-+  102 sensor .currentLine*elem *tmp22 @name
-+  103 read *tmp18 @this .currentLine*elem
-+  104 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
-+  105 lookup item *tmp23 :c
-+  106 sensor .previousLine*elem *tmp23 @name
-+  107 write *tmp18 @this .previousLine*elem
-   108 label *label8
-   109 op add :c :c 1
-   110 jump *label12 lessThan :c :lineLength
+-    * readarr<inlined:regular:inj+1> *tmp18 .currentLine[] :c
+-    * > writearr<lookup:item> *tmp18 .previousLine[] :c
++   64 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 24:13: index out of bounds (0 to 9)"
++   65 multijump :c 0 0 (m:marker1)
++   66 multilabel *label25 (m:marker1)
++   67 op add :total :total nitrogen
++   68 jump *label24 always
++   69 multilabel *label26 (m:marker1)
++   70 op add :total :total gallium
++   71 jump *label24 always
++   72 multilabel *label27 (m:marker1)
++   73 op add :total :total cyanogen
++   74 jump *label24 always
++   75 multilabel *label28 (m:marker1)
++   76 op add :total :total ozone
++   77 jump *label24 always
++   78 multilabel *label29 (m:marker1)
++   79 op add :total :total hydrogen
++   80 jump *label24 always
++   81 multilabel *label30 (m:marker1)
++   82 op add :total :total neoplasm
++   83 jump *label24 always
++   84 multilabel *label31 (m:marker1)
++   85 op add :total :total cryofluid
++   86 jump *label24 always
++   87 multilabel *label32 (m:marker1)
++   88 op add :total :total oil
++   89 jump *label24 always
++   90 multilabel *label33 (m:marker1)
++   91 op add :total :total slag
++   92 jump *label24 always
++   93 multilabel *label34 (m:marker1)
++   94 op add :total :total water
++   95 label *label24
++   96 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
++   97 multijump :c 0 0 (m:marker2)
++   98 multilabel *label36 (m:marker2)
++   99 set silicon nitrogen
++  100 jump *label35 always
++  101 multilabel *label37 (m:marker2)
++  102 set scrap gallium
++  103 jump *label35 always
++  104 multilabel *label38 (m:marker2)
++  105 set thorium cyanogen
++  106 jump *label35 always
++  107 multilabel *label39 (m:marker2)
++  108 set titanium ozone
++  109 jump *label35 always
++  110 multilabel *label40 (m:marker2)
++  111 set coal hydrogen
++  112 jump *label35 always
++  113 multilabel *label41 (m:marker2)
++  114 set sand neoplasm
++  115 jump *label35 always
++  116 multilabel *label42 (m:marker2)
++  117 set graphite cryofluid
++  118 jump *label35 always
++  119 multilabel *label43 (m:marker2)
++  120 set metaglass oil
++  121 jump *label35 always
++  122 multilabel *label44 (m:marker2)
++  123 set lead slag
++  124 jump *label35 always
++  125 multilabel *label45 (m:marker2)
++  126 set copper water
++  127 label *label35
+   128 label *label8
+   129 op add :c :c 1
+   130 jump *label12 lessThan :c :lineLength
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   109 label *label3
-   110 assertequals 1023 :total "Sum of Pascal triangle"
-   111 stop
+   129 label *label3
+   130 assertequals 1023 :total "Sum of Pascal triangle"
+   131 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -390,51 +430,47 @@ jump *label6 greaterThan 1 :lineLength
 label *label11
 op sub *tmp0 :j 1
 assertbounds multiple 1 0 lessThanEq *tmp0 lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
-lookup item *tmp4 *tmp0
-sensor .previousLine*elem *tmp4 @name
+lookup item *tmp2 *tmp0
+sensor .previousLine*elem *tmp2 @name
 read *tmp1 @this .previousLine*elem
 assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
 multijump :j 0 0
 multilabel *label14
-op add *tmp2 *tmp1 silicon              # Origin: 14, keys: 9
+op add nitrogen *tmp1 silicon           # Origin: 14, keys: 9
 jump *label13 always
 multilabel *label15
-op add *tmp2 *tmp1 scrap                # Origin: 14, keys: 8
+op add gallium *tmp1 scrap              # Origin: 14, keys: 8
 jump *label13 always
 multilabel *label16
-op add *tmp2 *tmp1 thorium              # Origin: 14, keys: 7
+op add cyanogen *tmp1 thorium           # Origin: 14, keys: 7
 jump *label13 always
 multilabel *label17
-op add *tmp2 *tmp1 titanium             # Origin: 14, keys: 6
+op add ozone *tmp1 titanium             # Origin: 14, keys: 6
 jump *label13 always
 multilabel *label18
-op add *tmp2 *tmp1 coal                 # Origin: 14, keys: 5
+op add hydrogen *tmp1 coal              # Origin: 14, keys: 5
 jump *label13 always
 multilabel *label19
-op add *tmp2 *tmp1 sand                 # Origin: 14, keys: 4
+op add neoplasm *tmp1 sand              # Origin: 14, keys: 4
 jump *label13 always
 multilabel *label20
-op add *tmp2 *tmp1 graphite             # Origin: 14, keys: 3
+op add cryofluid *tmp1 graphite         # Origin: 14, keys: 3
 jump *label13 always
 multilabel *label21
-op add *tmp2 *tmp1 metaglass            # Origin: 14, keys: 2
+op add oil *tmp1 metaglass              # Origin: 14, keys: 2
 jump *label13 always
 multilabel *label22
-op add *tmp2 *tmp1 lead                 # Origin: 14, keys: 1
+op add slag *tmp1 lead                  # Origin: 14, keys: 1
 jump *label13 always
 multilabel *label23
-op add *tmp2 *tmp1 copper               # Origin: 14, keys: 0
+op add water *tmp1 copper               # Origin: 14, keys: 0
 label *label13
-assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:13: index out of bounds (0 to 9)"
-lookup liquid *tmp5 :j
-sensor .currentLine*elem *tmp5 @name
-write *tmp2 @this .currentLine*elem
 op add :j :j 1
 jump *label11 lessThanEq :j :lineLength
 label *label6
 assertbounds multiple 1 0 lessThanEq :lineLength lessThanEq 9 "position 20:9: index out of bounds (0 to 9)"
-lookup liquid *tmp6 :lineLength
-sensor .currentLine*elem *tmp6 @name
+lookup liquid *tmp3 :lineLength
+sensor .currentLine*elem *tmp3 @name
 write 1 @this .currentLine*elem
 op add :lineLength :lineLength 1
 set :c 0
@@ -443,43 +479,67 @@ label *label12
 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 24:13: index out of bounds (0 to 9)"
 multijump :c 0 0
 multilabel *label25
-op add :total :total nitrogen           # Origin: 45, keys: 9
+op add :total :total nitrogen           # Origin: 42, keys: 9
 jump *label24 always
 multilabel *label26
-op add :total :total gallium            # Origin: 45, keys: 8
+op add :total :total gallium            # Origin: 42, keys: 8
 jump *label24 always
 multilabel *label27
-op add :total :total cyanogen           # Origin: 45, keys: 7
+op add :total :total cyanogen           # Origin: 42, keys: 7
 jump *label24 always
 multilabel *label28
-op add :total :total ozone              # Origin: 45, keys: 6
+op add :total :total ozone              # Origin: 42, keys: 6
 jump *label24 always
 multilabel *label29
-op add :total :total hydrogen           # Origin: 45, keys: 5
+op add :total :total hydrogen           # Origin: 42, keys: 5
 jump *label24 always
 multilabel *label30
-op add :total :total neoplasm           # Origin: 45, keys: 4
+op add :total :total neoplasm           # Origin: 42, keys: 4
 jump *label24 always
 multilabel *label31
-op add :total :total cryofluid          # Origin: 45, keys: 3
+op add :total :total cryofluid          # Origin: 42, keys: 3
 jump *label24 always
 multilabel *label32
-op add :total :total oil                # Origin: 45, keys: 2
+op add :total :total oil                # Origin: 42, keys: 2
 jump *label24 always
 multilabel *label33
-op add :total :total slag               # Origin: 45, keys: 1
+op add :total :total slag               # Origin: 42, keys: 1
 jump *label24 always
 multilabel *label34
-op add :total :total water              # Origin: 45, keys: 0
+op add :total :total water              # Origin: 42, keys: 0
 label *label24
 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
-lookup liquid *tmp7 :c
-sensor .currentLine*elem *tmp7 @name
-read *tmp3 @this .currentLine*elem
-assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
-lookup item *tmp8 :c
-sensor .previousLine*elem *tmp8 @name
-write *tmp3 @this .previousLine*elem
+multijump :c 0 0
+multilabel *label36
+set silicon nitrogen                    # Origin: 62, keys: 9
+jump *label35 always
+multilabel *label37
+set scrap gallium                       # Origin: 62, keys: 8
+jump *label35 always
+multilabel *label38
+set thorium cyanogen                    # Origin: 62, keys: 7
+jump *label35 always
+multilabel *label39
+set titanium ozone                      # Origin: 62, keys: 6
+jump *label35 always
+multilabel *label40
+set coal hydrogen                       # Origin: 62, keys: 5
+jump *label35 always
+multilabel *label41
+set sand neoplasm                       # Origin: 62, keys: 4
+jump *label35 always
+multilabel *label42
+set graphite cryofluid                  # Origin: 62, keys: 3
+jump *label35 always
+multilabel *label43
+set metaglass oil                       # Origin: 62, keys: 2
+jump *label35 always
+multilabel *label44
+set lead slag                           # Origin: 62, keys: 1
+jump *label35 always
+multilabel *label45
+set copper water                        # Origin: 62, keys: 0
+label *label35
 op add :c :c 1
 jump *label12 lessThan :c :lineLength
 label *label9

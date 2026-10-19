@@ -7,8 +7,8 @@ The array optimization improves the performance of array operations in several w
 Mindcode supports the following types of arrays:
 
 * **Internal arrays:** backed by processor variables, and index-based access is provided by the compiler.
-* **Remote arrays:** backed by variables residing in a remote processor. Index-based access is provided by the compiler on the current processor.
-* **Multiplexed arrays:** similar to remote arrays, but several copies of these arrays may exist in different processors. Index-based access is provided by the compiler on the current processor.
+* **Remote arrays:** backed by variables residing in a remote processor. The compiler implements index-based access in the current processor.
+* **Multiplexed arrays:** similar to remote arrays, but several copies of these arrays may exist in different processors. The compiler implements index-based access in the current processor.
 * **Constant arrays:** individual elements of the array are constant. The compiler implements index-based read-only access.
 * **External arrays:** backed by a memory bank or a memory cell. Index-based access is provided directly by mlog instructions (`read` and `write`).
 
@@ -39,7 +39,7 @@ Constant arrays are also implemented using regular tables. Here, the table provi
 
 Available for targets `8.0` and higher. Implemented as a single table which provides the name of the variable corresponding to a given array element. The `read` and `write` instructions are then used to access the variable. The compact array can be used with both internal, remote, and multiplexed arrays. It is equally efficient for all these types of arrays, as the array element is read or written indirectly in all three cases using a single additional instruction. Due to this additional instruction requirement, the compact table is in most cases less efficient than a regular one.
 
-However, if an array element at the same index is accessed multiple times (e.g., a read-update-write pattern such as `a[i]++`), Mindcode might be able to recognize this and for the second and later accesses use the name of the variable obtained through the table for the first access, providing considerable savings in both code-size and execution time. In these cases, a compact array is more efficient than a regular array and is preferred by the optimizer.
+However, if an array element at the same index is accessed multiple times, Mindcode may use the name of the variable obtained through the table for the first access for the second and later accesses. This brings considerable savings in both code-size and execution time, making a compact array more efficient than a regular array. In these cases, the optimizer prefers a compact array.
 
 Since a compact table doesn't access the array element variables directly, but accesses them through their mlog names, the variables aren't created in the processor by the table itself (unlike regular arrays). Array elements which aren't accessed directly by the program must be explicitly created by a `draw triangle` instruction. Up to six variables can be created by a single instruction, meaning that an array implemented as a compact array may require approx. 2.17 instructions per array element for tables.
 
@@ -83,7 +83,7 @@ This replacement is available for both compact and regular tables. The compact v
 
 ### Using an if / else statement
 
-When a `select` instruction is not available, access to elements of arrays of length 2 is replaced with if/else statements:
+When a `select` instruction is not available, access to arrays with less than three elements is replaced with if/else statements:
 
 * `a[x] = b;` gets converted to `if x == 0 then a[0] = b; else a[1] = b; end;`.
 * `b = a[x]` gets converted to  `if x == 0 then b = a[0]; else b = a[1]; end;`.
@@ -162,58 +162,56 @@ Example of a lookup array:
 
 ```Mindcode
 #set syntax = strict;
+#set symbolic-labels = true;
 
 const SIZE = 5;
 var array[SIZE];
 
-begin
-    for var i in 0 ... 100 do
-        array[floor(rand(SIZE))] += array[floor(rand(SIZE))] + 1;
-    end;
+// Using noinline functions to prevent optimizations of the array access
+// unwanted for this demonstration
 
-    for var a in array do
-        println(a);
-    end;
+noinline def get(index)
+    return array[index];
+end;
+
+noinline void set(index, value)
+    array[index] = value;
+end;
+
+begin
+    set(0, 10);
+    print(get(0));
 end;
 ```
 
 compiles to:
 
 ```mlog
-set :i 0
-op rand *tmp0 5 0
-op rand *tmp1 5 0
-read @counter "\u000c\n\u0008\u0006\u0004" *tmp1
-op add *tmp2 green 1                    # Origin: 3, keys: 4
-jump 13 always 0 0
-op add *tmp2 malis 1                    # Origin: 3, keys: 3
-jump 13 always 0 0
-op add *tmp2 crux 1                     # Origin: 3, keys: 2
-jump 13 always 0 0
-op add *tmp2 sharded 1                  # Origin: 3, keys: 1
-jump 13 always 0 0
-op add *tmp2 derelict 1                 # Origin: 3, keys: 0
-read @counter "\u0016\u0014\u0012\u0010\u000e" *tmp0
-op add *tmp3 green *tmp2                # Origin: 13, keys: 4
-jump 23 always 0 0
-op add *tmp3 malis *tmp2                # Origin: 13, keys: 3
-jump 23 always 0 0
-op add *tmp3 crux *tmp2                 # Origin: 13, keys: 2
-jump 23 always 0 0
-op add *tmp3 sharded *tmp2              # Origin: 13, keys: 1
-jump 23 always 0 0
-op add *tmp3 derelict *tmp2             # Origin: 13, keys: 0
-lookup team *tmp4 *tmp0
-sensor .array*elem *tmp4 @name
-write *tmp3 @this .array*elem
-op add :i :i 1
-jump 1 lessThan :i 100
-print derelict
-print "\n{0}\n{0}\n{0}\n{0}\n"
-format sharded
-format crux
-format malis
-format green
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+        set :set:index 0
+        set :set:value 10
+        op add :set*retaddr @counter 1
+        jump label_13 always 0 0
+        set :get:index 0
+        op add :get*retaddr @counter 1
+        jump label_9 always 0 0
+        print :get*retval
+end
+    # Function: noinline def get(in index)
+label_9:
+            lookup team *tmp0 :get:index
+            sensor .array*elem *tmp0 @name
+            read :get*retval @this .array*elem
+    set @counter :get*retaddr
+    # Function: noinline void set(in index, in value)
+label_13:
+            lookup team *tmp1 :set:index
+            sensor .array*elem *tmp1 @name
+            write :set:value @this .array*elem
+    set @counter :set*retaddr
+draw triangle derelict sharded crux malis green 0
 ```
 
 ## Text-based table dispatch
@@ -401,6 +399,87 @@ Note: multiplexed remote arrays are handled equally to simple remote arrays, as 
     * The size of branches decreased by one, as the last branch doesn't end with a jump but immediately continues with the next instruction.
     * One execution step is saved when using the last branch of the table. The last branch is used for the last element of the array, and in the case of folded even-sized arrays, for one additional element. This saving is considered by the optimizer but not shown in the table.
 
+## Instruction injection
+
+Sometimes, the value read from the array is used just once in the following instruction and nowhere else. In these cases, the instruction itself can be embedded in the `@counter` table, if the array elements are stored in the processor, the array access is inlined, and the table is not folded:
+
+```Mindcode
+const colors[] = ("[red]", "[green]", "[blue]", "[salmon]", "[crimson]");
+print(colors[floor(rand(length(colors)))], "A colorful text.");
+```
+
+compiles to:
+
+```mlog
+op rand *tmp0 5 0
+read @counter "\n\u0008\u0006\u0004\u0002" *tmp0
+print "[crimson]"                       # Origin: 1, keys: 4
+jump 11 always 0 0
+print "[salmon]"                        # Origin: 1, keys: 3
+jump 11 always 0 0
+print "[blue]"                          # Origin: 1, keys: 2
+jump 11 always 0 0
+print "[green]"                         # Origin: 1, keys: 1
+jump 11 always 0 0
+print "[red]"                           # Origin: 1, keys: 0
+print "A colorful text."
+```
+
+A more complex injection may happen when an array element is updated. In this case, the entire update operation can be inlined into the table, and the second array access - to write back the resulting value - can be completely avoided:
+
+```Mindcode
+param p = 0;
+param q = 0;
+volatile var array[5];
+
+array[p] += 2 * q + 1;
+```
+
+compiles to:
+
+```mlog
+set p 0
+set q 0
+op mul *tmp0 2 q
+op add *tmp1 *tmp0 1
+read @counter "\u000d\u000b\u0009\u0007\u0005" p
+op add .array*4 .array*4 *tmp1          # Origin: 4, keys: 4
+jump 0 always 0 0
+op add .array*3 .array*3 *tmp1          # Origin: 4, keys: 3
+jump 0 always 0 0
+op add .array*2 .array*2 *tmp1          # Origin: 4, keys: 2
+jump 0 always 0 0
+op add .array*1 .array*1 *tmp1          # Origin: 4, keys: 1
+jump 0 always 0 0
+op add .array*0 .array*0 *tmp1          # Origin: 4, keys: 0
+```
+
+This is even supported for two different arrays if they're of the same length:
+
+```Mindcode
+param p = 0;
+param q = 5;
+var a[5], b[5];
+a[p] = b[p] + q;
+```
+
+compiles to:
+
+```mlog
+set p 0
+set q 5
+read @counter "\u000b\u0009\u0007\u0005\u0003" p
+op add .a*4 .b*4 q                      # Origin: 2, keys: 4
+jump 0 always 0 0
+op add .a*3 .b*3 q                      # Origin: 2, keys: 3
+jump 0 always 0 0
+op add .a*2 .b*2 q                      # Origin: 2, keys: 2
+jump 0 always 0 0
+op add .a*1 .b*1 q                      # Origin: 2, keys: 1
+jump 0 always 0 0
+op add .a*0 .b*0 q                      # Origin: 2, keys: 0
+```
+
 ## Optimization progression
 
 The compiler initially chooses array implementations to take the least amount of space possible. The initial implementations are always non-inlined. The specific implementation depends on the capabilities of the target processor:
@@ -441,13 +520,20 @@ Compact tables can get promoted to regular ones. If the array is only read or on
 This optimization inlines the table to the place of array access.
 
 * Inlining saves between one and four execution steps, depending on the original implementation of the array.
-* Inlining a single non-inlined array access using a specific table means the original table is eliminated, decreasing the code size; therefore it is always applied.
-* When [text-based table dispatch](#text-based-table-dispatch) is available, inlined arrays are folded for compact tables or read access usig regular tables.
+* Inlining single non-inlined array access using a specific table means the original table is eliminated, decreasing the code size; therefore, it is always applied.
+* When [text-based table dispatch](#text-based-table-dispatch) is available, inlined arrays are folded for compact tables or read access using regular tables.
+
+**Injecting instructions**
+
+This optimization injects either a simple operation or an element update into the `@counter` table. The injection optimization also inlines the table if it wasn't inlined already.
+
+* When a single instruction is injected, one execution step is saved, but the table size might increase as folding is not possible with injection.
+* When an update operation is injected, a separate write operation on the array is avoided, resulting in significant savings in both execution time and, typically, in code size too.
 
 The optimizer considers possible optimizations for the following groups of array accesses:
 
 * All non-inlined array accesses sharing an instance of the table. The optimization affects either all of these instructions or none of them. When the optimization succeeds, the original table is replaced by the optimized ones.
-* Inlining (possibly combined with folding) of every array access is considered separately. In this case, since not all array accesses using the same table are inlined, the original table used by other, non-inlined instructions cannot be eliminated. Inlining only some instead of all array accesses using the same table only happens when there isn't enough instruction space to inline all of them.
+* Inlining (possibly combined with folding or injecting) of every array access is considered separately. In this case, since not all array accesses using the same table are inlined, the original table used by other, non-inlined instructions cannot be eliminated. Inlining only some instead of all array accesses using the same table only happens when there isn't enough instruction space to inline all of them.
 * Unfolding or promoting each inlined array access is also considered separately. Since the array access is inlined, only its table is affected by the optimization.
 
 Note: it doesn't make sense to consider unfolding or promoting individual non-inlined accesses. If the optimization benefits one such access, it benefits all of them in the same way, and applying the optimization to all is considered as stated above.

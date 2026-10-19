@@ -64,17 +64,14 @@ class ArrayOptimizerTest {
                             """,
                     createInstruction(SET, "p", "0"),
                     createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "1", q("position 1:1: index out of bounds (0 to 1)")),
-                    createInstruction(OP, "add", tmp(1), ".array*1", "1"),
-                    createInstruction(JUMP, label(1), "greaterThanEq", "p", "1"),
-                    createInstruction(OP, "add", tmp(1), ".array*0", "1"),
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "1", q("position 1:1: index out of bounds (0 to 1)")),
-                    createInstruction(JUMP, label(2), "greaterThanEq", "p", "1"),
-                    createInstruction(SET, ".array*0", tmp(1)),
-                    createInstruction(JUMP, label(3), "always"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(SET, ".array*1", tmp(1)),
-                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "shl", tmp(2), "p", "1"),
+                    createInstruction(MULTIJUMP, label(1), tmp(2), "0"),
+                    createInstruction(MULTILABEL, label(1)),
+                    createInstruction(OP, "add", ".array*0", ".array*0", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(2)),
+                    createInstruction(OP, "add", ".array*1", ".array*1", "1"),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ".array*0"),
                     createInstruction(PRINT, ".array*1")
             );
@@ -134,31 +131,17 @@ class ArrayOptimizerTest {
                     createInstruction(OP, "shl", tmp(2), "p", "1"),
                     createInstruction(MULTIJUMP, label(1), tmp(2), "0"),
                     createInstruction(MULTILABEL, label(1)),
-                    createInstruction(OP, "add", tmp(1), ".array*0", "1"),
+                    createInstruction(OP, "add", ".array*0", ".array*0", "1"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(MULTILABEL, label(2)),
-                    createInstruction(OP, "add", tmp(1), ".array*1", "1"),
+                    createInstruction(OP, "add", ".array*1", ".array*1", "1"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(MULTILABEL, label(3)),
-                    createInstruction(OP, "add", tmp(1), ".array*2", "1"),
+                    createInstruction(OP, "add", ".array*2", ".array*2", "1"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(MULTILABEL, label(4)),
-                    createInstruction(OP, "add", tmp(1), ".array*3", "1"),
+                    createInstruction(OP, "add", ".array*3", ".array*3", "1"),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "3", q("position 1:1: index out of bounds (0 to 3)")),
-                    createInstruction(MULTIJUMP, label(6), tmp(2), "0"),
-                    createInstruction(MULTILABEL, label(6)),
-                    createInstruction(SET, ".array*0", tmp(1)),
-                    createInstruction(JUMP, label(5), "always"),
-                    createInstruction(MULTILABEL, label(7)),
-                    createInstruction(SET, ".array*1", tmp(1)),
-                    createInstruction(JUMP, label(5), "always"),
-                    createInstruction(MULTILABEL, label(8)),
-                    createInstruction(SET, ".array*2", tmp(1)),
-                    createInstruction(JUMP, label(5), "always"),
-                    createInstruction(MULTILABEL, label(9)),
-                    createInstruction(SET, ".array*3", tmp(1)),
-                    createInstruction(LABEL, label(5)),
                     createInstruction(PRINT, ".array*0"),
                     createInstruction(PRINT, ".array*1"),
                     createInstruction(PRINT, ".array*2"),
@@ -584,53 +567,31 @@ class ArrayOptimizerTest {
                             mlog(:team) var a[5];
                             var b[5];
                             param p = 0;
-                            a[p] = b[p];
+                            a[p] = foo(b[p]);
                             print(a[p], b[p]);
+                            
+                            noinline def foo(x) x; end;
                             """,
                     createInstruction(SET, "p", "0"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 4:1: index out of bounds (0 to 4)")),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 4:8: index out of bounds (0 to 4)")),
                     createInstruction(LOOKUP, "liquid", tmp(5), "p"),
                     createInstruction(SENSOR, ".b*elem", tmp(5), "@name"),
-                    createInstruction(READ, tmp(1), "@this", ".b*elem"),
+                    createInstruction(READ, ":foo:x", "@this", ".b*elem"),
+                    createInstruction(SETADDR, ":foo*retaddr", label(1)),
+                    createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 4:1: index out of bounds (0 to 4)")),
                     createInstruction(LOOKUP, "team", tmp(6), "p"),
                     createInstruction(SENSOR, ".a*elem", tmp(6), "@name"),
-                    createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
+                    createInstruction(WRITE, ":foo*retval", "@this", ".a*elem"),
                     createInstruction(READ, tmp(2), "@this", ".a*elem"),
                     createInstruction(PRINT, tmp(2)),
                     createInstruction(READ, tmp(4), "@this", ".b*elem"),
-                    createInstruction(PRINT, tmp(4))
-            );
-        }
-
-        @Test
-        void processesLookupDeclarations2() {
-            assertCompilesTo("""
-                            mlog(:team) var a[5];
-                            var b[5];
-                            param p = 0;
-                            a[p] = b[p];
-                            print(a, b);
-                            """,
-                    createInstruction(SET, "p", "0"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 4:1: index out of bounds (0 to 4)")),
-                    createInstruction(LOOKUP, "liquid", tmp(2), "p"),
-                    createInstruction(SENSOR, ".b*elem", tmp(2), "@name"),
-                    createInstruction(READ, tmp(1), "@this", ".b*elem"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 4:1: index out of bounds (0 to 4)")),
-                    createInstruction(LOOKUP, "team", tmp(3), "p"),
-                    createInstruction(SENSOR, ".a*elem", tmp(3), "@name"),
-                    createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
-                    createInstruction(PRINT, "derelict"),
-                    createInstruction(PRINT, "sharded"),
-                    createInstruction(PRINT, "crux"),
-                    createInstruction(PRINT, "malis"),
-                    createInstruction(PRINT, "green"),
-                    createInstruction(PRINT, "water"),
-                    createInstruction(PRINT, "slag"),
-                    createInstruction(PRINT, "oil"),
-                    createInstruction(PRINT, "cryofluid"),
-                    createInstruction(PRINT, "neoplasm")
+                    createInstruction(PRINT, tmp(4)),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":foo*retval", ":foo:x"),
+                    createInstruction(RETURN, ":foo*retaddr")
             );
         }
 

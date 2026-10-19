@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -92,7 +91,7 @@ public class CompactSharedArrayConstructor extends SharedArrayConstructor {
     }
 
     @Override
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
+    protected BranchCreator branchCreator() {
         return compactBranchCreator();
     }
 

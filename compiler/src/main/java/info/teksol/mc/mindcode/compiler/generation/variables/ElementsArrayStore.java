@@ -19,7 +19,7 @@ public abstract class ElementsArrayStore extends AbstractArrayStore {
     }
 
     public ElementsArrayStore getMasterArray() {
-        return masterArray == null ? this : (ElementsArrayStore) masterArray;
+        return (ElementsArrayStore) masterArray;
     }
 
     public List<ValueStore> getElements() {

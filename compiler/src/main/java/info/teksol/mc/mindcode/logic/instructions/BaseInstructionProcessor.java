@@ -296,6 +296,15 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     @Override
+    public <T extends LogicInstruction> T replaceArgs(T instruction, Map<? extends LogicValue, LogicValue> argumentMap) {
+        Function<LogicArgument, LogicArgument> mapper =
+                arg -> arg instanceof LogicVariable variable ? argumentMap.getOrDefault(variable, variable) : arg;
+        T ix = replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
+        ix.remapInfoValues(argumentMap);
+        return ix;
+    }
+
+    @Override
     public <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg) {
         if (!instruction.getArgs().contains(oldArg)) return instruction;
 

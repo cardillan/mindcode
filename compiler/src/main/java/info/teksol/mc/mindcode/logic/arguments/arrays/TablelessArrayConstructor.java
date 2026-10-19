@@ -8,7 +8,6 @@ import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -35,7 +34,7 @@ public abstract class TablelessArrayConstructor extends AbstractArrayConstructor
     }
 
     @Override
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
+    protected BranchCreator branchCreator() {
         throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
     }
 

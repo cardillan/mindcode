@@ -26,7 +26,7 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
     protected final int size;
 
     /// Contains the master array: source of the subarray
-    protected final @Nullable ArrayStore masterArray;
+    protected final ArrayStore masterArray;
 
     protected final LogicArray logicArray;
 
@@ -37,7 +37,7 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
         this.arrayType = arrayType;
         this.startOffset = startOffset;
         this.size = size;
-        this.masterArray = masterArray;
+        this.masterArray = masterArray == null ? this : masterArray;
         this.logicArray = subarray ? LogicArray.create(this, startOffset, startOffset + size) : LogicArray.create(this);
     }
 
@@ -72,7 +72,7 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
     }
 
     public ArrayStore getMasterArray() {
-        return masterArray == null ? this : masterArray;
+        return masterArray;
     }
 
     @Override

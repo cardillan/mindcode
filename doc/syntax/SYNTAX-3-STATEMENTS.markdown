@@ -12,6 +12,9 @@ There are several types of loops:
 * [C-style loops](#c-style-loops)
 * [Infinite loops](#infinite-loops)
 
+> [!NOTE]
+> In loops using loop control variables (i.e., range iteration loops and list iteration loops), the loop control variable must not be reused in another such loop. Furthermore, in strict syntax mode, the loop control variable needs to be declared in the loop itself; it is not possible to use a variable declared earlier as a loop control variable.
+
 ## While loops
 
 The `while` loop gets repeated as long as the condition remains true:

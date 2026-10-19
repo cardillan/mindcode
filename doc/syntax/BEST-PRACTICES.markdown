@@ -668,14 +668,18 @@ The difference increases with each additional array access within the loop:
 
 var a[4], b[4], c[4];
 
-/// List iteration loop (7 instructions per iteration)
+/// List iteration loop (8 instructions per iteration)
 for var out x in a; var y in b; var z in c do
-    x = y + z;
+    x = foo(x, y);
 end;
 
-/// Index-based access (12 instructions per iteration)
+/// Index-based access (13 instructions per iteration)
 for var i in 0 ... length(a) do
-    a[i] = b[i] + c[i];
+    a[i] = foo(b[i], c[i]);
+end;
+
+noinline def foo(x, y)
+    return x + y;
 end;
 
 print(a);
@@ -687,54 +691,56 @@ produces
 # Mlog code compiled with support for symbolic labels
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
-    # List iteration loop (7 instructions per iteration)
-    set :y water
-    set :z .c*0
+    # List iteration loop (8 instructions per iteration)
+    set :foo:x derelict
+    set :foo:y water
     op add *tmp0 @counter 1
     jump label_18 always 0 0
-    set derelict :x
-    set :y slag
-    set :z .c*1
+    set derelict :foo*retval
+    set :foo:x sharded
+    set :foo:y slag
     op add *tmp0 @counter 1
     jump label_18 always 0 0
-    set sharded :x
-    set :y oil
-    set :z .c*2
+    set sharded :foo*retval
+    set :foo:x crux
+    set :foo:y oil
     op add *tmp0 @counter 1
     jump label_18 always 0 0
-    set crux :x
-    set :y cryofluid
-    set :z .c*3
+    set crux :foo*retval
+    set :foo:x malis
+    set :foo:y cryofluid
     set *tmp0 null
     label_18:
-        op add :x :y :z
+        op add :foo*retaddr @counter 1
+        jump label_41 always 0 0
         set @counter *tmp0
-    set malis :x
-    # Index-based access (12 instructions per iteration)
+    set malis :foo*retval
+    # Index-based access (13 instructions per iteration)
     set :i 0
-label_22:
-            lookup liquid *tmp3 :i
-            sensor .b*elem *tmp3 @name
-            read *tmp1 @this .b*elem
-        op shl *tmp4 :i 1
-        op add @counter @counter *tmp4
-        op add *tmp2 *tmp1 .c*0
-        jump label_34 always 0 0
-        op add *tmp2 *tmp1 .c*1
-        jump label_34 always 0 0
-        op add *tmp2 *tmp1 .c*2
-        jump label_34 always 0 0
-        op add *tmp2 *tmp1 .c*3
-    label_34:
-            lookup team *tmp5 :i
-            sensor .a*elem *tmp5 @name
-            write *tmp2 @this .a*elem
+label_23:
+            lookup liquid *tmp1 :i
+            sensor .b*elem *tmp1 @name
+            read :foo:x @this .b*elem
+            lookup item *tmp2 :i
+            sensor .c*elem *tmp2 @name
+            read :foo:y @this .c*elem
+        op add :foo*retaddr @counter 1
+        jump label_41 always 0 0
+            lookup team *tmp3 :i
+            sensor .a*elem *tmp3 @name
+            write :foo*retval @this .a*elem
     op add :i :i 1
-    jump label_22 lessThan :i 4
+    jump label_23 lessThan :i 4
     print derelict
     print sharded
     print crux
     print malis
+end
+    # Function: noinline def foo(in x, in y)
+label_41:
+        op add :foo*retval :foo:x :foo:y
+    set @counter :foo*retaddr
+draw triangle copper lead metaglass graphite 0 0
 ```
 
 The reason is that in the list iteration loop, all array accesses are performed using direct access to elements, while in index-based access, each array element is accessed separately using lookup access. When `@counter` arrays are used instead of lookup arrays for some reason, the difference is even greater.

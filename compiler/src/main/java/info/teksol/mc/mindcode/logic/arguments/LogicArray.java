@@ -52,4 +52,8 @@ public class LogicArray extends AbstractArgument {
     public static LogicArray create(ArrayStore array, int start, int end) {
         return new LogicArray(array, "[" + start + "..." + end + "]");
     }
+
+    public boolean sameArray(LogicArray other) {
+        return array.getMasterArray() == other.array.getMasterArray();
+    }
 }

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -162,21 +161,25 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     // as long as a single instruction is capable of storing the value in a variable.
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    protected interface BranchCreator {
+        void createBranch(LocalContextfulInstructionsCreator creator, ValueStore element, int index);
+    }
+
     /// Provides a branch creator. Branch creator creates the instruction for a branch of an unfolded table.
     /// It takes a value store, which is a representation of the array element to be returned by the table.
     /// It might not be a LogicVariable, as the branch instruction can encode access to the actual value.
-    abstract protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator();
+    abstract protected BranchCreator branchCreator();
 
-    protected final BiConsumer<LocalContextfulInstructionsCreator, ValueStore> regularBranchCreator() {
+    protected final BranchCreator regularBranchCreator() {
         return switch (accessType) {
-            case READ -> (creator, element) -> element.readValue(creator, (LogicVariable) transferVariable());
-            case WRITE -> (creator, element) -> element.setValue(creator, transferVariable());
+            case READ -> (creator, element, _) -> element.readValue(creator, (LogicVariable) transferVariable());
+            case WRITE -> (creator, element, _) -> element.setValue(creator, transferVariable());
         };
     }
 
-    protected final BiConsumer<LocalContextfulInstructionsCreator, ValueStore> compactBranchCreator() {
+    protected final BranchCreator compactBranchCreator() {
         // For compact arrays, the transfer variable needs to be an actual LogicVariable.
-        return (creator, element) -> creator.createSet((LogicVariable) transferVariable(), element.getMlogVariableName());
+        return (creator, element, index) -> creator.createSet((LogicVariable) transferVariable(), element.getMlogVariableName());
     }
 
     /// Provides an instance which creates a value store representation of the element to be used by the branch creator.
@@ -184,7 +187,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
             Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
-        BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator = branchCreator();
+        BranchCreator branchCreator = branchCreator();
         Function<ValueStore, ValueStore> elementProcessor = elementValueStoreExtractor();
         LogicLabel nextLabel = firstLabel;
 
@@ -194,12 +197,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
         branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
         for (int i = 0; i < count; i++) {
-            int branch = reversed ? count - i - 1 : i;
-            ValueStore arrayElement = elements.get(branch);
+            int index = reversed ? count - i - 1 : i;
+            ValueStore arrayElement = elements.get(index);
             ValueStore element = elementProcessor.apply(arrayElement);
             creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
-            branchLabels.set(branch, nextLabel);
-            branchCreator.accept(creator, element);
+            branchLabels.set(index, nextLabel);
+            branchCreator.createBranch(creator, element, index);
             if (i < count - 1) {
                 createExit.run();
                 nextLabel = processor.nextLabel();      // We'll waste one label. Meh.

@@ -2,6 +2,8 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayType;
+import info.teksol.mc.mindcode.compiler.generation.variables.ElementsArrayStore;
+import info.teksol.mc.mindcode.logic.arguments.LogicArray;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -492,23 +494,32 @@ class ArrayOptimizer extends BaseOptimizer {
             if (!(instruction instanceof ReadArrInstruction)) return List.of();
 
             try (OptimizationContext.LogicIterator iterator = createIteratorAtInstruction(instruction)) {
-                if (iterator.next() instanceof ReadArrInstruction ix) {
-                    LogicInstruction next = iterator.peekValid(0);
-                    if (next != null && canInject(next) && next.inputArgumentsStream().anyMatch(v -> v == ix.getResult())) {
-                        LogicInstruction second;
-                        if (selfUpdate(next) && next.getResult() == ix.getResult()
-                                && iterator.peekValid(1) instanceof WriteArrInstruction wix
-                                && wix.getValue() == ix.getResult() && wix.getArray() == ix.getArray()
-                                && wix.getIndex() == ix.getIndex() && wix.getIndex() != ix.getResult()) {
-                            second = wix;
-                        } else {
-                            second = null;
-                        }
+                if (iterator.next() instanceof ReadArrInstruction read && read.getArray().getArrayStore() instanceof ElementsArrayStore) {
+                    LogicInstruction inject = iterator.peekValid(0);
+                    if (inject instanceof WriteArrInstruction write
+                            && write.getArray().getArrayStore() instanceof ElementsArrayStore
+                            && write.getValue() == read.getResult()
+                            && compatibleArrays(read.getArray(), write.getArray())
+                            && write.getIndex() == read.getIndex()
+                            && write.getIndex() != read.getResult()
+                            && getVariableReferences(read.getResult()).stream().noneMatch(i -> i != read && i != write)) {
 
-                        if (getVariableReferences(ix.getResult()).stream().noneMatch(i -> i != ix && i != next && i != second)) {
+                        return new ArrayList<>(List.of(write));
+                    } else if (inject != null && canInject(inject) && inject.inputArgumentsStream().anyMatch(v -> v == read.getResult())) {
+                        WriteArrInstruction writeIx = iterator.peekValid(1) instanceof WriteArrInstruction write
+                                && write.getArray().getArrayStore() instanceof ElementsArrayStore
+                                && write.getValue() == inject.getResult()
+                                && compatibleArrays(read.getArray(), write.getArray())
+                                && write.getIndex() == read.getIndex()
+                                && write.getIndex() != inject.getResult()
+                                && write.getIndex() != read.getResult()
+                                && getVariableReferences(inject.getResult()).stream().noneMatch(i -> i != read && i != inject && i != write)
+                                ? write: null;
+
+                        if (getVariableReferences(read.getResult()).stream().noneMatch(i -> i != read && i != inject && i != writeIx)) {
                             ArrayList<LogicInstruction> injections = new ArrayList<>();
-                            injections.add(next);
-                            if (second != null) injections.add(second);
+                            injections.add(inject);
+                            if (writeIx != null) injections.add(writeIx);
                             return injections;
                         }
                     }
@@ -516,6 +527,11 @@ class ArrayOptimizer extends BaseOptimizer {
 
                 return List.of();
             }
+        }
+
+        private boolean compatibleArrays(LogicArray read, LogicArray write) {
+            return read.sameArray(write)
+                    || read.size() == read.fullSize() && write.size() == write.fullSize() && read.size() == write.size();
         }
 
         private boolean canInject(LogicInstruction instruction) {

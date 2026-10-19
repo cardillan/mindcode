@@ -74,7 +74,7 @@ public class BuiltInArray extends AbstractArrayStore {
 
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + start, this);
+        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + start, masterArray);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class BuiltInArray extends AbstractArrayStore {
 
     @Override
     public ArrayStore offset(int offset) {
-        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + offset, getMasterArray());
+        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + offset, masterArray);
     }
 
     private interface Accessor {

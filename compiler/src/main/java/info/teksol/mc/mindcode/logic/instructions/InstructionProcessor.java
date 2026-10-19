@@ -88,6 +88,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs);
 
+    <T extends LogicInstruction> T replaceArgs(T instruction, Map<? extends LogicValue, LogicValue> argumentMap);
+
     /// Replaces all label arguments of the instruction contained in the label map with the label the original
     /// is mapped to. Used when duplication sections of code containing labels.
     ///

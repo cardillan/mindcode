@@ -704,34 +704,34 @@ Modifications by Virtual Instruction Expansion (-1 instructions):
 +   41 op shl *tmp10 *tmp2 1
 +   42 multijump *label79 *tmp10 0 (m:marker1)
 +   43 multilabel *label79 (m:marker1)
-+   44 > op add .array*0 .array*0 1
++   44 op add .array*0 .array*0 1
 +   45 jump *label78 always
 +   46 multilabel *label80 (m:marker1)
-+   47 > op add .array*1 .array*1 1
++   47 op add .array*1 .array*1 1
 +   48 jump *label78 always
 +   49 multilabel *label81 (m:marker1)
-+   50 > op add .array*2 .array*2 1
++   50 op add .array*2 .array*2 1
 +   51 jump *label78 always
 +   52 multilabel *label82 (m:marker1)
-+   53 > op add .array*3 .array*3 1
++   53 op add .array*3 .array*3 1
 +   54 jump *label78 always
 +   55 multilabel *label83 (m:marker1)
-+   56 > op add .array*4 .array*4 1
++   56 op add .array*4 .array*4 1
 +   57 jump *label78 always
 +   58 multilabel *label84 (m:marker1)
-+   59 > op add .array*5 .array*5 1
++   59 op add .array*5 .array*5 1
 +   60 jump *label78 always
 +   61 multilabel *label85 (m:marker1)
-+   62 > op add .array*6 .array*6 1
++   62 op add .array*6 .array*6 1
 +   63 jump *label78 always
 +   64 multilabel *label86 (m:marker1)
-+   65 > op add .array*7 .array*7 1
++   65 op add .array*7 .array*7 1
 +   66 jump *label78 always
 +   67 multilabel *label87 (m:marker1)
-+   68 > op add .array*8 .array*8 1
++   68 op add .array*8 .array*8 1
 +   69 jump *label78 always
 +   70 multilabel *label88 (m:marker1)
-+   71 > op add .array*9 .array*9 1
++   71 op add .array*9 .array*9 1
 +   72 label *label78
     73 op idiv :countDigits:number :countDigits:number 10
     74 label *label19
