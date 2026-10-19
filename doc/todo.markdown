@@ -22,13 +22,13 @@ Changes intended for the next regular release.
   * Remove on success
   * Produce error (warning?) on failure
 * `items`, `liquids`, `blocks` and `unitTypes` arrays
+* Convert constant case statements to jumps
 
 * **Doing**
 
 * Large arrays
   * Nested for loops for list-iteration loops
   * Subarrays
-* Convert constant case statements to jumps!!! 
 * Remove lookup/sensor id in front of case statements
 
 * **Planned**

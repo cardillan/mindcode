@@ -42,7 +42,7 @@ public interface LogicReadable extends MlogReadable {
 
     /// @return true when this value is a long
     default boolean isLong() {
-        return isNumber() && getLongValue() == getDoubleValue();
+        return isNumericConstant() && getLongValue() == getDoubleValue();
     }
 
     /// Provides the value of this argument as an int. Throws error when isConstant() is false.
@@ -54,7 +54,7 @@ public interface LogicReadable extends MlogReadable {
 
     /// @return true when this value is an int
     default boolean isInteger() {
-        return isNumber() && getIntValue() == getDoubleValue();
+        return isNumericConstant() && getIntValue() == getDoubleValue();
     }
 
     /// Provides the value of this argument as an object. Throws error when isConstant() is false.
