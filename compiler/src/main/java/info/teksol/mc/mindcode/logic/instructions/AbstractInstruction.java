@@ -183,4 +183,14 @@ public abstract class AbstractInstruction implements LogicInstruction {
     public String toString() {
         return LogicInstructionPrinter.toStringSimple(this);
     }
+
+    @Override
+    public final boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public final int hashCode() {
+        return super.hashCode();
+    }
 }

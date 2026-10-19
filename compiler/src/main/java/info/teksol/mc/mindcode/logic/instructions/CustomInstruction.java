@@ -72,18 +72,4 @@ public class CustomInstruction extends AbstractInstruction {
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         return label ? 0 : 1;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CustomInstruction that = (CustomInstruction) o;
-        return Objects.equals(opcode, that.opcode) &&
-                Objects.equals(args, that.args);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(opcode, args);
-    }
 }

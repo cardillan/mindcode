@@ -235,7 +235,7 @@ public class ApiController {
 
     private ApiSource getApiSource(String id, String source, CompilerMode mode) {
         if (source.length() > MAX_TEXT_LENGTH) {
-            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "Text exceeds the maximum allowed length of " + MAX_TEXT_LENGTH + " characters.");
+            throw new ResponseStatusException(HttpStatus.CONTENT_TOO_LARGE, "Text exceeds the maximum allowed length of " + MAX_TEXT_LENGTH + " characters.");
         }
 
         ApiSource apiSource;

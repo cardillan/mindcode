@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -227,7 +228,9 @@ class BaseOptimizerTest extends AbstractCompilerTestBase {
         LogicList list = test.contextInstructions(mockAstContext).duplicate(l -> true);
         test.insertInstructions(1, list);
         LabelInstruction duplicatedLabel = test.createLabel(mockAstContext, LogicLabel.symbolic("*label0"));
-        assertEquals(List.of(ix0, ix0, duplicatedLabel, ix2, ix1, ix2), program);
+        assertEquals(
+                Stream.of(ix0, ix0, duplicatedLabel, ix2, ix1, ix2).map(Object::toString).toList(),
+                program.stream().map(Object::toString).toList());
     }
 
     @Test

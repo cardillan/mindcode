@@ -72,8 +72,8 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "0");
         LogicInstruction replaced = ip.replaceAllArgs(original, new GenericArgument("0"), new GenericArgument("255"));
         Assertions.assertEquals(
-                createInstruction(DRAW, "clear", "255", "255", "255"),
-                replaced
+                createInstruction(DRAW, "clear", "255", "255", "255").toString(),
+                replaced.toString()
         );
     }
 

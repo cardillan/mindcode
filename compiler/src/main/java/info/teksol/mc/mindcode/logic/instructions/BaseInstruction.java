@@ -50,21 +50,6 @@ public class BaseInstruction extends AbstractInstruction {
         return opcode;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BaseInstruction that = (BaseInstruction) o;
-        return Objects.equals(opcode, that.opcode) &&
-                Objects.equals(args, that.args) &&
-                info.equals(that.info);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(opcode, args);
-    }
-
     private @Nullable Boolean externalStack = null;
     protected boolean externalStack() {
         if (externalStack == null) {
