@@ -15,7 +15,7 @@ Mindcode 3.18 supports an internal stack for recursive functions. The internal s
 
 ### List iteration loops
 
-List iteration loops over arrays are now preferred over indexed loops for most use cases. Mindcode automatically converts lost iteration loop into index-based loops for large arrays, and may apply additional optimizations not available to explicitly created indexed loops.
+List iteration loops over arrays are now preferred over indexed loops for most use cases. Mindcode automatically converts list iteration loop into index-based loops for large arrays and may apply additional optimizations not available to explicitly created indexed loops.
 
 ## Mindcode 3.17
 
@@ -529,11 +529,14 @@ print "1\n3\n7\n15\n31\n63\n127\n255\n511\n1023\n"
 
 # Arrays in loops
 
-Mindcode offers two mechanisms to iterate over arrays: list iteration loops, and loops accessing array elements using the loop control variable as an index. Oftentimes, it is possible to express the same algorithm using either of these two approaches, but they may offer different performance in Mindcode due to various factors.
+Mindcode offers two mechanisms to iterate over small arrays: list iteration loops and loops accessing array elements using the loop control variable as an index. Oftentimes, it is possible to express the same algorithm using either of these two approaches, but they may offer different performance in Mindcode due to various factors.
+
+> [!NOTE]
+> List iteration loops over large arrays get converted to indexed loops anyway. The threshold for this conversion is controlled by the [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold).
 
 ## Arrays in unrolled loops
 
-If the loop over an array or arrays gets unrolled, the produced code is effectively the same in most cases. However, in cases where the list iteration loop updates the array, Mindcode is unable to properly resolve the self-referential update and produces suboptimal code. Compare these two approaches:
+If the loop over an array or arrays gets unrolled, the produced code is effectively the same in most cases. However, in cases where the loop updates the array, Mindcode is unable to properly resolve the self-referential update and produces suboptimal code in either case:
 
 ```Mindcode
 param p = 0;
@@ -575,16 +578,18 @@ print(array);
 produces
 
 ```mlog
+op add *tmp0 .array*0 1
 op add .array*0 .array*0 1
+op add *tmp1 .array*1 1
 op add .array*1 .array*1 1
-op add *tmp0 .array*2 1
+op add *tmp2 .array*2 1
 op add .array*2 .array*2 1
-print .array*0
-print .array*1
 print *tmp0
+print *tmp1
+print *tmp2
 ```
 
-The long-term goal is to produce identical, optimal code in both of these cases. At this moment, there's room for improvement in both approaches, but index-based loops may produce better code in some circumstances.
+The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 

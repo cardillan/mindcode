@@ -1,15 +1,15 @@
     88 instructions before optimizations.
-     1 instruction eliminated by Temp Variables Elimination (9 iterations).
+    10 instructions eliminated by Temp Variables Elimination (2 passes, 9 iterations).
      1 instruction eliminated by Dead Code Elimination (4 iterations).
-     1 instruction eliminated by Jump Normalization (8 iterations).
-     1 instruction eliminated by Condition Optimization (9 iterations).
-     1 instruction eliminated by Single Step Elimination (9 iterations).
-   171 instructions eliminated by Expression Optimization (6 iterations).
-    31 instructions eliminated by Data Flow Optimization (4 passes, 17 iterations).
+     1 instruction eliminated by Jump Normalization (7 iterations).
+     1 instruction eliminated by Condition Optimization (8 iterations).
+     1 instruction eliminated by Single Step Elimination (8 iterations).
+   162 instructions eliminated by Expression Optimization (5 iterations).
+    22 instructions eliminated by Data Flow Optimization (3 passes, 23 iterations).
        2 loop conditions were partially rotated.
-   173 instructions added by Loop Unrolling (10 iterations).
+   173 instructions added by Loop Unrolling (18 iterations).
      2 loops unrolled by Loop Unrolling.
-    28 instructions added by Array Optimization (10 iterations).
+    28 instructions added by Array Optimization (18 iterations).
      1 array improved by Array Optimization.
      8 instructions eliminated by Print Merging.
     52 instructions after optimizations.
@@ -28,6 +28,69 @@ Pass 1: speed optimization selection (cost limit 947):
 
 Pass 2: speed optimization selection (cost limit 932):
   * Unroll loop at line 25:5                                     size    +3, benefit      450.0, efficiency    150.000 (+174 instructions)
+
+Pass 2: speed optimization selection (cost limit 758):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 759):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 760):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 761):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 762):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 763):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 764):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 765):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
+    Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity
+
+Pass 2: speed optimization selection (cost limit 766):
+  * Inject array access to 'array' at line 26:9                  size    -1, benefit        1.0, efficiency   Infinity (-1 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -371,48 +434,48 @@ Modifications by Unroll loop at line 25:5 (+193 instructions):
 +   53 set :printArray:i 1
 +   54 label *label68
 +   55 print "-"
-+   56 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   57 print *tmp9
++   56 readarr<inlined:regular> *tmp10 .array[] :printArray:i
++   57 print *tmp10
 +   58 label *label69
 +   59 op add :printArray:i :printArray:i 1
 +   60 print "-"
-+   61 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   62 print *tmp9
++   61 readarr<inlined:regular> *tmp11 .array[] :printArray:i
++   62 print *tmp11
 +   63 label *label70
 +   64 op add :printArray:i :printArray:i 1
 +   65 print "-"
-+   66 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   67 print *tmp9
++   66 readarr<inlined:regular> *tmp12 .array[] :printArray:i
++   67 print *tmp12
 +   68 label *label71
 +   69 op add :printArray:i :printArray:i 1
 +   70 print "-"
-+   71 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   72 print *tmp9
++   71 readarr<inlined:regular> *tmp13 .array[] :printArray:i
++   72 print *tmp13
 +   73 label *label72
 +   74 op add :printArray:i :printArray:i 1
 +   75 print "-"
-+   76 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   77 print *tmp9
++   76 readarr<inlined:regular> *tmp14 .array[] :printArray:i
++   77 print *tmp14
 +   78 label *label73
 +   79 op add :printArray:i :printArray:i 1
 +   80 print "-"
-+   81 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   82 print *tmp9
++   81 readarr<inlined:regular> *tmp15 .array[] :printArray:i
++   82 print *tmp15
 +   83 label *label74
 +   84 op add :printArray:i :printArray:i 1
 +   85 print "-"
-+   86 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   87 print *tmp9
++   86 readarr<inlined:regular> *tmp16 .array[] :printArray:i
++   87 print *tmp16
 +   88 label *label75
 +   89 op add :printArray:i :printArray:i 1
 +   90 print "-"
-+   91 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   92 print *tmp9
++   91 readarr<inlined:regular> *tmp17 .array[] :printArray:i
++   92 print *tmp17
 +   93 label *label76
 +   94 op add :printArray:i :printArray:i 1
 +   95 print "-"
-+   96 readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   97 print *tmp9
++   96 readarr<inlined:regular> *tmp18 .array[] :printArray:i
++   97 print *tmp18
 +   98 label *label77
 +   99 op add :printArray:i :printArray:i 1
 +  100 label *label24
@@ -420,70 +483,70 @@ Modifications by Unroll loop at line 25:5 (+193 instructions):
    102 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
    103 label *label0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-9 instructions):
  
     53 set :printArray:i 1
     54 label *label68
     55 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   56 readarr<inlined:regular> *tmp9 .array[] 1
-    57 print *tmp9
+-    * readarr<inlined:regular> *tmp10 .array[] :printArray:i
++   56 readarr<inlined:regular:inj+1> *tmp10 .array[] 1
+    57 print *tmp10
     58 label *label69
 -    * op add :printArray:i :printArray:i 1
 +   59 op add :printArray:i 1 1
     60 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   61 readarr<inlined:regular> *tmp9 .array[] 2
-    62 print *tmp9
+-    * readarr<inlined:regular> *tmp11 .array[] :printArray:i
++   61 readarr<inlined:regular:inj+1> *tmp11 .array[] 2
+    62 print *tmp11
     63 label *label70
 -    * op add :printArray:i :printArray:i 1
 +   64 op add :printArray:i 2 1
     65 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   66 readarr<inlined:regular> *tmp9 .array[] 3
-    67 print *tmp9
+-    * readarr<inlined:regular> *tmp12 .array[] :printArray:i
++   66 readarr<inlined:regular:inj+1> *tmp12 .array[] 3
+    67 print *tmp12
     68 label *label71
 -    * op add :printArray:i :printArray:i 1
 +   69 op add :printArray:i 3 1
     70 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   71 readarr<inlined:regular> *tmp9 .array[] 4
-    72 print *tmp9
+-    * readarr<inlined:regular> *tmp13 .array[] :printArray:i
++   71 readarr<inlined:regular:inj+1> *tmp13 .array[] 4
+    72 print *tmp13
     73 label *label72
 -    * op add :printArray:i :printArray:i 1
 +   74 op add :printArray:i 4 1
     75 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   76 readarr<inlined:regular> *tmp9 .array[] 5
-    77 print *tmp9
+-    * readarr<inlined:regular> *tmp14 .array[] :printArray:i
++   76 readarr<inlined:regular:inj+1> *tmp14 .array[] 5
+    77 print *tmp14
     78 label *label73
 -    * op add :printArray:i :printArray:i 1
 +   79 op add :printArray:i 5 1
     80 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   81 readarr<inlined:regular> *tmp9 .array[] 6
-    82 print *tmp9
+-    * readarr<inlined:regular> *tmp15 .array[] :printArray:i
++   81 readarr<inlined:regular:inj+1> *tmp15 .array[] 6
+    82 print *tmp15
     83 label *label74
 -    * op add :printArray:i :printArray:i 1
 +   84 op add :printArray:i 6 1
     85 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   86 readarr<inlined:regular> *tmp9 .array[] 7
-    87 print *tmp9
+-    * readarr<inlined:regular> *tmp16 .array[] :printArray:i
++   86 readarr<inlined:regular:inj+1> *tmp16 .array[] 7
+    87 print *tmp16
     88 label *label75
 -    * op add :printArray:i :printArray:i 1
 +   89 op add :printArray:i 7 1
     90 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   91 readarr<inlined:regular> *tmp9 .array[] 8
-    92 print *tmp9
+-    * readarr<inlined:regular> *tmp17 .array[] :printArray:i
++   91 readarr<inlined:regular:inj+1> *tmp17 .array[] 8
+    92 print *tmp17
     93 label *label76
 -    * op add :printArray:i :printArray:i 1
 +   94 op add :printArray:i 8 1
     95 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] :printArray:i
-+   96 readarr<inlined:regular> *tmp9 .array[] 9
-    97 print *tmp9
+-    * readarr<inlined:regular> *tmp18 .array[] :printArray:i
++   96 readarr<inlined:regular:inj+1> *tmp18 .array[] 9
+    97 print *tmp18
     98 label *label77
 -    * op add :printArray:i :printArray:i 1
 +   99 op add :printArray:i 9 1
@@ -499,197 +562,273 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
 -    * set :printArray:i 1
     53 label *label68
     54 print "-"
-    55 readarr<inlined:regular> *tmp9 .array[] 1
-    56 print *tmp9
+    55 readarr<inlined:regular:inj+1> *tmp10 .array[] 1
+    56 print *tmp10
     57 label *label69
 -    * op add :printArray:i 1 1
     58 print "-"
-    59 readarr<inlined:regular> *tmp9 .array[] 2
-    60 print *tmp9
+    59 readarr<inlined:regular:inj+1> *tmp11 .array[] 2
+    60 print *tmp11
     61 label *label70
 -    * op add :printArray:i 2 1
     62 print "-"
-    63 readarr<inlined:regular> *tmp9 .array[] 3
-    64 print *tmp9
+    63 readarr<inlined:regular:inj+1> *tmp12 .array[] 3
+    64 print *tmp12
     65 label *label71
 -    * op add :printArray:i 3 1
     66 print "-"
-    67 readarr<inlined:regular> *tmp9 .array[] 4
-    68 print *tmp9
+    67 readarr<inlined:regular:inj+1> *tmp13 .array[] 4
+    68 print *tmp13
     69 label *label72
 -    * op add :printArray:i 4 1
     70 print "-"
-    71 readarr<inlined:regular> *tmp9 .array[] 5
-    72 print *tmp9
+    71 readarr<inlined:regular:inj+1> *tmp14 .array[] 5
+    72 print *tmp14
     73 label *label73
 -    * op add :printArray:i 5 1
     74 print "-"
-    75 readarr<inlined:regular> *tmp9 .array[] 6
-    76 print *tmp9
+    75 readarr<inlined:regular:inj+1> *tmp15 .array[] 6
+    76 print *tmp15
     77 label *label74
 -    * op add :printArray:i 6 1
     78 print "-"
-    79 readarr<inlined:regular> *tmp9 .array[] 7
-    80 print *tmp9
+    79 readarr<inlined:regular:inj+1> *tmp16 .array[] 7
+    80 print *tmp16
     81 label *label75
 -    * op add :printArray:i 7 1
     82 print "-"
-    83 readarr<inlined:regular> *tmp9 .array[] 8
-    84 print *tmp9
+    83 readarr<inlined:regular:inj+1> *tmp17 .array[] 8
+    84 print *tmp17
     85 label *label76
 -    * op add :printArray:i 8 1
     86 print "-"
-    87 readarr<inlined:regular> *tmp9 .array[] 9
-    88 print *tmp9
+    87 readarr<inlined:regular:inj+1> *tmp18 .array[] 9
+    88 print *tmp18
     89 label *label77
 -    * op add :printArray:i 9 1
     90 label *label24
     91 label *label21
     92 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
 
-Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1 (-171 instructions):
+Modifications by Inject array access to 'array' at line 26:9:
  
     52 print .array*0
     53 label *label68
     54 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 1
-+   55 set *tmp9 .array*1
-    56 print *tmp9
+-    * readarr<inlined:regular:inj+1> *tmp10 .array[] 1
+-    * print *tmp10
++   55 readarr<inlined:regular:inj+1> *tmp10 .array[] 1
++   56 print *tmp10
     57 label *label69
     58 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 2
-+   59 set *tmp9 .array*2
-    60 print *tmp9
-    61 label *label70
-    62 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 3
-+   63 set *tmp9 .array*3
-    64 print *tmp9
-    65 label *label71
-    66 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 4
-+   67 set *tmp9 .array*4
-    68 print *tmp9
-    69 label *label72
-    70 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 5
-+   71 set *tmp9 .array*5
-    72 print *tmp9
-    73 label *label73
-    74 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 6
-+   75 set *tmp9 .array*6
-    76 print *tmp9
-    77 label *label74
-    78 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 7
-+   79 set *tmp9 .array*7
-    80 print *tmp9
-    81 label *label75
-    82 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 8
-+   83 set *tmp9 .array*8
-    84 print *tmp9
-    85 label *label76
-    86 print "-"
--    * readarr<inlined:regular> *tmp9 .array[] 9
-+   87 set *tmp9 .array*9
-    88 print *tmp9
-    89 label *label77
-    90 label *label24
+    59 readarr<inlined:regular:inj+1> *tmp11 .array[] 2
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
+Modifications by Inject array access to 'array' at line 26:9:
  
-    53 label *label68
-    54 print "-"
-    55 set *tmp9 .array*1
--    * print *tmp9
-+   56 print .array*1
+    56 print *tmp10
     57 label *label69
     58 print "-"
-    59 set *tmp9 .array*2
--    * print *tmp9
-+   60 print .array*2
+-    * readarr<inlined:regular:inj+1> *tmp11 .array[] 2
+-    * print *tmp11
++   59 readarr<inlined:regular:inj+1> *tmp11 .array[] 2
++   60 print *tmp11
     61 label *label70
     62 print "-"
-    63 set *tmp9 .array*3
--    * print *tmp9
-+   64 print .array*3
+    63 readarr<inlined:regular:inj+1> *tmp12 .array[] 3
+
+Modifications by Inject array access to 'array' at line 26:9:
+ 
+    60 print *tmp11
+    61 label *label70
+    62 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp12 .array[] 3
+-    * print *tmp12
++   63 readarr<inlined:regular:inj+1> *tmp12 .array[] 3
++   64 print *tmp12
     65 label *label71
     66 print "-"
-    67 set *tmp9 .array*4
--    * print *tmp9
-+   68 print .array*4
+    67 readarr<inlined:regular:inj+1> *tmp13 .array[] 4
+
+Modifications by Inject array access to 'array' at line 26:9:
+ 
+    64 print *tmp12
+    65 label *label71
+    66 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp13 .array[] 4
+-    * print *tmp13
++   67 readarr<inlined:regular:inj+1> *tmp13 .array[] 4
++   68 print *tmp13
     69 label *label72
     70 print "-"
-    71 set *tmp9 .array*5
--    * print *tmp9
-+   72 print .array*5
+    71 readarr<inlined:regular:inj+1> *tmp14 .array[] 5
+
+Modifications by Inject array access to 'array' at line 26:9:
+ 
+    68 print *tmp13
+    69 label *label72
+    70 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp14 .array[] 5
+-    * print *tmp14
++   71 readarr<inlined:regular:inj+1> *tmp14 .array[] 5
++   72 print *tmp14
     73 label *label73
     74 print "-"
-    75 set *tmp9 .array*6
--    * print *tmp9
-+   76 print .array*6
+    75 readarr<inlined:regular:inj+1> *tmp15 .array[] 6
+
+Modifications by Inject array access to 'array' at line 26:9:
+ 
+    72 print *tmp14
+    73 label *label73
+    74 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp15 .array[] 6
+-    * print *tmp15
++   75 readarr<inlined:regular:inj+1> *tmp15 .array[] 6
++   76 print *tmp15
     77 label *label74
     78 print "-"
-    79 set *tmp9 .array*7
--    * print *tmp9
-+   80 print .array*7
+    79 readarr<inlined:regular:inj+1> *tmp16 .array[] 7
+
+Modifications by Inject array access to 'array' at line 26:9:
+ 
+    76 print *tmp15
+    77 label *label74
+    78 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp16 .array[] 7
+-    * print *tmp16
++   79 readarr<inlined:regular:inj+1> *tmp16 .array[] 7
++   80 print *tmp16
     81 label *label75
     82 print "-"
-    83 set *tmp9 .array*8
--    * print *tmp9
-+   84 print .array*8
+    83 readarr<inlined:regular:inj+1> *tmp17 .array[] 8
+
+Modifications by Inject array access to 'array' at line 26:9:
+ 
+    80 print *tmp16
+    81 label *label75
+    82 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp17 .array[] 8
+-    * print *tmp17
++   83 readarr<inlined:regular:inj+1> *tmp17 .array[] 8
++   84 print *tmp17
     85 label *label76
     86 print "-"
-    87 set *tmp9 .array*9
--    * print *tmp9
-+   88 print .array*9
+    87 readarr<inlined:regular:inj+1> *tmp18 .array[] 9
+
+Modifications by Inject array access to 'array' at line 26:9:
+ 
+    84 print *tmp17
+    85 label *label76
+    86 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp18 .array[] 9
+-    * print *tmp18
++   87 readarr<inlined:regular:inj+1> *tmp18 .array[] 9
++   88 print *tmp18
     89 label *label77
     90 label *label24
     91 label *label21
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-9 instructions):
+Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1 (-162 instructions):
  
     52 print .array*0
     53 label *label68
     54 print "-"
--    * set *tmp9 .array*1
-    55 print .array*1
+-    * readarr<inlined:regular:inj+1> *tmp10 .array[] 1
++   55 set *tmp10 .array*1
+    56 print *tmp10
+    57 label *label69
+    58 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp11 .array[] 2
++   59 set *tmp11 .array*2
+    60 print *tmp11
+    61 label *label70
+    62 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp12 .array[] 3
++   63 set *tmp12 .array*3
+    64 print *tmp12
+    65 label *label71
+    66 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp13 .array[] 4
++   67 set *tmp13 .array*4
+    68 print *tmp13
+    69 label *label72
+    70 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp14 .array[] 5
++   71 set *tmp14 .array*5
+    72 print *tmp14
+    73 label *label73
+    74 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp15 .array[] 6
++   75 set *tmp15 .array*6
+    76 print *tmp15
+    77 label *label74
+    78 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp16 .array[] 7
++   79 set *tmp16 .array*7
+    80 print *tmp16
+    81 label *label75
+    82 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp17 .array[] 8
++   83 set *tmp17 .array*8
+    84 print *tmp17
+    85 label *label76
+    86 print "-"
+-    * readarr<inlined:regular:inj+1> *tmp18 .array[] 9
++   87 set *tmp18 .array*9
+    88 print *tmp18
+    89 label *label77
+    90 label *label24
+
+Modifications by Iterated phase, Temp Variables Elimination, pass 3, iteration 1 (-9 instructions):
+ 
+    52 print .array*0
+    53 label *label68
+    54 print "-"
+-    * set *tmp10 .array*1
+-    * print *tmp10
++   55 print .array*1
     56 label *label69
     57 print "-"
--    * set *tmp9 .array*2
-    58 print .array*2
+-    * set *tmp11 .array*2
+-    * print *tmp11
++   58 print .array*2
     59 label *label70
     60 print "-"
--    * set *tmp9 .array*3
-    61 print .array*3
+-    * set *tmp12 .array*3
+-    * print *tmp12
++   61 print .array*3
     62 label *label71
     63 print "-"
--    * set *tmp9 .array*4
-    64 print .array*4
+-    * set *tmp13 .array*4
+-    * print *tmp13
++   64 print .array*4
     65 label *label72
     66 print "-"
--    * set *tmp9 .array*5
-    67 print .array*5
+-    * set *tmp14 .array*5
+-    * print *tmp14
++   67 print .array*5
     68 label *label73
     69 print "-"
--    * set *tmp9 .array*6
-    70 print .array*6
+-    * set *tmp15 .array*6
+-    * print *tmp15
++   70 print .array*6
     71 label *label74
     72 print "-"
--    * set *tmp9 .array*7
-    73 print .array*7
+-    * set *tmp16 .array*7
+-    * print *tmp16
++   73 print .array*7
     74 label *label75
     75 print "-"
--    * set *tmp9 .array*8
-    76 print .array*8
+-    * set *tmp17 .array*8
+-    * print *tmp17
++   76 print .array*8
     77 label *label76
     78 print "-"
--    * set *tmp9 .array*9
-    79 print .array*9
+-    * set *tmp18 .array*9
+-    * print *tmp18
++   79 print .array*9
     80 label *label77
     81 label *label24
+    82 label *label21
 
 Modifications by Virtual Instruction Expansion (-1 instructions):
  
@@ -735,7 +874,7 @@ Modifications by Virtual Instruction Expansion (-1 instructions):
     72 label *label19
     73 jump *label18 greaterThan :countDigits:number 0
 
-Modifications by Jumps phase, Single Step Elimination, pass 7, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
  
     72 print "-"
     73 print .array*9

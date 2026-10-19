@@ -17,10 +17,11 @@ Changes intended for the next regular release.
 * Mlog Dev Tools integration
 * Internal: enum for variable flags. When creating variables, a set of flags would be specified.
 * Large arrays
-* Array code injection optimization (partial)
+* Array code injection optimization (allmost full)
 * Evaluate constant compiler-generated assertions (assertbounds for now)
   * Remove on success
   * Produce error (warning?) on failure
+* `items`, `liquids`, `blocks` and `unitTypes` arrays
 
 * **Doing**
 
@@ -28,7 +29,6 @@ Changes intended for the next regular release.
   * Nested for loops for list-iteration loops
   * Subarrays
 * Convert constant case statements to jumps!!! 
-* `items`, `liquids`, `blocks` and `unitTypes` arrays
 * Remove lookup/sensor id in front of case statements
 
 * **Planned**

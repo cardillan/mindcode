@@ -227,10 +227,10 @@ assertflush *tmp31
 op mul :printExactSlow:base 1.0123456789 1
 print "1."
 set :printExactSlow:digit 1
-op mod *tmp45 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp45 10
-op floor *tmp46 :printExactSlow:base 0
-print *tmp46
+op mod *tmp44 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp44 10
+op floor *tmp45 :printExactSlow:base 0
+print *tmp45
 op add :printExactSlow:digit :printExactSlow:digit 1
 jump 229 lessThanEq :printExactSlow:digit 15
 assertprints *tmp31 "1.012345678900000" "printExactSlow(1.0123456789)"
@@ -238,10 +238,10 @@ assertflush *tmp32
 op mul :printExactSlow:base 1.0000001E20 1.0E-20
 print "1."
 set :printExactSlow:digit 1
-op mod *tmp45 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp45 10
-op floor *tmp46 :printExactSlow:base 0
-print *tmp46
+op mod *tmp44 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp44 10
+op floor *tmp45 :printExactSlow:base 0
+print *tmp45
 op add :printExactSlow:digit :printExactSlow:digit 1
 jump 240 lessThanEq :printExactSlow:digit 15
 print "E20"
@@ -250,10 +250,10 @@ assertflush *tmp33
 op mul :printExactSlow:base 1.2345E-50 1.0E50
 print "1."
 set :printExactSlow:digit 1
-op mod *tmp45 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp45 10
-op floor *tmp46 :printExactSlow:base 0
-print *tmp46
+op mod *tmp44 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp44 10
+op floor *tmp45 :printExactSlow:base 0
+print *tmp45
 op add :printExactSlow:digit :printExactSlow:digit 1
 jump 252 lessThanEq :printExactSlow:digit 15
 print "E-50"
@@ -262,10 +262,10 @@ assertflush *tmp34
 print "-1."
 op mul :printExactSlow:base 1.2345E-50 1.0E50
 set :printExactSlow:digit 1
-op mod *tmp45 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp45 10
-op floor *tmp46 :printExactSlow:base 0
-print *tmp46
+op mod *tmp44 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp44 10
+op floor *tmp45 :printExactSlow:base 0
+print *tmp45
 op add :printExactSlow:digit :printExactSlow:digit 1
 jump 264 lessThanEq :printExactSlow:digit 15
 print "E-50"
@@ -300,8 +300,8 @@ jump 347 always 0 0
 op floor *tmp43 :printExactFast:base 0
 print *tmp43
 print "."
-op mod *tmp44 :printExactFast:base 1
-op mul :printExactFast:base *tmp44 100000
+op mod *tmp46 :printExactFast:base 1
+op mul :printExactFast:base *tmp46 100000
 op floor :printExactFast:t :printExactFast:base 0
 jump 311 greaterThanEq :printExactFast:t 100
 jump 309 greaterThanEq :printExactFast:t 10
@@ -315,8 +315,8 @@ jump 316 always 0 0
 jump 316 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-op mod *tmp44 :printExactFast:base 1
-op mul :printExactFast:base *tmp44 100000
+op mod *tmp47 :printExactFast:base 1
+op mul :printExactFast:base *tmp47 100000
 op floor :printExactFast:t :printExactFast:base 0
 jump 326 greaterThanEq :printExactFast:t 100
 jump 324 greaterThanEq :printExactFast:t 10
@@ -330,8 +330,8 @@ jump 331 always 0 0
 jump 331 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-op mod *tmp44 :printExactFast:base 1
-op mul :printExactFast:base *tmp44 100000
+op mod *tmp48 :printExactFast:base 1
+op mul :printExactFast:base *tmp48 100000
 op floor :printExactFast:t :printExactFast:base 0
 jump 341 greaterThanEq :printExactFast:t 100
 jump 339 greaterThanEq :printExactFast:t 10

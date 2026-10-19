@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PushOrPopInstruction;
 import info.teksol.mc.mindcode.logic.instructions.SetInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
 import org.jspecify.annotations.NullMarked;
 
@@ -63,7 +64,7 @@ class TempVariableEliminator extends BaseOptimizer {
                     // Make sure all <variable> arguments of the last instruction are input
                     boolean replaceInputArg = last.typedArgumentsStream()
                             .filter(t -> t.argument().equals(variable))
-                            .allMatch(TypedArgument::isInput);
+                            .allMatch(a -> a.isInputOnly() && a.type() != InstructionParameterType.LABEL);
 
                     if (replaceInputArg) {
                         // The first instruction merely sets up a temp variable to be used by the last instruction

@@ -445,25 +445,25 @@ Modifications by Unroll loop at line 6:5 (+11 instructions):
 -    * label *label3
 +    2 set *tmp15 3
 +    3 label *label83
-+    4 set *tmp18 :foo:i
++    4 set *tmp49 :foo:i
 +    5 op add :foo:i :foo:i 1
 +    6 label *label84
-+    7 writearr<external:regular> *tmp18 .a[] *tmp15
++    7 writearr<external:regular> *tmp49 .a[] *tmp15
 +    8 op sub *tmp15 *tmp15 1
-+    9 set *tmp18 :foo:i
++    9 set *tmp50 :foo:i
 +   10 op add :foo:i :foo:i 1
 +   11 label *label85
-+   12 writearr<external:regular> *tmp18 .a[] *tmp15
++   12 writearr<external:regular> *tmp50 .a[] *tmp15
 +   13 op sub *tmp15 *tmp15 1
-+   14 set *tmp18 :foo:i
++   14 set *tmp51 :foo:i
 +   15 op add :foo:i :foo:i 1
 +   16 label *label86
-+   17 writearr<external:regular> *tmp18 .a[] *tmp15
++   17 writearr<external:regular> *tmp51 .a[] *tmp15
 +   18 op sub *tmp15 *tmp15 1
-+   19 set *tmp18 :foo:i
++   19 set *tmp52 :foo:i
 +   20 op add :foo:i :foo:i 1
 +   21 label *label87
-+   22 writearr<external:regular> *tmp18 .a[] *tmp15
++   22 writearr<external:regular> *tmp52 .a[] *tmp15
 +   23 op sub *tmp15 *tmp15 1
 +   24 label *label3
     25 set *tmp21 4
@@ -475,41 +475,41 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      1 set :foo:i 65
      2 set *tmp15 3
      3 label *label83
--    * set *tmp18 :foo:i
+-    * set *tmp49 :foo:i
 -    * op add :foo:i :foo:i 1
-+    4 set *tmp18 65
++    4 set *tmp49 65
 +    5 op add :foo:i 65 1
      6 label *label84
--    * writearr<external:regular> *tmp18 .a[] *tmp15
+-    * writearr<external:regular> *tmp49 .a[] *tmp15
 -    * op sub *tmp15 *tmp15 1
--    * set *tmp18 :foo:i
+-    * set *tmp50 :foo:i
 -    * op add :foo:i :foo:i 1
-+    7 writearr<external:regular> *tmp18 .a[] 3
++    7 writearr<external:regular> *tmp49 .a[] 3
 +    8 op sub *tmp15 3 1
-+    9 set *tmp18 66
++    9 set *tmp50 66
 +   10 op add :foo:i 66 1
     11 label *label85
--    * writearr<external:regular> *tmp18 .a[] *tmp15
+-    * writearr<external:regular> *tmp50 .a[] *tmp15
 -    * op sub *tmp15 *tmp15 1
--    * set *tmp18 :foo:i
+-    * set *tmp51 :foo:i
 -    * op add :foo:i :foo:i 1
-+   12 writearr<external:regular> *tmp18 .a[] 2
++   12 writearr<external:regular> *tmp50 .a[] 2
 +   13 op sub *tmp15 2 1
-+   14 set *tmp18 67
++   14 set *tmp51 67
 +   15 op add :foo:i 67 1
     16 label *label86
--    * writearr<external:regular> *tmp18 .a[] *tmp15
+-    * writearr<external:regular> *tmp51 .a[] *tmp15
 -    * op sub *tmp15 *tmp15 1
--    * set *tmp18 :foo:i
+-    * set *tmp52 :foo:i
 -    * op add :foo:i :foo:i 1
-+   17 writearr<external:regular> *tmp18 .a[] 1
++   17 writearr<external:regular> *tmp51 .a[] 1
 +   18 op sub *tmp15 1 1
-+   19 set *tmp18 68
++   19 set *tmp52 68
 +   20 op add :foo:i 68 1
     21 label *label87
--    * writearr<external:regular> *tmp18 .a[] *tmp15
+-    * writearr<external:regular> *tmp52 .a[] *tmp15
 -    * op sub *tmp15 *tmp15 1
-+   22 writearr<external:regular> *tmp18 .a[] 0
++   22 writearr<external:regular> *tmp52 .a[] 0
 +   23 op sub *tmp15 0 1
     24 label *label3
     25 set *tmp21 4
@@ -520,28 +520,28 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-9
 -    * set :foo:i 65
 -    * set *tmp15 3
      1 label *label83
-     2 set *tmp18 65
+     2 set *tmp49 65
 -    * op add :foo:i 65 1
      3 label *label84
--    * writearr<external:regular> *tmp18 .a[] 3
+-    * writearr<external:regular> *tmp49 .a[] 3
 -    * op sub *tmp15 3 1
 +    4 writearr<external:regular> 65 .a[] 3
-     5 set *tmp18 66
+     5 set *tmp50 66
 -    * op add :foo:i 66 1
      6 label *label85
--    * writearr<external:regular> *tmp18 .a[] 2
+-    * writearr<external:regular> *tmp50 .a[] 2
 -    * op sub *tmp15 2 1
 +    7 writearr<external:regular> 66 .a[] 2
-     8 set *tmp18 67
+     8 set *tmp51 67
 -    * op add :foo:i 67 1
      9 label *label86
--    * writearr<external:regular> *tmp18 .a[] 1
+-    * writearr<external:regular> *tmp51 .a[] 1
 -    * op sub *tmp15 1 1
 +   10 writearr<external:regular> 67 .a[] 1
-    11 set *tmp18 68
+    11 set *tmp52 68
     12 op add :foo:i 68 1
     13 label *label87
--    * writearr<external:regular> *tmp18 .a[] 0
+-    * writearr<external:regular> *tmp52 .a[] 0
 -    * op sub *tmp15 0 1
 +   14 writearr<external:regular> 68 .a[] 0
     15 label *label3
@@ -551,16 +551,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-9
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-4 instructions):
      0 assertflush *tmp14
      1 label *label83
--    * set *tmp18 65
+-    * set *tmp49 65
      2 label *label84
      3 writearr<external:regular> 65 .a[] 3
--    * set *tmp18 66
+-    * set *tmp50 66
      4 label *label85
      5 writearr<external:regular> 66 .a[] 2
--    * set *tmp18 67
+-    * set *tmp51 67
      6 label *label86
      7 writearr<external:regular> 67 .a[] 1
--    * set *tmp18 68
+-    * set *tmp52 68
      8 op add :foo:i 68 1
      9 label *label87
     10 writearr<external:regular> 68 .a[] 0
@@ -586,50 +586,50 @@ Modifications by Unroll loop at line 10:5 (+35 instructions):
 -    * label *label6
 +   12 set *tmp21 4
 +   13 label *label88
-+   14 op sub *tmp25 17 *tmp21
-+   15 set *tmp27 :foo:i
++   14 op sub *tmp53 17 *tmp21
++   15 set *tmp55 :foo:i
 +   16 op add :foo:i :foo:i 1
-+   17 set *tmp28 :foo:i
++   17 set *tmp54 :foo:i
 +   18 op add :foo:i :foo:i 1
 +   19 label *label89
-+   20 writearr<external:regular> *tmp27 .b[] *tmp21
-+   21 writearr<external:regular> *tmp28 .c[] *tmp25
++   20 writearr<external:regular> *tmp55 .b[] *tmp21
++   21 writearr<external:regular> *tmp54 .c[] *tmp53
 +   22 op add *tmp21 *tmp21 1
-+   23 op sub *tmp25 17 *tmp21
-+   24 set *tmp27 :foo:i
++   23 op sub *tmp56 17 *tmp21
++   24 set *tmp58 :foo:i
 +   25 op add :foo:i :foo:i 1
-+   26 set *tmp28 :foo:i
++   26 set *tmp57 :foo:i
 +   27 op add :foo:i :foo:i 1
 +   28 label *label90
-+   29 writearr<external:regular> *tmp27 .b[] *tmp21
-+   30 writearr<external:regular> *tmp28 .c[] *tmp25
++   29 writearr<external:regular> *tmp58 .b[] *tmp21
++   30 writearr<external:regular> *tmp57 .c[] *tmp56
 +   31 op add *tmp21 *tmp21 1
-+   32 op sub *tmp25 17 *tmp21
-+   33 set *tmp27 :foo:i
++   32 op sub *tmp59 17 *tmp21
++   33 set *tmp61 :foo:i
 +   34 op add :foo:i :foo:i 1
-+   35 set *tmp28 :foo:i
++   35 set *tmp60 :foo:i
 +   36 op add :foo:i :foo:i 1
 +   37 label *label91
-+   38 writearr<external:regular> *tmp27 .b[] *tmp21
-+   39 writearr<external:regular> *tmp28 .c[] *tmp25
++   38 writearr<external:regular> *tmp61 .b[] *tmp21
++   39 writearr<external:regular> *tmp60 .c[] *tmp59
 +   40 op add *tmp21 *tmp21 1
-+   41 op sub *tmp25 17 *tmp21
-+   42 set *tmp27 :foo:i
++   41 op sub *tmp62 17 *tmp21
++   42 set *tmp64 :foo:i
 +   43 op add :foo:i :foo:i 1
-+   44 set *tmp28 :foo:i
++   44 set *tmp63 :foo:i
 +   45 op add :foo:i :foo:i 1
 +   46 label *label92
-+   47 writearr<external:regular> *tmp27 .b[] *tmp21
-+   48 writearr<external:regular> *tmp28 .c[] *tmp25
++   47 writearr<external:regular> *tmp64 .b[] *tmp21
++   48 writearr<external:regular> *tmp63 .c[] *tmp62
 +   49 op add *tmp21 *tmp21 1
-+   50 op sub *tmp25 17 *tmp21
-+   51 set *tmp27 :foo:i
++   50 op sub *tmp65 17 *tmp21
++   51 set *tmp67 :foo:i
 +   52 op add :foo:i :foo:i 1
-+   53 set *tmp28 :foo:i
++   53 set *tmp66 :foo:i
 +   54 op add :foo:i :foo:i 1
 +   55 label *label93
-+   56 writearr<external:regular> *tmp27 .b[] *tmp21
-+   57 writearr<external:regular> *tmp28 .c[] *tmp25
++   56 writearr<external:regular> *tmp67 .b[] *tmp21
++   57 writearr<external:regular> *tmp66 .c[] *tmp65
 +   58 op add *tmp21 *tmp21 1
 +   59 label *label6
     60 read :foo:x bank1 0
@@ -641,90 +641,90 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     11 label *label3
     12 set *tmp21 4
     13 label *label88
--    * op sub *tmp25 17 *tmp21
--    * set *tmp27 :foo:i
+-    * op sub *tmp53 17 *tmp21
+-    * set *tmp55 :foo:i
 -    * op add :foo:i :foo:i 1
--    * set *tmp28 :foo:i
+-    * set *tmp54 :foo:i
 -    * op add :foo:i :foo:i 1
-+   14 op sub *tmp25 17 4
-+   15 set *tmp27 69
++   14 op sub *tmp53 17 4
++   15 set *tmp55 69
 +   16 op add :foo:i 69 1
-+   17 set *tmp28 70
++   17 set *tmp54 70
 +   18 op add :foo:i 70 1
     19 label *label89
--    * writearr<external:regular> *tmp27 .b[] *tmp21
--    * writearr<external:regular> *tmp28 .c[] *tmp25
+-    * writearr<external:regular> *tmp55 .b[] *tmp21
+-    * writearr<external:regular> *tmp54 .c[] *tmp53
 -    * op add *tmp21 *tmp21 1
--    * op sub *tmp25 17 *tmp21
--    * set *tmp27 :foo:i
+-    * op sub *tmp56 17 *tmp21
+-    * set *tmp58 :foo:i
 -    * op add :foo:i :foo:i 1
--    * set *tmp28 :foo:i
+-    * set *tmp57 :foo:i
 -    * op add :foo:i :foo:i 1
-+   20 writearr<external:regular> *tmp27 .b[] 4
-+   21 writearr<external:regular> *tmp28 .c[] 13
++   20 writearr<external:regular> *tmp55 .b[] 4
++   21 writearr<external:regular> *tmp54 .c[] 13
 +   22 op add *tmp21 4 1
-+   23 op sub *tmp25 17 5
-+   24 set *tmp27 71
++   23 op sub *tmp56 17 5
++   24 set *tmp58 71
 +   25 op add :foo:i 71 1
-+   26 set *tmp28 72
++   26 set *tmp57 72
 +   27 op add :foo:i 72 1
     28 label *label90
--    * writearr<external:regular> *tmp27 .b[] *tmp21
--    * writearr<external:regular> *tmp28 .c[] *tmp25
+-    * writearr<external:regular> *tmp58 .b[] *tmp21
+-    * writearr<external:regular> *tmp57 .c[] *tmp56
 -    * op add *tmp21 *tmp21 1
--    * op sub *tmp25 17 *tmp21
--    * set *tmp27 :foo:i
+-    * op sub *tmp59 17 *tmp21
+-    * set *tmp61 :foo:i
 -    * op add :foo:i :foo:i 1
--    * set *tmp28 :foo:i
+-    * set *tmp60 :foo:i
 -    * op add :foo:i :foo:i 1
-+   29 writearr<external:regular> *tmp27 .b[] 5
-+   30 writearr<external:regular> *tmp28 .c[] 12
++   29 writearr<external:regular> *tmp58 .b[] 5
++   30 writearr<external:regular> *tmp57 .c[] 12
 +   31 op add *tmp21 5 1
-+   32 op sub *tmp25 17 6
-+   33 set *tmp27 73
++   32 op sub *tmp59 17 6
++   33 set *tmp61 73
 +   34 op add :foo:i 73 1
-+   35 set *tmp28 74
++   35 set *tmp60 74
 +   36 op add :foo:i 74 1
     37 label *label91
--    * writearr<external:regular> *tmp27 .b[] *tmp21
--    * writearr<external:regular> *tmp28 .c[] *tmp25
+-    * writearr<external:regular> *tmp61 .b[] *tmp21
+-    * writearr<external:regular> *tmp60 .c[] *tmp59
 -    * op add *tmp21 *tmp21 1
--    * op sub *tmp25 17 *tmp21
--    * set *tmp27 :foo:i
+-    * op sub *tmp62 17 *tmp21
+-    * set *tmp64 :foo:i
 -    * op add :foo:i :foo:i 1
--    * set *tmp28 :foo:i
+-    * set *tmp63 :foo:i
 -    * op add :foo:i :foo:i 1
-+   38 writearr<external:regular> *tmp27 .b[] 6
-+   39 writearr<external:regular> *tmp28 .c[] 11
++   38 writearr<external:regular> *tmp61 .b[] 6
++   39 writearr<external:regular> *tmp60 .c[] 11
 +   40 op add *tmp21 6 1
-+   41 op sub *tmp25 17 7
-+   42 set *tmp27 75
++   41 op sub *tmp62 17 7
++   42 set *tmp64 75
 +   43 op add :foo:i 75 1
-+   44 set *tmp28 76
++   44 set *tmp63 76
 +   45 op add :foo:i 76 1
     46 label *label92
--    * writearr<external:regular> *tmp27 .b[] *tmp21
--    * writearr<external:regular> *tmp28 .c[] *tmp25
+-    * writearr<external:regular> *tmp64 .b[] *tmp21
+-    * writearr<external:regular> *tmp63 .c[] *tmp62
 -    * op add *tmp21 *tmp21 1
--    * op sub *tmp25 17 *tmp21
--    * set *tmp27 :foo:i
+-    * op sub *tmp65 17 *tmp21
+-    * set *tmp67 :foo:i
 -    * op add :foo:i :foo:i 1
--    * set *tmp28 :foo:i
+-    * set *tmp66 :foo:i
 -    * op add :foo:i :foo:i 1
-+   47 writearr<external:regular> *tmp27 .b[] 7
-+   48 writearr<external:regular> *tmp28 .c[] 10
++   47 writearr<external:regular> *tmp64 .b[] 7
++   48 writearr<external:regular> *tmp63 .c[] 10
 +   49 op add *tmp21 7 1
-+   50 op sub *tmp25 17 8
-+   51 set *tmp27 77
++   50 op sub *tmp65 17 8
++   51 set *tmp67 77
 +   52 op add :foo:i 77 1
-+   53 set *tmp28 78
++   53 set *tmp66 78
 +   54 op add :foo:i 78 1
     55 label *label93
--    * writearr<external:regular> *tmp27 .b[] *tmp21
--    * writearr<external:regular> *tmp28 .c[] *tmp25
+-    * writearr<external:regular> *tmp67 .b[] *tmp21
+-    * writearr<external:regular> *tmp66 .c[] *tmp65
 -    * op add *tmp21 *tmp21 1
-+   56 writearr<external:regular> *tmp27 .b[] 8
-+   57 writearr<external:regular> *tmp28 .c[] 9
++   56 writearr<external:regular> *tmp67 .b[] 8
++   57 writearr<external:regular> *tmp66 .c[] 9
 +   58 op add *tmp21 8 1
     59 label *label6
     60 read :foo:x bank1 0
@@ -741,58 +741,58 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2
     10 label *label3
 -    * set *tmp21 4
     11 label *label88
--    * op sub *tmp25 17 4
-    12 set *tmp27 69
+-    * op sub *tmp53 17 4
+    12 set *tmp55 69
 -    * op add :foo:i 69 1
-    13 set *tmp28 70
+    13 set *tmp54 70
 -    * op add :foo:i 70 1
     14 label *label89
--    * writearr<external:regular> *tmp27 .b[] 4
--    * writearr<external:regular> *tmp28 .c[] 13
+-    * writearr<external:regular> *tmp55 .b[] 4
+-    * writearr<external:regular> *tmp54 .c[] 13
 -    * op add *tmp21 4 1
--    * op sub *tmp25 17 5
+-    * op sub *tmp56 17 5
 +   15 writearr<external:regular> 69 .b[] 4
 +   16 writearr<external:regular> 70 .c[] 13
-    17 set *tmp27 71
+    17 set *tmp58 71
 -    * op add :foo:i 71 1
-    18 set *tmp28 72
+    18 set *tmp57 72
 -    * op add :foo:i 72 1
     19 label *label90
--    * writearr<external:regular> *tmp27 .b[] 5
--    * writearr<external:regular> *tmp28 .c[] 12
+-    * writearr<external:regular> *tmp58 .b[] 5
+-    * writearr<external:regular> *tmp57 .c[] 12
 -    * op add *tmp21 5 1
--    * op sub *tmp25 17 6
+-    * op sub *tmp59 17 6
 +   20 writearr<external:regular> 71 .b[] 5
 +   21 writearr<external:regular> 72 .c[] 12
-    22 set *tmp27 73
+    22 set *tmp61 73
 -    * op add :foo:i 73 1
-    23 set *tmp28 74
+    23 set *tmp60 74
 -    * op add :foo:i 74 1
     24 label *label91
--    * writearr<external:regular> *tmp27 .b[] 6
--    * writearr<external:regular> *tmp28 .c[] 11
+-    * writearr<external:regular> *tmp61 .b[] 6
+-    * writearr<external:regular> *tmp60 .c[] 11
 -    * op add *tmp21 6 1
--    * op sub *tmp25 17 7
+-    * op sub *tmp62 17 7
 +   25 writearr<external:regular> 73 .b[] 6
 +   26 writearr<external:regular> 74 .c[] 11
-    27 set *tmp27 75
+    27 set *tmp64 75
 -    * op add :foo:i 75 1
-    28 set *tmp28 76
+    28 set *tmp63 76
 -    * op add :foo:i 76 1
     29 label *label92
--    * writearr<external:regular> *tmp27 .b[] 7
--    * writearr<external:regular> *tmp28 .c[] 10
+-    * writearr<external:regular> *tmp64 .b[] 7
+-    * writearr<external:regular> *tmp63 .c[] 10
 -    * op add *tmp21 7 1
--    * op sub *tmp25 17 8
+-    * op sub *tmp65 17 8
 +   30 writearr<external:regular> 75 .b[] 7
 +   31 writearr<external:regular> 76 .c[] 10
-    32 set *tmp27 77
+    32 set *tmp67 77
 -    * op add :foo:i 77 1
-    33 set *tmp28 78
+    33 set *tmp66 78
 -    * op add :foo:i 78 1
     34 label *label93
--    * writearr<external:regular> *tmp27 .b[] 8
--    * writearr<external:regular> *tmp28 .c[] 9
+-    * writearr<external:regular> *tmp67 .b[] 8
+-    * writearr<external:regular> *tmp66 .c[] 9
 -    * op add *tmp21 8 1
 +   35 writearr<external:regular> 77 .b[] 8
 +   36 writearr<external:regular> 78 .c[] 9
@@ -805,28 +805,28 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-1
      9 writearr<external:regular> 68 .a[] 0
     10 label *label3
     11 label *label88
--    * set *tmp27 69
--    * set *tmp28 70
+-    * set *tmp55 69
+-    * set *tmp54 70
     12 label *label89
     13 writearr<external:regular> 69 .b[] 4
     14 writearr<external:regular> 70 .c[] 13
--    * set *tmp27 71
--    * set *tmp28 72
+-    * set *tmp58 71
+-    * set *tmp57 72
     15 label *label90
     16 writearr<external:regular> 71 .b[] 5
     17 writearr<external:regular> 72 .c[] 12
--    * set *tmp27 73
--    * set *tmp28 74
+-    * set *tmp61 73
+-    * set *tmp60 74
     18 label *label91
     19 writearr<external:regular> 73 .b[] 6
     20 writearr<external:regular> 74 .c[] 11
--    * set *tmp27 75
--    * set *tmp28 76
+-    * set *tmp64 75
+-    * set *tmp63 76
     21 label *label92
     22 writearr<external:regular> 75 .b[] 7
     23 writearr<external:regular> 76 .c[] 10
--    * set *tmp27 77
--    * set *tmp28 78
+-    * set *tmp67 77
+-    * set *tmp66 78
     24 label *label93
     25 writearr<external:regular> 77 .b[] 8
     26 writearr<external:regular> 78 .c[] 9

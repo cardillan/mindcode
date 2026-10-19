@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax ([#464](https://github.com/cardillan/mindcode/issues/464)).
 * Loop control variables declared within the loop are never reported as unused. 
 * Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code ([#483](https://github.com/cardillan/mindcode/issues/483)).
+* Changed the loop unrolling optimization to create a separate temporary variable in each iteration for temporary variables that are only found within the loop. This change makes some additional optimization possible in unrolled loops. 
 * **Breaking:** the remote call protocol version was increased to 2. Both main and remote processors' code must be recompiled to use the new version. 
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
 * Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.

@@ -75,28 +75,28 @@ class AtomicBlockResolverTest {
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
-                            read *tmp1 cell1 1
-                            op add *tmp0 *tmp1 1
-                            write *tmp0 cell1 1
-                            read *tmp1 cell1 2
-                            op add *tmp0 *tmp1 1
-                            write *tmp0 cell1 2
-                            read *tmp1 cell1 3
-                            op add *tmp0 *tmp1 1
-                            write *tmp0 cell1 3
-                            read *tmp1 cell1 4
-                            op add *tmp0 *tmp1 1
-                            write *tmp0 cell1 4
-                            read *tmp1 cell1 5
-                            op add *tmp0 *tmp1 1
-                            write *tmp0 cell1 5                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1
+                            read *tmp5 cell1 2
+                            op add *tmp4 *tmp5 1
+                            write *tmp4 cell1 2
+                            read *tmp7 cell1 3
+                            op add *tmp6 *tmp7 1
+                            write *tmp6 cell1 3
+                            read *tmp9 cell1 4
+                            op add *tmp8 *tmp9 1
+                            write *tmp8 cell1 4
+                            read *tmp11 cell1 5
+                            op add *tmp10 *tmp11 1
+                            write *tmp10 cell1 5                    # The last atomic section instruction
                             wait 0.01167                            # 0.700 ticks for atomic execution of 7 steps at 10 ipt
-                            read *tmp1 cell1 6
-                            op add *tmp0 *tmp1 1
-                            write *tmp0 cell1 6
-                            read *tmp1 cell1 7
-                            op add *tmp0 *tmp1 1
-                            write *tmp0 cell1 7                     # The last atomic section instruction
+                            read *tmp13 cell1 6
+                            op add *tmp12 *tmp13 1
+                            write *tmp12 cell1 6
+                            read *tmp15 cell1 7
+                            op add *tmp14 *tmp15 1
+                            write *tmp14 cell1 7                    # The last atomic section instruction
                             """
             );
         }

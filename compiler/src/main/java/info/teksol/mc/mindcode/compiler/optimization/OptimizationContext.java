@@ -651,7 +651,9 @@ public class OptimizationContext extends CompilerMessageEmitter {
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
                 .distinct()
-                .forEach(v -> variableReferences.get(v).remove(instruction));
+                .map(variableReferences::get)
+                .filter(Objects::nonNull)
+                .forEach(v -> v.remove(instruction));
     }
 
     private void clearReferences(LogicLabel label, LogicInstruction reference) {
@@ -2164,21 +2166,25 @@ public class OptimizationContext extends CompilerMessageEmitter {
 
             Map<AstContext, AstContext> contextMap = astContext.createDeepCopy();
             return new LogicList(contextMap.get(astContext), stream()
-                    .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
+                    .map(ix -> remapContextAndLabels(labelMap, Map.of(), contextMap, ix))
                     .toList(), labelMap);
         }
 
         public LogicList duplicateToContext(AstContext newContext) {
-            return transformToContext(newContext, false, ix -> ix);
+            return transformToContext(newContext, false, false, ix -> ix);
+        }
+
+        public LogicList duplicateToContextForUnrolling(AstContext newContext) {
+            return transformToContext(newContext, false, true, ix -> ix);
         }
 
         public LogicList duplicateToContext(AstContext newContext, Predicate<LogicLabel> labelRemapFilter) {
-            return transformToContext(newContext, labelRemapFilter, false, ix -> ix);
+            return transformToContext(newContext, labelRemapFilter, false, false, ix -> ix);
         }
 
         // Note: when used on recursive functions, this undoes any return optimizations performed earlier.
         public LogicList duplicateToContextForInlining(AstContext newContext, Predicate<LogicLabel> labelRemapFilter) {
-            return transformToContext(newContext, labelRemapFilter, true,
+            return transformToContext(newContext, labelRemapFilter, true, false,
                     ix -> switch (ix) {
                         case LabelInstruction lbl when !labelRemapFilter.test(lbl.getLabel()) -> null;
                         case InitRecInstruction i -> i.withInlined(LogicBoolean.TRUE);
@@ -2186,15 +2192,34 @@ public class OptimizationContext extends CompilerMessageEmitter {
                     });
         }
 
-        public LogicList transformToContext(AstContext newContext, boolean functionInlining,
+        public LogicList transformToContext(AstContext newContext, boolean functionInlining, boolean loopUnrolling,
                 Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
-            return transformToContext(newContext, l -> true, functionInlining, transformer);
+            return transformToContext(newContext, l -> true, functionInlining, loopUnrolling, transformer);
         }
 
         public LogicList transformToContext(AstContext newContext, Predicate<LogicLabel> labelRemapFilter,
-                boolean functionInlining, Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
+                boolean functionInlining, boolean loopUnrolling, Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
+            }
+
+            // Get all instructions of this list
+            Map<LogicValue, LogicValue> variableMap;
+            if (loopUnrolling) {
+                Set<LogicInstruction> instructions = stream().collect(Collectors.toSet());
+                Set<LogicVariable> innerTemps = new HashSet<>();
+                Set<LogicVariable> outerTemps = new HashSet<>();
+
+                instructionStream().forEach(ix -> {
+                    Set<LogicVariable> temps = instructions.contains(ix) ? innerTemps : outerTemps;
+                    ix.getAllArguments().filter(a -> a.getType() == ArgumentType.TMP_VARIABLE).forEach(a -> temps.add((LogicVariable) a));
+                });
+
+                // Only keep temps used solely inside the list
+                innerTemps.removeAll(outerTemps);
+                variableMap = innerTemps.stream().collect(Collectors.toMap(v -> v, v -> instructionProcessor.nextTemp()));
+            } else {
+                variableMap = Map.of();
             }
 
             // Duplicate labels?
@@ -2204,7 +2229,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
             return new LogicList(contextMap.get(astContext), stream()
                     .map(transformer)
                     .filter(Objects::nonNull)
-                    .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
+                    .map(ix -> remapContextAndLabels(labelMap, variableMap, contextMap, ix))
                     .toList(), labelMap);
         }
 
@@ -2224,8 +2249,12 @@ public class OptimizationContext extends CompilerMessageEmitter {
                     .collect(Collectors.toMap(l -> l, l -> instructionProcessor.nextLabel()));
         }
 
-        private LogicInstruction remapContextAndLabels(Map<LogicLabel, LogicLabel> labelMap, Map<AstContext, AstContext> contextMap, LogicInstruction ix) {
+        private LogicInstruction remapContextAndLabels(Map<LogicLabel, LogicLabel> labelMap, Map<LogicValue, LogicValue> variableMap,
+                Map<AstContext, AstContext> contextMap, LogicInstruction ix) {
             LogicInstruction newIx = instructionProcessor.replaceLabels(ix.withContext(contextMap.get(ix.getAstContext())), labelMap);
+            if (!variableMap.isEmpty()) {
+                newIx = instructionProcessor.replaceArgs(newIx, variableMap);
+            }
             if (newIx instanceof ArrayAccessInstruction aix) {
                 aix.setArrayInjections(List.of()).setArrayInjectedInto(null);
             }

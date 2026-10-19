@@ -1,8 +1,8 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   8E48359FAEDB74BB
-base64-decode.mnd:                                 62      384      85.5%   BDD246AE230D839E   9B1C28769F3019DB
+base64-decode.mnd:                                 62      384      85.5%   BDD246AE230D839E   AC42CC30CDC4B314
 compute-recursive-fibonacci.mnd:                   49     2468      98.0%   BDE1C81A7769E0CB   35187B89817999FF
-compute-sum-of-primes.mnd:                        426     1876      99.8%   B6615E97E02F94A9   A4C6A6EAA213F4FB
+compute-sum-of-primes.mnd:                        426     1876      99.8%   B6615E97E02F94A9   1DAB25D7DB4158FC
 digit-counts.mnd:                                  53     1636     100.0%   4395C6D90051BC6D   AA5CDAEE6D5FA0F5
 memory-read-write.mnd:                              4        4     100.0%   D9539CC21D8111B7   30633B28AE9D9EDA
 pascal-triangle.mnd:                               90     1002      97.8%   954D9E65ED4E6EF0   2EEE1DA2C9785C56

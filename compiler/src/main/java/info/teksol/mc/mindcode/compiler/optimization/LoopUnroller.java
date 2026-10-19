@@ -435,14 +435,14 @@ class LoopUnroller extends BaseOptimizer {
         AstContext newContext = loop.existingParent().createChild(loop.existingNode(), AstContextType.CODE);
         int insertionPoint = firstInstructionIndex(loop);
         for (LogicList list : initContexts) {
-            insertInstructions(insertionPoint, list.duplicateToContext(newContext));
+            insertInstructions(insertionPoint, list.duplicateToContextForUnrolling(newContext));
             insertionPoint += list.size();
         }
 
         // Put in copies of the body
         for (int i = 0; i < loops; i++) {
             for (LogicList list : iterationContexts) {
-                insertInstructions(insertionPoint, list.duplicateToContext(newContext));
+                insertInstructions(insertionPoint, list.duplicateToContextForUnrolling(newContext));
                 insertionPoint += list.size();
             }
         }
@@ -484,16 +484,16 @@ class LoopUnroller extends BaseOptimizer {
         for (int i = 0; i < leading.size(); i++) {
             LogicList leadingCtx = removeLeadingIteratorInstructions(contextInstructions(leading.get(i)));
 
-            insertInstructions(insertionPoint, leadingCtx.duplicateToContext(newContext));
+            insertInstructions(insertionPoint, leadingCtx.duplicateToContextForUnrolling(newContext));
             insertionPoint += leadingCtx.size();
 
-            insertInstructions(insertionPoint, body.duplicateToContext(newContext));
+            insertInstructions(insertionPoint, body.duplicateToContextForUnrolling(newContext));
             insertionPoint += body.size();
 
             LogicList trailingCtx = contextInstructions(trailing.get(i));
             if (!trailingCtx.isEmpty()) {
                 // Skips labels/multilabels, copies the rest
-                LogicList copy = trailingCtx.transformToContext(newContext, false,
+                LogicList copy = trailingCtx.transformToContext(newContext, false, true,
                         ix -> ix instanceof LabelInstruction || ix instanceof MultiLabelInstruction || ix instanceof ReturnInstruction
                                 ? null : ix);
                 insertInstructions(insertionPoint, copy);

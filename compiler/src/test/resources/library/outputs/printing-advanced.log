@@ -1,23 +1,23 @@
    494 instructions before optimizations.
-    27 instructions eliminated by Temp Variables Elimination (8 iterations).
+    45 instructions eliminated by Temp Variables Elimination (3 passes, 9 iterations).
      1 instruction eliminated by Case Expression Optimization.
     38 instructions eliminated by Dead Code Elimination (6 iterations).
-    87 instructions eliminated by Jump Normalization (7 iterations).
-    22 instructions eliminated by Condition Optimization (2 passes, 9 iterations).
-   126 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
-    34 instructions modified by Expression Optimization (3 passes, 5 iterations).
-     6 instructions eliminated by Boolean Optimization (9 iterations).
+    87 instructions eliminated by Jump Normalization (6 iterations).
+    22 instructions eliminated by Condition Optimization (2 passes, 8 iterations).
+   126 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+    34 instructions modified by Expression Optimization (3 passes, 4 iterations).
+     6 instructions eliminated by Boolean Optimization (8 iterations).
        2 fully-evaluated expressions optimized using 'select's.
-   750 instructions eliminated by Data Flow Optimization (32 passes, 103 iterations).
+   732 instructions eliminated by Data Flow Optimization (31 passes, 100 iterations).
      2 loops improved by Loop Hoisting.
        7 loop conditions were partially rotated.
-  1012 instructions added by Loop Unrolling (35 iterations).
+  1012 instructions added by Loop Unrolling (34 iterations).
     25 loops unrolled by Loop Unrolling.
-   415 instructions added by Function Inlining (35 iterations).
+   415 instructions added by Function Inlining (34 iterations).
     24 function calls inlined by Function Inlining.
-     6 instructions eliminated by Case Switching (35 iterations).
+     6 instructions eliminated by Case Switching (34 iterations).
      1 case expression converted to fast dispatch by Case Switching.
-     7 instructions eliminated by Jump Straightening (8 iterations).
+     7 instructions eliminated by Jump Straightening (7 iterations).
     58 instructions updated by Jump Threading.
    343 instructions eliminated by Unreachable Code Elimination (2 iterations).
    157 instructions eliminated by Print Merging.
@@ -490,11 +490,11 @@ Pass 1: speed optimization selection (cost limit 6):
   ! Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
   ! Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
 
-Pass 2: speed optimization selection (cost limit 139):
+Pass 2: speed optimization selection (cost limit 141):
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
-  * Unroll loop at *printing:112:5                               size    -1, benefit      100.0, efficiency   Infinity (-7 instructions)
+  * Unroll loop at *printing:112:5                               size    -1, benefit      100.0, efficiency   Infinity (-5 instructions)
     Unroll loop at *printing:112:5                               size    -1, benefit      100.0, efficiency   Infinity
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
     Unroll loop at *printing:184:5                               size    -1, benefit      100.0, efficiency   Infinity
@@ -508,9 +508,9 @@ Pass 2: speed optimization selection (cost limit 139):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:341:9                               size   +90, benefit     1600.0, efficiency     17.778
-    Unroll loop at *printing:341:9                               size   +26, benefit     1600.0, efficiency     61.538
+    Unroll loop at *printing:341:9                               size   +27, benefit     1600.0, efficiency     59.259
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
-    Unroll loop at *printing:367:9                               size   +16, benefit      400.0, efficiency     25.000
+    Unroll loop at *printing:367:9                               size   +17, benefit      400.0, efficiency     23.529
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
   ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
     Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
@@ -852,16 +852,16 @@ Pass 2: speed optimization selection (cost limit 48):
   ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
   ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 3: speed optimization selection (cost limit 48):
+Pass 3: speed optimization selection (cost limit 64):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+  * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (-7 instructions)
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
   ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
   ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
@@ -873,28 +873,7 @@ Pass 3: speed optimization selection (cost limit 48):
   ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
   ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 4: speed optimization selection (cost limit 78):
-  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
-  * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
-    Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
-
-Pass 4: speed optimization selection (cost limit 71):
+Pass 3: speed optimization selection (cost limit 71):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -914,7 +893,7 @@ Pass 4: speed optimization selection (cost limit 71):
     Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
     Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 4: speed optimization selection (cost limit 64):
+Pass 3: speed optimization selection (cost limit 64):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -933,13 +912,30 @@ Pass 4: speed optimization selection (cost limit 64):
   ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
   ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 4: speed optimization selection (cost limit 57):
+Pass 3: speed optimization selection (cost limit 57):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
+
+Pass 3: speed optimization selection (cost limit 50):
+  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
+  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
   ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
   ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
@@ -952,23 +948,6 @@ Pass 4: speed optimization selection (cost limit 57):
   ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
 Pass 4: speed optimization selection (cost limit 50):
-  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
-  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
-
-Pass 5: speed optimization selection (cost limit 50):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -1239,10 +1218,10 @@ Final code before resolving virtual instructions:
   227:  print "1."
   228:  set :printExactSlow:digit 1
         label *label419
-  229:  op mod *tmp45 :printExactSlow:base 1
-  230:  op mul :printExactSlow:base *tmp45 10
-  231:  op floor *tmp46 :printExactSlow:base 0
-  232:  print *tmp46
+  229:  op mod *tmp44 :printExactSlow:base 1
+  230:  op mul :printExactSlow:base *tmp44 10
+  231:  op floor *tmp45 :printExactSlow:base 0
+  232:  print *tmp45
   233:  op add :printExactSlow:digit :printExactSlow:digit 1
   234:  jump *label419 lessThanEq :printExactSlow:digit 15
   235:  assertprints *tmp31 "1.012345678900000" "printExactSlow(1.0123456789)"
@@ -1251,10 +1230,10 @@ Final code before resolving virtual instructions:
   238:  print "1."
   239:  set :printExactSlow:digit 1
         label *label433
-  240:  op mod *tmp45 :printExactSlow:base 1
-  241:  op mul :printExactSlow:base *tmp45 10
-  242:  op floor *tmp46 :printExactSlow:base 0
-  243:  print *tmp46
+  240:  op mod *tmp44 :printExactSlow:base 1
+  241:  op mul :printExactSlow:base *tmp44 10
+  242:  op floor *tmp45 :printExactSlow:base 0
+  243:  print *tmp45
   244:  op add :printExactSlow:digit :printExactSlow:digit 1
   245:  jump *label433 lessThanEq :printExactSlow:digit 15
   246:  print "E20"
@@ -1264,10 +1243,10 @@ Final code before resolving virtual instructions:
   250:  print "1."
   251:  set :printExactSlow:digit 1
         label *label447
-  252:  op mod *tmp45 :printExactSlow:base 1
-  253:  op mul :printExactSlow:base *tmp45 10
-  254:  op floor *tmp46 :printExactSlow:base 0
-  255:  print *tmp46
+  252:  op mod *tmp44 :printExactSlow:base 1
+  253:  op mul :printExactSlow:base *tmp44 10
+  254:  op floor *tmp45 :printExactSlow:base 0
+  255:  print *tmp45
   256:  op add :printExactSlow:digit :printExactSlow:digit 1
   257:  jump *label447 lessThanEq :printExactSlow:digit 15
   258:  print "E-50"
@@ -1277,10 +1256,10 @@ Final code before resolving virtual instructions:
   262:  op mul :printExactSlow:base 1.2345E-50 1.0E50
   263:  set :printExactSlow:digit 1
         label *label461
-  264:  op mod *tmp45 :printExactSlow:base 1
-  265:  op mul :printExactSlow:base *tmp45 10
-  266:  op floor *tmp46 :printExactSlow:base 0
-  267:  print *tmp46
+  264:  op mod *tmp44 :printExactSlow:base 1
+  265:  op mul :printExactSlow:base *tmp44 10
+  266:  op floor *tmp45 :printExactSlow:base 0
+  267:  print *tmp45
   268:  op add :printExactSlow:digit :printExactSlow:digit 1
   269:  jump *label461 lessThanEq :printExactSlow:digit 15
   270:  print "E-50"
@@ -1320,8 +1299,8 @@ Final code before resolving virtual instructions:
   299:  op floor *tmp43 :printExactFast:base 0
   300:  print *tmp43
   301:  print "."
-  302:  op mod *tmp44 :printExactFast:base 1
-  303:  op mul :printExactFast:base *tmp44 100000
+  302:  op mod *tmp46 :printExactFast:base 1
+  303:  op mul :printExactFast:base *tmp46 100000
   304:  op floor :printExactFast:t :printExactFast:base 0
   305:  jump *label1016 greaterThanEq :printExactFast:t 100
   306:  jump *label1014 greaterThanEq :printExactFast:t 10
@@ -1341,8 +1320,8 @@ Final code before resolving virtual instructions:
         label *label1020
         label *label1021
   316:  print :printExactFast:t
-  317:  op mod *tmp44 :printExactFast:base 1
-  318:  op mul :printExactFast:base *tmp44 100000
+  317:  op mod *tmp47 :printExactFast:base 1
+  318:  op mul :printExactFast:base *tmp47 100000
   319:  op floor :printExactFast:t :printExactFast:base 0
   320:  jump *label1026 greaterThanEq :printExactFast:t 100
   321:  jump *label1024 greaterThanEq :printExactFast:t 10
@@ -1362,8 +1341,8 @@ Final code before resolving virtual instructions:
         label *label1030
         label *label1031
   331:  print :printExactFast:t
-  332:  op mod *tmp44 :printExactFast:base 1
-  333:  op mul :printExactFast:base *tmp44 100000
+  332:  op mod *tmp48 :printExactFast:base 1
+  333:  op mul :printExactFast:base *tmp48 100000
   334:  op floor :printExactFast:t :printExactFast:base 0
   335:  jump *label1036 greaterThanEq :printExactFast:t 100
   336:  jump *label1034 greaterThanEq :printExactFast:t 10
@@ -1433,8 +1412,8 @@ Final code before resolving virtual instructions:
 *tmp31: 0.0
 :printExactSlow:base: 0.15276668818842154
 :printExactSlow:digit: 16.0
-*tmp45: 0.015276668818842154
-*tmp46: 0.0
+*tmp44: 0.015276668818842154
+*tmp45: 0.0
 *tmp32: 0.0
 *tmp33: 0.0
 *tmp34: 0.0
@@ -1450,5 +1429,7 @@ Final code before resolving virtual instructions:
 *tmp42: 0.23450000000000015
 :printExactFast:cmp: 0.23450000000000015
 *tmp43: 1.0
-*tmp44: 5.838671768287895E-7
+*tmp46: 1.0000000005838672E-7
 :printExactFast:t: 0.0
+*tmp47: 0.010000000005838672
+*tmp48: 5.838671768287895E-7

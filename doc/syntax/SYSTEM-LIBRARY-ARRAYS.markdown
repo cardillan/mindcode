@@ -62,9 +62,9 @@ Sorts the array.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Five elements in internal arrays         |                 113 |                 70 |
-| Ten elements in internal arrays          |                 253 |                 70 |
-| Twenty elements in internal arrays       |                 533 |                 70 |
+| Five elements in internal arrays         |                 105 |                 70 |
+| Ten elements in internal arrays          |                 235 |                 70 |
+| Twenty elements in internal arrays       |                 495 |                 70 |
 | Five elements in external arrays         |                 113 |                 45 |
 | Ten elements in external arrays          |                 253 |                 45 |
 | Twenty elements in external arrays       |                 533 |                 45 |
