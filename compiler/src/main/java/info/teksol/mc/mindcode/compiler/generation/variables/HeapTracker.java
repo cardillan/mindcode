@@ -9,14 +9,13 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /// Tracks the heap usage/external variables' storage. Creates heap variables and assigns indexes to them.
 @NullMarked
@@ -130,28 +129,18 @@ public class HeapTracker extends CompilerMessageEmitter {
             return new LargeArray(identifier.sourcePosition(),
                     nameCreator.arrayBase(null, "", identifier.getName(), 0), memory, memoryArray, blockSize, size);
         } else {
-            LogicVariable memory;
-            List<ValueStore> elements;
-            int startOffset;
-
             int slot = findFreeStorageIndex(size);
             int available = slot < 0 ? 0 : endHeapIndex[slot] - currentHeapIndex[slot];
 
             if (available < size) {
                 if (heapAllocated) error(identifier, ERR.EXT_STORAGE_EXCEEDED_ARRAY, identifier.getName(), size, available);
-                startOffset = 0;
-                memory = LogicVariable.INVALID;
-                elements = Collections.nCopies(size, new ExternalVariable(identifier.sourcePosition(),
-                        LogicVariable.INVALID, LogicVariable.INVALID, LogicVariable.INVALID));
+                return ExternalArray.createInvalid(identifier, size);
             } else {
-                startOffset = currentHeapIndex[slot];
-                memory = heapStorage.get(slot);
-                elements = IntStream.range(0, size).mapToObj(index -> (ValueStore) new ExternalVariable(identifier.sourcePosition(),
-                        memory, LogicNumber.create(currentHeapIndex[slot]++), processor.nextTemp())).toList();
+                LogicVariable memory = heapStorage.get(slot);
+                int startOffset = currentHeapIndex[slot];
+                currentHeapIndex[slot] += size;
+                return ExternalArray.create(processor, identifier.sourcePosition(), nameCreator.arrayBase(null, "", identifier.getName(), 0), memory, IntRange.of(startOffset, startOffset + size - 1));
             }
-
-            return new ExternalArray(identifier.sourcePosition(),
-                    nameCreator.arrayBase(null, "", identifier.getName(), 0), memory, startOffset, null, elements);
         }
     }
 }

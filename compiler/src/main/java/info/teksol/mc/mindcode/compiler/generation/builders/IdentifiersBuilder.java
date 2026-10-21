@@ -16,9 +16,7 @@ import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 
@@ -113,15 +111,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
 
     private ValueStore memorySubarrayAccess(AstSubarray node, LogicVariable memory) {
         IntRange range = parseSubarrayRange(node, Globals.MAX_EXTERNAL_ARRAY_SIZE);
-        if (range == null) {
-            return LogicVariable.INVALID;
-        }
-
-        List<ValueStore> elements = IntStream.rangeClosed(range.min(), range.max())
-                .mapToObj(index -> (ValueStore) new ExternalVariable(node.sourcePosition(), memory,
-                        LogicNumber.create(index), processor.nextTemp())).toList();
-
-        return new ExternalArray(node.sourcePosition(), memory.getName(), memory, range.min(), null, elements);
+        return range == null ? LogicVariable.INVALID : ExternalArray.create(processor, node.sourcePosition(), memory.getName(), memory, range);
     }
 
     // TODO TYPES: type checking of the memory variable
@@ -162,7 +152,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
             return LogicVariable.INVALID;
         } else {
             IntRange range = parseSubarrayRange(node, array.size());
-            return range == null ? LogicVariable.INVALID : array.subarray(node.sourcePosition(), range.min(), range.max() + 1);
+            return range == null ? LogicVariable.INVALID : array.subarray(node.sourcePosition(), range);
         }
     }
 

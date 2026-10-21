@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -122,9 +123,9 @@ public class InternalArray extends ElementsArrayStore {
     }
 
     @Override
-    public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + start,
-                end - start, elements.subList(start, end), (ElementsArrayStore) masterArray, arrayType, true);
+    public ArrayStore subarray(SourcePosition sourcePosition, IntRange range) {
+        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + range.min(),
+                range.size(), range.sublist(elements), (ElementsArrayStore) masterArray, arrayType, true);
     }
 
     @Override

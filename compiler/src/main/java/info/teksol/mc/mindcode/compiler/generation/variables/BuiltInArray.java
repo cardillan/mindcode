@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -14,7 +15,6 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 public class BuiltInArray extends AbstractArrayStore {
     private final LogicValue count;
     private final Accessor accessor;
-    private final LogicNumber startOffsetNumber;
 
     public static BuiltInArray createLinks(String name) {
         return new BuiltInArray(name, LogicBuiltIn.LINKS, ContextfulInstructionCreator::createGetLink, -1);
@@ -48,14 +48,12 @@ public class BuiltInArray extends AbstractArrayStore {
         super(SourcePosition.EMPTY, name, ArrayType.LINKS, 0, size, null, false);
         this.count = count;
         this.accessor = accessor;
-        this.startOffsetNumber = LogicNumber.create(startOffset);
     }
 
     private BuiltInArray(SourcePosition sourcePosition, String name, LogicValue count, Accessor accessor, int startOffset, ArrayStore masterArray) {
         super(sourcePosition, name, ArrayType.LINKS, startOffset, -1, masterArray, false);
         this.count = count;
         this.accessor = accessor;
-        this.startOffsetNumber = LogicNumber.create(startOffset);
     }
 
     public LogicValue getCount() {
@@ -72,9 +70,10 @@ public class BuiltInArray extends AbstractArrayStore {
         return false;
     }
 
+    // TODO support fixed-sized built-in arrays
     @Override
-    public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + start, masterArray);
+    public ArrayStore subarray(SourcePosition sourcePosition, IntRange range) {
+        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + range.min(), masterArray);
     }
 
     @Override

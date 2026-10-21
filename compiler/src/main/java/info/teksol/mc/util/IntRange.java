@@ -2,6 +2,9 @@ package info.teksol.mc.util;
 
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+import java.util.stream.IntStream;
+
 /// Integer range, closed on both ends: index is in range iff start <= index <= end.
 @NullMarked
 public record IntRange(int min, int max) implements Comparable<IntRange> {
@@ -34,6 +37,18 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
 
     public String getRangeLiteral() {
         return min + " ... " + (max + 1);
+    }
+
+    public IntRange offset(int offset) {
+        return new IntRange(min + offset, max + offset);
+    }
+
+    public IntStream stream() {
+        return IntStream.range(min, max + 1);
+    }
+
+    public <T> List<T> sublist(List<T> list) {
+        return list.subList(min, max + 1);
     }
 
     @Override

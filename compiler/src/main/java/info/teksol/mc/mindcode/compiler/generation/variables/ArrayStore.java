@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -41,7 +42,7 @@ public interface ArrayStore extends ValueStore {
         return getArrayOffset() != LogicNumber.ZERO;
     }
 
-    ArrayStore subarray(SourcePosition sourcePosition, int start, int end);
+    ArrayStore subarray(SourcePosition sourcePosition, IntRange range);
 
     ArrayStore offset(int offset);
 

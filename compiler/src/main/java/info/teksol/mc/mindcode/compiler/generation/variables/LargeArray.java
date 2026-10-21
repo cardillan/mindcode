@@ -1,10 +1,13 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.LocalCompilerProfile;
+import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -28,9 +31,9 @@ public class LargeArray extends AbstractArrayStore {
         this.blockSizeNumber = LogicNumber.create(blockSize);
     }
 
-    private LargeArray(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size, ArrayStore masterArray,
+    private LargeArray(SourcePosition sourcePosition, String name, int startOffset, int size, ArrayStore masterArray,
             boolean subarray, List<LogicVariable> memoryBlocks, ArrayStore memoryArray, int blockSize, LogicNumber blockSizeNumber) {
-        super(sourcePosition, name, arrayType, startOffset, size, masterArray, subarray);
+        super(sourcePosition, name, ArrayType.LARGE, startOffset, size, masterArray, subarray);
         this.memoryBlocks = memoryBlocks;
         this.memoryArray = memoryArray;
         this.blockSize = blockSize;
@@ -58,8 +61,18 @@ public class LargeArray extends AbstractArrayStore {
     }
 
     @Override
-    public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        throw new UnsupportedOperationException();
+    public ArrayStore subarray(SourcePosition sourcePosition, IntRange range) {
+        int min = this.startOffset + range.min();
+        int max = this.startOffset + range.max();
+
+        if (min / blockSize == max / blockSize) {
+            InstructionProcessor processor = ContextFactory.getMasterContext().instructionProcessor();
+            return ExternalArray.create(processor, sourcePosition, name, memoryBlocks.get(min / blockSize),
+                    new IntRange(min % blockSize, max % blockSize), this);
+        } else {
+            return new LargeArray(sourcePosition, name, startOffset + range.min(), range.size(), masterArray, true,
+                    memoryBlocks, memoryArray, blockSize, blockSizeNumber);
+        }
     }
 
     @Override
@@ -83,13 +96,14 @@ public class LargeArray extends AbstractArrayStore {
             return new LargeArrayElement(sourcePosition, fixedIndex, creator.nextTemp(), safeAccess);
         } else {
             LogicVariable actualIndex = creator.nextTemp();
+            creator.createOp(Operation.ADD, actualIndex, index.getValue(creator), startOffsetNumber);
             return new LargeArrayElement(sourcePosition, actualIndex, creator.nextTemp(), safeAccess);
         }
     }
 
     @Override
     public LargeArray withSourcePosition(SourcePosition sourcePosition) {
-        return new LargeArray(sourcePosition, name, arrayType, startOffset, size, masterArray, false,
+        return new LargeArray(sourcePosition, name, startOffset, size, masterArray, false,
                 memoryBlocks, memoryArray, blockSize, blockSizeNumber);
     }
 

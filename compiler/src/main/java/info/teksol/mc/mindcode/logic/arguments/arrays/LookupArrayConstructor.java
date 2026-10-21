@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.arguments.arrays;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.generation.variables.ElementsArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
@@ -80,9 +81,11 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
         Map<Integer, ? extends MindustryContent> lookupMap = processor.getMetadata().getLookupMap(type.getKeyword());
         assert lookupMap != null;
 
-        List<ValueStore> elements = arrayStore.getMasterArray().getElements();
-        for (int i = 0; i < elements.size(); i++) {
-            elements.get(i).setArrayElementName(lookupMap.get(i).contentName());
+        if (arrayStore.getMasterArray() instanceof ElementsArrayStore elementsArrayStore) {
+            List<ValueStore> elements = elementsArrayStore.getElements();
+            for (int i = 0; i < elements.size(); i++) {
+                elements.get(i).setArrayElementName(lookupMap.get(i).contentName());
+            }
         }
     }
 }

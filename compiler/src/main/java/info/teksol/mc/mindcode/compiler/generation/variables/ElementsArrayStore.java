@@ -13,13 +13,9 @@ public abstract class ElementsArrayStore extends AbstractArrayStore {
     protected final List<ValueStore> elements;
 
     public ElementsArrayStore(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size,
-            @Nullable ElementsArrayStore masterArray, List<ValueStore> elements, boolean subarray) {
+            @Nullable ArrayStore masterArray, List<ValueStore> elements, boolean subarray) {
         super(sourcePosition, name, arrayType, startOffset, size, masterArray, subarray);
         this.elements = elements;
-    }
-
-    public ElementsArrayStore getMasterArray() {
-        return (ElementsArrayStore) masterArray;
     }
 
     public List<ValueStore> getElements() {

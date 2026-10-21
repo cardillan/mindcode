@@ -21,6 +21,8 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
     /// The starting offset of the array: used with subarrays or external arrays starting at a non-zero index
     protected final int startOffset;
 
+    protected final LogicNumber startOffsetNumber;
+
     /// Size of the array. May be different from the number of elements if the array is a local array in a
     /// recursive function, in which case the starting element is floating.
     protected final int size;
@@ -36,6 +38,7 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
         this.name = name;
         this.arrayType = arrayType;
         this.startOffset = startOffset;
+        this.startOffsetNumber = LogicNumber.create(startOffset);
         this.size = size;
         this.masterArray = masterArray == null ? this : masterArray;
         this.logicArray = subarray ? LogicArray.create(this, startOffset, startOffset + size) : LogicArray.create(this);
