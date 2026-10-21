@@ -14,6 +14,7 @@ import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import info.teksol.mc.util.MathUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -141,13 +142,6 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     }
 
     private void buildRangedForLoop(AstForEachLoopStatement node, int iterations) {
-        // We need to switch contexts
-        assembler.exitAstNode(node);
-        assembler.enterAstNode(node, AstContextType.LOOP);
-
-        // Initialization
-        assembler.setSubcontextType(AstSubcontextType.INIT, iterations);
-
         // Creates all variables as needed
         List<ListIterator> iterators = new ArrayList<>();
         List<ArrayStore> arrays = new ArrayList<>();
@@ -158,11 +152,20 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             arrays.add((ArrayStore) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
         });
 
+        // If we have large arrays, find the GDC
+        int[] blockSizes = arrays.stream().mapToInt(a -> a instanceof LargeArray la ? la.getBlockSize() : 0).toArray();
+        int blockSize = MathUtils.gcd(blockSizes);
+
         boolean descending = iterators.getFirst().descending;
         int offset = IntStream.range(0, iterators.size())
                 .filter(i -> iterators.get(i).descending == descending)
                 .map(i -> arrays.get(i).getStartOffset())
                 .min().orElse(0);
+
+        if (offset == 0 && blockSize > 1) {
+            buildRangedForLoopLarge(node, iterations, iterators, arrays, blockSize);
+            return;
+        }
 
         if (offset != 0) {
             for (int i = 0; i < arrays.size(); i++) {
@@ -171,6 +174,13 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 }
             }
         }
+
+        // We need to switch contexts
+        assembler.exitAstNode(node);
+        assembler.enterAstNode(node, AstContextType.LOOP);
+
+        // Initialization
+        assembler.setSubcontextType(AstSubcontextType.INIT, iterations);
 
         LogicNumber start = LogicNumber.create(descending ? offset + iterations - 1 : offset);
         LogicNumber limit = LogicNumber.create(descending ? offset : offset + iterations - 1);
@@ -238,48 +248,138 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         exitLoop(loopLabels);
     }
 
-    private class ForEachLoopBuilder extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
-        private final List<IterationGroup> iterationGroups;
-        private final LogicLabel bodyLabel = assembler.nextLabel();
-        private final LogicLabel marker = assembler.nextMarker();
-        private final LogicVariable nextAddress = assembler.nextTemp();
-        private final LoopLabels loopLabels;
-        private final boolean symbolicLabels;
-        private final boolean nullCounterNoop;
-        private final Set<ValueStore> invalidOutputs = new HashSet<>();
+    private void buildRangedForLoopLarge(AstForEachLoopStatement node, int iterations, List<ListIterator> iterators, List<ArrayStore> arrays, int blockSize) {
+        List<LogicVariable> memoryBlocks = new ArrayList<>();
+        TreeMap<Integer, LogicVariable> memoryIndexes = new TreeMap<>();
+        for (ArrayStore array : arrays) {
+            memoryBlocks.add(assembler.nextTemp());
+            memoryIndexes.computeIfAbsent(array instanceof LargeArray a ? a.getBlockSize() : 0, _ -> assembler.nextTemp());
+        }
 
-        public ForEachLoopBuilder(AstForEachLoopStatement node) {
+        LogicVariable loopControl = memoryIndexes.entrySet().stream().filter(e -> e.getKey() > 0).findFirst().map(Map.Entry::getValue).orElseThrow();
+        LogicVariable limit = assembler.nextTemp();
+
+        new ForEachLoopBuilderBase(node) {
+            int iteration = 0;
+
+            @Override
+            protected boolean hasMoreData() {
+                return iteration < iterations;
+            }
+
+            @Override
+            protected void prepareIteration(List<IterationElement> outputs) {
+                if (iteration == 0) {
+                    if (iterations > blockSize) assembler.createSet(limit, LogicNumber.create(blockSize));
+                    if (memoryIndexes.containsKey(0)) assembler.createSet(memoryIndexes.get(0), LogicNumber.ZERO);
+                }
+
+                for (int i = 0; i < arrays.size(); i++) {
+                    if (arrays.get(i) instanceof LargeArray a && iteration % a.getBlockSize() == 0) {
+                        assembler.createSet(memoryBlocks.get(i), a.getMemoryBlocks().get(iteration / a.getBlockSize()));
+                    }
+                }
+                memoryIndexes.entrySet().stream().filter(e -> e.getKey() > 0).skip(1)
+                        .filter(e -> iteration % e.getKey() == 0)
+                        .forEach(e -> assembler.createSet(e.getValue(), LogicNumber.ZERO));
+
+                iteration += blockSize;
+
+                if (iteration > iterations) {
+                    assembler.createSet(limit, LogicNumber.create(iterations % blockSize));
+                }
+            }
+
+            @Override
+            protected void createBody() {
+                final LogicLabel beginLabel = assembler.nextLabel();
+
+                assembler.createSet(loopControl, LogicNumber.ZERO);
+
+                assembler.enterAstNode(node, AstContextType.LOOP);
+
+                // Loop body
+                assembler.setSubcontextType(AstSubcontextType.BODY, iterations);
+                assembler.createLabel(beginLabel);
+
+                // Set up variables
+                for (int i = 0; i < arrays.size(); i++) {
+                    ListIterator iterator = iterators.get(i);
+                    ArrayStore array = arrays.get(i);
+
+                    if (array instanceof LargeArray a) {
+                        if (iterator.var instanceof LogicVariable var) {
+                            assembler.createRead(var, memoryBlocks.get(i), memoryIndexes.get(a.getBlockSize()));
+                        } else {
+                            LogicVariable tmp = assembler.nextTemp();
+                            assembler.createRead(tmp, memoryBlocks.get(i), memoryIndexes.get(a.getBlockSize()));
+                            iterator.var.copyFrom(assembler, tmp);
+                        }
+                    } else {
+                        iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), memoryIndexes.get(0), true));
+                    }
+                }
+
+                visitBody(node.getBody());
+
+                // Copy values back
+                for (int i = 0; i < arrays.size(); i++) {
+                    ListIterator iterator = iterators.get(i);
+                    if (!iterator.out) continue;
+
+                    if (iterator.var.isLvalue()) {
+                        ArrayStore array = arrays.get(i);
+
+                        if (array instanceof LargeArray a) {
+                            assembler.createWrite(iterator.var.getValue(assembler), memoryBlocks.get(i), memoryIndexes.get(a.getBlockSize()));
+                        } else {
+                            array.getElement(assembler, array.sourcePosition(), memoryIndexes.get(0), true).copyFrom(assembler, iterator.var);
+                        }
+                    } else if (invalidOutputs.add(iterator.var)) {
+                        error(iterator.var, ERR.LVALUE_CANNOT_ASSIGN_TO_ITERATOR);
+                    }
+                }
+
+                // Advance indexes
+                memoryIndexes.forEach((_, index) -> assembler.createOp(Operation.ADD, index, index, LogicNumber.ONE));
+
+                // Condition
+                assembler.setSubcontextType(AstSubcontextType.CONDITION, iterations);
+                assembler.createJump(beginLabel, Condition.LESS_THAN, loopControl, limit);
+
+                // Exit
+                assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);
+                assembler.clearSubcontextType();
+
+                assembler.exitAstNode(node, AstContextType.LOOP);
+            }
+        }.build();
+    }
+
+    private abstract class ForEachLoopBuilderBase extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
+        protected final LogicLabel bodyLabel = assembler.nextLabel();
+        protected final LogicLabel marker = assembler.nextMarker();
+        protected final LogicVariable nextAddress = assembler.nextTemp();
+        protected final LoopLabels loopLabels;
+        protected final boolean symbolicLabels;
+        protected final boolean nullCounterNoop;
+        protected final Set<ValueStore> invalidOutputs = new HashSet<>();
+
+        public ForEachLoopBuilderBase(AstForEachLoopStatement node) {
             super(ForEachLoopStatementsBuilder.this, node);
             symbolicLabels = node.getProfile().isSymbolicLabels();
             nullCounterNoop = node.getProfile().isNullCounterIsNoop();
-            iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
             loopLabels = enterLoop(node, "for");
             allowContinue(false);
         }
 
-        private IterationGroup processIteratorGroup(AstIteratorsValuesGroup group) {
-            return new IterationGroup(
-                    group.getIterators().stream().map(iterator -> processIterator(group, iterator))
-                            .collect(Collectors.toCollection(ArrayList::new)),
-                    group.getValues().getExpressions().stream().mapMulti(this::processValue)
-                            .collect(Collectors.toCollection(ArrayList::new)),
-                    group.isDescending()
-            );
-        }
+        protected abstract boolean hasMoreData();
 
-        private void processValue(AstExpression expression, Consumer<ValueStore> consumer) {
-            if (variables.isVarargParameter(expression)) {
-                variables.getVarargs().forEach(consumer);
-            } else {
-                consumer.accept(new DeferredValueStore(expression));
-            }
-        }
+        protected abstract void prepareIteration(List<IterationElement> outputs);
 
-        private boolean hasMoreData() {
-            return iterationGroups.stream().anyMatch(IterationGroup::hasMoreData);
-        }
+        protected abstract void createBody();
 
-        private void build() {
+        public void build() {
             int iterations = 0;
             while (hasMoreData()) {
                 createIteration();
@@ -294,11 +394,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 assembler.clearSubcontextType();
             }
             exitLoop(loopLabels);
-
-            iterationGroups.forEach(IterationGroup::generateMessage);
         }
 
-        private void createIteration() {
+        protected void createIteration() {
             // Code which sets up variables for the next iteration
             // Multiplier is set to 1: all instructions execute exactly once
             assembler.setSubcontextType(AstSubcontextType.ITR_LEADING, 1.0);
@@ -306,7 +404,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             LinkedList<IterationElement> outputs = new LinkedList<>();
 
             // Copy values from the list to iterators
-            iterationGroups.forEach(group -> group.generateIterationSetup(outputs));
+            // Consumes data - must update advance hasMoreData()
+            prepareIteration(outputs);
 
             boolean lastIteration = !hasMoreData();
 
@@ -335,7 +434,24 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 }
 
                 // The last iteration: continue to the loop body directly
+                allowContinue(true);
+
+                // This is the last iteration. We'll output the loop body directly here.
+                assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
+                assembler.createLabel(bodyLabel);
+
                 createBody();
+
+                // Continue label
+                // The label needs to be part of the loop body so that it gets copied on loop unrolling
+                assembler.createLabel(loopLabels.continueLabel());
+
+                // Jumps to the iteration trailing block
+                // On the last iteration, this jumps right to the next statement, but it can't be avoided
+                assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
+                assembler.createMultiJump(nextAddress, marker);
+
+                allowContinue(false);
             } else {
                 // This isn't a last iteration: jump to the loop body
                 assembler.createJumpUnconditional(bodyLabel);
@@ -363,26 +479,50 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 }
             }
         }
+    }
 
-        private void createBody() {
-            allowContinue(true);
+    private class ForEachLoopBuilder extends ForEachLoopBuilderBase {
+        private final List<IterationGroup> iterationGroups;
 
-            // This is the last iteration. We'll output the loop body directly here.
-            assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
-            assembler.createLabel(bodyLabel);
+        public ForEachLoopBuilder(AstForEachLoopStatement node) {
+            super(node);
+            iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
+        }
 
+        private IterationGroup processIteratorGroup(AstIteratorsValuesGroup group) {
+            return new IterationGroup(
+                    group.getIterators().stream().map(iterator -> processIterator(group, iterator))
+                            .collect(Collectors.toCollection(ArrayList::new)),
+                    group.getValues().getExpressions().stream().mapMulti(this::processValue)
+                            .collect(Collectors.toCollection(ArrayList::new)),
+                    group.isDescending()
+            );
+        }
+
+        private void processValue(AstExpression expression, Consumer<ValueStore> consumer) {
+            if (variables.isVarargParameter(expression)) {
+                variables.getVarargs().forEach(consumer);
+            } else {
+                consumer.accept(new DeferredValueStore(expression));
+            }
+        }
+
+        @Override
+        public void build() {
+            super.build();
+            iterationGroups.forEach(IterationGroup::generateMessage);
+        }
+
+        protected  boolean hasMoreData() {
+            return iterationGroups.stream().anyMatch(IterationGroup::hasMoreData);
+        }
+
+        protected void prepareIteration(List<IterationElement> outputs) {
+            iterationGroups.forEach(group -> group.generateIterationSetup(outputs));
+        }
+
+        protected void createBody() {
             visitBody(node.getBody());
-
-            // Continue label
-            // The label needs to be part of the loop body so that it gets copied on loop unrolling
-            assembler.createLabel(loopLabels.continueLabel());
-
-            // Jumps to the iteration trailing block
-            // On the last iteration, this jumps right to the next statement, but it can't be avoided
-            assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
-            assembler.createMultiJump(nextAddress, marker);
-
-            allowContinue(false);
         }
     }
 

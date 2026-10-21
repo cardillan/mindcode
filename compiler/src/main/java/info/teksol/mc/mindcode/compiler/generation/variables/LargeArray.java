@@ -48,6 +48,15 @@ public class LargeArray extends AbstractArrayStore {
         return true;
     }
 
+    // For the list iteration loop
+    public int getBlockSize() {
+        return blockSize;
+    }
+
+    public List<LogicVariable> getMemoryBlocks() {
+        return memoryBlocks;
+    }
+
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
         throw new UnsupportedOperationException();

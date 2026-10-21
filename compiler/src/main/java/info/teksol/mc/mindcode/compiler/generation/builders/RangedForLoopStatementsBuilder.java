@@ -36,7 +36,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
                 ? (int) (upperValue.getDoubleValue() - lowerValue.getDoubleValue()) : LOOP_REPETITIONS;
 
         // Initialization
-        assembler.setSubcontextType(AstSubcontextType.INIT, multiplier);
+        assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
 
         // Encapsulate both: they're evaluated just here and not propagated anywhere
         ValueStore lowerValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getFirstValue()));
