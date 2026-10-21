@@ -106,7 +106,7 @@ MemberExpression {
 }
 
 Range {
-  expression !dots (".." | "...") expression
+  expression ~externalRange !dots (".." | "...") expression
 }
 
 Identifier {
@@ -160,18 +160,23 @@ declarationModifier {
   kw<"const"> |
   kw<"cached"> |
   kw<"export"> ~sharedModifier |
-  kw<"external"> ("(" Identifier ("[" expression "]")? ")")? |
+  kw<"external"> ("(" Identifier ~externalRange "[" expression "]" ")")? |
+  kw<"external"> ("(" commaSep<Identifier> ")")? |
+  kw<"external"> ("(" Range ")")? |
   kw<"guarded"> |
   kw<"linked"> ("(" Identifier ")")? |
   kw<"mlog"> "(" commaSep<expression ~mlogAmbig> ")" |
   kw<"noinit"> |
   kw<"remote"> ("(" Identifier ~remoteDeclareRequireAmbig ")")? |
-  kw<"volatile">
+  kw<"volatile"> |
+  kw<"internal">
 }
 
 
 allocation {
-  (kw<"heap"> | kw<"stack">) kw<"in"> Identifier ("[" Range "]")?
+  (kw<"heap"> | kw<"stack">) kw<"in"> Identifier ("[" Range "]")? |
+  (kw<"heap"> | kw<"stack">) kw<"in"> "(" commaSep<Identifier> ")" |
+  (kw<"heap"> | kw<"stack">) kw<"in"> "(" Range ")"
 }
 
 BinaryExpression {
