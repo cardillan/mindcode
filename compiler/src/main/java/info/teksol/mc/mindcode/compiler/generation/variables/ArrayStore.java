@@ -21,6 +21,9 @@ public interface ArrayStore extends ValueStore {
     /// Logical size of the array. -1 for a dynamically sized array.
     int size();
 
+    /// Size of the array as a logical value; can be a built-in constant as well
+    LogicValue limit();
+
     /// The physical size of the array (differs from the logical size for local arrays in recursive functions). -1 for a dynamically sized array.
     int fullSize();
 

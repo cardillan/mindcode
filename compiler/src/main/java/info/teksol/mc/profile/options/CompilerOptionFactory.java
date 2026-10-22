@@ -260,7 +260,7 @@ public class CompilerOptionFactory {
                 "specifies the minimum size of an array for which iteration loops are preferred over expanded code",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
-                0, 1000, 25));
+                1, 1000, 25));
 
         list.add(new BooleanCompilerOptionValue(CompilerOptions.ATOMIC_FULL_PROTECTION, "",
                 "when set to 'false', nonvolatile variables are not protected by atomic blocks",

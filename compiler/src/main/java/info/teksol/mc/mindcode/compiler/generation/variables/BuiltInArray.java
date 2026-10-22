@@ -13,7 +13,6 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 
 @NullMarked
 public class BuiltInArray extends AbstractArrayStore {
-    private final LogicValue count;
     private final Accessor accessor;
 
     public static BuiltInArray createLinks(String name) {
@@ -44,20 +43,14 @@ public class BuiltInArray extends AbstractArrayStore {
         return new BuiltInArray(name, LogicBuiltIn.TEAM_COUNT, lookupAccessor(LogicKeyword.TEAM), -1);
     }
 
-    private BuiltInArray(String name, LogicValue count, Accessor accessor, int size) {
-        super(SourcePosition.EMPTY, name, ArrayType.LINKS, 0, size, null, false);
-        this.count = count;
+    private BuiltInArray(String name, LogicValue limit, Accessor accessor, int size) {
+        super(SourcePosition.EMPTY, name, ArrayType.LINKS, 0, size, limit, null, false);
         this.accessor = accessor;
     }
 
-    private BuiltInArray(SourcePosition sourcePosition, String name, LogicValue count, Accessor accessor, int startOffset, ArrayStore masterArray) {
-        super(sourcePosition, name, ArrayType.LINKS, startOffset, -1, masterArray, false);
-        this.count = count;
+    private BuiltInArray(SourcePosition sourcePosition, String name, LogicValue limit, Accessor accessor, int startOffset, ArrayStore masterArray) {
+        super(sourcePosition, name, ArrayType.LINKS, startOffset, -1, limit, masterArray, false);
         this.accessor = accessor;
-    }
-
-    public LogicValue getCount() {
-        return count;
     }
 
     @Override
@@ -73,7 +66,7 @@ public class BuiltInArray extends AbstractArrayStore {
     // TODO support fixed-sized built-in arrays
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, IntRange range) {
-        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + range.min(), masterArray);
+        return new BuiltInArray(sourcePosition, name, limit, accessor, startOffset + range.min(), masterArray);
     }
 
     @Override
@@ -95,7 +88,7 @@ public class BuiltInArray extends AbstractArrayStore {
 
     @Override
     public ArrayStore offset(int offset) {
-        return new BuiltInArray(sourcePosition, name, count, accessor, startOffset + offset, masterArray);
+        return new BuiltInArray(sourcePosition, name, limit, accessor, startOffset + offset, masterArray);
     }
 
     private interface Accessor {

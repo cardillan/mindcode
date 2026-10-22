@@ -27,19 +27,23 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
     /// recursive function, in which case the starting element is floating.
     protected final int size;
 
+    /// Limit of the array: size expressed as a logical value; can be a built-in constant as well
+    protected final LogicValue limit;
+
     /// Contains the master array: source of the subarray
     protected final ArrayStore masterArray;
 
     protected final LogicArray logicArray;
 
     public AbstractArrayStore(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size,
-            @Nullable ArrayStore masterArray, boolean subarray) {
+            LogicValue limit, @Nullable ArrayStore masterArray, boolean subarray) {
         super(sourcePosition, ERR.ARRAY_FORBIDDEN);
         this.name = name;
         this.arrayType = arrayType;
         this.startOffset = startOffset;
         this.startOffsetNumber = LogicNumber.create(startOffset);
         this.size = size;
+        this.limit = limit;
         this.masterArray = masterArray == null ? this : masterArray;
         this.logicArray = subarray ? LogicArray.create(this, startOffset, startOffset + size) : LogicArray.create(this);
     }
@@ -96,6 +100,11 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
     @Override
     public int size() {
         return size;
+    }
+
+    @Override
+    public LogicValue limit() {
+        return limit;
     }
 
     public int fullSize() {

@@ -109,7 +109,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--unicode-escapes {minimal,non-printable,non-ascii,all}] [--encode-zero-characters [{true,false}]]
                 [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--stack-depth {1..10000}] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--array-iteration-threshold {0..1000}] [--atomic-full-protection [{true,false}]]
+                [--array-iteration-threshold {1..1000}] [--atomic-full-protection [{true,false}]]
                 [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}]
                 [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}]
@@ -251,7 +251,7 @@ Compiler options:
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
-  --array-iteration-threshold {0..1000}
+  --array-iteration-threshold {1..1000}
                          specifies the minimum size of an array  for  which  iteration loops are preferred over expanded
                          code
   --atomic-full-protection [{true,false}]
@@ -609,7 +609,7 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--unicode-escapes {minimal,non-printable,non-ascii,all}] [--encode-zero-characters [{true,false}]]
                 [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--stack-depth {1..10000}] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--array-iteration-threshold {0..1000}] [--atomic-full-protection [{true,false}]]
+                [--array-iteration-threshold {1..1000}] [--atomic-full-protection [{true,false}]]
                 [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}]
                 [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}]
@@ -756,7 +756,7 @@ Compiler options:
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
-  --array-iteration-threshold {0..1000}
+  --array-iteration-threshold {1..1000}
                          specifies the minimum size of an array  for  which  iteration loops are preferred over expanded
                          code
   --atomic-full-protection [{true,false}]

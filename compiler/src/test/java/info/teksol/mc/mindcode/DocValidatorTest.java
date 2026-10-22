@@ -434,14 +434,14 @@ public class DocValidatorTest extends AbstractTestBase {
                 String caption = fileContent.get(i);
                 if (caption.startsWith("## ")) {
                     if (lastCategory != null) {
-                        categoryRanges.put(lastCategory, IntRange.of(lastStart, i - 1));
+                        categoryRanges.put(lastCategory, IntRange.halfOpen(lastStart, i));
                     }
                     lastStart = i;
                     lastCategory = OptionCategory.fromTitle(caption.substring(3)).orElse(null);
                 }
             }
             if (lastCategory != null) {
-                categoryRanges.put(lastCategory, IntRange.of(lastStart, fileContent.size() - 1));
+                categoryRanges.put(lastCategory, IntRange.halfOpen(lastStart, fileContent.size()));
             }
 
             for (OptionCategory optionCategory : OptionCategory.values()) {

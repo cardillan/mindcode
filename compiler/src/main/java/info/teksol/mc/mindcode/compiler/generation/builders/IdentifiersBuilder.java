@@ -177,7 +177,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
             error = true;
         }
 
-        return error ? null : new IntRange(start, end);
+        return error ? null : IntRange.closed(start, end);
     }
 
     private int getIndex(AstRange range, boolean first) {

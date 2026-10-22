@@ -39,7 +39,7 @@ public abstract class AbstractHandler extends CompilerMessageEmitter implements 
         this.name = name;
         this.opcodeVariant = opcodeVariant;
         this.assembler = functionMapper.assembler;
-        this.argumentCount = new IntRange(minArgs, numArgs);
+        this.argumentCount = IntRange.closed(minArgs, numArgs);
         this.hasResult = hasResult;
     }
 

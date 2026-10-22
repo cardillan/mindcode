@@ -5,7 +5,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 import java.util.stream.IntStream;
 
-/// Integer range, closed on both ends: index is in range iff start <= index <= end.
+/// Integer range, closed on both ends: index is in range iff min <= index <= max.
 @NullMarked
 public record IntRange(int min, int max) implements Comparable<IntRange> {
 
@@ -15,8 +15,21 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
         }
     }
 
-    public static IntRange of(int start, int stop) {
-        return new IntRange(start, stop);
+    public int start() {
+        return min;
+    }
+
+    /// @return the exclusive end - first value not belonging to the range.
+    public int end() {
+        return max + 1;
+    }
+
+    public static IntRange closed(int min, int max) {
+        return new IntRange(min, max);
+    }
+
+    public static IntRange halfOpen(int min, int end) {
+        return new IntRange(min, end - 1);
     }
 
     public boolean overlaps(IntRange other) {
@@ -35,10 +48,6 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
         return min == max ? String.valueOf(min) : min + " to " + max;
     }
 
-    public String getRangeLiteral() {
-        return min + " ... " + (max + 1);
-    }
-
     public IntRange offset(int offset) {
         return new IntRange(min + offset, max + offset);
     }
@@ -48,7 +57,7 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
     }
 
     public <T> List<T> sublist(List<T> list) {
-        return list.subList(min, max + 1);
+        return list.subList(min, end());
     }
 
     @Override

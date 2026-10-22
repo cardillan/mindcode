@@ -575,21 +575,16 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             external a[10];
                             for i in a[5 .. 6] do print(i); end;
                             """,
-                    createInstruction(READ, tmp(5), "cell1", "5"),
-                    createInstruction(SET, ":i", tmp(5)),
-                    createInstruction(SETADDR, tmp(10), label(3)),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(MULTILABEL, label(3)),
-                    createInstruction(READ, tmp(6), "cell1", "6"),
-                    createInstruction(SET, ":i", tmp(6)),
-                    createInstruction(SETADDR, tmp(10), label(4)),
-                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(10), "5"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(11), tmp(10)),
+                    createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
+                    createInstruction(SET, ":i", tmp(12)),
                     createInstruction(PRINT, ":i"),
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(MULTIJUMP, tmp(10), "0", "0"),
-                    createInstruction(MULTILABEL, label(4)),
-                    createInstruction(LABEL, label(2))
-
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(10), tmp(10), "1"),
+                    createInstruction(JUMP, label(2), "lessThan", tmp(10), "7"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -598,20 +593,16 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             for i in cell1[5 .. 6] do print(i); end;
                             """,
-                    createInstruction(READ, tmp(1), "cell1", "5"),
-                    createInstruction(SET, ":i", tmp(1)),
-                    createInstruction(SETADDR, tmp(0), label(3)),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(MULTILABEL, label(3)),
-                    createInstruction(READ, tmp(2), "cell1", "6"),
-                    createInstruction(SET, ":i", tmp(2)),
-                    createInstruction(SETADDR, tmp(0), label(4)),
-                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(4), "5"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(5), tmp(4)),
+                    createInstruction(READARR, tmp(6), "cell1[]", tmp(5)),
+                    createInstruction(SET, ":i", tmp(6)),
                     createInstruction(PRINT, ":i"),
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
-                    createInstruction(MULTILABEL, label(4)),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(4), tmp(4), "1"),
+                    createInstruction(JUMP, label(2), "lessThan", tmp(4), "7"),
+                    createInstruction(LABEL, label(1))
             );
         }
     }
@@ -811,16 +802,15 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for x in a do print(x); end;
                             """,
                     createInstruction(SET, tmp(10), "0"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(2), "greaterThan", tmp(10), "9"),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(11), tmp(10)),
                     createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
                     createInstruction(SET, ":x", tmp(12)),
                     createInstruction(PRINT, ":x"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", tmp(10), tmp(10), "1"),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(2), "lessThan", tmp(10), "10"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -831,16 +821,15 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for x in a descending do print(x); end;
                             """,
                     createInstruction(SET, tmp(10), "9"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(2), "lessThan", tmp(10), "0"),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(11), tmp(10)),
                     createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
                     createInstruction(SET, ":x", tmp(12)),
                     createInstruction(PRINT, ":x"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "sub", tmp(10), tmp(10), "1"),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(2), "greaterThanEq", tmp(10), "0"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -851,16 +840,15 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for x in a do print(x); end;
                             """,
                     createInstruction(SET, tmp(10), "5"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(2), "greaterThan", tmp(10), "14"),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(11), tmp(10)),
                     createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
                     createInstruction(SET, ":x", tmp(12)),
                     createInstruction(PRINT, ":x"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", tmp(10), tmp(10), "1"),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(2), "lessThan", tmp(10), "15"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -871,16 +859,15 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for x in a descending do print(x); end;
                             """,
                     createInstruction(SET, tmp(10), "14"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(2), "lessThan", tmp(10), "5"),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(11), tmp(10)),
                     createInstruction(READARR, tmp(12), ".a[]", tmp(11)),
                     createInstruction(SET, ":x", tmp(12)),
                     createInstruction(PRINT, ":x"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "sub", tmp(10), tmp(10), "1"),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(2), "greaterThanEq", tmp(10), "5"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -891,21 +878,20 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for x in b; y in c descending do print(x, y); end;
                             """,
                     createInstruction(SET, tmp(14), "4"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(2), "greaterThan", tmp(14), "8"),
-                    createInstruction(SET, tmp(15), tmp(14)),
-                    createInstruction(READARR, tmp(16), ".b[]", tmp(15)),
-                    createInstruction(SET, ":x", tmp(16)),
-                    createInstruction(OP, "sub", tmp(17), "8", tmp(14)),
-                    createInstruction(OP, "add", tmp(18), tmp(17), "9"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(16), tmp(14)),
+                    createInstruction(READARR, tmp(17), ".b[]", tmp(16)),
+                    createInstruction(SET, ":x", tmp(17)),
+                    createInstruction(OP, "sub", tmp(15), "17", tmp(14)),
+                    createInstruction(SET, tmp(18), tmp(15)),
                     createInstruction(READARR, tmp(19), ".c[]", tmp(18)),
                     createInstruction(SET, ":y", tmp(19)),
                     createInstruction(PRINT, ":x"),
                     createInstruction(PRINT, ":y"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", tmp(14), tmp(14), "1"),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(2), "lessThan", tmp(14), "9"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -916,21 +902,20 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for x in b descending; y in c do print(x, y); end;
                             """,
                     createInstruction(SET, tmp(14), "8"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(2), "lessThan", tmp(14), "4"),
-                    createInstruction(SET, tmp(15), tmp(14)),
-                    createInstruction(READARR, tmp(16), ".b[]", tmp(15)),
-                    createInstruction(SET, ":x", tmp(16)),
-                    createInstruction(OP, "sub", tmp(17), "8", tmp(14)),
-                    createInstruction(OP, "add", tmp(18), tmp(17), "9"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(16), tmp(14)),
+                    createInstruction(READARR, tmp(17), ".b[]", tmp(16)),
+                    createInstruction(SET, ":x", tmp(17)),
+                    createInstruction(OP, "sub", tmp(15), "17", tmp(14)),
+                    createInstruction(SET, tmp(18), tmp(15)),
                     createInstruction(READARR, tmp(19), ".c[]", tmp(18)),
                     createInstruction(SET, ":y", tmp(19)),
                     createInstruction(PRINT, ":x"),
                     createInstruction(PRINT, ":y"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "sub", tmp(14), tmp(14), "1"),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(2), "greaterThanEq", tmp(14), "4"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -942,21 +927,95 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for x in b descending; y in c do print(x, y); end;
                             """,
                     createInstruction(SET, tmp(0), "4"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(2), "lessThan", tmp(0), "0"),
-                    createInstruction(SET, tmp(1), tmp(0)),
-                    createInstruction(READARR, tmp(2), ".b[]", tmp(1)),
-                    createInstruction(SET, ":x", tmp(2)),
-                    createInstruction(OP, "sub", tmp(3), "4", tmp(0)),
-                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(2), tmp(0)),
+                    createInstruction(READARR, tmp(3), ".b[]", tmp(2)),
+                    createInstruction(SET, ":x", tmp(3)),
+                    createInstruction(OP, "sub", tmp(1), "4", tmp(0)),
+                    createInstruction(SET, tmp(4), tmp(1)),
                     createInstruction(READARR, tmp(5), ".c[]", tmp(4)),
                     createInstruction(SET, ":y", tmp(5)),
                     createInstruction(PRINT, ":x"),
                     createInstruction(PRINT, ":y"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "sub", tmp(0), tmp(0), "1"),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(2), "greaterThanEq", tmp(0), "0"),
+                    createInstruction(LABEL, label(1))
+            );
+        }
+    }
+
+    @Nested
+    class LargeArrays {
+        @Test
+        void compilesCellsBanksIterations() {
+            assertCompilesTo("""
+                            linked(@memory-cell) cells[] = (C1 .. C2);
+                            linked(@memory-bank) banks[] = (B1 .. B2);
+
+                            external(cells) var a[128];
+                            external(banks) var b[1024];
+                            
+                            begin
+                                for var a0 in a; var b0, b1, b2, b3, b4, b5, b6, b7 in b do
+                                    print(a0, b0, b1, b2, b3, b4, b5, b6, b7);
+                                end;
+                            end;
+                            """,
+                    createInstruction(SET, tmp(1), "cell1"),
+                    createInstruction(SET, tmp(3), "bank1"),
+                    createInstruction(SET, tmp(0), "64"),
+                    createInstruction(SETADDR, tmp(12), label(4)),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SET, tmp(1), "cell2"),
+                    createInstruction(SET, tmp(3), "bank2"),
+                    createInstruction(SETADDR, tmp(12), label(5)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(2), "0"),
+                    createInstruction(SET, tmp(4), "0"),
+                    createInstruction(SET, tmp(5), "1"),
+                    createInstruction(SET, tmp(6), "2"),
+                    createInstruction(SET, tmp(7), "3"),
+                    createInstruction(SET, tmp(8), "4"),
+                    createInstruction(SET, tmp(9), "5"),
+                    createInstruction(SET, tmp(10), "6"),
+                    createInstruction(SET, tmp(11), "7"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(READ, ":a0", tmp(1), tmp(2)),
+                    createInstruction(READ, ":b0", tmp(3), tmp(4)),
+                    createInstruction(READ, ":b1", tmp(3), tmp(5)),
+                    createInstruction(READ, ":b2", tmp(3), tmp(6)),
+                    createInstruction(READ, ":b3", tmp(3), tmp(7)),
+                    createInstruction(READ, ":b4", tmp(3), tmp(8)),
+                    createInstruction(READ, ":b5", tmp(3), tmp(9)),
+                    createInstruction(READ, ":b6", tmp(3), tmp(10)),
+                    createInstruction(READ, ":b7", tmp(3), tmp(11)),
+                    createInstruction(PRINT, ":a0"),
+                    createInstruction(PRINT, ":b0"),
+                    createInstruction(PRINT, ":b1"),
+                    createInstruction(PRINT, ":b2"),
+                    createInstruction(PRINT, ":b3"),
+                    createInstruction(PRINT, ":b4"),
+                    createInstruction(PRINT, ":b5"),
+                    createInstruction(PRINT, ":b6"),
+                    createInstruction(PRINT, ":b7"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(OP, "add", tmp(2), tmp(2), "1"),
+                    createInstruction(OP, "add", tmp(4), tmp(4), "8"),
+                    createInstruction(OP, "add", tmp(5), tmp(5), "8"),
+                    createInstruction(OP, "add", tmp(6), tmp(6), "8"),
+                    createInstruction(OP, "add", tmp(7), tmp(7), "8"),
+                    createInstruction(OP, "add", tmp(8), tmp(8), "8"),
+                    createInstruction(OP, "add", tmp(9), tmp(9), "8"),
+                    createInstruction(OP, "add", tmp(10), tmp(10), "8"),
+                    createInstruction(OP, "add", tmp(11), tmp(11), "8"),
+                    createInstruction(JUMP, label(6), "lessThan", tmp(2), tmp(0)),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(MULTIJUMP, tmp(12), "0", "0"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(LABEL, label(0))
             );
         }
     }

@@ -375,14 +375,40 @@ inline void reverse(array...)
 end;
 ```
 
+### Dynamic arrays
+
+List iteration loop over a [dynamic array](SYNTAX-1-VARIABLES.markdown#built-in-variables) (such as `links` or `blocks`) is supported, but only one iterator can be used in the loop statement. For example, to iterate over all linked blocks, use:
+
+```Mindcode
+println("Linked blocks:");
+
+for b in links do
+    println(b);
+end;
+
+printflush(message1);
+```
+
+compiles to
+
+```mlog
+print "Linked blocks:\n"
+set *tmp0 0
+jump 8 greaterThanEq 0 @links
+getlink :b *tmp0
+print :b
+print "\n"
+op add *tmp0 *tmp0 1
+jump 3 lessThan *tmp0 @links
+printflush message1
+```
+
 ### Conversion to range iteration loops
 
 A range iteration loop may be preferable to a list iteration loop in these cases:
 
 * The array is so large that a list-iteration loop would take up a lot of instruction space. The [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) specifies the minimum array size for which range iteration loops may be used. 
 * The array elements can't be accessed directly (i.e., the array is an external array or a local array in a recursive function), and index-based access needs to be used anyway.
-
-A list iteration loop can be converted to a range iteration loop when iterating over an entire array using a single iterator. When several iterators are used, each of them must iterate over an entire array, and all array sizes must be the same. Using a subarray, or iteration over an array plus some additional values, prevents using the range iteration loop.
 
 Example:
 
@@ -412,7 +438,7 @@ op add *tmp1 *tmp0 20
 op add :sum :sum :x
 write :sum cell1 *tmp1
 op add *tmp0 *tmp0 1
-jump 2 lessThanEq *tmp0 19
+jump 2 lessThan *tmp0 20
 print :sum
 ```
 

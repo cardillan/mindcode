@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -14,7 +15,7 @@ public abstract class ElementsArrayStore extends AbstractArrayStore {
 
     public ElementsArrayStore(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size,
             @Nullable ArrayStore masterArray, List<ValueStore> elements, boolean subarray) {
-        super(sourcePosition, name, arrayType, startOffset, size, masterArray, subarray);
+        super(sourcePosition, name, arrayType, startOffset, size, LogicNumber.create(size), masterArray, subarray);
         this.elements = elements;
     }
 

@@ -271,7 +271,7 @@ When a main or local variable has the same name as a global variable, the global
 
 ## Built-in variables
 
-Mindcode provides several built-in variables, all representing various arrays. List iteration loops and index-based access are supported on these arrays. Declaring another variable (global or local) with the same name shadows the built-in one. 
+Mindcode provides several built-in variables, all representing various _dynamic arrays_. List iteration loops and index-based access are supported on these arrays. Declaring another variable (global or local) with the same name shadows the built-in one. 
 
 | Array       | Content                                |
 |-------------|----------------------------------------|
@@ -349,6 +349,12 @@ When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-bou
 Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, with a performance better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
 
 Several different implementations of internal arrays are available in target `8.0` or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](optimizations/ARRAY-OPTIMIZATION.markdown) chooses the most efficient implementation for each array or individual array access.
+
+## Dynamic arrays
+
+Dynamic arrays are arrays whose length is not known at compile time. Dynamic arrays can't be created programmatically, and only the ones listed [here](#built-in-variables) are supported.
+
+It is possible to determine the length of the array at runtime using the `length()` function. Dynamic arrays are meant to be used with [list iteration loops](SYNTAX-3-STATEMENTS.markdown#dynamic-arrays).
 
 ## Remote arrays
 

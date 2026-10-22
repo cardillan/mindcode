@@ -21,6 +21,7 @@ import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.BASIC;
@@ -199,6 +200,26 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
     /// @param node node to process
     protected void compile(AstMindcodeNode node) {
         codeGenerator.visit(node, false);
+    }
+
+    /// Find the value of the node without generating any errors or code and preventing the results of the evaluation
+    /// from being cached. Can be used to determine the type of value produced by the node to decide on how to proceed
+    /// evaluating that node.
+    ///
+    /// @param node node to process
+    /// @return a `ValueStore` instance representing the value of the node
+    protected ValueStore findValue(AstMindcodeNode node) {
+        ValueStore[] value = new ValueStore[1];
+
+        boolean active = assembler.isActive();
+        assembler.setActive(false);
+        try {
+            runWithMessageFilter(_ -> false, () -> value[0] = evaluate(node));
+            evaluator.purgeFromCache(List.of(node));
+        } finally {
+            assembler.setActive(active);
+        }
+        return Objects.requireNonNull(value[0]);
     }
 
     /// Visits a body of statements, disregarding the resulting values of all nodes.

@@ -81,13 +81,13 @@ public class AstFunctionDeclaration extends AstDeclaration {
 
     public IntRange getParameterCount() {
         if (parameters.isEmpty()) {
-            return new IntRange(0, 0);
+            return IntRange.closed(0, 0);
         } else if (isVarargs()) {
             int min = CollectionUtils.lastIndexOf(parameters.subList(0, parameters.size() - 1), AstFunctionParameter::isCompulsory) + 1;
-            return new IntRange(min, Integer.MAX_VALUE);
+            return IntRange.closed(min, Integer.MAX_VALUE);
         } else {
             int min = CollectionUtils.lastIndexOf(parameters, AstFunctionParameter::isCompulsory) + 1;
-            return new IntRange(min, parameters.size());
+            return IntRange.closed(min, parameters.size());
         }
     }
 

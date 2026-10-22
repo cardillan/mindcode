@@ -24,7 +24,7 @@ public class LargeArray extends AbstractArrayStore {
     private final LogicNumber blockSizeNumber;
 
     public LargeArray(SourcePosition sourcePosition, String name, List<LogicVariable> memoryBlocks, ArrayStore memoryArray, int blockSize, int size) {
-        super(sourcePosition, name, ArrayType.LARGE, 0, size, null, false);
+        super(sourcePosition, name, ArrayType.LARGE, 0, size, LogicNumber.create(size), null, false);
         this.memoryBlocks = memoryBlocks;
         this.memoryArray = memoryArray;
         this.blockSize = blockSize;
@@ -33,7 +33,7 @@ public class LargeArray extends AbstractArrayStore {
 
     private LargeArray(SourcePosition sourcePosition, String name, int startOffset, int size, ArrayStore masterArray,
             boolean subarray, List<LogicVariable> memoryBlocks, ArrayStore memoryArray, int blockSize, LogicNumber blockSizeNumber) {
-        super(sourcePosition, name, ArrayType.LARGE, startOffset, size, masterArray, subarray);
+        super(sourcePosition, name, ArrayType.LARGE, startOffset, size, LogicNumber.create(size), masterArray, subarray);
         this.memoryBlocks = memoryBlocks;
         this.memoryArray = memoryArray;
         this.blockSize = blockSize;
@@ -56,8 +56,12 @@ public class LargeArray extends AbstractArrayStore {
         return blockSize;
     }
 
-    public List<LogicVariable> getMemoryBlocks() {
-        return memoryBlocks;
+    public LogicVariable getMemoryBlock(int index) {
+        return memoryBlocks.get((startOffset + index) / blockSize);
+    }
+
+    public int getMemoryIndex(int index) {
+        return (startOffset + index) % blockSize;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class LargeArray extends AbstractArrayStore {
         if (min / blockSize == max / blockSize) {
             InstructionProcessor processor = ContextFactory.getMasterContext().instructionProcessor();
             return ExternalArray.create(processor, sourcePosition, name, memoryBlocks.get(min / blockSize),
-                    new IntRange(min % blockSize, max % blockSize), this);
+                    IntRange.closed(min % blockSize, max % blockSize), this);
         } else {
             return new LargeArray(sourcePosition, name, startOffset + range.min(), range.size(), masterArray, true,
                     memoryBlocks, memoryArray, blockSize, blockSizeNumber);
@@ -85,8 +89,8 @@ public class LargeArray extends AbstractArrayStore {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        LogicVariable memory = memoryBlocks.get(index / blockSize);
-        return new ExternalVariable(sourcePosition, memory, LogicNumber.create(index % blockSize), creator.nextTemp());
+        LogicVariable memory = getMemoryBlock(index);
+        return new ExternalVariable(sourcePosition, memory, LogicNumber.create(getMemoryIndex(index)), creator.nextTemp());
     }
 
     @Override

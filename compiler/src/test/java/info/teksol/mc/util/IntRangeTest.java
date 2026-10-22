@@ -9,9 +9,9 @@ class IntRangeTest {
 
     @Test
     void detectsOverlaps() {
-        IntRange r1 = new IntRange(1, 1);
-        IntRange r2 = new IntRange(2, 2);
-        IntRange r3 = new IntRange(1, 2);
+        IntRange r1 = IntRange.closed(1, 1);
+        IntRange r2 = IntRange.closed(2, 2);
+        IntRange r3 = IntRange.closed(1, 2);
 
         Assertions.assertAll(
                 () -> Assertions.assertFalse(r1.overlaps(r2), "Wrong indication of overlaps"),
@@ -25,7 +25,7 @@ class IntRangeTest {
 
     @Test
     void detectContains() {
-        IntRange range = new IntRange(2, 5);
+        IntRange range = IntRange.closed(2, 5);
 
         Assertions.assertAll(
                 () -> Assertions.assertFalse(range.contains(0), "Wrong indication of contains"),

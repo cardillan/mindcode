@@ -139,7 +139,8 @@ public class HeapTracker extends CompilerMessageEmitter {
                 LogicVariable memory = heapStorage.get(slot);
                 int startOffset = currentHeapIndex[slot];
                 currentHeapIndex[slot] += size;
-                return ExternalArray.create(processor, identifier.sourcePosition(), nameCreator.arrayBase(null, "", identifier.getName(), 0), memory, IntRange.of(startOffset, startOffset + size - 1));
+                return ExternalArray.create(processor, identifier.sourcePosition(), nameCreator.arrayBase(null, "",
+                        identifier.getName(), 0), memory, IntRange.halfOpen(startOffset, startOffset + size));
             }
         }
     }

@@ -14,19 +14,18 @@ import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
-import info.teksol.mc.util.MathUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
 @NullMarked
 public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements AstForEachLoopStatementVisitor<ValueStore> {
+    protected final Set<ValueStore> invalidOutputs = new HashSet<>();
 
     public ForEachLoopStatementsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
@@ -34,6 +33,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
     @Override
     public ValueStore visitForEachLoopStatement(AstForEachLoopStatement node) {
+        invalidOutputs.clear();
+
         int iterations = computeRangedForLoopIterations(node);
         if (iterations == Integer.MIN_VALUE) {
             buildBuiltInArrayForLoop(node);
@@ -53,18 +54,47 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     // If this iterator group should be replaced by a ranged loop, returns the number of iterations.
     // Returns 0 otherwise.
     private int iteratorGroupFixedRange(AstIteratorsValuesGroup group) {
-        if (group.getIterators().size() != 1 || group.getValues().getExpressions().size() != 1) return 0;
+        if (group.getValues().getExpressions().size() != 1) return 0;
 
-        // TODO support subarrays
-        if (group.getValues().getExpressions().getFirst() instanceof AstIdentifier id) {
+        AstExpression firstNode = group.getValues().getExpressions().getFirst();
+        int arraySize = 0;
+
+        if (firstNode instanceof AstIdentifier id) {
             ValueStore expression = variables.findVariable(id.getName(), true);
             if (expression instanceof BuiltInArray) return Integer.MIN_VALUE;
             if (expression instanceof ArrayStore arrayStore &&
                     (!arrayStore.optimizeElementAccess() || arrayStore.size() >= group.getProfile().getArrayIterationThreshold())) {
-                return arrayStore.size();
+                arraySize = arrayStore.size();
+            }
+        } else if (firstNode instanceof AstSubarray) {
+            ValueStore expression = findValue(firstNode);
+            if (expression instanceof ArrayStore arrayStore) {
+                arraySize = !arrayStore.optimizeElementAccess() || arrayStore.size() >= group.getProfile().getArrayIterationThreshold()
+                        ? arrayStore.size() : 0;
+            } else if (expression != LogicVariable.INVALID) {
+                throw new MindcodeInternalError("Error evaluating subarray");
             }
         }
-        return 0;
+
+        // If the array size isn't divisible by the number of iterators, the error gets reported by the
+        // standard for each loop builder.
+        return arraySize % group.getIterators().size() == 0 ? arraySize / group.getIterators().size() : 0;
+    }
+
+    List<LoopIterator> createArrayIterators(AstForEachLoopStatement node) {
+        List<LoopIterator> list = new ArrayList<>();
+        for (AstIteratorsValuesGroup valuesGroup : node.getIteratorGroups()) {
+            int iteratorCount = valuesGroup.getIterators().size();
+            int iteratorIndex = 0;
+            for (AstIterator astIterator : valuesGroup.getIterators()) {
+                LoopIterator iterator = processIterator(valuesGroup, astIterator, iteratorCount, iteratorIndex);
+                ArrayStore store = (ArrayStore) findValue(valuesGroup.getValues().getExpressions().getFirst());
+                iterator.setArray(store);
+                list.add(iterator);
+                iteratorIndex++;
+            }
+        }
+        return list;
     }
 
     private void buildBuiltInArrayForLoop(AstForEachLoopStatement node) {
@@ -80,16 +110,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         assembler.setSubcontextType(AstSubcontextType.INIT, LOOP_REPETITIONS);
 
         // Creates all variables as needed
-        List<ListIterator> iterators = new ArrayList<>();
-        List<BuiltInArray> arrays = new ArrayList<>();
-
-        node.getIteratorGroups().forEach(group -> {
-            iterators.add(processIterator(group, group.getIterators().getFirst()));
-            AstIdentifier id = (AstIdentifier) group.getValues().getExpressions().getFirst();
-            arrays.add((BuiltInArray) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
-        });
-
-        BuiltInArray arr = arrays.getFirst();
+        List<LoopIterator> iterators = createArrayIterators(node);
+        ArrayStore arr = iterators.getFirst().array();
 
         // Report out iterators
         iterators.stream().filter(it -> it.out).forEach(iterator -> error(iterator.var, ERR.LVALUE_CANNOT_ASSIGN_TO_ITERATOR));
@@ -97,9 +119,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         boolean descending = iterators.getFirst().descending;
 
         LogicValue start = descending
-                ? assembler.createOp(Operation.SUB, assembler.nextTemp(), arr.getCount(), LogicNumber.ONE).getResult()
+                ? assembler.createOp(Operation.SUB, assembler.nextTemp(), arr.limit(), LogicNumber.ONE).getResult()
                 : LogicNumber.ZERO;
-        LogicValue limit = descending ? LogicNumber.ZERO : arr.getCount();
+        LogicValue limit = descending ? LogicNumber.ZERO : arr.limit();
         LogicVariable loopControlVariable = assembler.nextTemp();
         loopControlVariable.setValue(assembler, start);
 
@@ -115,12 +137,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
 
         // Set up iterators
-        for (int i = 0; i < iterators.size(); i++) {
-            ListIterator iterator = iterators.get(i);
-            ArrayStore array = arrays.get(i);
-            iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(),
-                    loopControlVariable, true));
-        }
+        iterators.forEach(iterator -> iterator.var.copyFrom(assembler,
+                iterator.array().getElement(assembler, iterator.array().sourcePosition(), loopControlVariable, true)));
+
         visitBody(node.getBody());
 
         // Continue label
@@ -143,124 +162,103 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
     private void buildRangedForLoop(AstForEachLoopStatement node, int iterations) {
         // Creates all variables as needed
-        List<ListIterator> iterators = new ArrayList<>();
-        List<ArrayStore> arrays = new ArrayList<>();
+        List<LoopIterator> iterators = createArrayIterators(node);
 
-        node.getIteratorGroups().forEach(group -> {
-            iterators.add(processIterator(group, group.getIterators().getFirst()));
-            AstIdentifier id = (AstIdentifier) group.getValues().getExpressions().getFirst();
-            arrays.add((ArrayStore) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
-        });
-
-        // If we have large arrays, find the GDC
-        int[] blockSizes = arrays.stream().mapToInt(a -> a instanceof LargeArray la ? la.getBlockSize() : 0).toArray();
-        int blockSize = MathUtils.gcd(blockSizes);
-
-        boolean descending = iterators.getFirst().descending;
-        int offset = IntStream.range(0, iterators.size())
-                .filter(i -> iterators.get(i).descending == descending)
-                .map(i -> arrays.get(i).getStartOffset())
-                .min().orElse(0);
-
-        if (offset == 0 && blockSize > 1) {
-            buildRangedForLoopLarge(node, iterations, iterators, arrays, blockSize);
+        // Handle large arrays separately
+        if (iterators.stream().anyMatch(it -> it.array instanceof LargeArray)) {
+            buildRangedForLoopLarge(node, iterations, iterators);
             return;
-        }
-
-        if (offset != 0) {
-            for (int i = 0; i < arrays.size(); i++) {
-                if (iterators.get(i).descending == descending) {
-                    arrays.set(i, arrays.get(i).offset(-offset));
-                }
-            }
         }
 
         // We need to switch contexts
         assembler.exitAstNode(node);
+
         assembler.enterAstNode(node, AstContextType.LOOP);
+        assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
 
-        // Initialization
-        assembler.setSubcontextType(AstSubcontextType.INIT, iterations);
+        LoopIterator loopControl = iterators.getFirst();
+        loopControl.setIteration(0);
+        int limit = loopControl.descending
+                ? loopControl.index - (iterations - 1) * loopControl.iteratorCount
+                : loopControl.index + iterations * loopControl.iteratorCount;
 
-        LogicNumber start = LogicNumber.create(descending ? offset + iterations - 1 : offset);
-        LogicNumber limit = LogicNumber.create(descending ? offset : offset + iterations - 1);
-        LogicVariable loopControlVariable = assembler.nextTemp();
-        loopControlVariable.setValue(assembler, start);
+        for (LoopIterator iterator : iterators) {
+            iterator.setIteration(0);
 
-        final LogicLabel beginLabel = assembler.nextLabel();
-        LoopLabels loopLabels = enterLoop(node, "for");
+            boolean found = false;
 
-        // Condition
-        assembler.setSubcontextType(AstSubcontextType.CONDITION, iterations);
-        assembler.createLabel(beginLabel);
-        assembler.createJump(loopLabels.breakLabel(), descending ? Condition.LESS_THAN : Condition.GREATER_THAN, loopControlVariable, limit);
+            for (LoopIterator previous : iterators) {
+                if (previous == iterator) break;
 
-        // Loop body
-        assembler.setSubcontextType(AstSubcontextType.BODY, iterations);
+                if (iterator.isCompatible(previous)) {
+                    iterator.indexVariable = previous.indexVariable;
+                    iterator.updateIndex = false;
+                    found = true;
+                    break;
+                }
 
-        // Set up iterators
-        for (int i = 0; i < iterators.size(); i++) {
-            ListIterator iterator = iterators.get(i);
-            ArrayStore array = arrays.get(i);
-            if (iterator.descending == descending) {
-                iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(),
-                        loopControlVariable, true));
-            } else {
-                LogicVariable index = assembler.nextTemp();
-                LogicNumber diff = LogicNumber.create(iterations - 1 + offset);
-                assembler.createOp(Operation.SUB, index, diff, loopControlVariable);
-                iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), index, true));
-            }
-        }
-        visitBody(node.getBody());
-
-        // Continue label
-        // The label needs to be part of the loop body so that it gets copied on loop unrolling
-        assembler.createLabel(loopLabels.continueLabel());
-
-        // Copy iterator values back
-        for (int i = 0; i < iterators.size(); i++) {
-            ListIterator iterator = iterators.get(i);
-            if (iterator.out) {
-                ArrayStore array = arrays.get(i);
-                if (iterator.descending == descending) {
-                    array.getElement(assembler, array.sourcePosition(), loopControlVariable, true).copyFrom(assembler, iterator.var);
-                } else {
-                    LogicVariable index = assembler.nextTemp();
-                    LogicNumber diff = LogicNumber.create(iterations - 1 + offset);
-                    assembler.createOp(Operation.SUB, index, diff, loopControlVariable);
-                    array.getElement(assembler, array.sourcePosition(), index, true).copyFrom(assembler, iterator.var);
+                if (iterator.derive(previous)) {
+                    iterator.indexVariable = assembler.nextTemp();
+                    iterator.updateIndex = false;
+                    found = true;
+                    break;
                 }
             }
+
+            if (!found) {
+                iterator.indexVariable = assembler.nextTemp();
+                assembler.createSet(iterator.indexVariable(), LogicNumber.create(iterator.index));
+            }
         }
 
-        // Update
-        assembler.setSubcontextType(AstSubcontextType.UPDATE, iterations);
-        assembler.createOp(descending ? Operation.SUB : Operation.ADD, loopControlVariable, loopControlVariable, LogicNumber.ONE);
+        for (LoopIterator iterator : iterators) {
+            if (iterator.array().getStartOffset() != 0) {
+                // Defer to the master array, as we're actually taking array offsets into an account here explicitly
+                ArrayStore masterArray = iterator.array().getMasterArray();
+                iterator.array = masterArray.offset(-masterArray.getStartOffset());
+                iterator.setIteration(0);
+            }
+        }
 
-        // Flow control
-        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, iterations);
-        assembler.createJumpUnconditional(beginLabel);
-
-        // Exit
-        assembler.createLabel(loopLabels.breakLabel());
-        assembler.clearSubcontextType();
+        LoopLabels loopLabels = enterLoop(node, "for");
+        buildInnerLoop(node, loopLabels, iterators, iterations, loopControl, LogicNumber.create(limit), true);
         exitLoop(loopLabels);
     }
 
-    private void buildRangedForLoopLarge(AstForEachLoopStatement node, int iterations, List<ListIterator> iterators, List<ArrayStore> arrays, int blockSize) {
-        List<LogicVariable> memoryBlocks = new ArrayList<>();
-        TreeMap<Integer, LogicVariable> memoryIndexes = new TreeMap<>();
-        for (ArrayStore array : arrays) {
-            memoryBlocks.add(assembler.nextTemp());
-            memoryIndexes.computeIfAbsent(array instanceof LargeArray a ? a.getBlockSize() : 0, _ -> assembler.nextTemp());
-        }
-
-        LogicVariable loopControl = memoryIndexes.entrySet().stream().filter(e -> e.getKey() > 0).findFirst().map(Map.Entry::getValue).orElseThrow();
+    private void buildRangedForLoopLarge(AstForEachLoopStatement node, int iterations, List<LoopIterator> iterators) {
+        LoopIterator loopControl = iterators.stream().filter(it -> it.array instanceof LargeArray).findFirst().orElseThrow();
         LogicVariable limit = assembler.nextTemp();
 
-        new ForEachLoopBuilderBase(node) {
+        int iteration = 0;
+        List<LoopIterator> largeIterators = iterators.stream().filter(it -> it.array instanceof LargeArray).toList();
+
+        while (iteration < iterations) {
+            for (LoopIterator it : largeIterators) {
+                it.setIteration(iteration);
+                int index = it.indexValue();
+                it.bodyIteratorValue = iteration == 0 || index == it.bodyIteratorValue ? index : Integer.MIN_VALUE;
+                it.memoryValues.add(it.memoryValue());
+            }
+
+            iteration = iterators.stream().mapToInt(LoopIterator::nextIteration).min().orElseThrow();
+        }
+
+        iterators.forEach(it -> it.setIteration(0));
+
+        // Allocate indexes
+        for (LoopIterator iterator : iterators) {
+            LoopIterator memoryCompatible = iterators.stream().filter(it -> it.memoryValues.equals(iterator.memoryValues)).findFirst().orElseThrow();
+            iterator.memoryVariable = iterator == memoryCompatible ? assembler.nextTemp() : memoryCompatible.memoryVariable;
+            iterator.updateMemory = iterator == memoryCompatible;
+
+            LoopIterator indexCompatible = iterators.stream().filter(iterator::isCompatible).findFirst().orElseThrow();
+            iterator.indexVariable = iterator == indexCompatible ? assembler.nextTemp() : indexCompatible.indexVariable;
+            iterator.updateIndex = iterator == indexCompatible;
+        }
+
+        new ForEachLoopBuilderBase(node, false) {
             int iteration = 0;
+            int lastLimit = Integer.MIN_VALUE;
 
             @Override
             protected boolean hasMoreData() {
@@ -269,91 +267,119 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             @Override
             protected void prepareIteration(List<IterationElement> outputs) {
-                if (iteration == 0) {
-                    if (iterations > blockSize) assembler.createSet(limit, LogicNumber.create(blockSize));
-                    if (memoryIndexes.containsKey(0)) assembler.createSet(memoryIndexes.get(0), LogicNumber.ZERO);
-                }
+                for (LoopIterator it : iterators) {
+                    int next = it.nextIteration();
+                    it.setIteration(iteration);
 
-                for (int i = 0; i < arrays.size(); i++) {
-                    if (arrays.get(i) instanceof LargeArray a && iteration % a.getBlockSize() == 0) {
-                        assembler.createSet(memoryBlocks.get(i), a.getMemoryBlocks().get(iteration / a.getBlockSize()));
+                    // Note: iteration always changes on the first pass
+                    if (it.array instanceof LargeArray a && (iteration == 0 || next != it.nextIteration())) {
+                        if (it.updateMemory) {
+                            assembler.createSet(it.memoryVariable(), it.memoryValue());
+                        }
+                        if (it.updateIndex && it.bodyIteratorValue == Integer.MIN_VALUE) {
+                            assembler.createSet(it.indexVariable(), LogicNumber.create(it.indexValue()));
+                        }
                     }
                 }
-                memoryIndexes.entrySet().stream().filter(e -> e.getKey() > 0).skip(1)
-                        .filter(e -> iteration % e.getKey() == 0)
-                        .forEach(e -> assembler.createSet(e.getValue(), LogicNumber.ZERO));
 
-                iteration += blockSize;
+                int oldIteration = iteration;
+                iteration = Math.min(iterations, iterators.stream().mapToInt(LoopIterator::nextIteration).min().orElseThrow());
+                int newLimit = loopControl.descending
+                        ? loopControl.indexValue() - (iteration - oldIteration - 1) * loopControl.iteratorCount
+                        : loopControl.indexValue() + (iteration - oldIteration) * loopControl.iteratorCount;
 
-                if (iteration > iterations) {
-                    assembler.createSet(limit, LogicNumber.create(iterations % blockSize));
+                if (newLimit != lastLimit) {
+                    assembler.createSet(limit, LogicNumber.create(newLimit));
+                    lastLimit = newLimit;
                 }
             }
 
             @Override
             protected void createBody() {
-                final LogicLabel beginLabel = assembler.nextLabel();
-
-                assembler.createSet(loopControl, LogicNumber.ZERO);
-
                 assembler.enterAstNode(node, AstContextType.LOOP);
-
-                // Loop body
-                assembler.setSubcontextType(AstSubcontextType.BODY, iterations);
-                assembler.createLabel(beginLabel);
-
-                // Set up variables
-                for (int i = 0; i < arrays.size(); i++) {
-                    ListIterator iterator = iterators.get(i);
-                    ArrayStore array = arrays.get(i);
-
-                    if (array instanceof LargeArray a) {
-                        if (iterator.var instanceof LogicVariable var) {
-                            assembler.createRead(var, memoryBlocks.get(i), memoryIndexes.get(a.getBlockSize()));
-                        } else {
-                            LogicVariable tmp = assembler.nextTemp();
-                            assembler.createRead(tmp, memoryBlocks.get(i), memoryIndexes.get(a.getBlockSize()));
-                            iterator.var.copyFrom(assembler, tmp);
-                        }
-                    } else {
-                        iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), memoryIndexes.get(0), true));
-                    }
-                }
-
-                visitBody(node.getBody());
-
-                // Copy values back
-                for (int i = 0; i < arrays.size(); i++) {
-                    ListIterator iterator = iterators.get(i);
-                    if (!iterator.out) continue;
-
-                    if (iterator.var.isLvalue()) {
-                        ArrayStore array = arrays.get(i);
-
-                        if (array instanceof LargeArray a) {
-                            assembler.createWrite(iterator.var.getValue(assembler), memoryBlocks.get(i), memoryIndexes.get(a.getBlockSize()));
-                        } else {
-                            array.getElement(assembler, array.sourcePosition(), memoryIndexes.get(0), true).copyFrom(assembler, iterator.var);
-                        }
-                    } else if (invalidOutputs.add(iterator.var)) {
-                        error(iterator.var, ERR.LVALUE_CANNOT_ASSIGN_TO_ITERATOR);
-                    }
-                }
-
-                // Advance indexes
-                memoryIndexes.forEach((_, index) -> assembler.createOp(Operation.ADD, index, index, LogicNumber.ONE));
-
-                // Condition
-                assembler.setSubcontextType(AstSubcontextType.CONDITION, iterations);
-                assembler.createJump(beginLabel, Condition.LESS_THAN, loopControl, limit);
-
-                // Exit
-                assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);
-                assembler.clearSubcontextType();
-
+                assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
+                buildInnerLoop(node, loopLabels, iterators, iterations, loopControl, limit, false);
                 assembler.exitAstNode(node, AstContextType.LOOP);
             }
         }.build();
+    }
+
+    private void buildInnerLoop(AstForEachLoopStatement node, LoopLabels loopLabels, List<LoopIterator> iterators, int iterations,
+            LoopIterator loopControl, LogicValue limit, boolean createBreakLabel) {
+
+        for (LoopIterator it : iterators) {
+            if (it.array instanceof LargeArray && it.updateIndex && it.bodyIteratorValue != Integer.MIN_VALUE) {
+                assembler.createSet(it.indexVariable(), LogicNumber.create(it.bodyIteratorValue));
+            }
+        }
+
+        // Loop body
+        assembler.setSubcontextType(AstSubcontextType.BODY, iterations);
+
+        final LogicLabel beginLabel = assembler.nextLabel();
+        assembler.createLabel(beginLabel);
+
+        // Set up variables
+        for (LoopIterator iterator : iterators) {
+            ArrayStore array = iterator.array();
+
+            iterator.indexDerivation.accept(assembler);
+
+            if (array instanceof LargeArray) {
+                if (iterator.var instanceof LogicVariable var) {
+                    assembler.createRead(var, iterator.memoryVariable(), iterator.indexVariable());
+                } else {
+                    LogicVariable tmp = assembler.nextTemp();
+                    assembler.createRead(tmp, iterator.memoryVariable(), iterator.indexVariable());
+                    iterator.var.copyFrom(assembler, tmp);
+                }
+            } else {
+                iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), iterator.indexVariable(), true));
+            }
+        }
+
+        visitBody(node.getBody());
+
+        // Continue label
+        // The label needs to be part of the loop body so that it gets copied on loop unrolling
+        assembler.createLabel(loopLabels.continueLabel());
+
+        // Copy values back
+        for (LoopIterator it : iterators) {
+            if (!it.out) continue;
+
+            if (it.var.isLvalue()) {
+                ArrayStore array = it.array();
+
+                if (array instanceof LargeArray a) {
+                    assembler.createWrite(it.var.getValue(assembler), it.memoryVariable(), it.indexVariable());
+                } else {
+                    array.getElement(assembler, array.sourcePosition(), it.indexVariable(), true).copyFrom(assembler, it.var);
+                }
+            } else if (invalidOutputs.add(it.var)) {
+                error(it.var, ERR.LVALUE_CANNOT_ASSIGN_TO_ITERATOR);
+            }
+        }
+
+        // Advance indexes
+        for (LoopIterator it : iterators) {
+            if (it.updateIndex) {
+                assembler.createOp(it.descending ? Operation.SUB : Operation.ADD,
+                        it.indexVariable(), it.indexVariable(), LogicNumber.create(it.iteratorCount));
+            }
+        }
+
+        // Condition
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, iterations);
+        assembler.createJump(beginLabel, loopControl.descending ? Condition.GREATER_THAN_EQ : Condition.LESS_THAN,
+                loopControl.indexVariable(), limit);
+
+        // Exit
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);
+        // The Flow Control subcontext needs to be present for unrolling
+        // Use an unused label if the break label is not generated
+        assembler.createLabel(createBreakLabel ? loopLabels.breakLabel(): assembler.nextLabel());
+        assembler.clearSubcontextType();
     }
 
     private abstract class ForEachLoopBuilderBase extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
@@ -363,13 +389,14 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         protected final LoopLabels loopLabels;
         protected final boolean symbolicLabels;
         protected final boolean nullCounterNoop;
-        protected final Set<ValueStore> invalidOutputs = new HashSet<>();
+        protected final boolean createContinueLabel;
 
-        public ForEachLoopBuilderBase(AstForEachLoopStatement node) {
+        public ForEachLoopBuilderBase(AstForEachLoopStatement node, boolean createContinueLabel) {
             super(ForEachLoopStatementsBuilder.this, node);
             symbolicLabels = node.getProfile().isSymbolicLabels();
             nullCounterNoop = node.getProfile().isNullCounterIsNoop();
             loopLabels = enterLoop(node, "for");
+            this.createContinueLabel = createContinueLabel;
             allowContinue(false);
         }
 
@@ -404,7 +431,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             LinkedList<IterationElement> outputs = new LinkedList<>();
 
             // Copy values from the list to iterators
-            // Consumes data - must update advance hasMoreData()
+            // Consumes data - must update hasMoreData()
             prepareIteration(outputs);
 
             boolean lastIteration = !hasMoreData();
@@ -444,7 +471,10 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
                 // Continue label
                 // The label needs to be part of the loop body so that it gets copied on loop unrolling
-                assembler.createLabel(loopLabels.continueLabel());
+                // May get skipped when this loop contains an inner loop as well
+                if (createContinueLabel) {
+                    assembler.createLabel(loopLabels.continueLabel());
+                }
 
                 // Jumps to the iteration trailing block
                 // On the last iteration, this jumps right to the next statement, but it can't be avoided
@@ -469,7 +499,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Copy iterator values back to the array - only for `out` iterators
             for (IterationElement output : outputs) {
                 if (output.value.isLvalue()) {
-                    output.value.setValue(assembler, output.iterator.getValue());
+                    output.value.setValue(assembler, output.iterator.getValue(assembler));
                 } else if (invalidOutputs.add(output.iterator.var)) {
                     if (output.value instanceof InputFunctionArgument arg) {
                         error(arg, ERR.LVALUE_CANNOT_ASSIGN_TO_ARGUMENT);
@@ -485,13 +515,13 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private final List<IterationGroup> iterationGroups;
 
         public ForEachLoopBuilder(AstForEachLoopStatement node) {
-            super(node);
+            super(node, true);
             iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
         }
 
         private IterationGroup processIteratorGroup(AstIteratorsValuesGroup group) {
             return new IterationGroup(
-                    group.getIterators().stream().map(iterator -> processIterator(group, iterator))
+                    group.getIterators().stream().map(iterator -> processIterator(group, iterator, 0, 0))
                             .collect(Collectors.toCollection(ArrayList::new)),
                     group.getValues().getExpressions().stream().mapMulti(this::processValue)
                             .collect(Collectors.toCollection(ArrayList::new)),
@@ -602,14 +632,14 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     }
 
     private final class IterationGroup {
-        private final List<ListIterator> iterators;
+        private final List<LoopIterator> iterators;
         private final LinkedList<ValueStore> values;
         private final boolean descending;
         private int consumedValues = 0;
         private int missing = 0;
         private boolean omitErrors = false;
 
-        private IterationGroup(ArrayList<ListIterator> iterators, ArrayList<ValueStore> values, boolean descending) {
+        private IterationGroup(ArrayList<LoopIterator> iterators, ArrayList<ValueStore> values, boolean descending) {
             this.iterators = descending ? reverse(iterators) : iterators;
             this.values = new LinkedList<>(descending ? reverse(values) : values);
             this.descending = descending;
@@ -679,9 +709,9 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             if (values.isEmpty()) {
                 missing += iterators.size();
             } else {
-                for (ListIterator iterator : iterators) {
+                for (LoopIterator iterator : iterators) {
                     ValueStore value = nextValue();
-                    iterator.setValue(value.getValue(assembler));
+                    iterator.setValue(assembler, value.getValue(assembler));
                     if (iterator.out) {
                         outputs.add(new IterationElement(iterator, value));
                     }
@@ -696,10 +726,10 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
     }
 
-    private record IterationElement(ListIterator iterator, ValueStore value) {
+    private record IterationElement(LoopIterator iterator, ValueStore value) {
     }
 
-    private ListIterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
+    private LoopIterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator, int iteratorCount, int iteratorIndex) {
         if (group.hasDeclaration()) {
             if (iterator.getIterator() instanceof AstIdentifier identifier) {
                 variables.createVariable(isLocalContext(), identifier, VariableScope.LOOP_CONTROL, Modifiers.EMPTY);
@@ -716,28 +746,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         ValueStore loopControlVariable = resolveLValue(iterator.getIterator());
-        return new ListIterator(iterator.hasOutModifier(), loopControlVariable, group.isDescending());
-    }
-
-    ///  Represents an iterator variable in the loop
-    private final class ListIterator {
-        public final boolean out;
-        private final ValueStore var;
-        public final boolean descending;
-
-        private ListIterator(boolean out, ValueStore var, boolean descending) {
-            this.out = out;
-            this.var = var;
-            this.descending = descending;
-        }
-
-        void setValue(LogicValue value) {
-            var.setValue(assembler, value);
-        }
-
-        LogicValue getValue() {
-            return var.getValue(assembler);
-        }
+        return new LoopIterator(iterator.hasOutModifier(), loopControlVariable, group.isDescending(), iteratorCount, iteratorIndex);
     }
 
     private static final ValueStore INACTIVE_VALUE = new InactiveValueStore();
