@@ -4,6 +4,9 @@ This document contains some tips on writing a better-performing code in Mindcode
 
 As Mindcode undergoes development, the beast practices may change as new versions are released. Significant changes to the best practices are therefore described here.
 
+## Mindcode 3.20
+
+
 ## Mindcode 3.18
 
 ### Recursive functions
@@ -11,11 +14,11 @@ As Mindcode undergoes development, the beast practices may change as new version
 Mindcode 3.18 supports an internal stack for recursive functions. The internal stack allows storing values of any type, not just numerical ones, and as a result, recursive functions can use parameters and local variables of all types without any restrictions in all Mindustry versions. With the internal stack, all recursive functions compile and execute correctly, although it may be necessary to [manually set stack sizes](SYNTAX-5-OTHER.markdown#option-stack-depth) to support the desired recursion depth.
 
 > [!NOTE]
-> In Mindustry v8 Build 160 or later, memory cells and memory blocks allow storing any type of data. Thanks to this, you can use either external or internal stacks to fully support recursive functions. Performance-wise, the external and internal stacks are similar. External stack stored in memory banks can support more recursion levels than an internal stack, and it doesn't occupy instruction space. Using internal stacks with Mindustry v8 Build 160 or later is only recommended when the recursion depth is fairly shallow.
+> In Mindustry v8 Build 160 or later, memory cells and memory blocks allow storing any type of data. Thanks to this, you can use either external or internal stacks to fully support recursive functions. Performance-wise, the external and internal stacks are similar. A large external stack stored in memory banks can support more recursion levels than an internal stack, and it doesn't occupy instruction space. Using internal stacks with Mindustry v8 Build 160 or later is only recommended when the recursion depth is fairly shallow.
 
 ### List iteration loops
 
-List iteration loops over arrays are now preferred over indexed loops for most use cases. Mindcode automatically converts list iteration loop into index-based loops for large arrays and may apply additional optimizations not available to explicitly created indexed loops.
+List iteration loops over arrays are now preferred over indexed loops for most use cases. Mindcode automatically converts list iteration loop into index-based loops for arrays larger than a configurable threshold and may apply additional optimizations not available to explicitly created indexed loops.
 
 ## Mindcode 3.17
 

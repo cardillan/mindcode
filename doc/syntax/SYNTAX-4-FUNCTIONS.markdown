@@ -784,6 +784,28 @@ allocate stack in bank1[256...512];
 >
 > Note that parameters that are not modified by the function and are passed unchanged to the recursive calls are not stored on the stack.
 
+#### Large stack
+
+To use more than a single memory cell or bank for the stack, use a _large stack_ declaration:
+
+```Mindcode
+allocate stack in (bank1 .. bank4);
+```
+
+Note that when using a large stack, the entire array of memory blocks is used for the stack. It is not possible to limit the stack to a specified range of elements.
+
+The list of memory blocks to be used can be declared in a separate array, providing a way to use symbolic link names and to declare the type of the linked block explicitly:
+
+```Mindcode
+linked(@memory-bank) heapMemory[] = (mem1 .. mem8);
+allocate heap in heapMemory;
+```
+
+> [!TIP]
+> Using a symbolic linked array is the only way in which it is possible to use `@memory-cell`, as opposed to `@world-cell`, with a world processor. When using plain block names, such as `cell1 .. cell4`, `@world-cell` is assumed on a world-processor target.    
+
+Compared to a simple external stack, a large stack adds a small overhead due to the need to manage switching between different memory blocks. The overhead affects recursive function calls, not storing individual variables on the stack. As a consequence, a small portion of each memory block may remain unused, and three to four elements of each memory block are reserved for stack management. To minimize wasted space and execution overhead, use memory banks or world cells instead of memory cells for large stacks.    
+
 #### Internal stack
 
 Mindcode builds an internal stack when an external one is not declared. The internal stack is superior in older Mindustry versions for supporting both numerical and non-numerical values, but it may occupy a significant amount of instruction space. When using an internal stack, it is necessary to use the [`stack-depth` option](SYNTAX-5-OTHER.markdown#option-stack-depth) to specify the maximum depth of the stack to build.

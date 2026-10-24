@@ -340,6 +340,20 @@ Accessing an element outside the bounds of an external array may cause other ele
 
 When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the metod specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
 
+## Large arrays
+
+Large arrays are external arrays spanning several memory blocks. The size of large arrays is therefore not limited by the memory block size.
+
+Large arrays require a separate array of memory blocks to be maintained. Currently, this array is always implemented as an internal array. Access to individual array elements consists of finding the memory block containing the element and accessing the element within that block, adding a not insignificant overhead compared to a simple external array. Mindcode provides several optimizations to reduce this overhead as much as possible (the best results are achieved when text jump tables can be generated, i.e., with [absolute addressing](SYNTAX-5-OTHER.markdown#option-symbolic-labels)).
+
+Using [list iteration loops](SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) to iterate over the entire array or a subarray provides significant performance improvements over using direct index-based access, and is the recommended way to access large arrays.
+
+## Dynamic arrays
+
+Dynamic arrays are arrays whose length is not known at compile time. Dynamic arrays can't be created programmatically, and only the ones listed [here](#built-in-variables) are supported.
+
+It is possible to determine the length of the array at runtime using the `length()` function. Dynamic arrays are meant to be used with [list iteration loops](SYNTAX-3-STATEMENTS.markdown#dynamic-arrays).
+
 ## Internal arrays
 
 Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _`@counter` arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings, and so on.
@@ -350,19 +364,13 @@ Accessing individual elements of internal arrays is slower than accessing elemen
 
 Several different implementations of internal arrays are available in target `8.0` or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](optimizations/ARRAY-OPTIMIZATION.markdown) chooses the most efficient implementation for each array or individual array access.
 
-## Dynamic arrays
-
-Dynamic arrays are arrays whose length is not known at compile time. Dynamic arrays can't be created programmatically, and only the ones listed [here](#built-in-variables) are supported.
-
-It is possible to determine the length of the array at runtime using the `length()` function. Dynamic arrays are meant to be used with [list iteration loops](SYNTAX-3-STATEMENTS.markdown#dynamic-arrays).
-
 ## Remote arrays
 
 Remote arrays are internal arrays stored in another processor. They are implemented similarly to internal arrays, but the mechanism to access individual elements reads the values from the remote processor. In many situations, remote arrays can be as fast as internal arrays, or they may need an additional instruction to read or write the value from/to the remote processor.
 
 ## Subarrays
 
-For some operations, such as array assignments, list-iteration loops, and function calls, it is possible to select a portion of the array for the operation. The syntax for creating subarrays is: `array[range]`, where `range` is a constant range expression. It is possible to create subarrays from implicit, external, internal, and remote arrays:
+For some operations, such as array assignments, list-iteration loops, and function calls, it is possible to select a portion of the array for the operation. The syntax for creating subarrays is: `array[range]`, where `range` is a constant range expression. It is possible to create subarrays from implicit, external, large, internal, and remote arrays:
 
 ```Mindcode
 allocate heap in bank1;
@@ -373,6 +381,8 @@ cell1[0 ... 5];         // Elements 0 to 4 from cell1 memory cell
 $a[5 .. 8];             // Elements 5 to 8 of an external array
 a[1 ... 10];            // All but the first element of an internal array
 ```
+
+Dynamic arrays do not support subarrays.  
 
 # Variable declarations
 
@@ -1544,7 +1554,7 @@ It is not possible to assign literal link names to symbolic link names in the de
 
 External variables and arrays represent cells in a memory block. They are declared using the [`external` storage modifier](#storage-modifiers).
 
-The `external` modifier can optionally specify storage for the declared variables or arrays. The storage specification consists of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the `external` keyword are allocated in given memory block, starting at the given index/range. If more space than provided by a given range is required for variables, an error is reported.
+The `external` modifier can optionally specify storage for the declared variables or arrays. The storage specification consists of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. Alternatively, a range of memory blocks, or a linked/constant array of memory blocks, can be specified. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the `external` keyword are allocated in given memory block, starting at the given index/range. If more space than provided by a given range is required for variables, an error is reported.
 
 Examples:
 
@@ -1553,9 +1563,26 @@ allocate heap in cell1[32 ... 64];
 external var foo;
 external(cell1) bar;
 external(cell1[10 ... 20]) var a, b, c[8];
+
+linked(@memory-bank) memory[] = (mem1 .. mem4);
+external(bank1 .. bank2) var x[1024];
+external(memory) var y[1024], z[1024];
 ```
 
 When no storage clause is specified, the declared variables are placed in the heap, which needs to be allocated first. The cells are assigned to variables in the order in which the variables appear in the source code. Explicit declaration of all external variables is the easiest way to specify fixed allocation order of external variables on the heap.
+
+A [large array](#large-arrays) may be created when specifying multiple memory blocks in the storage clause. Each large array must start at an empty cell/bank, so the total space required might not be equal to a simple sum of array sizes:
+
+```
+// Error: not enough capacity
+external(cell1 .. cell3) var a[80], b[80];
+```
+
+It is, however, possible to mix large and simple arrays in a suitable order in the same declaration:
+
+```
+external(cell1 .. cell4) var a[80], c[40], b[80], d[40];
+```
 
 Declared external variables can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
 
@@ -1570,7 +1597,7 @@ When declaring external variables, these additional modifiers can be used:
 > In targets `8.1` and earlier, external variables stored in [external memory](#external-memory) only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory.
 
 > [!NOTE]
-> External arrays stored in memory cells or memory banks starting at an index different from `0` incur small performance penalty when accessing the array elements, since the offset needs to be added to the index to access the correct memory cell.
+> External arrays stored in memory cells or banks starting at a non-zero index may incur a small performance penalty when accessing the array, since the offset needs to be added to access the correct element. Using a list iteration loop typically avoids this overhead.
 
 Example of code using external variables:
 

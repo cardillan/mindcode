@@ -187,9 +187,7 @@ end;
 ```
 
 > [!TIP]
-> It is generally more efficient to use list iteration loop rather than other forms of loops (e.g., range iteration loop combined with index access) for internal arrays. For external arrays, index access is about as effective as list iteration loop, but produces smaller code.
->
-> When loop unrolling optimization is applied, the resulting code is identical regardless of the type of loop used.
+> List iteration loops can be converted to index-based loops for internal arrays exceeding a [configurable size](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) and for external/large arrays. Compared to a range iteration loop or a C-style loop, the list iteration loop provides may remove some overhead of non-zero-based external arrays, and provides very significant performance improvements for large arrays. Currently, it is recommended to use list iteration loops whenever possible. Parallel iteration makes list iteration loops usable in a wide variety of scenarios.
 
 ### Modifications of variables in the list
 

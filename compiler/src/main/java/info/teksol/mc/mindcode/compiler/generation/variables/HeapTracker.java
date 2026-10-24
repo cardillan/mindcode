@@ -111,11 +111,13 @@ public class HeapTracker extends CompilerMessageEmitter {
 
         if (size > blockSize) {
             int blocks = (size + blockSize - 1) / blockSize;
+            int unallocated = size;
             List<LogicVariable> memory = new ArrayList<>();
             for (int i = 0; i < heapStorage.size(); i++) {
                 if (currentHeapIndex[i] == 0) {
                     memory.add(heapStorage.get(i));
-                    currentHeapIndex[i] = blockSize;
+                    currentHeapIndex[i] = Math.min(unallocated, blockSize);
+                    unallocated -= blockSize;
                     if (--blocks <= 0) break;
                 }
             }

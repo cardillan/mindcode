@@ -23,16 +23,17 @@ Changes intended for the next regular release.
   * Produce error (warning?) on failure
 * `items`, `liquids`, `blocks` and `unitTypes` arrays
 * Convert constant case statements to jumps
-
-* **Doing**
-
 * Large arrays
   * Nested for loops for list-iteration loops
   * Subarrays
-* Remove lookup/sensor id in front of case statements
+
+* **Doing**
+
 
 * **Planned**
 
+* **Internal subarrays optimization: for shared tables. the master array is used; when inlining, the subarray is used.**
+* Remove lookup/sensor id in front of case statements
 * Allow using linked arrays in the `remote require` clause.
 * If expression telescoping optimization
 * Compatibility test 2: verifies how Mindustry parses (numeric) literals.
@@ -55,7 +56,7 @@ Changes intended for the next regular release.
   * Might need a category for volatile, but removable variables.
 * Large heap
   * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays. 
-* Reuse array offset variable for same-sized arrays.
+* Recursive functions: reuse array offset variable for same-sized arrays.
 * Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
 * Invoke properties on any expression, including arrays.

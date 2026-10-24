@@ -528,7 +528,7 @@ This optimization inlines the table to the place of array access.
 This optimization injects either a simple operation or an element update into the `@counter` table. The injection optimization also inlines the table if it wasn't inlined already.
 
 * When a single instruction is injected, one execution step is saved, but the table size might increase as folding is not possible with injection.
-* When an update operation is injected, a separate write operation on the array is avoided, resulting in significant savings in both execution time and, typically, in code size too.
+* When an update operation is injected, a separate write operation on the array is avoided, resulting in significant savings in execution time and code size.
 
 The optimizer considers possible optimizations for the following groups of array accesses:
 

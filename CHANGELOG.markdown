@@ -14,9 +14,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking:** a new `internal` keyword has been added to the language and is reserved for future use. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
 * **Breaking:** added [built-in arrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-variables) named `links`, `blocks`, `liquids`,  `unitTypes`, `items`, `allItems` and `teams`. List iteration loops and index-based access are supported on these arrays. Declaring another variable (global or local) with the same name shadows the built-in one. Code using these names for variables without declaration in relaxed syntax mode will fail to compile. 
+* Added support for a [large stack](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#large-stack), for using more than one memory block for the stack ([#356](https://github.com/cardillan/mindcode/issues/356)).
+* Added support for [large arrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#large-arrays), external arrays stored in multiple memory blocks, including related optimizations ([#357](https://github.com/cardillan/mindcode/issues/357)).
+* Added [instruction injection](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#instruction-injection) to Array Optimization. This optimization allows injecting a single instruction or the entire element update operation into the `@counter` table of internal arrays   
 * Added constant folding for the integer division (`\`) to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown).
-* Added the `assertbounds` instruction evaluation to [Jump Normalization](doc/syntax/optimizations/JUMP-NORMALIZATION.markdown). Instructions that always produce a success are removed, while instructions that always produce a failure are reported as errors.
 * Added the `multijump` instruction evaluation to [Jump Normalization](doc/syntax/optimizations/JUMP-NORMALIZATION.markdown). Multijumps using a constant jump target get converted to regular unconditional jumps, allowing compile-time resolution of `case` expressions.
+* Added the `assertbounds` instruction evaluation to [Jump Normalization](doc/syntax/optimizations/JUMP-NORMALIZATION.markdown). Instructions that always produce a success are removed, while instructions that always produce a failure are reported as errors.
 * Added support for instructions provided by the Mlog Dev Tools mod v0.11.6: `assert` and `asserttype`.
 * Added the [`devtools` system library](/doc/syntax/SYSTEM-LIBRARY-DEVTOOLS.markdown). This library provides access to the Mlog Dev Tools mod's instructions not provided directly by the compiler (`breakpoint`, `profile`, `reset` and `snapshot`). The `breakpoint` instruction can be used to trigger variale dump in Mindcode's processor emulator.
 * Added a new `dump-variables-on-breakpoint` execution flag. When set, the processor emulator will dump all variables on an active `breakpoint` instruction and will contibue executing the code.
@@ -25,9 +28,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax ([#464](https://github.com/cardillan/mindcode/issues/464)).
 * Loop control variables declared within the loop are never reported as unused. 
-* Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code ([#483](https://github.com/cardillan/mindcode/issues/483)).
 * Changed the loop unrolling optimization to create a separate temporary variable in each iteration for temporary variables that are only found within the loop. This change makes some additional optimization possible in unrolled loops. 
-* **Breaking:** the remote call protocol version was increased to 2. Both main and remote processors' code must be recompiled to use the new version. 
+* Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code ([#483](https://github.com/cardillan/mindcode/issues/483)).
+* The remote call protocol version was increased to 2. Both main and remote processors' code must be recompiled to use the new version. 
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
 * Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.
 * **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary. 
