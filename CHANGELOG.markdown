@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.20.0 – Unreleased
+## 3.20.0 – 2026-10-24
 
 ### Fixed
 
 * Fixed wrong boundary runtime checks generation for subarrays and external arrays with non-zero start index position.    
+* Fixed an internal compiler error when using out iterator with a constant array ([#482](https://github.com/cardillan/mindcode/issues/482)).
 
 ### Added
 
