@@ -83,8 +83,11 @@ final class LoopIterator {
     }
 
     public int indexValue() {
-        LargeArray array = largeArray();
-        return array.getMemoryIndex(index - array.getStartOffset());
+        return switch (array) {
+            case LargeArray a -> a.getMemoryIndex(index - a.getStartOffset());
+            case ArrayStore _ -> index;
+            case null -> throw new IllegalStateException();
+        };
     }
 
     public boolean isCompatible(LoopIterator other) {

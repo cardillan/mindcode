@@ -386,7 +386,9 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
             }
         }
 
-        renumberTemporary(instructions);
+        if (!OptimizationCoordinator.TRACE) {
+            renumberTemporary(instructions);
+        }
 
         // Sort variables
         FinalInstructionResolver resolver = new FinalInstructionResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext);

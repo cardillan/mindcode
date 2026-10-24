@@ -230,14 +230,15 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         LogicVariable limit = assembler.nextTemp();
 
         int iteration = 0;
-        List<LoopIterator> largeIterators = iterators.stream().filter(it -> it.array instanceof LargeArray).toList();
 
         while (iteration < iterations) {
-            for (LoopIterator it : largeIterators) {
+            for (LoopIterator it : iterators) {
                 it.setIteration(iteration);
                 int index = it.indexValue();
                 it.bodyIteratorValue = iteration == 0 || index == it.bodyIteratorValue ? index : Integer.MIN_VALUE;
-                it.memoryValues.add(it.memoryValue());
+                if (it.array instanceof LargeArray) {
+                    it.memoryValues.add(it.memoryValue());
+                }
             }
 
             iteration = iterators.stream().mapToInt(LoopIterator::nextIteration).min().orElseThrow();
@@ -272,8 +273,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                     it.setIteration(iteration);
 
                     // Note: iteration always changes on the first pass
-                    if (it.array instanceof LargeArray a && (iteration == 0 || next != it.nextIteration())) {
-                        if (it.updateMemory) {
+                    if (iteration == 0 || next != it.nextIteration()) {
+                        if (it.array instanceof LargeArray && it.updateMemory) {
                             assembler.createSet(it.memoryVariable(), it.memoryValue());
                         }
                         if (it.updateIndex && it.bodyIteratorValue == Integer.MIN_VALUE) {
