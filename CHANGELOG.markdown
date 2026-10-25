@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.20.1 – 2026-10-25
+
+### Fixed
+
+* Fixes incorrectly built shared jump table when using internal subarrays ([#498](https://github.com/cardillan/mindcode/issues/498)).
+
 ## 3.20.0 – 2026-10-24
 
 ### Fixed

@@ -1,0 +1,384 @@
+   139 instructions before optimizations.
+     2 instructions eliminated by Temp Variables Elimination (7 iterations).
+     1 loop improved by Loop Hoisting.
+   137 instructions after optimizations.
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
+ 
+     2 set :sum 0
+     3 set *tmp0 0
+     4 label *label3
+-    * set *tmp1 *tmp0
+-    * readarr<internal:folded:compact> *tmp2 .a[] *tmp1
+-    * set :x *tmp2
++    5 readarr<internal:folded:compact> :x .a[] *tmp0
+     6 op add :sum :sum :x
+     7 label *label1
+     8 op add *tmp0 *tmp0 1
+
+Modifications by Virtual Instruction Expansion:
+ 
+     2 set :sum 0
+     3 set *tmp0 0
+     4 label *label3
+-    * readarr<internal:folded:compact> :x .a[] *tmp0
++    5 setaddr .a*ret *label54 (h:marker1)
++    6 set .a*ind *tmp0
++    7 multicall *tmp0 0 (m:marker0) (h:marker1)
++    8 label *label54
++    9 read :x @this .a*elem
+    10 op add :sum :sum :x
+    11 label *label1
+    12 op add *tmp0 *tmp0 1
+    13 jump *label3 lessThan *tmp0 50
+    14 label *label2
+-    * readarr<internal:folded:compact> *tmp3 .a[] p
++   15 setaddr .a*ret *label55 (h:marker2)
++   16 assertbounds multiple 1 0 lessThanEq p lessThanEq 99 "position 15:5: index out of bounds (0 to 99)"
++   17 set .a*ind p
++   18 multicall p 0 (m:marker0) (h:marker2)
++   19 label *label55
++   20 read *tmp3 @this .a*elem
+    21 op add :sum :sum *tmp3
+    22 assertequals 10 :sum "@counter table test"
+    23 stop
+    24 label *label0
+    25 end
++   26 multilabel *label4 (m:marker0)
++   27 select .a*elem lessThan .a*ind 50 ".a*0" ".a*50"
++   28 return .a*ret
++   29 multilabel *label5 (m:marker0)
++   30 select .a*elem lessThan .a*ind 50 ".a*1" ".a*51"
++   31 return .a*ret
++   32 multilabel *label6 (m:marker0)
++   33 select .a*elem lessThan .a*ind 50 ".a*2" ".a*52"
++   34 return .a*ret
++   35 multilabel *label7 (m:marker0)
++   36 select .a*elem lessThan .a*ind 50 ".a*3" ".a*53"
++   37 return .a*ret
++   38 multilabel *label8 (m:marker0)
++   39 select .a*elem lessThan .a*ind 50 ".a*4" ".a*54"
++   40 return .a*ret
++   41 multilabel *label9 (m:marker0)
++   42 select .a*elem lessThan .a*ind 50 ".a*5" ".a*55"
++   43 return .a*ret
++   44 multilabel *label10 (m:marker0)
++   45 select .a*elem lessThan .a*ind 50 ".a*6" ".a*56"
++   46 return .a*ret
++   47 multilabel *label11 (m:marker0)
++   48 select .a*elem lessThan .a*ind 50 ".a*7" ".a*57"
++   49 return .a*ret
++   50 multilabel *label12 (m:marker0)
++   51 select .a*elem lessThan .a*ind 50 ".a*8" ".a*58"
++   52 return .a*ret
++   53 multilabel *label13 (m:marker0)
++   54 select .a*elem lessThan .a*ind 50 ".a*9" ".a*59"
++   55 return .a*ret
++   56 multilabel *label14 (m:marker0)
++   57 select .a*elem lessThan .a*ind 50 ".a*10" ".a*60"
++   58 return .a*ret
++   59 multilabel *label15 (m:marker0)
++   60 select .a*elem lessThan .a*ind 50 ".a*11" ".a*61"
++   61 return .a*ret
++   62 multilabel *label16 (m:marker0)
++   63 select .a*elem lessThan .a*ind 50 ".a*12" ".a*62"
++   64 return .a*ret
++   65 multilabel *label17 (m:marker0)
++   66 select .a*elem lessThan .a*ind 50 ".a*13" ".a*63"
++   67 return .a*ret
++   68 multilabel *label18 (m:marker0)
++   69 select .a*elem lessThan .a*ind 50 ".a*14" ".a*64"
++   70 return .a*ret
++   71 multilabel *label19 (m:marker0)
++   72 select .a*elem lessThan .a*ind 50 ".a*15" ".a*65"
++   73 return .a*ret
++   74 multilabel *label20 (m:marker0)
++   75 select .a*elem lessThan .a*ind 50 ".a*16" ".a*66"
++   76 return .a*ret
++   77 multilabel *label21 (m:marker0)
++   78 select .a*elem lessThan .a*ind 50 ".a*17" ".a*67"
++   79 return .a*ret
++   80 multilabel *label22 (m:marker0)
++   81 select .a*elem lessThan .a*ind 50 ".a*18" ".a*68"
++   82 return .a*ret
++   83 multilabel *label23 (m:marker0)
++   84 select .a*elem lessThan .a*ind 50 ".a*19" ".a*69"
++   85 return .a*ret
++   86 multilabel *label24 (m:marker0)
++   87 select .a*elem lessThan .a*ind 50 ".a*20" ".a*70"
++   88 return .a*ret
++   89 multilabel *label25 (m:marker0)
++   90 select .a*elem lessThan .a*ind 50 ".a*21" ".a*71"
++   91 return .a*ret
++   92 multilabel *label26 (m:marker0)
++   93 select .a*elem lessThan .a*ind 50 ".a*22" ".a*72"
++   94 return .a*ret
++   95 multilabel *label27 (m:marker0)
++   96 select .a*elem lessThan .a*ind 50 ".a*23" ".a*73"
++   97 return .a*ret
++   98 multilabel *label28 (m:marker0)
++   99 select .a*elem lessThan .a*ind 50 ".a*24" ".a*74"
++  100 return .a*ret
++  101 multilabel *label29 (m:marker0)
++  102 select .a*elem lessThan .a*ind 50 ".a*25" ".a*75"
++  103 return .a*ret
++  104 multilabel *label30 (m:marker0)
++  105 select .a*elem lessThan .a*ind 50 ".a*26" ".a*76"
++  106 return .a*ret
++  107 multilabel *label31 (m:marker0)
++  108 select .a*elem lessThan .a*ind 50 ".a*27" ".a*77"
++  109 return .a*ret
++  110 multilabel *label32 (m:marker0)
++  111 select .a*elem lessThan .a*ind 50 ".a*28" ".a*78"
++  112 return .a*ret
++  113 multilabel *label33 (m:marker0)
++  114 select .a*elem lessThan .a*ind 50 ".a*29" ".a*79"
++  115 return .a*ret
++  116 multilabel *label34 (m:marker0)
++  117 select .a*elem lessThan .a*ind 50 ".a*30" ".a*80"
++  118 return .a*ret
++  119 multilabel *label35 (m:marker0)
++  120 select .a*elem lessThan .a*ind 50 ".a*31" ".a*81"
++  121 return .a*ret
++  122 multilabel *label36 (m:marker0)
++  123 select .a*elem lessThan .a*ind 50 ".a*32" ".a*82"
++  124 return .a*ret
++  125 multilabel *label37 (m:marker0)
++  126 select .a*elem lessThan .a*ind 50 ".a*33" ".a*83"
++  127 return .a*ret
++  128 multilabel *label38 (m:marker0)
++  129 select .a*elem lessThan .a*ind 50 ".a*34" ".a*84"
++  130 return .a*ret
++  131 multilabel *label39 (m:marker0)
++  132 select .a*elem lessThan .a*ind 50 ".a*35" ".a*85"
++  133 return .a*ret
++  134 multilabel *label40 (m:marker0)
++  135 select .a*elem lessThan .a*ind 50 ".a*36" ".a*86"
++  136 return .a*ret
++  137 multilabel *label41 (m:marker0)
++  138 select .a*elem lessThan .a*ind 50 ".a*37" ".a*87"
++  139 return .a*ret
++  140 multilabel *label42 (m:marker0)
++  141 select .a*elem lessThan .a*ind 50 ".a*38" ".a*88"
++  142 return .a*ret
++  143 multilabel *label43 (m:marker0)
++  144 select .a*elem lessThan .a*ind 50 ".a*39" ".a*89"
++  145 return .a*ret
++  146 multilabel *label44 (m:marker0)
++  147 select .a*elem lessThan .a*ind 50 ".a*40" ".a*90"
++  148 return .a*ret
++  149 multilabel *label45 (m:marker0)
++  150 select .a*elem lessThan .a*ind 50 ".a*41" ".a*91"
++  151 return .a*ret
++  152 multilabel *label46 (m:marker0)
++  153 select .a*elem lessThan .a*ind 50 ".a*42" ".a*92"
++  154 return .a*ret
++  155 multilabel *label47 (m:marker0)
++  156 select .a*elem lessThan .a*ind 50 ".a*43" ".a*93"
++  157 return .a*ret
++  158 multilabel *label48 (m:marker0)
++  159 select .a*elem lessThan .a*ind 50 ".a*44" ".a*94"
++  160 return .a*ret
++  161 multilabel *label49 (m:marker0)
++  162 select .a*elem lessThan .a*ind 50 ".a*45" ".a*95"
++  163 return .a*ret
++  164 multilabel *label50 (m:marker0)
++  165 select .a*elem lessThan .a*ind 50 ".a*46" ".a*96"
++  166 return .a*ret
++  167 multilabel *label51 (m:marker0)
++  168 select .a*elem lessThan .a*ind 50 ".a*47" ".a*97"
++  169 return .a*ret
++  170 multilabel *label52 (m:marker0)
++  171 select .a*elem lessThan .a*ind 50 ".a*48" ".a*98"
++  172 return .a*ret
++  173 multilabel *label53 (m:marker0)
++  174 select .a*elem lessThan .a*ind 50 ".a*49" ".a*99"
++  175 return .a*ret
+
+Modifications by Iterated phase, Loop Hoisting, pass 3, iteration 1:
+ 
+     1 set .a*51 10
+     2 set :sum 0
+     3 set *tmp0 0
++    4 setaddr .a*ret *label54 (h:marker1)
+     5 label *label3
+-    * setaddr .a*ret *label54 (h:marker1)
+     6 set .a*ind *tmp0
+     7 multicall *tmp0 0 (m:marker0) (h:marker1)
+     8 label *label54
+
+Final code before resolving virtual instructions:
+
+set p 51
+set .a*51 10
+set :sum 0
+set *tmp0 0
+setaddr .a*ret *label54
+label *label3
+set .a*ind *tmp0
+multicall *tmp0 0
+label *label54
+read :x @this .a*elem
+op add :sum :sum :x
+op add *tmp0 *tmp0 1
+jump *label3 lessThan *tmp0 50
+setaddr .a*ret *label55
+assertbounds multiple 1 0 lessThanEq p lessThanEq 99 "position 15:5: index out of bounds (0 to 99)"
+set .a*ind p
+multicall p 0
+label *label55
+read *tmp1 @this .a*elem
+op add :sum :sum *tmp1
+assertequals 10 :sum "@counter table test"
+stop
+end
+multilabel *label4
+select .a*elem lessThan .a*ind 50 ".a*0" ".a*50" # Origin: 6, 13, keys: 0, 50
+return .a*ret
+multilabel *label5
+select .a*elem lessThan .a*ind 50 ".a*1" ".a*51" # Origin: 6, 13, keys: 1, 51
+return .a*ret
+multilabel *label6
+select .a*elem lessThan .a*ind 50 ".a*2" ".a*52" # Origin: 6, 13, keys: 2, 52
+return .a*ret
+multilabel *label7
+select .a*elem lessThan .a*ind 50 ".a*3" ".a*53" # Origin: 6, 13, keys: 3, 53
+return .a*ret
+multilabel *label8
+select .a*elem lessThan .a*ind 50 ".a*4" ".a*54" # Origin: 6, 13, keys: 4, 54
+return .a*ret
+multilabel *label9
+select .a*elem lessThan .a*ind 50 ".a*5" ".a*55" # Origin: 6, 13, keys: 5, 55
+return .a*ret
+multilabel *label10
+select .a*elem lessThan .a*ind 50 ".a*6" ".a*56" # Origin: 6, 13, keys: 6, 56
+return .a*ret
+multilabel *label11
+select .a*elem lessThan .a*ind 50 ".a*7" ".a*57" # Origin: 6, 13, keys: 7, 57
+return .a*ret
+multilabel *label12
+select .a*elem lessThan .a*ind 50 ".a*8" ".a*58" # Origin: 6, 13, keys: 8, 58
+return .a*ret
+multilabel *label13
+select .a*elem lessThan .a*ind 50 ".a*9" ".a*59" # Origin: 6, 13, keys: 9, 59
+return .a*ret
+multilabel *label14
+select .a*elem lessThan .a*ind 50 ".a*10" ".a*60" # Origin: 6, 13, keys: 10, 60
+return .a*ret
+multilabel *label15
+select .a*elem lessThan .a*ind 50 ".a*11" ".a*61" # Origin: 6, 13, keys: 11, 61
+return .a*ret
+multilabel *label16
+select .a*elem lessThan .a*ind 50 ".a*12" ".a*62" # Origin: 6, 13, keys: 12, 62
+return .a*ret
+multilabel *label17
+select .a*elem lessThan .a*ind 50 ".a*13" ".a*63" # Origin: 6, 13, keys: 13, 63
+return .a*ret
+multilabel *label18
+select .a*elem lessThan .a*ind 50 ".a*14" ".a*64" # Origin: 6, 13, keys: 14, 64
+return .a*ret
+multilabel *label19
+select .a*elem lessThan .a*ind 50 ".a*15" ".a*65" # Origin: 6, 13, keys: 15, 65
+return .a*ret
+multilabel *label20
+select .a*elem lessThan .a*ind 50 ".a*16" ".a*66" # Origin: 6, 13, keys: 16, 66
+return .a*ret
+multilabel *label21
+select .a*elem lessThan .a*ind 50 ".a*17" ".a*67" # Origin: 6, 13, keys: 17, 67
+return .a*ret
+multilabel *label22
+select .a*elem lessThan .a*ind 50 ".a*18" ".a*68" # Origin: 6, 13, keys: 18, 68
+return .a*ret
+multilabel *label23
+select .a*elem lessThan .a*ind 50 ".a*19" ".a*69" # Origin: 6, 13, keys: 19, 69
+return .a*ret
+multilabel *label24
+select .a*elem lessThan .a*ind 50 ".a*20" ".a*70" # Origin: 6, 13, keys: 20, 70
+return .a*ret
+multilabel *label25
+select .a*elem lessThan .a*ind 50 ".a*21" ".a*71" # Origin: 6, 13, keys: 21, 71
+return .a*ret
+multilabel *label26
+select .a*elem lessThan .a*ind 50 ".a*22" ".a*72" # Origin: 6, 13, keys: 22, 72
+return .a*ret
+multilabel *label27
+select .a*elem lessThan .a*ind 50 ".a*23" ".a*73" # Origin: 6, 13, keys: 23, 73
+return .a*ret
+multilabel *label28
+select .a*elem lessThan .a*ind 50 ".a*24" ".a*74" # Origin: 6, 13, keys: 24, 74
+return .a*ret
+multilabel *label29
+select .a*elem lessThan .a*ind 50 ".a*25" ".a*75" # Origin: 6, 13, keys: 25, 75
+return .a*ret
+multilabel *label30
+select .a*elem lessThan .a*ind 50 ".a*26" ".a*76" # Origin: 6, 13, keys: 26, 76
+return .a*ret
+multilabel *label31
+select .a*elem lessThan .a*ind 50 ".a*27" ".a*77" # Origin: 6, 13, keys: 27, 77
+return .a*ret
+multilabel *label32
+select .a*elem lessThan .a*ind 50 ".a*28" ".a*78" # Origin: 6, 13, keys: 28, 78
+return .a*ret
+multilabel *label33
+select .a*elem lessThan .a*ind 50 ".a*29" ".a*79" # Origin: 6, 13, keys: 29, 79
+return .a*ret
+multilabel *label34
+select .a*elem lessThan .a*ind 50 ".a*30" ".a*80" # Origin: 6, 13, keys: 30, 80
+return .a*ret
+multilabel *label35
+select .a*elem lessThan .a*ind 50 ".a*31" ".a*81" # Origin: 6, 13, keys: 31, 81
+return .a*ret
+multilabel *label36
+select .a*elem lessThan .a*ind 50 ".a*32" ".a*82" # Origin: 6, 13, keys: 32, 82
+return .a*ret
+multilabel *label37
+select .a*elem lessThan .a*ind 50 ".a*33" ".a*83" # Origin: 6, 13, keys: 33, 83
+return .a*ret
+multilabel *label38
+select .a*elem lessThan .a*ind 50 ".a*34" ".a*84" # Origin: 6, 13, keys: 34, 84
+return .a*ret
+multilabel *label39
+select .a*elem lessThan .a*ind 50 ".a*35" ".a*85" # Origin: 6, 13, keys: 35, 85
+return .a*ret
+multilabel *label40
+select .a*elem lessThan .a*ind 50 ".a*36" ".a*86" # Origin: 6, 13, keys: 36, 86
+return .a*ret
+multilabel *label41
+select .a*elem lessThan .a*ind 50 ".a*37" ".a*87" # Origin: 6, 13, keys: 37, 87
+return .a*ret
+multilabel *label42
+select .a*elem lessThan .a*ind 50 ".a*38" ".a*88" # Origin: 6, 13, keys: 38, 88
+return .a*ret
+multilabel *label43
+select .a*elem lessThan .a*ind 50 ".a*39" ".a*89" # Origin: 6, 13, keys: 39, 89
+return .a*ret
+multilabel *label44
+select .a*elem lessThan .a*ind 50 ".a*40" ".a*90" # Origin: 6, 13, keys: 40, 90
+return .a*ret
+multilabel *label45
+select .a*elem lessThan .a*ind 50 ".a*41" ".a*91" # Origin: 6, 13, keys: 41, 91
+return .a*ret
+multilabel *label46
+select .a*elem lessThan .a*ind 50 ".a*42" ".a*92" # Origin: 6, 13, keys: 42, 92
+return .a*ret
+multilabel *label47
+select .a*elem lessThan .a*ind 50 ".a*43" ".a*93" # Origin: 6, 13, keys: 43, 93
+return .a*ret
+multilabel *label48
+select .a*elem lessThan .a*ind 50 ".a*44" ".a*94" # Origin: 6, 13, keys: 44, 94
+return .a*ret
+multilabel *label49
+select .a*elem lessThan .a*ind 50 ".a*45" ".a*95" # Origin: 6, 13, keys: 45, 95
+return .a*ret
+multilabel *label50
+select .a*elem lessThan .a*ind 50 ".a*46" ".a*96" # Origin: 6, 13, keys: 46, 96
+return .a*ret
+multilabel *label51
+select .a*elem lessThan .a*ind 50 ".a*47" ".a*97" # Origin: 6, 13, keys: 47, 97
+return .a*ret
+multilabel *label52
+select .a*elem lessThan .a*ind 50 ".a*48" ".a*98" # Origin: 6, 13, keys: 48, 98
+return .a*ret
+multilabel *label53
+select .a*elem lessThan .a*ind 50 ".a*49" ".a*99" # Origin: 6, 13, keys: 49, 99
+return .a*ret

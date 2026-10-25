@@ -212,9 +212,10 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         for (LoopIterator iterator : iterators) {
-            if (iterator.array().getStartOffset() != 0) {
-                // Defer to the master array, as we're actually taking array offsets into an account here explicitly
-                ArrayStore masterArray = iterator.array().getMasterArray();
+            ArrayStore array = iterator.array();
+            ArrayStore masterArray = array.getMasterArray();
+            if (array.getStartOffset() != 0 || masterArray.size() != array.size()) {
+                // Defer to the master array, as we're actually handling array offsets explicitly
                 iterator.array = masterArray.offset(-masterArray.getStartOffset());
                 iterator.setIteration(0);
             }

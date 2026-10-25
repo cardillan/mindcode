@@ -1,0 +1,18 @@
+#set syntax = strict;
+#set loop-unrolling = none;
+#set array-optimization = none;
+
+volatile var a[100];
+param p = 51;
+
+begin
+    a[51] = 10;
+    var sum = 0;
+    for var x in a[0 ... 50] do
+        sum += x;
+    end;
+
+    sum += a[p];
+    assertEquals(10, sum, "@counter table test");
+    stopProcessor();
+end;
