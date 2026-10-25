@@ -63,7 +63,7 @@
 		"typescript-eslint": "^8.71.2",
 		"vaul-svelte": "^1.0.0-next.7",
 		"vite": "^8.3.4",
-		"vitest": "^5.0.3"
+		"vitest": "^5.0.5"
 	},
 	"imports": {
 		"#lib": "./src/lib/index.js",
