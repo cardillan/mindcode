@@ -804,7 +804,7 @@ allocate heap in heapMemory;
 > [!TIP]
 > Using a symbolic linked array is the only way in which it is possible to use `@memory-cell`, as opposed to `@world-cell`, with a world processor. When using plain block names, such as `cell1 .. cell4`, `@world-cell` is assumed on a world-processor target.    
 
-Compared to a simple external stack, a large stack adds a small overhead due to the need to manage switching between different memory blocks. The overhead affects recursive function calls, not storing individual variables on the stack. As a consequence, a small portion of each memory block may remain unused, and three to four elements of each memory block are reserved for stack management. To minimize wasted space and execution overhead, use memory banks or world cells instead of memory cells for large stacks.    
+Compared to a simple external stack, a large stack adds a small overhead due to the need to manage switching between different memory blocks. Stack switches occur at recursive function calls, not at each stack access, to minimize execution overhead. As a consequence, a small portion of each memory block may remain unused, and three to four elements of each memory block are reserved for stack management. To minimize wasted space and execution overhead, use memory banks or world cells instead of memory cells for large stacks.    
 
 #### Internal stack
 

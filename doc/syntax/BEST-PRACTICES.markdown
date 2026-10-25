@@ -6,6 +6,110 @@ As Mindcode undergoes development, the beast practices may change as new version
 
 ## Mindcode 3.20
 
+### List iteration loops
+
+Using list iteration loops should be preferred when looping over large arrays, as these loops are implemented as two nested loops (one over the memory blocks, the other over the elements in each block). List iteration loops reduce the execution time by 30 to 50%, compared to explicitly coded index-based loops.
+
+When only a portion of the array needs to be traversed, use subarrays when the start and end indexes are known at compile time, and consider using a loop over the array terminated by a `break` statement in other cases. If you need to loop over the array from an index till the end of the array, performing a descending loop and using the `break` statement may again provide a better performance. The performance savings are a bit less pronounced in these cases:
+
+```Mindcode
+#set target = 8m;
+#set loop-unrolling = none;
+
+const size = 4 * 64;
+external(cell1 .. cell4) var array[size];
+param p = size \ 2;
+
+begin
+    var start = @tick;
+    var sum = 0;
+    for var i in 0 ... p do
+        sum += array[i];
+    end;
+    var time = @tick - start;
+    println($"Indexed loop: ${round(time * @ipt)} instructions.");
+
+    start = @tick;
+    var count = 0;
+    for var x in array do
+        if ++count > p then break; end;
+        sum += x;
+    end;
+    time = @tick - start;
+    println($"List iteration: ${round(time * @ipt)} instructions.");
+    printflush(message1);
+    format(sum);
+end;
+```
+
+compiles to
+```mlog
+set p 128
+set :start @tick
+set :sum 0
+set :i 0
+jump 18 greaterThanEq 0 p
+op mod *tmp1 :i 64
+op idiv *tmp2 :i 64
+read @counter "\u000e\u000c\n\u0008" *tmp2
+read *tmp0 cell4 *tmp1                  # Origin: 7, keys: 3
+jump 15 always 0 0
+read *tmp0 cell3 *tmp1                  # Origin: 7, keys: 2
+jump 15 always 0 0
+read *tmp0 cell2 *tmp1                  # Origin: 7, keys: 1
+jump 15 always 0 0
+read *tmp0 cell1 *tmp1                  # Origin: 7, keys: 0
+op add :sum :sum *tmp0
+op add :i :i 1
+jump 5 lessThan :i p
+op sub :time @tick :start
+op mul *tmp3 :time @ipt
+op round *tmp4 *tmp3 0
+print "Indexed loop: {0} instructions.\n"
+format *tmp4
+set :start @tick
+set :count 0
+set *tmp5 cell1
+set *tmp7 28
+jump 36 always 0 0
+set *tmp5 cell2
+set *tmp7 31
+jump 36 always 0 0
+set *tmp5 cell3
+set *tmp7 34
+jump 36 always 0 0
+set *tmp5 cell4
+set *tmp7 44
+set *tmp6 0
+read :x *tmp5 *tmp6
+op add :count :count 1
+jump 44 greaterThan :count p
+op add :sum :sum :x
+op add *tmp6 *tmp6 1
+jump 37 lessThan *tmp6 64
+set @counter *tmp7
+op sub :time @tick :start
+op mul *tmp8 :time @ipt
+op round *tmp9 *tmp8 0
+print "List iteration: {0} instructions.\n"
+format *tmp9
+printflush message1
+format :sum
+```
+
+and produces:
+
+```
+Indexed loop: 964 instructions.
+List iteration: 786 instructions.
+```
+
+> [!TIP]
+> Parallel iteration with other arrays and multiple iterators are fully supported, and the generated code is optimized for these cases too.
+
+### Recursive functions
+
+Mindcode 3.20 supports [large stacks](SYNTAX-4-FUNCTIONS.markdown#large-stack) which use multiple memory blocks, providing much more space for recursion. Compared to a simple external stack, a large stack adds a small overhead due to the need to manage switching between different memory blocks. Stack switches occur at recursive function calls, not at each stack access, to minimize execution overhead. As a consequence, a small portion of each memory block may remain unused, and three to four elements of each memory block are reserved for stack management. To minimize wasted space and execution overhead, use memory banks or world cells instead of memory cells for large stacks.
 
 ## Mindcode 3.18
 
@@ -14,7 +118,7 @@ As Mindcode undergoes development, the beast practices may change as new version
 Mindcode 3.18 supports an internal stack for recursive functions. The internal stack allows storing values of any type, not just numerical ones, and as a result, recursive functions can use parameters and local variables of all types without any restrictions in all Mindustry versions. With the internal stack, all recursive functions compile and execute correctly, although it may be necessary to [manually set stack sizes](SYNTAX-5-OTHER.markdown#option-stack-depth) to support the desired recursion depth.
 
 > [!NOTE]
-> In Mindustry v8 Build 160 or later, memory cells and memory blocks allow storing any type of data. Thanks to this, you can use either external or internal stacks to fully support recursive functions. Performance-wise, the external and internal stacks are similar. A large external stack stored in memory banks can support more recursion levels than an internal stack, and it doesn't occupy instruction space. Using internal stacks with Mindustry v8 Build 160 or later is only recommended when the recursion depth is fairly shallow.
+> In Mindustry v8 Build 160 or later, memory cells and memory blocks allow storing any type of data. Thanks to this, you can use either external or internal stacks to fully support recursive functions. Performance-wise, the external and internal stacks are similar. An external stack stored in memory banks can support more recursion levels than an internal stack, and it doesn't occupy instruction space. Using internal stacks with Mindustry v8 Build 160 or later is only recommended when the recursion depth is fairly shallow.
 
 ### List iteration loops
 
@@ -97,7 +201,7 @@ Note: an optimization which would replace the sequence of the four instructions 
 
 # Absolute addressing
 
-Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) for generating the mlog code with symbolic labels. Even though this option ensures the resulting code is more readable and can also be modified manually, it also precludes the compiler from using absolute addressing in the code and (in taget `8.0` or higher) text-encoded jump tables. This causes the compiler to generate less optimal (slower, or larger) code. Especially case expressions can be seriously affected, and to a lesser extent, internal arrays.
+Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) for generating the mlog code with symbolic labels. Even though this option ensures the resulting code is more readable and can also be modified manually, it also precludes the compiler from using absolute addressing in the code and (in taget `8.0` or higher) text-encoded jump tables. This causes the compiler to generate less optimal (slower, or larger) code. Especially case expressions and internal arrays can be significantly affected.
 
 # The `case` expressions
 
@@ -119,10 +223,7 @@ compiles to:
 read .output "ABC" :input
 ```
 
-The following measures may help produce the most efficient code:
-
-* When using Mindustry objects as `when` values, set the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) to `full`. This means the compiler only considers the Mindustry objects which exist in the given target and doesn't need to produce code for handling unknown objects. On the other hand, the compiled code is only guaranteed to run correctly on Mindustry versions compatible with the chosen target. Consider using the [`target-guard` option](SYNTAX-5-OTHER.markdown#option-target-guard) to ensure the program won't run on incompatible Mindustry versions.
-* If possible, use printable characters as `when` values. For example, if your case expression produces a few categories, consider assigning each category a value using character literals (e.g. `'A'`, `'B'` or `'0'`, `'1'` and so on). If you need to perform additional computations on the resulting values, though, use the natural values in the `when` clause and let Mindcode perform the necessary conversions.
+When using Mindustry objects as `when` values, set the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) to `full` to produce the most efficient code. This ensures the compiler only considers the Mindustry objects which exist in the given target and doesn't need to produce code for handling unknown objects. On the other hand, the compiled code is only guaranteed to run correctly on Mindustry versions compatible with the chosen target. Consider using the [`target-guard` option](SYNTAX-5-OTHER.markdown#option-target-guard) to ensure the program won't run on incompatible Mindustry versions.
 
 An `in` operator applied to a list of values uses `case` expression internally, so it benefits from the same optimizations.
 
@@ -597,7 +698,7 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 ## Arrays in non-unrolled loops
 
 > [!NOTE]
-> List iteration loops over all external arrans and internal arrays larger than [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) are implemented as indexed loops. For external arrays not starting at zero index in the memory block, additional optimization is performed, and such loops may be more efficient than indexed loops created explicitly by the programmer. 
+> List iteration loops over all external arrans and internal arrays larger than [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) are implemented as indexed loops. For external arrays not starting at zero index in the memory block, additional optimization is performed, and such loops may be more efficient than indexed loops created explicitly in the source code. 
 
 When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based internal array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.
 
@@ -864,10 +965,6 @@ label_34:
         print :a.1
         set @counter *tmp1
 ```
-
-# Recursive functions
-
-Recursive functions are fully supported in Mindcode when using an internal stack. However, an internal stack can take up a lot of instruction space. A possible approach is to split the code between two (or more) processors, implementing the recursion itself in one processor and perform all (non-recursive) computations in another processor, freeing up space in the main processor for the internal stack.
 
 ---
 
