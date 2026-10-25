@@ -9,13 +9,13 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>annotations</module>
         <module>compiler</module>
         <module>exttest</module>
         <module>schemacode</module>
         <module>toolapp</module>
         <module>samples</module>
         <module>webapp</module>
-        <module>annotations</module>
     </modules>
 
     <name>Mindcode</name>

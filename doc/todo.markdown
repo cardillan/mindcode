@@ -6,43 +6,32 @@ A broad plan for the next few releases. Everything may change, though.
 
 See [changelog in the development branch](https://github.com/cardillan/mindcode/blob/devel/CHANGELOG.markdown) for a list of features ready for the upcoming release.
 
-## 3.20.x
+## 3.21.x
 
 Changes intended for the next regular release.
 
 **Done**
-
-* Large stack
-* `links` array
-* Mlog Dev Tools integration
-* Internal: enum for variable flags. When creating variables, a set of flags would be specified.
-* Large arrays
-* Array code injection optimization (allmost full)
-* Evaluate constant compiler-generated assertions (assertbounds for now)
-  * Remove on success
-  * Produce error (warning?) on failure
-* `items`, `liquids`, `blocks` and `unitTypes` arrays
-* Convert constant case statements to jumps
-* Large arrays
-  * Nested for loops for list-iteration loops
-  * Subarrays
 
 * **Doing**
 
 
 * **Planned**
 
-* **Internal subarrays optimization: for shared tables. the master array is used; when inlining, the subarray is used.**
+* Internal subarrays optimization: for shared tables. the master array is used; when inlining, the subarray is used.
+* Large heap
+  * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays.
+
 * Remove lookup/sensor id in front of case statements
-* Allow using linked arrays in the `remote require` clause.
 * If expression telescoping optimization
-* Compatibility test 2: verifies how Mindustry parses (numeric) literals.
-* String minification
-  * Replacing icon names with the corresponding characters
-  * Choosing a shorter representation for colors (e.g., replace `[lightgray]` with `[#bfbfbf]`, or `[#ffd700]` with `[gold]`). Replace an RGB color with a close enough named color.
 * Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
-* After updating a processor via MlogWatcher, download the processor's content again and compare to determine whether Mindustry parsing causes some changes; if so, it is an error.
-  * Update MlogWatcher to automatically return the new processor content.
+
+
+* Automatically make global variables accessed by a background process volatile.
+  * Might need a category for volatile, but removable variables.
+  * Maybe do the same for exported functions (on a compiler option) 
+* Compatibility test 2: verifies how Mindustry parses (numeric) literals.
+* Allow using linked arrays in the `remote require` clause.
+* After updating a processor via MlogWatcher, download the processor's content again and compare to determine whether Mindustry parsing causes some changes; if so, it is an error - command line app only.
 * Add support for Mindcode user preferences: allow setting command-line options in them.
 * Add `update.json` to the repo, lists new versions and their level:
   * Optional: no bug fixes
@@ -51,11 +40,8 @@ Changes intended for the next regular release.
 * Add checking for new versions:
   * Downloads the `update.json` locally once per hour or day.
   * Reports the most serious update level available since the current version.   
+
 * Support for mlogls directives
-* Automatically make global variables accessed by a background process volatile.
-  * Might need a category for volatile, but removable variables.
-* Large heap
-  * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays. 
 * Recursive functions: reuse array offset variable for same-sized arrays.
 * Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
@@ -69,7 +55,6 @@ Changes intended for the next regular release.
 
 These are topics that I'm spending time thinking about. Some of these should appear in the next release after the upcoming one.
 
-* Big arrays
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * Modules/namespaces (see #149)
   * Implement public/private modifiers for variables, functions, and constants.
@@ -81,6 +66,10 @@ These are topics that I'm spending time thinking about. Some of these should app
   * Enums
   * Local structures
   * Function pointers/array pointers
+* String minification
+  * Replacing icon names with the corresponding characters
+  * Choosing a shorter representation for colors (e.g., replace `[lightgray]` with `[#bfbfbf]`, or `[#ffd700]` with `[gold]`). Replace an RGB color with a close enough named color.
+* Big arrays
 
 ## New quick ideas
 
@@ -171,7 +160,7 @@ I'll implement a simplified mechanism probably:
 - Variables, functions, etc. will be declared `global`, `public` or `private`. Private will be the default.
   - Private: inaccessible outside its namespace/module.
   - Public: accessible via fully qualified name: `cardillan.foo()`.
-  - Global: accessible via unqualified or fully qualified name.
+  - Global: inserted into the global namespace.
 - Program parameters and linked blocks are always global; can't be declared public or private.
 - It will still be possible to `require` files that don't have any `module` declaration. All declarations in such files will be global - `public` and `private` will be forbidden.
 - `global require "library.mnd";` will import all public declarations into global namespace.
@@ -185,7 +174,7 @@ I'll implement a simplified mechanism probably:
 - Mlog variable names will include the namespace prefix (none for globals).
 
 Also, global identifiers will only be available via `global.` qualification in a module. That way an identifier used in a module cannot be unexpectedly resolved as a global one.
-Global namespace therefore only exists in the context of the main program, or in required files that do not create a module.
+Global namespace therefore only exists in the context of the main program or in required files that do not create a module.
 Hm, required files not creating a module are problematic, and it will only be allowed to require them in the main program. I'll probably deprecate and remove this usage.
 
 ## Autolinked variables
