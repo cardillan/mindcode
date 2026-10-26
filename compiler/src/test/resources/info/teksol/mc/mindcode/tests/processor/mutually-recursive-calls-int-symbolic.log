@@ -3,7 +3,7 @@
      8 instructions eliminated by Dead Code Elimination (5 iterations).
      2 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     5 instructions eliminated by Data Flow Optimization (4 passes, 12 iterations).
+     5 instructions eliminated by Data Flow Optimization (3 passes, 9 iterations).
        1 loop condition was partially rotated.
     10 instructions added by Function Inlining (6 iterations).
      1 function call inlined by Function Inlining.
@@ -392,17 +392,6 @@ Modifications by Optimize return at line 6:9 (+1 instructions):
     49 label *label16
     50 op sub *tmp15 :f:n 1
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-    91 set *tmp28 :f1:n
-    92 set :f1:i 0
-    93 label *label23
--    * jump *label25 greaterThanEq :f1:i *tmp28
-+   94 jump *label25 greaterThanEq 0 :f1:n
-    95 label *label28
-    96 # "Function: def g1(in n)"
-    97 op sub *tmp30 :f1:i 1
-
 Modifications by Optimize return at line 18:9 (+1 instructions):
  
     68 op add :g:y :g:n 4
@@ -466,6 +455,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     64 push :g:x
     65 push :g:y
     66 set :f:n *tmp24
+ 
+   110 set *tmp28 :f1:n
+   111 set :f1:i 0
+   112 label *label23
+-    * jump *label25 greaterThanEq :f1:i *tmp28
++  113 jump *label25 greaterThanEq 0 :f1:n
+   114 label *label28
+   115 # "Function: def g1(in n)"
+   116 op sub *tmp30 :f1:i 1
 
 Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
  

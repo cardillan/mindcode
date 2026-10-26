@@ -17,7 +17,7 @@ Changes intended for the next regular release.
 
 * **Planned**
 
-* Internal subarrays optimization: for shared tables. the master array is used; when inlining, the subarray is used.
+* Internal subarrays optimization: for shared tables, the master array is used; when inlining, the subarray is used.
 * Large heap
   * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays.
 

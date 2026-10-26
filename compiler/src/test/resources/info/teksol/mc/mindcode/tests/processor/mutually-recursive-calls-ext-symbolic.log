@@ -5,7 +5,7 @@
      2 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
     34 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      6 instructions modified by Expression Optimization (3 iterations).
-    51 instructions eliminated by Data Flow Optimization (14 passes, 51 iterations).
+    51 instructions eliminated by Data Flow Optimization (14 passes, 49 iterations).
        1 loop condition was partially rotated.
    298 instructions added by Function Inlining (17 iterations).
     12 function calls inlined by Function Inlining.

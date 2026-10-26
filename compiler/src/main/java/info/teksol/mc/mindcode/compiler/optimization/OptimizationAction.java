@@ -97,4 +97,10 @@ public interface OptimizationAction {
                 cost() < otherAction.cost() && benefit() >= otherAction.benefit();
 
     }
+
+    /// Indicates whether a data flow optimization should be run immediately after applying this optimization
+    /// as a part of this action
+    default boolean runDataFlowOptimization() {
+        return true;
+    }
 }

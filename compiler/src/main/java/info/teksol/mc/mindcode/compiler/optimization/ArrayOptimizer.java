@@ -307,6 +307,11 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         @Override
+        public boolean runDataFlowOptimization() {
+            return false;
+        }
+
+        @Override
         public String toString() {
             int count = optimizationPlan.instructions.size();
             ArrayAccessInstruction first = optimizationPlan.instructions.getFirst();

@@ -272,6 +272,11 @@ class RecursiveOptimizer extends BaseOptimizer {
         }
 
         @Override
+        public boolean runDataFlowOptimization() {
+            return false;
+        }
+
+        @Override
         public OptimizationResult apply(int costLimit) {
             return applyOptimization(() -> replaceJumpToReturn(this, costLimit), toString());
         }

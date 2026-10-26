@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.20.2 – 2026-10-26
+
+### Fixed
+
+* Fixed the instruction injection optimization taking too much time in some cases ([#500](https://github.com/cardillan/mindcode/issues/500)).
+
 ## 3.20.1 – 2026-10-25
 
 ### Fixed

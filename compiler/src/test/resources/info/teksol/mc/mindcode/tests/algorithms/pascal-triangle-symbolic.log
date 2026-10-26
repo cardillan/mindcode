@@ -1,10 +1,10 @@
     91 instructions before optimizations.
-     4 instructions eliminated by Temp Variables Elimination (7 iterations).
+     4 instructions eliminated by Temp Variables Elimination (8 iterations).
      1 instruction eliminated by Dead Code Elimination (4 iterations).
-     1 instruction eliminated by Single Step Elimination (7 iterations).
-     6 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
+     1 instruction eliminated by Single Step Elimination (8 iterations).
+     6 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
        3 loop conditions were partially rotated.
-    39 instructions added by Array Optimization (7 iterations).
+    41 instructions added by Array Optimization (8 iterations).
      2 arrays improved by Array Optimization.
     91 instructions after optimizations.
 
@@ -14,11 +14,11 @@ Pass 1: speed optimization selection (cost limit 952):
     Inject array access to 'currentLine' at line 25:13           size   +17, benefit       62.5, efficiency      3.676
 
 Pass 1: speed optimization selection (cost limit 938):
-  * Inject array access to 'currentLine' at line 24:13           size   +17, benefit       62.5, efficiency      3.676 (+19 instructions)
+  * Inject array access to 'currentLine' at line 24:13           size   +17, benefit       62.5, efficiency      3.676 (+17 instructions)
     Inject array access to 'currentLine' at line 25:13           size   +17, benefit       62.5, efficiency      3.676
 
-Pass 1: speed optimization selection (cost limit 919):
-  * Inject array access to 'currentLine' at line 25:13           size   +15, benefit     1312.5, efficiency     87.500 (+15 instructions)
+Pass 1: speed optimization selection (cost limit 921):
+  * Inject array access to 'currentLine' at line 25:13           size   +17, benefit       62.5, efficiency      3.676 (+17 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -65,7 +65,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 inst
     35 label *label8
     36 op add :c :c 1
 
-Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-31 instructions):
+Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-33 instructions):
  
     13 set *tmp1 :j
     14 op sub *tmp4 :j 1
@@ -224,7 +224,33 @@ Modifications by Inject array access to 'previousLine' at line 18:50 (+14 instru
     20 op add :j :j 1
     21 jump *label11 lessThanEq :j :lineLength
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+Modifications by Inject array access to 'currentLine' at line 24:13 (+17 instructions):
+ 
+    26 label *label7
+    27 jump *label9 greaterThanEq :c :lineLength
+    28 label *label12
+-    * readarr<lookup:liquid> *tmp14 .currentLine[] :c
+-    * op add :total :total *tmp14
++   29 readarr<inlined:regular:inj+1> *tmp14 .currentLine[] :c
++   30 > op add :total :total *tmp14
+    31 readarr<lookup:liquid> *tmp18 .currentLine[] :c
+    32 writearr<lookup:item> *tmp18 .previousLine[] :c
+    33 label *label8
+
+Modifications by Inject array access to 'currentLine' at line 25:13 (+17 instructions):
+ 
+    28 label *label12
+    29 readarr<inlined:regular:inj+1> *tmp14 .currentLine[] :c
+    30 > op add :total :total *tmp14
+-    * readarr<lookup:liquid> *tmp18 .currentLine[] :c
+-    * writearr<lookup:item> *tmp18 .previousLine[] :c
++   31 readarr<inlined:regular:inj+1> *tmp18 .currentLine[] :c
++   32 > writearr<lookup:item> *tmp18 .previousLine[] :c
+    33 label *label8
+    34 op add :c :c 1
+    35 jump *label12 lessThan :c :lineLength
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      4 set lead 1
      5 set :i 3
@@ -247,34 +273,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * jump *label9 greaterThanEq :c :lineLength
 +   27 jump *label9 greaterThanEq 0 :lineLength
     28 label *label12
-    29 readarr<lookup:liquid> *tmp14 .currentLine[] :c
-    30 op add :total :total *tmp14
-
-Modifications by Inject array access to 'currentLine' at line 24:13 (+17 instructions):
- 
-    26 label *label7
-    27 jump *label9 greaterThanEq 0 :lineLength
-    28 label *label12
--    * readarr<lookup:liquid> *tmp14 .currentLine[] :c
--    * op add :total :total *tmp14
-+   29 readarr<inlined:regular:inj+1> *tmp14 .currentLine[] :c
-+   30 > op add :total :total *tmp14
-    31 readarr<lookup:liquid> *tmp18 .currentLine[] :c
-    32 writearr<lookup:item> *tmp18 .previousLine[] :c
-    33 label *label8
-
-Modifications by Inject array access to 'currentLine' at line 25:13 (+15 instructions):
- 
-    28 label *label12
     29 readarr<inlined:regular:inj+1> *tmp14 .currentLine[] :c
     30 > op add :total :total *tmp14
--    * readarr<lookup:liquid> *tmp18 .currentLine[] :c
--    * writearr<lookup:item> *tmp18 .previousLine[] :c
-+   31 readarr<inlined:regular:inj+1> *tmp18 .currentLine[] :c
-+   32 > writearr<lookup:item> *tmp18 .previousLine[] :c
-    33 label *label8
-    34 op add :c :c 1
-    35 jump *label12 lessThan :c :lineLength
 
 Modifications by Virtual Instruction Expansion (-3 instructions):
  
@@ -410,7 +410,7 @@ Modifications by Virtual Instruction Expansion (-3 instructions):
    132 op add :c :c 1
    133 jump *label12 lessThan :c :lineLength
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
     97 label *label24
     98 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
@@ -421,7 +421,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
    102 set copper water
    103 jump *label35 always
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
  
     96 op add :total :total nitrogen
     97 label *label24
@@ -431,7 +431,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-1
    100 multilabel *label36 (m:marker2)
    101 set copper water
 
-Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
  
    131 label *label3
    132 assertequals 1023 :total "Sum of Pascal triangle"

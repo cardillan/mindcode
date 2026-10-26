@@ -232,9 +232,9 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                 optimizationContext.finish();
 
                 if (result == OptimizationResult.REALIZED) {
-                    optimizationContext.debugPrintProgram(String.format("%n*** Performing Data Flow optimization after %s ***%n", selectedAction), true);
                     Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
-                    if (optimizer != null) {
+                    if (selectedAction.runDataFlowOptimization() && optimizer != null) {
+                        optimizationContext.debugPrintProgram(String.format("%n*** Performing Data Flow optimization after %s ***%n", selectedAction), true);
                         optimizationContext.prepare();
                         optimizer.optimize(phase, pass);
                         optimizationContext.finish();
