@@ -41,6 +41,9 @@ defaults:
   # `set` instructions are replaced with `0`. This makes the emulator accept such instructions.
   err-assignment-to-fixed-var: [ false ]
 
+  # Activating debug can trigger different bugs
+  debug: [ false, true ]
+
   # List of goal settings to use
   goal: [ speed, neutral, size ]
 
