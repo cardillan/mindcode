@@ -272,6 +272,8 @@ class DataFlowVariableStates {
                 return;
             }
 
+            values.remove(variable);
+
             if (instruction instanceof ArrayAccessInstruction thisIx) {
                 if (thisIx.getArrayConstruction().accessByName()) {
                     LogicVariable elementVariable = thisIx.getArrayConstructor().getElementNameVariable();
@@ -683,6 +685,11 @@ class DataFlowVariableStates {
                     reads.forEach((k, v) -> trace("        " + k.toMlog() + " (*" + v + ")"));
                 }
             }
+        }
+
+        @Override
+        public String toString() {
+            return "VariableStates #" + id;
         }
     }
 

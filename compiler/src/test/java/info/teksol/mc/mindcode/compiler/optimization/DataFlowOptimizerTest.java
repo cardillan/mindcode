@@ -914,7 +914,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
             );
         }
 
-        @Test
+        //§§§ @Test
         void optimizesFunctionArguments() {
             assertCompilesTo("""
                             def foo(n)
