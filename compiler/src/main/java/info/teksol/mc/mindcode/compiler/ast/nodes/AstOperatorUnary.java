@@ -15,8 +15,7 @@ public class AstOperatorUnary extends AstExpression {
     private final Operation operation;
     private final AstExpression operand;
 
-    public AstOperatorUnary(SourcePosition sourcePosition, Operation operation,
-            AstExpression operand) {
+    public AstOperatorUnary(SourcePosition sourcePosition, Operation operation, AstExpression operand) {
         super(sourcePosition, children(operand));
         this.operation = Objects.requireNonNull(operation);
         this.operand = Objects.requireNonNull(operand);

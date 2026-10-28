@@ -51,6 +51,32 @@ class WhileLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, label(3))
             );
         }
+
+        @Test
+        void compilesDoWhileLoopWithParentheses() {
+            assertCompilesTo("""
+                            do
+                                x = rand(10);
+                                y = rand(10);
+                            while (x < 5 and y < 5);
+                            print(x);
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "rand", tmp(0), "10"),
+                    createInstruction(SET, ":x", tmp(0)),
+                    createInstruction(OP, "rand", tmp(1), "10"),
+                    createInstruction(SET, ":y", tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "lessThan", tmp(2), ":x", "5"),
+                    createInstruction(JUMP, label(2), "equal", tmp(2), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "lessThan", tmp(3), ":y", "5"),
+                    createInstruction(JUMP, label(2), "equal", tmp(3), "false"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, ":x")
+            );
+        }
     }
 
     @Nested

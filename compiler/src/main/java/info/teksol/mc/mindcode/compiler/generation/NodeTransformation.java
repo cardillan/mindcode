@@ -137,14 +137,17 @@ public class NodeTransformation {
 
         while (true) {
             switch (current) {
-                case AstOperatorUnary n when n.getOperation().isBooleanNegation():
+                case AstOperatorUnary n when n.getOperation().isBooleanNegation() -> {
                     negated = !negated;
                     current = n.getOperand();
-                    break;
-
-                case AstParentheses n:  current = n.getExpression(); break;
-                case AstNegatable<?> n: return negated ? n.negate() : (AstExpression) n;
-                default:                return node;
+                }
+                case AstParentheses n -> current = n.getExpression();
+                case AstNegatable<?> n -> {
+                    return negated ? n.negate() : (AstExpression) n;
+                }
+                default -> {
+                    return node;
+                }
             }
         }
     }

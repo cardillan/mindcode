@@ -351,7 +351,8 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
         }
     }
 
-    protected void evaluateInvertedCondition(AstExpression node, LogicLabel trueLabel, LogicLabel falseLabel) {
+    protected void evaluateInvertedCondition(AstExpression expression, LogicLabel trueLabel, LogicLabel falseLabel) {
+        AstExpression node = transform(expression);
         final AstContextType contextType = AstContextType.SCBE_COND;
         if (node instanceof AstOperatorShortCircuiting shortCircuitingNode) {
             assembler.enterAstNode(shortCircuitingNode, contextType);

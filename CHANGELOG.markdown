@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.20.4 – 2026-10-28
+
+### Fixed
+
+* Fixed suboptimal handling of parenthesized expressions in `do while` loops ([#510](https://github.com/cardillan/mindcode/issues/510)).
+
 ## 3.20.3 – 2026-10-27
 
 ### Fixed
