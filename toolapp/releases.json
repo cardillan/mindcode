@@ -1,0 +1,42 @@
+{
+  "releases": [
+    {
+      "version": "3.20.4",
+      "importance": "optional",
+      "features": [
+        "Improved possible suboptimal code generation in do-while loops"
+      ]
+    },
+    {
+      "version": "3.20.3",
+      "importance": "recommended",
+      "features": [
+        "Fix: incorrect code generated when using descending loops with the 'debug' option"
+      ]
+    },
+    {
+      "version": "3.20.2",
+      "importance": "optional",
+      "features": [
+        "Improved compilation/optimization time in some cases"
+      ]
+    },
+    {
+      "version": "3.20.1",
+      "importance": "recommended",
+      "features": [
+        "Fix: possibly incorrectly built shared jump table when using internal subarrays"
+      ]
+    },
+    {
+      "version": "3.20.0",
+      "importance": "recommended",
+      "features": [
+        "Large stack",
+        "Large arrays",
+        "Built-in arrays",
+        "Compiler and optimizer improvements"
+      ]
+    }
+  ]
+}
