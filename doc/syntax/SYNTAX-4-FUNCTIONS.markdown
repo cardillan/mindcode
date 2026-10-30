@@ -471,7 +471,7 @@ The `error()` function, which can be used to report errors detected at runtime, 
 
 ## The `emitLog()` function
 
-The `emitLog()` function, which can be used to write information into the Mindustry log file using the Mlog Assertions mod, is described [here](TROUBLESHOOTING.markdown#the-emitlog-function).
+The `emitLog()` function, which can be used to write information into the Mindustry log file using the Mlog Dev Tools mod, is described [here](TROUBLESHOOTING.markdown#the-emitlog-function).
 
 ## The `length()` function
 

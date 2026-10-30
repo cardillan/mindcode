@@ -57,7 +57,7 @@ By setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) t
 * Statements in `debug` blocks are included in the compiled code.
 * Calls to `debug` functions are compiled.
 
-Compiling code with debug support enabled may result in larger code (both due to additional code in debug blocks and debug functions, and due to some optimizations not being performed to preserve user-defined variables). If the new code size exceeds the mlog code size limit (1000 instructions), you can use the [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions) to increase the instruction limit (up to 2000 instructions) to be able to still run the compiled code.
+Compiling code with debug support enabled may result in larger code (both due to additional code in debug blocks and debug functions, and due to some optimizations not being performed to preserve user-defined variables). If the new code size exceeds the mlog code size limit (1000 instructions), you can use the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools) to increase the instruction limit (up to 2000 instructions) to be able to still run the compiled code.
 
 When entering the processor screen while the program is running doesn't stop program execution. To get a meaningful insight into the state of the program, you may need to stop it. Stopping the program is possible in several ways:
 
@@ -115,7 +115,7 @@ When the first parameter to the error function is not a formattable string liter
 How the function is compiled depends on the `error-reporting` compiler option:
 
 * when set to `minimal`, `simple` or `described`, the function parameters are stored in variables `*ERROR_n`, where `n` is an index starting at 0. When the formattable string literal was used, the formatted string is stored in `*ERROR_0` and the rest in `*ERROR_1`, `*ERROR_2` etc. After that, a `stop` instruction is emitted.
-* when set to `assert`, an `error` instruction is produced, taking up to 10 of the accumulated parameters as arguments. When the formattable string literal was used, the formatted string is used as the first argument. This instruction is then handled by the [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), which displays the message and stops the processor.
+* when set to `assert`, an `error` instruction is produced, taking up to 10 of the accumulated parameters as arguments. When the formattable string literal was used, the formatted string is used as the first argument. This instruction is then handled by the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools), which displays the message and stops the processor.
 
 Example:
 
@@ -155,7 +155,7 @@ label_4:
 
 ### The `emitLog()` function
 
-The built-in `emitLog()` function serves for logging diagnostic information into the Mindustry log file. The log file is located in the game's data directory. The function requires the [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions) to be installed.
+The built-in `emitLog()` function serves for logging diagnostic information into the Mindustry log file. The log file is located in the game's data directory. The function requires the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools) to be installed.
 
 > [!NOTE]
 > When the `error-reporting` option is set to a value other than `assert`, calls to the `emitLog()` function are ignored and not compiled into the final code.

@@ -86,7 +86,7 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into the selected processor in Mindustry World directly, avoiding the use of the clipboard. Both the online and offline versions of Mindcode support this feature.
 
-The [Mlog Dev Tools mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting) for both internal and external arrays, making this kind of bugs easier to detect. Additional debugging and profiling features are available for Mindustry 8.
+The [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting) for both internal and external arrays, making this kind of bugs easier to detect. Additional debugging and profiling features are available for Mindustry 8.
 
 ## Mindustry Logic References
 
