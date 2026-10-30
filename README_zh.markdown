@@ -84,7 +84,7 @@ Mindcode 可在 https://mindcode.herokuapp.com/ 获取。在 _Mindcode Source Co
 
 Mindcode 可以与 [Mlog Watcher 模组](/doc/syntax/TOOLS-MLOG-WATCHER.markdown)交互，将编译后的代码直接注入 Mindustry 世界中选定的处理器，避免使用剪贴板。在线和离线版本的 Mindcode 都支持此功能。
 
-适用于 Mindustry 7/8 的 [Mlog Assertions 模组](https://github.com/cardillan/MlogAssertions)，允许对内部和外部数组进行高效的[数组边界检查](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting)，使这类 bug 更容易检测。
+适用于 Mindustry 7/8 的 [Mlog Dev Tools 模组](https://github.com/cardillan/MlogDevTools)，允许对内部和外部数组进行高效的[数组边界检查](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting)，使这类 bug 更容易检测。
 
 ## Mindustry 逻辑参考资料
 

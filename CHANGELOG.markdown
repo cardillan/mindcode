@@ -57,7 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code ([#483](https://github.com/cardillan/mindcode/issues/483)).
 * The remote call protocol version was increased to 2. Both main and remote processors' code must be recompiled to use the new version. 
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
-* Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Assertions mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.
+* Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Dev Tools mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.
 * **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary. 
 * **Breaking:** the `err-runtime-check-failed` execution flag has been split into five separate flags: `err-stop-on-assert-bounds`, `err-stop-on-assert-equals`, `err-stop-on-assert-prints`, `err-stop-on-assert-type` and `err-stop-on-error`.
 
