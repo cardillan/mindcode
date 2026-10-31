@@ -234,6 +234,7 @@ public class ERR {
     public static final String UNSATISFIED_LINK = "No block is linked to the processor as '%s' in the schematic definition.";
     public static final String UNSUPPORTED_LINK_NAME = "Symbolic link name is required ('%s' denotes a literal link name).";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
+    public static final String VARIABLE_CANNOT_READ_DEBUG = "The value of a debug variable '%s' cannot be read.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' cannot be used with '%s'.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIERS = "Modifiers %s are mutually exclusive.";
     public static final String VARIABLE_INTRINSIC_IDENTIFIER = "Identifier '%s' is reserved for compiler-defined variables.";

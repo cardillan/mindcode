@@ -273,6 +273,94 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
     }
 
+
+    @Nested
+    class DebugVariableDeclarations {
+
+        @Test
+        void compilesDebugVariable() {
+            assertCompilesTo("""
+                            #set debug = true;
+                            debug foo;
+                            print(foo = @time);
+                            """,
+                    createInstruction(SET, tmp(0), "@time"),
+                    createInstruction(SET, "foo", tmp(0)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void omitsDebugVariable() {
+            assertCompilesTo("""
+                            #set debug = false;
+                            debug foo;
+                            print(foo = @time);
+                            """,
+                    createInstruction(SET, tmp(0), "@time"),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void refusesInvalidVariableName() {
+            assertGeneratesMessage(
+                    "Name 'wave1' is reserved for linked blocks.",
+                    "debug wave1;");
+        }
+
+        @Test
+        void refusesAssignmentsFromDebugVariable() {
+            assertGeneratesMessage(
+                    "The value of a debug variable 'x' cannot be read.",
+                    "debug x = 10; var y = x;");
+        }
+
+        @Test
+        void refusesForEachLoopWithDebugVariable() {
+            assertGeneratesMessage(
+                    "The value of a debug variable 'x' cannot be read.",
+                    "debug x = 10; for y in x, 20, 30 do print(y); end;");
+        }
+
+        @Test
+        void refusesPassingDebugVariableToFunction() {
+            assertGeneratesMessage(
+                    "The value of a debug variable 'x' cannot be read.",
+                    """
+                            debug x = 10;
+
+                            void foo(a)
+                            end;
+                            
+                            foo(x);
+                            """);
+        }
+
+        @Test
+        void refusesPassingDebugVariableToMlogBlock() {
+            assertGeneratesMessage(
+                    "The value of a debug variable 'x' cannot be read.",
+                    """
+                            debug x = 10;
+
+                            mlog (in x) {
+                                print x
+                            }
+                            """);
+        }
+
+        @Test
+        void refusesLocalDebugVariable() {
+            assertGeneratesMessage(
+                    "The 'debug' modifier cannot be used to declare local variables.",
+                    """
+                            begin
+                                debug x = 10;
+                            end;
+                            """);
+        }
+    }
     @Nested
     class ExternalArrayDeclarations {
         @Test

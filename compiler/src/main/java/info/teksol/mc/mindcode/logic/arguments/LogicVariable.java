@@ -1,11 +1,15 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionParameter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
@@ -313,6 +317,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 identifier.getName(), mlog, blockType);
     }
 
+    public static LogicVariable debug(AstIdentifier identifier, String mlog) {
+        return new LogicDebug(identifier, mlog);
+    }
+
     public static LogicVariable global(AstIdentifier identifier, String mlog) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
                 identifier.getName(), mlog, f());
@@ -506,6 +514,62 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
         public LogicVariable withType(ArgumentType argumentType) {
             return new LogicTemp(nameCreator, argumentType, index, name);
+        }
+    }
+
+    public static class LogicDebug extends LogicVariable {
+        LogicDebug(SourcePosition sourcePosition, String name, String mlog) {
+            super(sourcePosition, GLOBAL_VARIABLE, name, mlog, f(fVolatile, fOptional));
+        }
+
+        LogicDebug(AstIdentifier identifier, String mlog) {
+            this(identifier.sourcePosition(), identifier.getName(), mlog);
+        }
+
+        @Override
+        public ValueStore withSourcePosition(SourcePosition sourcePosition) {
+            return new LogicDebug(sourcePosition, name, mlog);
+        }
+
+        public LogicVariable withType(ArgumentType argumentType) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
+            ContextFactory.getMessageContext().addMessage(PositionalMessage.error(creator.getAstContext().sourcePosition(), ERR.VARIABLE_CANNOT_READ_DEBUG, name));
+            return INVALID;
+        }
+
+        @Override
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+            ContextFactory.getMessageContext().addMessage(PositionalMessage.error(creator.getAstContext().sourcePosition(), ERR.VARIABLE_CANNOT_READ_DEBUG, name));
+        }
+
+        @Override
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+            if (creator.getAstContext().getLocalProfile().isDebug()) {
+                super.setValue(creator, value);
+            }
+        }
+
+        @Override
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+            if (creator.getAstContext().getLocalProfile().isDebug()) {
+                super.writeValue(creator, valueSetter);
+            }
+        }
+
+        @Override
+        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+            return creator.getAstContext().getLocalProfile().isDebug() ? super.getWriteVariable(creator) : INVALID;
+        }
+
+        @Override
+        public void storeValue(ContextfulInstructionCreator creator) {
+            if (creator.getAstContext().getLocalProfile().isDebug()) {
+                super.storeValue(creator);
+            }
         }
     }
 

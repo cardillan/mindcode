@@ -54,7 +54,7 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
     /// If the resulting value is passed up in a new temporary variable (may happen for volatile variables,
     /// for example), the variable is properly registered in the parent node context.
     ///
-    /// @param returnPriorValue indicates the prior value of the target is the result of this node (basically only
+    /// @param returnPriorValue indicates the prior value of the target is the result of this node (basically, only
     ///                         true for postfix operators)
     /// @return a ValueStore instance holding the result of this node
     private ValueStore applyOperation(AstExpression node, AstExpression targetNode, AstExpression valueNode, @Nullable Operation operation,

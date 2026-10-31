@@ -50,12 +50,14 @@ This requires adding a code only used for the actual debugging process. Mindcode
 
 * A debug code block: `debug <some code> end;`. Debug block is not compiled, unless `debug` is set to `true`.
 * A debug function: `debug void foo() <some code> end;`. Calls to debug functions are not compiled, unless `debug` is set to `true`.
+* A debug variable: `debug var bar;`. Debug variables can't be read. Writes to debug variables are not compiled, unless `debug` is set to `true`.
 
 By setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) to `true`, the code gets compiled with debug support. The compiler ensures the following:
 
 * All user-defined variables are preserved and not removed by optimizations. It is possible to inspect all variables on the **Vars** screen.
 * Statements in `debug` blocks are included in the compiled code.
 * Calls to `debug` functions are compiled.
+* Writes to `debug` variables are compiled, and these variables can be inspected in the **Vars** screen.
 
 Compiling code with debug support enabled may result in larger code (both due to additional code in debug blocks and debug functions, and due to some optimizations not being performed to preserve user-defined variables). If the new code size exceeds the mlog code size limit (1000 instructions), you can use the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools) to increase the instruction limit (up to 2000 instructions) to be able to still run the compiled code.
 

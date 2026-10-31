@@ -428,6 +428,7 @@ external(cell1) var foo[4];
 The following storage modifiers are available:
 
 * `const`: the variable represents a [constant value](#constants).
+* `debug`: the variable is a [debug variable](#debug-variables).
 * `linked`: the variable is a [linked variable](#linked-variables).
 * `external`: the variable is an [external variable](#external-variables).
 * `export`: the variable is an [exported variable](#exported-variables): stored in the current processor, but made available to other processors.
@@ -443,7 +444,7 @@ Other modifiers are compatible only with specific storage modifiers. This table 
 |------------|-------------------------------------------------|-----------------|
 | `cached`   | `external`, `remote`                            | global          |
 | `guarded`  | `linked` or none                                | global          |
-| `mlog`     | `export`, `remote` or none                      | global          |
+| `mlog`     | `debug`, export`, `remote` or none              | global          |
 | `noinit`   | `export`, `external`, `linked`, remote` or none | global or local |
 | `volatile` | `export`, `linked` or none                      | global          |
 
@@ -597,10 +598,10 @@ A constant declaration must specify an initial value for the variable/array. The
 * linked blocks (only in relaxed syntax mode),
 * built-in variables, except built-in variables known not to be constant.
 
-The following values can be assigned to constant parameters or variables but not to constant arrays:
+Additionally, the following values can be used with some limitations:
 
-* mlog keywords,
-* formattable string literals (these may be passed to a `const` parameter of an inline function, but cannot be assigned to a constant variable).
+* mlog keywords: can be assigned to constant parameters or variables but not to constant arrays,
+* formattable string literals: cannot be assigned to constant variables or arrays directly, but can be passed as arguments to `const` parameters of inline functions.  
 
 Example:
 
@@ -1444,6 +1445,43 @@ void printExactHex(n)
     end;
 end;
 ```
+
+## Debug variables
+
+Debug variables are meant to help with debugging your code. They only exist in the debug build (when setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) to `true`). 
+
+It is only possible to write values to debug variables, which can then be inspected on the **Vars** screen. Using a value of a `debug` variable in any other way is not possible in Mindcode — for example, the following code doesn't compile (regardless of the value of the `debug` option):
+
+```
+debug foo;
+foo = 10;       // Okay
+print(foo);     // Compile error
+```
+
+An example of using a debug variable is shown below:
+
+```Mindcode
+debug time;
+
+// This is allowed, because a debug variable is only written to, not read from, in chained assignments:
+print(time = @time);
+```
+
+Compiled with `debug = false`:
+
+```mlog
+print @time
+```
+
+Compiled with `debug = true`:
+
+```
+set *tmp0 @time
+set .time *tmp0
+print *tmp0
+```
+
+As you can see, Mindcode ensures the value which is actually used is the same as the value stored in the debug variable.
 
 ## Linked variables
 

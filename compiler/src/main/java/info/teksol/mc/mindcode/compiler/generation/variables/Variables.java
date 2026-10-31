@@ -411,7 +411,14 @@ public class Variables extends CompilerMessageEmitter {
                         modifiers.contains(CACHED));
 
                 return registerRemoteVariable(identifier, variable);
-            } else  {
+            } else if (modifiers.contains(DEBUG)) {
+                if (processor.isBlockName(name)) {
+                    error(identifier, ERR.VARIABLE_NAME_RESERVED_FOR_LINKS, name);
+                } else if (!processor.isValidMlogName(name)) {
+                    error(identifier, ERR.INVALID_MLOG_SYMBOL, name);
+                }
+                return registerGlobalVariable(identifier, LogicVariable.debug(identifier, name));
+            } else {
                 return registerGlobalVariable(identifier,
                         LogicVariable.global(identifier,
                                 mlogName == null ? nameCreator.global(identifier.getName()) : mlogName,

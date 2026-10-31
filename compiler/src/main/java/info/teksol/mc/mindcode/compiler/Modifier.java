@@ -11,6 +11,7 @@ public enum Modifier {
     // Primary modifiers: mutually exclusive
     NONE            (-1),
     CONST           (MindcodeLexer.CONST),
+    DEBUG           (MindcodeLexer.DEBUG),
     LINKED          (MindcodeLexer.LINKED),
     EXTERNAL        (MindcodeLexer.EXTERNAL),
     EXPORT          (MindcodeLexer.EXPORT),
@@ -19,7 +20,7 @@ public enum Modifier {
     // Secondary modifiers: allowed for certain primary ones
     CACHED          (MindcodeLexer.CACHED, EXTERNAL, REMOTE),
     GUARDED         (MindcodeLexer.GUARDED, NONE, LINKED),
-    MLOG            (MindcodeLexer.MLOG, NONE, EXPORT, REMOTE),
+    MLOG            (MindcodeLexer.MLOG, NONE, DEBUG, EXPORT, REMOTE),
     NOINIT          (MindcodeLexer.NOINIT, NONE, LINKED, EXPORT, EXTERNAL, REMOTE),
     VOLATILE        (MindcodeLexer.VOLATILE, NONE, LINKED, EXPORT),
     ;
@@ -46,7 +47,7 @@ public enum Modifier {
     }
 
     public static EnumSet<Modifier> getPrimarySet() {
-        return EnumSet.of(CONST, LINKED, EXTERNAL, EXPORT, REMOTE);
+        return EnumSet.of(CONST, DEBUG, EXPORT, EXTERNAL, LINKED, REMOTE);
     }
 
     public static Modifier fromToken(int tokenType) {

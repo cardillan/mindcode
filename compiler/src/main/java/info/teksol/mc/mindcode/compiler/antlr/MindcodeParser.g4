@@ -145,6 +145,7 @@ variableDeclaration
 declModifier
     : modifier = CONST
     | modifier = CACHED
+    | modifier = DEBUG
     | modifier = EXPORT
     | modifier = EXTERNAL
     | modifier = EXTERNAL LPAREN blockList = identifierList RPAREN

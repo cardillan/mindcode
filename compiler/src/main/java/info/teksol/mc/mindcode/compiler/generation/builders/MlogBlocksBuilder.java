@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicToken;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
@@ -65,6 +66,8 @@ public class MlogBlocksBuilder extends AbstractCodeBuilder implements
 
         if (argument == null) {
             error(node, ERR.MLOG_BLOCK_VARIABLE_NOT_SIMPLE, node.getName());
+        } else if (node.isInput() && argument instanceof LogicVariable.LogicDebug) {
+            error(node, ERR.VARIABLE_CANNOT_READ_DEBUG, node.getName());
         } else {
             if (node.isOutput() && !argument.isUserWritable()) {
                 error(node, ERR.LVALUE_ASSIGNMENT_TO_CONST_NOT_ALLOWED, node.getName());

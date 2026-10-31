@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.21.0 – Unreleased
 
+### Added
+
+* Added the [`debug` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#debug-variables) to variable declarations ([#513](https://github.com/cardillan/mindcode/issues/513)).
+
 ### Changed
 
-* **Breaking:** Formattable string literals are evaluated in the declaration context instead of the use context ([#512](https://github.com/cardillan/mindcode/issues/512)).
+* **Breaking:** Formattable string literals are evaluated in the declaration context instead of the use context. Creating constants from formattable string literals is no longer supported ([#512](https://github.com/cardillan/mindcode/issues/512)).
 
 ## 3.20.5 – 2026-11-01
 

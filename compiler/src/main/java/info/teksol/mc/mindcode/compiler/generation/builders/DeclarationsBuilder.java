@@ -365,7 +365,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
     private void validateLocalContextModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
-            case EXPORT, EXTERNAL, GUARDED, LINKED, MLOG, REMOTE, VOLATILE -> error(element,
+            case EXPORT, DEBUG, EXTERNAL, GUARDED, LINKED, MLOG, REMOTE, VOLATILE -> error(element,
                     ERR.MODIFIER_REQUIRES_GLOBAL_SCOPE, element.getModifier().keyword());
         }
     }
@@ -612,7 +612,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             // Local variables need to be created within the parent node, as the current node is the
             // AstVariablesDeclaration node. If the variable was created within the current node, it
             // would fall out of scope when AstVariablesDeclaration node processing finishes.
-            case NONE, EXPORT, REMOTE ->
+            case NONE, DEBUG, EXPORT, REMOTE ->
                     variables.createVariable(isLocalContext(), specification.getIdentifier(), VariableScope.PARENT_NODE, modifiers);
 
             default -> {
