@@ -15,6 +15,8 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @NullMarked
@@ -40,7 +42,25 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
 
     @Override
     public ValueStore visitFormattableLiteral(AstFormattableLiteral node) {
-        return new FormattableContent(node.sourcePosition(), node.getParts());
+        // Try to merge strings that were split during parsing due to escapes
+        List<AstExpression> expressions = new ArrayList<>();
+
+        for (AstExpression part : node.getParts()) {
+            if (part instanceof AstLiteralString str) {
+                AstLiteralString string = str instanceof AstLiteralEscape escape
+                        ? new AstLiteralString(escape.sourcePosition(), "\\" + escape.getValue()) : str;
+
+                if (!expressions.isEmpty() && expressions.getLast() instanceof AstLiteralString lastString) {
+                    expressions.set(expressions.size() - 1, lastString.append(string));
+                } else {
+                    expressions.add(string);
+                }
+            } else {
+                expressions.add(part);
+            }
+        }
+
+        return new FormattableContent(node.sourcePosition(), evaluateExpressions(expressions));
     }
 
     @Override
@@ -50,7 +70,6 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
 
     @Override
     public ValueStore visitLiteralBinary(AstLiteralBinary node) {
-        String literal = node.getLiteral();
         return visitIntegerLiteral(node, 2, 2);
     }
 

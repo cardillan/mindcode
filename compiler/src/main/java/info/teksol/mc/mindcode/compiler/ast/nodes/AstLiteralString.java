@@ -24,6 +24,10 @@ public class AstLiteralString extends AstLiteral {
         return new AstLiteralString(sourcePosition, literal);
     }
 
+    public AstLiteralString append(AstLiteralString other) {
+        return new AstLiteralString(sourcePosition(), getValue() + other.getValue());
+    }
+
     @Override
     public double getDoubleValue() {
         return 1.0;

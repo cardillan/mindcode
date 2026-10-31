@@ -97,7 +97,7 @@ The value returned by functions performing plain text output corresponds to the 
 
 ### Compile-time formatting
 
-If the first argument passed to the `print()` or `println()` function is a [formattable string literal](SYNTAX-0-BASICS.markdown#formattable-string-literals), the functions perform compile-time formatting. All `$` characters inside the formattable string literal are replaced with variables and expressions like this:
+If the first argument passed to the `print()`, `println()`, or `remark()` functions is a [formattable string literal](SYNTAX-0-BASICS.markdown#formattable-string-literals), the functions perform compile-time formatting. All `$` characters inside the formattable string literal are replaced with variables and expressions like this:
 
 * If the `$` character is followed by a variable name, the variable is printed (external variables with the `$` prefix, e.g., `$X`, aren't supported).
 * If the `$` character is not followed by a variable name, next argument from the argument list is printed.
@@ -120,7 +120,7 @@ If the first argument passed to the `print()` or `println()` function is a [form
 
 The `println()` function works the same, but outputs an additional newline character to the text buffer.
 
-The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide the means to do it at runtime).
+The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal, as the formatting takes place at compile time (Mindustry Logic doesn't provide the means to do it at runtime).
 
 ```Mindcode
 var x = 3;
@@ -132,41 +132,9 @@ println($"Position: $, $", x, y);     // Will be formatted and will ultimately o
 println($"Distance: $", len(x, y));   // Will output "Distance: 5\n"
                                       // The expression for $ is taken from the list
 println($"Distance: ${len(x, y)}");   // The same as above
-
-const format = $"Position: $x, $y";
-println(format);                      // The formattable string can be assigned to a constant
 ```
 
 Compile-time formatting is supported by the `print()` and `println()` functions. The value returned by these functions performing compile-time formatting is always `null`.
-
-#### Using formattable string literal constants in functions
-
-Variables and expressions embedded in the formattable string literals are evaluated in the context of the function in which they're used:
-
-```Mindcode
-const format = $"Position: $x, $y";
-var x = 10;               // Global variables
-
-void foo(x, y)
-    println(format);      // Uses function parameters x, y
-end;
-
-void bar(y)
-    println(format);      // Uses global variable x and parameter y
-end;
-
-void baz(x)
-    println(format);      // Uses parameter x and undeclared local variable y
-end;
-
-begin
-    foo(1, 2);            // Prints "Position: 1, 2"
-    bar(20);              // Prints "Position: 10, 20"
-    baz(30);              // Prints "Position: 30, null"
-end;
-```
-
-When compiled in strict syntax, the above code produces the error "Variable 'y' is not defined." The error is located in the definition of the constant `format`, which makes identifying the cause of the error difficult. Use formattable string literal constants with caution.
 
 ### Run-time formatting
 

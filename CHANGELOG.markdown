@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.21.0 – Unreleased
+
+### Changed
+
+* **Breaking:** Formattable string literals are evaluated in the declaration context instead of the use context ([#512](https://github.com/cardillan/mindcode/issues/512)).
+
 ## 3.20.5 – 2026-11-01
 
 ### Fixed

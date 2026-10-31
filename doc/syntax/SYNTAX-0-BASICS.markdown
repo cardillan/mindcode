@@ -429,10 +429,11 @@ Formattable string literals are a special case of string literals which can only
 
 Concatenation of strings with the formattable string literal is supported through string interpolation:
 
+```Mindcode
+println($"$ITEM_COAL coal: ${vault1.@coal}");
 ```
-const FORMAT = $"$ITEM_COAL coal: ${vault1.@coal}";
-println(FORMAT);
-```
+
+If a formattable string literal contains embedded variables or expressions, they're evaluated in the context containing the literal. 
 
 ## Specifics of numeric literals in Mindustry Logic
 
@@ -466,23 +467,25 @@ To find a way around these constraints, Mindcode always reads the value of the n
 
 This processing ensures that numbers within a reasonable range are encoded to use maximal available precision, without producing mlog representations that would be unreasonably long.
 
+Mindustry build 160 and later also supports full scientific representation in numeric literals (e.g., `1.5e-5`), and supports all possible values for binary and hexadecimal literals. 
+
 Examples of Mindcode literals and their conversion into mlog:
 
-| Mindcode literal     | mlog 7 representation  | mlog 8 representation  |
-|:---------------------|:-----------------------|:-----------------------|
-| `1`                  | `1`                    | `1`                    |
-| `-008`               | `-008`                 | `-008`                 |
-| `0b10101`            | `0b10101`              | `0b10101`              |
-| `0xFFFFFFFFFFFFFFFF` | `-1`                   | `-1`                   |
-| `-0xFF`              | `-255`                 | `-255`                 |
-| `3.0`                | `3`                    | `3`                    |
-| `1e10`               | `10000000000`          | `10000000000`          |
-| `-1e-10`             | `-0.0000000001`        | `-0.0000000001`        |
-| `1.23456789e10`      | `12345678900`          | `12345678900`          |
-| `1.23456789e-10`     | `0.000000000123456789` | `0.000000000123456789` |
-| `1.23456789e25`      | `1234568E19`           | `123456789E17`         |
-| `1.23456789e-25`     | `12345679E-32`         | `123456789E-33`        |
-| `1.23456789e100`     | _Cannot be encoded_    | `123456789E92`         |
+| Mindcode literal     | mlog 7                 | mlog 8 before v160     | mlog 8 v160 and later |
+|:---------------------|:-----------------------|:-----------------------|:----------------------|
+| `1`                  | `1`                    | `1`                    | `1`                   |
+| `-008`               | `-8`                   | `-8`                   | `-8`                  |
+| `0b10101`            | `0b10101`              | `0b10101`              | `0b10101`             |
+| `0xFFFFFFFFFFFFFFFF` | `-1`                   | `0xFFFFFFFFFFFFFFFF`   | `0xFFFFFFFFFFFFFFFF`  |
+| `-0xFF`              | `-255`                 | `-0xff`                | `-0xff`               |
+| `3.0`                | `3`                    | `3`                    | `3`                   |
+| `1e10`               | `10000000000`          | `10000000000`          | `10000000000`         |
+| `-1e-10`             | `-0.0000000001`        | `-0.0000000001`        | `-0.0000000001`       |
+| `1.23456789e10`      | `12345678900`          | `12345678900`          | `12345678900`         |
+| `1.23456789e-10`     | `0.000000000123456789` | `0.000000000123456789` | `1.23456789E-10`      |
+| `1.23456789e25`      | `1234568E19`           | `123456789E17`         | `1.23456789E25`       |
+| `1.23456789e-25`     | `12345679E-32`         | `123456789E-33`        | `1.23456789E-25`      |
+| `1.23456789e100`     | _Cannot be encoded_    | `123456789E92`         | `1.23456789E100`      |
 
 The last three examples show the loss of precision when the number needs to be encoded using exponential notation into Mindustry Logic version 7, and the inability to represent such a literal value in mlog 7 at all.
 

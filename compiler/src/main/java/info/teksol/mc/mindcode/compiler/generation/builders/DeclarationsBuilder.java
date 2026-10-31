@@ -588,7 +588,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             ValueStore valueStore = processInLocalScope(() -> evaluate(expression));
 
             if (modifiers.contains(CONST)) {
-                if (valueStore.isConstantValue()) {
+                if (valueStore.isConstantValue() && !(valueStore instanceof FormattableContent)) {
                     variables.createConstant(isLocalContext(), specification, valueStore);
                 } else {
                     error(expression, ERR.EXPRESSION_NOT_CONSTANT_CONST, specification.getName());

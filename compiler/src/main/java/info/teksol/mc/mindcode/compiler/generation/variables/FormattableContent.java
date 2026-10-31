@@ -2,21 +2,20 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
 @NullMarked
 public class FormattableContent extends CompoundValueStore  {
-    private final List<AstExpression> parts;
+    private final List<ValueStore> parts;
 
-    public FormattableContent(SourcePosition sourcePosition, List<AstExpression> parts) {
+    public FormattableContent(SourcePosition sourcePosition, List<ValueStore> parts) {
         super(sourcePosition, ERR.FORMATTABLE_FORBIDDEN);
         this.parts = parts;
     }
 
-    public List<AstExpression> getParts() {
+    public List<ValueStore> getParts() {
         return parts;
     }
 

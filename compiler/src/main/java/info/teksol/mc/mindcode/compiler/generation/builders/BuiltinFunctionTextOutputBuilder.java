@@ -2,7 +2,8 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.messages.WARN;
-import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstEnhancedComment;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
@@ -124,8 +125,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             LogicKeyword level = assembler.validateKeyword(opcodeVariant.namedParameters().getFirst(), levelArg, true);
 
             List<LogicArgument> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
-                    ? createFormattableErrorOutput(
-                    evaluateExpressionsUncached(formattable.getParts()), arguments.subList(1, arguments.size()))
+                    ? createFormattableErrorOutput(formattable.getParts(), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
 
             if (call.getProfile().getErrorReporting() == RuntimeErrorReporting.ASSERT) {
@@ -157,8 +157,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         } else {
             assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
             List<LogicArgument> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
-                    ? createFormattableErrorOutput(
-                    evaluateExpressionsUncached(formattable.getParts()), arguments.subList(1, arguments.size()))
+                    ? createFormattableErrorOutput(formattable.getParts(), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
 
             assembler.createError(finalArgs);
@@ -263,9 +262,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         ValueStore result = arguments.getFirst().unwrap() instanceof FormattableContent formattable
-                ? createFormattableOutput(formattable, false, formatter,
-                    evaluateExpressionsUncached(merge(formattable)),
-                    arguments.subList(1, arguments.size()))
+                ? createFormattableOutput(formattable, false, formatter, formattable.getParts(),arguments.subList(1, arguments.size()))
                 : createPlainOutput(0, formatter, arguments);
 
         if (formatter.createsNewLine()) {
@@ -274,34 +271,6 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
         assembler.clearSubcontextType();
         return result;
-    }
-
-    private List<AstExpression> merge(FormattableContent formattable) {
-        List<AstExpression> parts = new ArrayList<>();
-        boolean wasString = false;
-        for (AstExpression part : formattable.getParts()) {
-            if (part instanceof AstLiteralString str) {
-                AstLiteralString string = handleEscapes(str);
-                if (wasString && parts.getLast() instanceof AstLiteralString lastString) {
-                    parts.set(parts.size() - 1, merge(lastString, string));
-                } else {
-                    parts.add(string);
-                    wasString = true;
-                }
-            } else {
-                parts.add(part);
-                wasString = false;
-            }
-        }
-        return parts;
-    }
-
-    private AstExpression merge(AstLiteralString lastString, AstLiteralString string) {
-        return new AstLiteralString(lastString.sourcePosition(), lastString.getValue() + string.getValue());
-    }
-
-    private AstLiteralString handleEscapes(AstLiteralString string) {
-        return string instanceof AstLiteralEscape escape ? new AstLiteralString(escape.sourcePosition(), "\\" + escape.getValue()) : string;
     }
 
     public void handleEnhancedComment(AstEnhancedComment comment) {
@@ -388,9 +357,5 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         boolean requiresParameter() {
             return this != PRINTLN;
         }
-    }
-
-    private interface ErrorAssembler {
-        void create(CodeAssembler assembler, List<ValueStore> values);
     }
 }

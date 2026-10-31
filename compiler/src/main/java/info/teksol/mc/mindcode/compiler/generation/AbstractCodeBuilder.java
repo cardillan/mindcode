@@ -252,18 +252,6 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
         return expressions.stream().map(this::evaluate).toList();
     }
 
-    /// Evaluates every expression in the list, returning a list of evaluated values. Any compile-time evaluations
-    /// made while evaluating the parts are cleared up upon return. Used to evaluate FormattableContent,
-    /// because it can be evaluated in different contexts and caching compile-time evaluations might lead to
-    /// wrong evaluation next time.
-    ///
-    /// @return the value of all expressions in the list
-    protected List<ValueStore> evaluateExpressionsUncached(List<? extends AstMindcodeNode> expressions) {
-        List<ValueStore> list = expressions.stream().map(this::evaluate).toList();
-        evaluator.purgeFromCache(expressions);
-        return list;
-    }
-
     /// Tries to resolve given expression as an l-value. Reports an appropriate error when the expression
     /// doesn't represent an l-value.
     ///

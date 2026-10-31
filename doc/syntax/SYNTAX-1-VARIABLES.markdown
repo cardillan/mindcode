@@ -597,12 +597,10 @@ A constant declaration must specify an initial value for the variable/array. The
 * linked blocks (only in relaxed syntax mode),
 * built-in variables, except built-in variables known not to be constant.
 
-The following values can be assigned to constant variables but not to constant arrays:
+The following values can be assigned to constant parameters or variables but not to constant arrays:
 
-* formattable string literals (mlog-incompatible),
-* mlog keywords (mlog-incompatible).
-
-These constants can be passed to inline functions but cannot be stored in variables or passed to out-of-line or recursive functions.
+* mlog keywords,
+* formattable string literals (these may be passed to a `const` parameter of an inline function, but cannot be assigned to a constant variable).
 
 Example:
 
@@ -612,11 +610,18 @@ const HIGH_SPEED = 50;
 const LOW_SPEED = HIGH_SPEED / 2;
 const RATIO = sqrt(2);
 const message = DEBUG ? "Debug" : "Release";
-const FORMAT = $"Position: $x, $y";
 
 // Array of switches - linked blocks
 linked switch1, switch2, switch3;
 const links[] = (switch1, switch2, switch3);
+
+// Passing a formattable string literal into an inline function
+inline void message(const text)
+    println(text);
+    printflush(message1);
+end;
+
+message($"A random dice roll: ${floor(rand(6))}");
 ```
 
 Compile-time evaluation uses the same rules as Mindustry Logic, i.e., `const ERROR = 1 / 0` is a valid constant declaration which creates a constant `ERROR` with a value of `null`.
