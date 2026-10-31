@@ -403,7 +403,13 @@ write @coal processor2 "bar"
 
 Sometimes you might want to use variables in remote processors which weren't exported by the remote module, possibly because the other processor's code was not compiled by Mindcode. Another use case is for the module to access the main processor's variables directly (although in this case, a reference to the main processor must be made available to the module in some way).
 
-To specify where the remote variable is located and even what name it uses, use the `remote` keyword followed by the processor's name (or variable) in the variable declaration:
+When a processor contains compiled Mindcode, a variable to be accessed remotely must be declared `volatile`. You may also use the `mlog` specification to assign an mlog name to the variable:
+
+```
+volatile [mlog("<name>")] [var] <variable>;
+```
+
+To specify where the remote variable is located, use the `remote` keyword followed by the processor's name (or variable) in the variable declaration:
 
 ```
 remote(<processor>) [mlog("<name>")] [var] <variable>;
@@ -417,6 +423,37 @@ The following restrictions apply to remote variables declared with storage speci
 * Such variables must be declared in global scope and are therefore always global.
 * The declarations may appear either in a module or in a program. When declared in a remote module, these variables are local to the module and aren't made available in the scope of the program or module which requires the remote module.
 * When the mlog name is present, only one variable can be specified per declaration (as otherwise multiple variables would share the same mlog name and would be redundant).
+
+**Example**
+
+Declaring variables for remote access:
+
+```Mindcode
+#set remarks = comments;
+
+/// Remote variables named using Mindcode's naming convention
+volatile x = 5, y = 10;
+print(x, y);
+
+/// Remote variable named using the specified name
+volatile mlog("foo") z = 20;
+print(z);
+```
+
+compiles to:
+
+```mlog
+# Remote variables named using Mindcode's naming convention
+set .x 5
+set .y 10
+print .x
+print .y
+# Remote variable named using the specified name
+set foo 20
+print foo
+```
+
+Accessing remote variables:
 
 ```Mindcode
 #set remarks = comments;
