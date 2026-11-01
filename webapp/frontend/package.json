@@ -41,7 +41,7 @@
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@tailwindcss/vite": "^4.3.3",
 		"@types/node": "~22.19.13",
-		"bits-ui": "^2.19.5",
+		"bits-ui": "^2.20.2",
 		"clsx": "^2.1.1",
 		"codemirror": "^6.0.2",
 		"eslint": "^10.13.0",
