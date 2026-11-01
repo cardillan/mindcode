@@ -1,0 +1,107 @@
+package io.github.cardillan.mc.mindcode.compiler.generation.builders;
+
+import io.github.cardillan.mc.mindcode.compiler.PositionalMessage;
+import io.github.cardillan.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
+import io.github.cardillan.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import io.github.cardillan.mc.mindcode.compiler.generation.AbstractCodeBuilder;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.ValueStore;
+import io.github.cardillan.mc.mindcode.logic.arguments.*;
+import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
+import io.github.cardillan.mc.mindcode.logic.opcodes.OpcodeVariant;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
+import java.util.Objects;
+
+@NullMarked
+public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
+
+    public BuiltinFunctionAssertsBuilder(AbstractCodeBuilder builder) {
+        super(builder);
+    }
+
+    public ValueStore handleAssert(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        if (validateStandardFunctionArguments(call, arguments, 2)) {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            LogicValue condition = arguments.get(0).getValue(assembler);
+            LogicValue message= arguments.get(1).getValue(assembler);
+            assembler.createInstruction(Opcode.ASSERT, Condition.NOT_EQUAL, condition, LogicBoolean.FALSE, message);
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
+    }
+
+    public ValueStore handleAssertEquals(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        if (validateStandardFunctionArguments(call, arguments, 3)) {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            LogicValue expected = arguments.get(0).getValue(assembler);
+            LogicValue actual = arguments.get(1).getValue(assembler);
+            LogicValue title = arguments.get(2).getValue(assembler);
+            assembler.createInstruction(Opcode.ASSERT_EQUALS, expected, actual, title);
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
+    }
+
+    public ValueStore handleAssertPrints(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        if (call.getArguments().size() != 3) {
+            // Validate all arguments we got and produce messages
+            List<FunctionArgument> arguments = processArguments(call);
+            validateStandardFunctionArguments(call, arguments, 3);
+        } else {
+            assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+            // We must not evaluate the second argument until necessary
+            LogicValue expected = convertArgument(call.getArgument(0)).validateAsInput(messageConsumer).getValue(assembler);
+            LogicValue title = convertArgument(call.getArgument(2)).validateAsInput(messageConsumer).getValue(assembler);
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            LogicVariable tmp = assembler.nextTemp();
+            assembler.createInstruction(Opcode.ASSERT_FLUSH, tmp);
+            validateAndCompile(call.getArgument(1));           // Just print, not interested in the result
+            assembler.createInstruction(Opcode.ASSERT_PRINTS, tmp, expected, title);
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
+    }
+
+    public ValueStore handleAssertType(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        if (validateStandardFunctionArguments(call, arguments, 3)) {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            OpcodeVariant opcodeVariant = Objects.requireNonNull(processor.getOpcodeVariant(Opcode.ASSERT_TYPE, List.of()));
+            FunctionArgument expectedArgument = arguments.getFirst();
+            LogicKeyword expected = assembler.validateKeyword(opcodeVariant.namedParameters().getFirst(), expectedArgument, true);
+            LogicValue actual = arguments.get(1).getValue(assembler);
+            LogicValue title = arguments.get(2).getValue(assembler);
+            assembler.createInstruction(Opcode.ASSERT_TYPE, expected, actual, title);
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
+    }
+
+    private void validateAndCompile(AstFunctionArgument argument) {
+        if (!argument.hasExpression()) {
+            messageConsumer.addMessage(PositionalMessage.error(argument.sourcePosition(),
+                    "Parameter corresponding to this argument isn't optional, a value must be provided."));
+        }
+        if (argument.hasOutModifier()) {
+            messageConsumer.addMessage(PositionalMessage.error(argument.sourcePosition(),
+                    "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used."));
+        }
+        compile(Objects.requireNonNull(argument.getExpression()));
+    }
+}

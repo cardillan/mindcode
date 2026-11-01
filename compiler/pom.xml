@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>info.teksol.mindcode</groupId>
+        <groupId>io.github.cardillan.mindcode</groupId>
         <artifactId>mindcode</artifactId>
         <version>${revision}</version>
     </parent>
@@ -113,7 +113,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>info.teksol.mindcode</groupId>
+            <groupId>io.github.cardillan.mindcode</groupId>
             <artifactId>mindcode-annotations</artifactId>
             <version>${revision}</version>
         </dependency>

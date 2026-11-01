@@ -1,0 +1,134 @@
+package io.github.cardillan.mc.profile;
+
+import io.github.cardillan.mc.mindcode.compiler.optimization.Optimization;
+import io.github.cardillan.mc.mindcode.compiler.optimization.OptimizationLevel;
+import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorType;
+import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorVersion;
+import io.github.cardillan.mc.profile.options.*;
+import org.jspecify.annotations.NullMarked;
+
+/// Provides access to module/local compiler options.
+@NullMarked
+public interface LocalCompilerProfile {
+    <T> CompilerOptionValue<T> getOption(Enum<?> option);
+
+    int getIntValue(Enum<?> option);
+
+    double getDoubleValue(Enum<?> option);
+
+    boolean getBooleanValue(Enum<?> option);
+
+    String getStringValue(Enum<?> option);
+
+    <T extends Enum<T>> T getEnumValue(Enum<?> option);
+
+    boolean isDefault(Enum<?> option);
+
+    boolean isSpecified(Enum<?> option);
+
+    //<editor-fold desc="Environment Options">
+    ProcessorVersion getProcessorVersion();
+
+    ProcessorType getProcessorType();
+
+    Target getTarget();
+
+    boolean useTextJumpTables();
+    //</editor-fold>
+
+    //<editor-fold desc="Debugging Options">
+    default boolean isDebug() {
+        return getBooleanValue(DebuggingOptions.DEBUG);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Compiler Options">
+    boolean isUseTextJumpTables();
+
+    default int getAtomicMergeLevel() {
+        return getIntValue(CompilerOptions.ATOMIC_MERGE_LEVEL);
+    }
+
+    default double getAtomicSafetyMargin() {
+        return getDoubleValue(CompilerOptions.ATOMIC_SAFETY_MARGIN);
+    }
+
+    default int getIpt() {
+        return isDefault(CompilerOptions.IPT) ? getIntValue(CompilerOptions.SETRATE) : getIntValue(CompilerOptions.IPT);
+    }
+
+    default int getIpt(int defaultIpt) {
+        return isSpecified(CompilerOptions.IPT) ? getIntValue(CompilerOptions.IPT)
+                : isSpecified(CompilerOptions.SETRATE)? getIntValue(CompilerOptions.SETRATE)
+                : defaultIpt;
+    }
+
+    default Remarks getRemarks() {
+        return getEnumValue(CompilerOptions.REMARKS);
+    }
+
+    default int getStackDepth() {
+        return getIntValue(CompilerOptions.STACK_DEPTH);
+    }
+
+    SyntacticMode getSyntacticMode();
+
+    default boolean isAtomicFullProtection() {
+        return getBooleanValue(CompilerOptions.ATOMIC_FULL_PROTECTION);
+    }
+
+    default int getArrayIterationThreshold() {
+        return getIntValue(CompilerOptions.ARRAY_ITERATION_THRESHOLD);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Runtime Checks Options">
+    default RuntimeErrorReporting getErrorReporting() {
+        return getEnumValue(RuntimeChecksOptions.ERROR_REPORTING);
+    }
+
+    default boolean isErrorFunction() {
+        return getBooleanValue(RuntimeChecksOptions.ERROR_FUNCTION);
+    }
+
+    default boolean isBoundaryChecks() {
+        return getBooleanValue(RuntimeChecksOptions.BOUNDARY_CHECKS);
+    }
+
+    default boolean isStackOverflowChecks() {
+        return getBooleanValue(RuntimeChecksOptions.STACK_OVERFLOW_CHECKS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Optimizations Options">
+    default int getCaseOptimizationStrength() {
+        return getIntValue(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH);
+    }
+
+    default double getCodeWeight() {
+        return getDoubleValue(OptimizationOptions.WEIGHT);
+    }
+
+    default GenerationGoal getGoal() {
+        return getEnumValue(OptimizationOptions.GOAL);
+    }
+
+    default boolean isMlogBlockOptimization() {
+        return getBooleanValue(OptimizationOptions.MLOG_BLOCK_OPTIMIZATION);
+    }
+
+    default boolean isUnsafeCaseOptimization() {
+        return getBooleanValue(OptimizationOptions.UNSAFE_CASE_OPTIMIZATION);
+    }
+
+    default boolean isUseTextTranslations() {
+        return getBooleanValue(OptimizationOptions.USE_TEXT_TRANSLATIONS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Optimization Levels">
+    OptimizationLevel getOptimizationLevel(Optimization optimization);
+
+    boolean optimizationsActive();
+    //</editor-fold>
+}

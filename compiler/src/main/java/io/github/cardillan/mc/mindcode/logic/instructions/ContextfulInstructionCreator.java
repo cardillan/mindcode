@@ -1,0 +1,246 @@
+package io.github.cardillan.mc.mindcode.logic.instructions;
+
+import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.ValueStore;
+import io.github.cardillan.mc.mindcode.logic.arguments.*;
+import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import static io.github.cardillan.mc.mindcode.logic.opcodes.Opcode.*;
+
+/// Convenience interface for instruction creation. To be implemented by classes which manage their AST contexts,
+/// which therefore are not provided for individual instruction creation.
+///
+/// The implementing class only needs to implement the non-specific instruction creation method. All the specific
+/// methods are inherited from the interface.
+@NullMarked
+public interface ContextfulInstructionCreator extends Consumer<LogicInstruction> {
+
+    InstructionProcessor getProcessor();
+
+    AstContext getAstContext();
+
+    /// Allocates a new temporary variable.
+    ///
+    /// @return a new temporary variable
+    default LogicVariable nextTemp() {
+        return getProcessor().nextTemp();
+    }
+
+    /// Provides an unchanging representation of the given ValueStore at the moment this method is called.
+    /// The returned value is guaranteed not to change. If `valueStore` is a literal, returns the literal
+    /// directly, as it cannot be changed.
+    ///
+    /// @param valueStore the value to use
+    /// @return a LogicValue capturing the current value of the valueStore
+    default LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
+        if (valueStore instanceof LogicValue value && value.isImmutable()) {
+            return value;
+        } else {
+            LogicVariable tmp = nextTemp().withType(argumentType);
+            createSet(tmp, valueStore.getValue(this));
+            return tmp;
+        }
+    }
+
+    default void setInternalError() {
+        throw new MindcodeInternalError("Internal error occurred.");
+    }
+
+    LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);
+
+    default LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
+        return createInstruction(opcode, List.of(arguments));
+    }
+
+    default AssertBoundsInstruction createAssertBounds(LogicKeyword type, LogicValue multiple, LogicValue lowerBound,
+            Condition lowerCondition, LogicValue value, Condition upperCondition, LogicValue upperBound, LogicValue message) {
+        return (AssertBoundsInstruction) createInstruction(ASSERT_BOUNDS, List.of(type, multiple,
+                lowerBound, lowerCondition, value, upperCondition, upperBound, message));
+    }
+
+    default CallRecInstruction createCallRecursive(LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
+        return (CallRecInstruction) createInstruction(CALLREC, callAddr, retAddr, returnValue);
+    }
+
+    default CallInstruction createCallStackless(LogicAddress address, LogicVariable retAddr, LogicVariable returnValue) {
+        return (CallInstruction) createInstruction(CALL, address, retAddr, returnValue);
+    }
+
+    default CommentInstruction createComment(LogicArgument comment) {
+        return (CommentInstruction) createInstruction(COMMENT, comment);
+    }
+
+    default CommentInstruction createComment(String comment) {
+        return (CommentInstruction) createInstruction(COMMENT, LogicString.createRaw(comment));
+    }
+
+    default ControlInstruction createControl(LogicKeyword property, LogicValue target, LogicValue value) {
+        return (ControlInstruction) createInstruction(CONTROL, property, target, value);
+    }
+
+    default EmptyInstruction createEmpty() {
+        return (EmptyInstruction) createInstruction(EMPTY);
+    }
+
+    default EndInstruction createEnd() {
+        return (EndInstruction) createInstruction(END);
+    }
+
+    default ErrorInstruction createError(List<LogicArgument> messages) {
+        return (ErrorInstruction) createInstruction(ERROR, messages);
+    }
+
+    default ErrorInstruction createError(String... messages) {
+        return createError(Stream.of(messages).map(str -> (LogicArgument)LogicString.createRaw(str)).toList());
+    }
+
+    default FormatInstruction createFormat(LogicValue what) {
+        return (FormatInstruction) createInstruction(FORMAT, what);
+    }
+
+    default GetlinkInstruction createGetLink(LogicVariable result, LogicValue index) {
+        return (GetlinkInstruction) createInstruction(GETLINK, result, index);
+    }
+
+    default InitRecInstruction createInitRec(LogicBoolean inlined) {
+        return (InitRecInstruction) createInstruction(INITREC, inlined);
+    }
+
+    default InitStackInstruction createInitStack(LogicLabel callLabel, LogicLabel returnLabel) {
+        return (InitStackInstruction) createInstruction(INITSTACK, callLabel, returnLabel);
+    }
+
+    default JumpInstruction createJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
+        return (JumpInstruction) createInstruction(JUMP, target, condition, x, y);
+    }
+
+    default JumpInstruction createJumpUnconditional(LogicLabel target) {
+        return (JumpInstruction) createInstruction(JUMP, target, Condition.ALWAYS);
+    }
+
+    default LabelInstruction createLabel(LogicLabel label) {
+        return (LabelInstruction) createInstruction(LABEL, label);
+    }
+
+    default LookupInstruction createLookup(LogicKeyword type, LogicVariable result, LogicValue index) {
+        return (LookupInstruction) createInstruction(LOOKUP, type, result, index);
+    }
+
+    default MultiCallInstruction createMultiCall(LogicLabel target, LogicVariable offset, LogicLabel marker) {
+        return (MultiCallInstruction) createInstruction(MULTICALL, target, offset).setMarker(marker);
+    }
+
+    default MultiCallInstruction createMultiCall(LogicValue target, LogicLabel marker) {
+        return (MultiCallInstruction) createInstruction(MULTICALL, target, LogicNumber.ZERO).setMarker(marker);
+    }
+
+    default MultiJumpInstruction createMultiJump(LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
+        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, value, offset).setMarker(marker);
+    }
+
+    default MultiJumpInstruction createMultiJump(LogicValue target, LogicLabel marker) {
+        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO).setMarker(marker);
+    }
+
+    default MultiLabelInstruction createMultiLabel(LogicLabel label, LogicLabel marker) {
+        return (MultiLabelInstruction) createInstruction(MULTILABEL, label).setMarker(marker);
+    }
+
+    default OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first) {
+        return (OpInstruction) createInstruction(OP, operation, target, first);
+    }
+
+    default OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
+        return (OpInstruction) createInstruction(OP, operation, target, first, second);
+    }
+
+    default PopInstruction createPop(LogicVariable value) {
+        return (PopInstruction) createInstruction(POP, value);
+    }
+
+    default PrintInstruction createPrint(LogicValue what) {
+        return (PrintInstruction) createInstruction(PRINT, what);
+    }
+
+    default PrintCharInstruction createPrintChar(LogicValue what) {
+        return (PrintCharInstruction) createInstruction(PRINTCHAR, what);
+    }
+
+    default PrintflushInstruction createPrintflush(LogicVariable messageBlock) {
+        return (PrintflushInstruction) createInstruction(PRINTFLUSH, messageBlock);
+    }
+
+    default PushInstruction createPush(LogicVariable value) {
+        return (PushInstruction) createInstruction(PUSH, value);
+    }
+
+    default ReadInstruction createRead(LogicVariable result, LogicValue memory, LogicValue index) {
+        return (ReadInstruction) createInstruction(READ, result, memory, index);
+    }
+
+    default ReadArrInstruction createReadArr(LogicVariable result, LogicArray array, LogicValue index) {
+        ReadArrInstruction instruction = (ReadArrInstruction) createInstruction(READARR, result, array, index);
+        getProcessor().setupArrayAccessInstruction(instruction);
+        return instruction;
+    }
+
+    default RemarkInstruction createRemark(LogicValue what) {
+        return (RemarkInstruction) createInstruction(REMARK, what);
+    }
+
+    default ReturnInstruction createReturn(LogicVariable address) {
+        return (ReturnInstruction) createInstruction(RETURN, address);
+    }
+
+    default ReturnRecInstruction createReturnRec() {
+        return (ReturnRecInstruction) createInstruction(RETURNREC);
+    }
+
+    default SelectInstruction createSelect(LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicValue valueIfTrue, LogicValue valueIfFalse) {
+        return (SelectInstruction) createInstruction(SELECT, result, condition, x, y, valueIfTrue, valueIfFalse);
+    }
+
+    default SelectInstruction createSelect(LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicArgument valueIfTrue, LogicArgument valueIfFalse) {
+        return (SelectInstruction) createInstruction(SELECT, result, condition, x, y, valueIfTrue, valueIfFalse);
+    }
+
+    default SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property) {
+        return (SensorInstruction) createInstruction(SENSOR, result, target, property);
+    }
+
+    default SetInstruction createSet(LogicVariable target, LogicValue value) {
+        return (SetInstruction) createInstruction(SET, target, value);
+    }
+
+    default SetInstruction createSet(LogicBuiltIn target, LogicValue value) {
+        return (SetInstruction) createInstruction(SET, target, value);
+    }
+
+    default SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address) {
+        return (SetAddressInstruction) createInstruction(SETADDR, variable, address);
+    }
+
+    default StopInstruction createStop() {
+        return (StopInstruction) createInstruction(STOP);
+    }
+
+    default WaitInstruction createWait(LogicValue value) {
+        return (WaitInstruction) createInstruction(WAIT, value);
+    }
+
+    default WriteInstruction createWrite(LogicValue value, LogicValue memory, LogicValue index) {
+        return (WriteInstruction) createInstruction(WRITE, value, memory, index);
+    }
+
+    default WriteArrInstruction createWriteArr(LogicValue value, LogicArray array, LogicValue index) {
+        WriteArrInstruction instruction = (WriteArrInstruction) createInstruction(WRITEARR, value, array, index);
+        getProcessor().setupArrayAccessInstruction(instruction);
+        return instruction;
+    }
+}

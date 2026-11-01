@@ -21,7 +21,7 @@ $AppPropFiles | % {
 		Write-Host "Testing JDBC-Target: $($RgxTest[0].Groups['Host'].Value):$($RgxTest[0].Groups['PortNo'].Value) … " -NoNewline
 		If ((Test-NetConnection -ComputerName $RgxTest[0].Groups['Host'].Value -Port $RgxTest[0].Groups['PortNo'].Value -InformationLevel Quiet -WarningAction:SilentlyContinue) -eq $false) {
 			Write-Host 'failed!' -ForegroundColor Red
-			
+
 			Write-Host @'
 *****
 ***** To run Mindcode locally, you need to have a PostgreSQL database accessible.
@@ -41,7 +41,7 @@ $AppPropFiles | % {
 *****    webapp\src\test\resources\application.properties
 *****
 '@ -ForegroundColor Magenta
-			
+
 			break script
 		} Else {
 			Write-Host 'OK' -ForegroundColor Green
@@ -62,4 +62,4 @@ If ($LastExitCode -eq 1) {
 }
 
 # Start the Web Application
-java -classpath "$((Get-ChildItem .\webapp\ *.jar -Recurse | select -ExpandProperty FullName) -join ';')" info.teksol.mindcode.webapp.WebappApplication
+java -classpath "$((Get-ChildItem .\webapp\ *.jar -Recurse | select -ExpandProperty FullName) -join ';')" webapp.io.github.cardillan.mindcode.WebappApplication

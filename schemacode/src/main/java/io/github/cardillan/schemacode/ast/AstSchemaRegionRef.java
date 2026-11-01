@@ -1,0 +1,17 @@
+package io.github.cardillan.schemacode.ast;
+
+import io.github.cardillan.mc.common.SourcePosition;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+public record AstSchemaRegionRef(SourcePosition sourcePosition, String regionReference) implements AstSchemaElement {
+
+    public AstSchemaRegionRef(String regionReference) {
+        this(SourcePosition.EMPTY, regionReference);
+    }
+
+    @Override
+    public AstSchemaItem withEmptyPosition() {
+        return new AstSchemaRegionRef(SourcePosition.EMPTY, regionReference);
+    }
+}

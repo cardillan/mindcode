@@ -1,0 +1,290 @@
+package io.github.cardillan.mc.mindcode.logic.arguments.arrays;
+
+import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.ElementsArrayStore;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.ValueStore;
+import io.github.cardillan.mc.mindcode.logic.arguments.*;
+import io.github.cardillan.mc.mindcode.logic.instructions.*;
+import io.github.cardillan.mc.mindcode.logic.instructions.ArrayAccessInstruction.AccessType;
+import io.github.cardillan.mc.profile.CompilerProfile;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@NullMarked
+public abstract class AbstractArrayConstructor implements ArrayConstructor {
+    protected final InstructionProcessor processor;
+    protected final CompilerProfile profile;
+    protected final AstContext rootAstContext;
+    protected final ArrayAccessInstruction instruction;
+    protected final ArrayConstruction arrayConstruction;
+    protected final AccessType accessType;
+    protected final ElementsArrayStore arrayStore;
+    protected final boolean useTextTables;
+
+    public AbstractArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        this.processor = context.instructionProcessor();
+        this.profile = instruction.getAstContext().getCompilerProfile();
+        this.rootAstContext = context.rootAstContext();
+        this.instruction = instruction;
+        this.arrayConstruction = instruction.getArrayConstruction();
+        this.accessType = instruction.getAccessType();
+        this.arrayStore = (ElementsArrayStore) instruction.getArray().getArrayStore();
+        this.useTextTables = instruction.getLocalProfile().useTextJumpTables();
+
+        instruction.resetIndirectVariables();
+    }
+
+    protected List<LogicVariable> arrayElements() {
+        return arrayStore.getElements().stream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .toList();
+    }
+
+    protected List<LogicVariable> arrayElementsPlus(@Nullable LogicVariable... variables) {
+        ArrayList<LogicVariable> result = arrayStore.getElements().stream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        for (LogicVariable variable : variables) {
+            if (variable != null) result.add(variable);
+        }
+
+        return result;
+    }
+
+    protected List<LogicVariable> variables(@Nullable LogicArgument... args) {
+        return Stream.of(args).filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList();
+    }
+
+    protected List<LogicVariable> variables(LogicArgument argument) {
+        return argument instanceof LogicVariable variable ? List.of(variable) : List.of();
+    }
+
+    @Override
+    public String getJumpTableId() {
+        return "";
+    }
+
+    protected final int getSharedTableSize() {
+        return folded()
+                ? roundUpToEven(arrayStore.fullSize()) + 2 * flag(profile.isSymbolicLabels())
+                : 2 * arrayStore.fullSize() + flag(profile.isSymbolicLabels());
+    }
+
+    protected void computeSharedJumpTableSize(@Nullable Map<String, Integer> sharedStructures) {
+        if (sharedStructures != null) {
+            sharedStructures.computeIfAbsent(getJumpTableId(), _ -> getSharedTableSize());
+        }
+    }
+
+    protected abstract LogicValue transferVariable();
+
+    // ALL IMPLEMENTATIONS
+    ////////////////////////////////////////////////////////////////
+
+    protected int offsetInstructions() {
+        return (arrayStore.hasArrayOffset() ? 1 : 0) + (arrayStore.getStartOffset() != 0 ? 1 : 0);
+    }
+
+    protected int boundsCheckSize() {
+        return profile.isBoundaryChecks() ? profile.getErrorReporting().getSize() : 0;
+    }
+
+    protected int boundsCheckExecutionSteps() {
+        return profile.isBoundaryChecks() && !instruction.isSafeAccess() ? profile.getErrorReporting().getExecutionSteps() : 0;
+    }
+
+    protected LogicValue computeIndex(LocalContextfulInstructionsCreator creator) {
+        if (arrayStore.hasArrayOffset() || arrayStore.getStartOffset() != 0) {
+            LogicVariable tmp = creator.nextTemp();
+            LogicValue index = instruction.getIndex();
+            if (arrayStore.getStartOffset() != 0) {
+                creator.createOp(Operation.ADD, tmp, index, LogicNumber.create(arrayStore.getStartOffset()));
+                index = tmp;
+            }
+            if (arrayStore.hasArrayOffset()) {
+                creator.createOp(Operation.ADD, tmp, index, arrayStore.getArrayOffset());
+                index = tmp;
+            }
+            return index;
+        } else {
+            return instruction.getIndex();
+        }
+    }
+
+    protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index) {
+        if (!profile.isBoundaryChecks() || instruction.isSafeAccess() || skipCompactLookup()) return;
+
+        int maxIndex = arrayStore.size() - 1;
+        String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
+
+        LogicInstruction instruction = processor.createAssertBounds(astContext, LogicKeyword.create("multiple"), LogicNumber.create(1),
+                LogicNumber.create(arrayStore.getStartOffset()), Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ,
+                LogicNumber.create(arrayStore.getStartOffset() + maxIndex), LogicString.createRaw(errorMessage));
+        instruction.setNonNegativeInt(index);
+        consumer.accept(instruction);
+    }
+
+    protected boolean skipCompactLookup() {
+        return arrayConstruction == ArrayConstruction.COMPACT && instruction.isCompactAccessTarget();
+    }
+
+    // COMPACT/LOOKUP ARRAYS
+    //
+    // Compact and lookup arrays generate the variable name to access elements.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public SideEffects createNameBasedSideEffects() {
+        boolean injected = !instruction.getArrayInjections().isEmpty() || instruction.getArrayInjectedInto() != null;
+        return switch (accessType) {
+            case READ -> SideEffects.of(arrayElements(), injected ? List.of() : List.of(getElementNameVariable()), List.of());
+            case WRITE -> SideEffects.of(List.of(), injected ? List.of() : List.of(getElementNameVariable()), arrayElements());
+        };
+    }
+
+    // UNFOLDED TABLE
+    //
+    // A branch in an unfolded table is a full instruction. Any ValueStore can be used with an unfolded table,
+    // as long as a single instruction is capable of storing the value in a variable.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    protected interface BranchCreator {
+        void createBranch(LocalContextfulInstructionsCreator creator, ValueStore element, int index);
+    }
+
+    /// Provides a branch creator. Branch creator creates the instruction for a branch of an unfolded table.
+    /// It takes a value store, which is a representation of the array element to be returned by the table.
+    /// It might not be a LogicVariable, as the branch instruction can encode access to the actual value.
+    abstract protected BranchCreator branchCreator();
+
+    protected final BranchCreator regularBranchCreator() {
+        return switch (accessType) {
+            case READ -> (creator, element, _) -> element.readValue(creator, (LogicVariable) transferVariable());
+            case WRITE -> (creator, element, _) -> element.setValue(creator, transferVariable());
+        };
+    }
+
+    protected final BranchCreator compactBranchCreator() {
+        // For compact arrays, the transfer variable needs to be an actual LogicVariable.
+        return (creator, element, index) -> creator.createSet((LogicVariable) transferVariable(), element.getMlogVariableName());
+    }
+
+    /// Provides an instance which creates a value store representation of the element to be used by the branch creator.
+    abstract protected Function<ValueStore, ValueStore> elementValueStoreExtractor();
+
+    protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
+            Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
+        BranchCreator branchCreator = branchCreator();
+        Function<ValueStore, ValueStore> elementProcessor = elementValueStoreExtractor();
+        LogicLabel nextLabel = firstLabel;
+
+        List<ValueStore> elements = arrayStore.getElements();
+        int count = elements.size();
+        boolean reversed = useTextTables && inlined;
+
+        branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
+        for (int i = 0; i < count; i++) {
+            int index = reversed ? count - i - 1 : i;
+            ValueStore arrayElement = elements.get(index);
+            ValueStore element = elementProcessor.apply(arrayElement);
+            creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
+            branchLabels.set(index, nextLabel);
+            branchCreator.createBranch(creator, element, index);
+            if (i < count - 1) {
+                createExit.run();
+                nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
+            } else if (!inlined) {
+                createExit.run();
+            }
+        }
+    }
+
+    // FOLDED TABLE
+    //
+    // A branch in a folded table is a `select` instruction. Only LogicValue instances can be used with
+    // a folded table.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /// Provides an instance which provides a LogicValue representing the element.
+    abstract protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> elementValueExtractor();
+
+    protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> compactValueExtractor() {
+        return (_, element) -> element.getMlogVariableName();
+    }
+
+    protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> regularValueExtractor() {
+        return (creator, element) -> element.getValue(creator);
+    }
+
+    protected void generateFoldedJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
+            LogicValue index, LogicValue limit, LogicVariable target, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels,
+            Consumer<LogicInstruction> decorator) {
+        BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> valueExtractor = elementValueExtractor();
+        LogicLabel nextLabel = firstLabel;
+
+        List<ValueStore> elements = arrayStore.getElements();
+        int count = (elements.size() + 1) / 2;
+        boolean reversed = useTextTables && inlined;
+
+        branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
+        for (int i = 0; i < count; i++) {
+            int branch = reversed ? count - i - 1 : i;
+            creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
+            LogicValue element1 = valueExtractor.apply(creator, elements.get(branch));
+            if (branch + count < elements.size()) {
+                LogicValue element2 = valueExtractor.apply(creator, elements.get(branch + count));
+                decorator.accept(creator.createSelect(target, Condition.LESS_THAN, index, limit, element1, element2));
+                branchLabels.set(branch, nextLabel);
+                branchLabels.set(branch + count, nextLabel);
+            } else {
+                creator.createSet(target, element1);
+                branchLabels.set(branch, nextLabel);
+            }
+
+            if (i < count - 1) {
+                createExit.run();
+                nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
+            } else if (!inlined) {
+                createExit.run();
+            }
+        }
+    }
+
+    protected void createCompactAccessInstruction(LocalContextfulInstructionsCreator creator, LogicValue storageProcessor,
+            LogicVariable arrayElem) {
+        switch (instruction) {
+            case ReadArrInstruction rix -> creator
+                    .createRead(rix.getResult(), storageProcessor, arrayElem)
+                    .setSideEffects(SideEffects.reads(arrayElements()))
+                    .setIndirectVariables(arrayElements());
+
+            case WriteArrInstruction wix -> creator
+                    .createWrite(wix.getValue(), storageProcessor, arrayElem)
+                    .setSideEffects(SideEffects.resets(arrayElements()))
+                    .setIndirectVariables(arrayElements());
+
+            default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
+        }
+    }
+
+    protected final int flag(boolean flag) {
+        return flag ? 1 : 0;
+    }
+
+    protected final int roundUpToEven(int value) {
+        return (value + 1) / 2 * 2;
+    }
+}

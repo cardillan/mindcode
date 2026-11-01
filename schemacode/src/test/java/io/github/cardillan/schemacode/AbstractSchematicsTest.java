@@ -1,0 +1,122 @@
+package io.github.cardillan.schemacode;
+
+import io.github.cardillan.mc.common.InputFiles;
+import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.mc.messages.ExpectedMessages;
+import io.github.cardillan.mc.messages.MessageConsumer;
+import io.github.cardillan.mc.messages.MindcodeMessage;
+import io.github.cardillan.mc.messages.SourcePositionTranslator;
+import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.schemacode.ast.AstDefinitions;
+import io.github.cardillan.schemacode.config.Configuration;
+import io.github.cardillan.schemacode.config.PositionArray;
+import io.github.cardillan.schemacode.grammar.SchemacodeParser.DefinitionsContext;
+import io.github.cardillan.schemacode.mindustry.Direction;
+import io.github.cardillan.schemacode.mindustry.Position;
+import io.github.cardillan.schemacode.schematics.Block;
+import io.github.cardillan.schemacode.schematics.Schematic;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class AbstractSchematicsTest {
+    protected InputFiles inputFiles = InputFiles.create();
+
+    public static final Position P0_0 = Position.ORIGIN;
+    public static final Position P1_0 = new Position(1, 0);
+    public static final Position P2_0 = new Position(2, 0);
+    public static final Position P3_0 = new Position(3, 0);
+    public static final Position P0_2 = new Position(0, 2);
+    public static final Position P2_2 = new Position(2, 2);
+
+    public static Position p(int x, int y) {
+        return new Position(x, y);
+    }
+
+    protected static void assertAstEquals(AstDefinitions expected, AstDefinitions actual) {
+        Assertions.assertEquals(expected, actual.withEmptyPosition());
+    }
+
+    protected static void assertAstEquals(Schematic expected, Schematic actual) {
+        Assertions.assertEquals(expected, actual);
+    }
+
+    public static PositionArray pa(Position... positions) {
+        return positions.length == 0 ? PositionArray.EMPTY : new PositionArray(positions);
+    }
+
+    // Block index generator. Class is re-instantiated for each test, index always starts from zero.
+    private int index = 0;
+
+    public Block block(List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(SourcePosition.EMPTY, index++, labels, SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
+    }
+
+    public Block block(String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(SourcePosition.EMPTY, index++, List.of(), SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
+    }
+
+    /**
+     * Creates a message listener that throws an error at the moment an error message is generated. Used in unit tests where
+     * no errors or warnings are expected. Allows placing a breakpoint here to break at the moment the error occurs.
+     *
+     * @param methodName name of the method being tested
+     * @return message listener which throws on errors
+     */
+    private MessageConsumer messageListener(String methodName) {
+        return message -> {
+            if (message.isError() || message.isWarning()) {
+                throw new RuntimeException("Unexpected error returned from " + methodName + ": " + message.message());
+            }
+        };
+    }
+
+    protected DefinitionsContext parseSchematics(InputFiles inputFiles) {
+        return SchemacodeCompiler.parseSchematics(messageListener("parseSchematics"), inputFiles);
+    }
+
+    protected void parseSchematicsExpectingMessages(ExpectedMessages expectedMessages, String source) {
+        expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
+        List<MindcodeMessage> messages = new ArrayList<>();
+        SchemacodeCompiler.parseSchematics(messages::add, InputFiles.fromSource(source));
+        expectedMessages.validate(messages);
+    }
+
+    protected AstDefinitions createDefinitions(InputFiles inputFiles) {
+        DefinitionsContext parseTree = parseSchematics(inputFiles);
+        return SchemacodeCompiler.createDefinitions(inputFiles.getMainInputFile(), parseTree, messageListener("createDefinitions"));
+    }
+
+    protected AstDefinitions createDefinitions(String source) {
+        inputFiles.registerSource(source, SourcePositionTranslator.EMPTY);
+        return createDefinitions(inputFiles);
+    }
+
+    protected Schematic buildSchematics(String source) {
+        inputFiles.registerSource(source, SourcePositionTranslator.EMPTY);
+        AstDefinitions definitions = createDefinitions(source).withEmptyPosition();
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
+        return SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messageListener("buildSchematics"));
+    }
+
+    protected void assertGeneratesErrors(ExpectedMessages expectedMessages, String source) {
+        InputFiles inputFiles = InputFiles.fromSource(source);
+        expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
+        List<MindcodeMessage> messages = new ArrayList<>();
+        AstDefinitions definitions = createDefinitions(inputFiles);
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
+        SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messages::add);
+        expectedMessages.validate(messages);
+    }
+
+    protected void assertGeneratesWarnings(ExpectedMessages expectedMessages, String source) {
+        InputFiles inputFiles = InputFiles.fromSource(source);
+        expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
+        List<MindcodeMessage> messages = new ArrayList<>();
+        AstDefinitions definitions = createDefinitions(inputFiles);
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
+        SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messages::add);
+        expectedMessages.validate(messages);
+    }
+}

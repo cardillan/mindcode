@@ -1,0 +1,440 @@
+package io.github.cardillan.mc.mindcode.compiler.generation;
+
+import io.github.cardillan.mc.generated.ast.ComposedAstNodeVisitor;
+import io.github.cardillan.mc.messages.ERR;
+import io.github.cardillan.mc.messages.WARN;
+import io.github.cardillan.mc.mindcode.compiler.CompilerMessageEmitter;
+import io.github.cardillan.mc.mindcode.compiler.MindcodeCompiler;
+import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mc.mindcode.compiler.ast.nodes.*;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContextType;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.CallGraph;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import io.github.cardillan.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
+import io.github.cardillan.mc.mindcode.compiler.generation.builders.*;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.NameCreator;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.ValueStore;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.Variables;
+import io.github.cardillan.mc.mindcode.logic.arguments.*;
+import io.github.cardillan.mc.mindcode.logic.instructions.DrawInstruction;
+import io.github.cardillan.mc.mindcode.logic.instructions.LogicInstruction;
+import io.github.cardillan.mc.mindcode.logic.instructions.PrintingInstruction;
+import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
+import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorVersion;
+import io.github.cardillan.mc.profile.BuiltinEvaluation;
+import io.github.cardillan.mc.profile.GlobalCompilerProfile;
+import io.github.cardillan.mc.profile.options.CompilerOptions;
+import io.github.cardillan.mc.util.CRC64;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.github.cardillan.mc.common.SourcePosition.EMPTY;
+
+@NullMarked
+public class CodeGenerator extends CompilerMessageEmitter {
+    // Stateless processing instances
+    private final CodeGeneratorContext context;
+    private final AstProgram program;
+    private final GlobalCompilerProfile globalProfile;
+    private final CallGraph callGraph;
+    private final CompileTimeEvaluator evaluator;
+    private final CodeAssembler assembler;
+    private final Variables variables;
+
+    private final ComposedAstNodeVisitor<ValueStore> nodeVisitor;
+    private final FunctionDeclarationsBuilder functionCompiler;
+
+    private LogicLabel remoteWaitLabel = LogicLabel.INVALID;
+
+    /// Nesting level of code blocks
+    private int nested = 0;
+
+    /// Nesting level of atomic blocks
+    private int nestedAtomic = 0;
+
+    private @Nullable String programId = null;
+
+    public CodeGenerator(CodeGeneratorContext context, AstProgram program) {
+        super(context.messageConsumer());
+        this.context = context;
+        this.program = program;
+        this.globalProfile = context.globalCompilerProfile();
+        callGraph = context.callGraph();
+        evaluator = context.compileTimeEvaluator();
+        assembler = context.assembler();
+        variables = context.variables();
+
+        nodeVisitor = new ComposedAstNodeVisitor<>(node -> {
+            throw new MindcodeInternalError("Unhandled node " + node);
+        });
+
+        // Registration order is unimportant as long as multiple handlers do not handle the same node
+        nodeVisitor.registerVisitor(new AssignmentsBuilder(this, context));
+        nodeVisitor.registerVisitor(new BreakContinueStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new CaseExpressionsBuilder(this, context));
+        nodeVisitor.registerVisitor(new DeclarationsBuilder(this, context));
+        nodeVisitor.registerVisitor(new ForEachLoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new FunctionCallsBuilder(this, context));
+        nodeVisitor.registerVisitor(new IdentifiersBuilder(this, context));
+        nodeVisitor.registerVisitor(new IfExpressionsBuilder(this, context));
+        nodeVisitor.registerVisitor(new IteratedForLoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new LiteralsBuilder(this, context));
+        nodeVisitor.registerVisitor(new LoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new MemberAccessBuilder(this, context));
+        nodeVisitor.registerVisitor(new MlogBlocksBuilder(this, context));
+        nodeVisitor.registerVisitor(new OperatorsBuilder(this, context));
+        nodeVisitor.registerVisitor(new RangedForLoopStatementsBuilder(this, context));
+        nodeVisitor.registerVisitor(new StatementListsBuilder(this, context));
+        nodeVisitor.registerVisitor(new WhileLoopStatementsBuilder(this, context));
+
+        // Specialized handler for cached nodes
+        nodeVisitor.registerVisitor(new CachedNodeBuilder(this, context));
+
+        functionCompiler = new FunctionDeclarationsBuilder(this, context);
+    }
+
+    public NameCreator nameCreator() {
+        return variables.nameCreator();
+    }
+
+    public GlobalCompilerProfile getGlobalProfile() {
+        return globalProfile;
+    }
+
+    public @Nullable String getProgramId() {
+        return programId;
+    }
+
+    public String createRemoteSignature(Stream<AstFunctionDeclaration> functions) {
+        String text = functions
+                .sorted(Comparator.comparing(AstFunctionDeclaration::getName))
+                .map(AstFunctionDeclaration::toSourceCode)
+                .collect(Collectors.joining("\n"));
+
+        return Long.toHexString(CRC64.hash1(text)) + ":" + MindcodeCompiler.REMOTE_PROTOCOL_VERSION;
+    }
+
+    public String createRemoteSignature(AstModule module) {
+        return createRemoteSignature(callGraph.getFunctions().stream()
+                .filter(f -> f.getModule() == module)
+                .map(MindcodeFunction::getDeclaration));
+    }
+
+    public AstModule getModule(AstRequire node) {
+        return context.getModule(node);
+    }
+
+    public boolean isLocalContext() {
+        return nested > 0;
+    }
+
+    protected void enterFunction(MindcodeFunction function, List<FunctionArgument> varargs) {
+        nested++;
+        variables.enterFunction(function, varargs);
+    }
+
+    protected void exitFunction(MindcodeFunction function) {
+        evaluator.purgeFromCache(function.getDeclaration().getBody());
+        variables.exitFunction(function);
+        nested--;
+    }
+
+    protected MindcodeFunction currentFunction() {
+        return variables.currentFunction();
+    }
+
+    /// Enters an atomic block. Returns true if this is a nested atomic block.
+    protected boolean enterAtomicBlock() {
+        return nestedAtomic++ > 0;
+    }
+
+    protected void exitAtomicBlock() {
+        nestedAtomic--;
+    }
+
+    protected boolean isAtomicBlock() {
+        return nestedAtomic > 0;
+    }
+
+    public <T> T processInLocalScope(Supplier<T> process) {
+        nested++;
+        T result = process.get();
+        nested--;
+        return result;
+    }
+
+    public void generateCode() {
+        generateRemoteJumpTable();
+        generateProcessorId();
+        generateTargetGuard();
+        generateSetrate();
+        initializeStack();
+
+        callGraph.getMain().setGenerated();
+        variables.enterFunction(callGraph.getMain(), List.of());
+        assembler.enterAstNode(program);
+        visit(program, false);
+        assembler.exitAstNode(program);
+        variables.exitFunction(callGraph.getMain());
+
+        // Separate the main program from function declarations
+        assembler.createCompilerEnd();
+
+        // From now on, we'll only compile function bodies, which is always a local context.
+        nested++;
+
+        // Create functions from function declarations
+        functionCompiler.generateFunctions();
+
+        // Restore back just in case
+        nested--;
+
+        addMissingPrintflush();
+    }
+
+    public LogicLabel getRemoteWaitLabel() {
+        return remoteWaitLabel;
+    }
+
+    /// Generates an error if the current target doesn't support remote calls or variables
+    void verifyMinimalRemoteTarget(AstMindcodeNode node) {
+        if (!globalProfile.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+            error(node, ERR.REMOTE_REQUIRES_TARGET_8);
+        }
+    }
+
+    private void generateRemoteJumpTable() {
+        if (program.isMainProgram()) return;
+
+        List<MindcodeFunction> remoteFunctions = callGraph.assignRemoteFunctionIndexes(f -> f.isExport() && f.isEntryPoint());
+        if (remoteFunctions.isEmpty()) return;
+
+        assembler.setContextType(program, AstContextType.JUMPS, AstSubcontextType.REMOTE_INIT);
+        LogicLabel jumpTableEndLabel = assembler.nextLabel().withoutStateTransfer();
+        assembler.createJumpUnconditional(jumpTableEndLabel);
+        remoteFunctions.stream().map(function -> Objects.requireNonNull(function.getRemoteLabel())).forEach(assembler::createJumpUnconditional);
+        assembler.createLabel(jumpTableEndLabel);
+        assembler.clearContextType(program);
+    }
+
+    private void generateProcessorId() {
+        List<String> lines = new ArrayList<>();
+        if (!globalProfile.getProcessorId().isBlank()) lines.add("id: " + globalProfile.getProcessorId());
+        if (!globalProfile.getProgramName().isBlank()) lines.add("name: " + globalProfile.getProgramName());
+        if (!globalProfile.getProgramVersion().isBlank()) lines.add("version: " + globalProfile.getProgramVersion());
+        programId = String.join("\n", lines);
+        LogicString id = LogicString.createRaw(programId);
+        variables.putVariable("@@ID", id);
+
+        if (!lines.isEmpty()) {
+            assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
+            assembler.createSet(LogicVariable.preserved(nameCreator().programId()), id);
+            assembler.clearContextType(program);
+        }
+    }
+
+    private void generateTargetGuard() {
+        if (!globalProfile.isTargetGuard()) return;
+
+        assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
+        LogicLabel guardLabel = assembler.nextLabel().withoutStateTransfer();
+        assembler.createLabel(guardLabel);
+        switch (globalProfile.getProcessorVersion()) {
+            case V6 -> {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V6 only
+                    assembler.createJump(guardLabel, Condition.GREATER_THAN, new LogicToken("%FFFFFF"), LogicNumber.ZERO).setTargetGuard(true);
+                } else {
+                    // V6 and above
+                    // Do nothing. Everything is compatible with V6.
+                }
+            }
+            case V7, V7A -> {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V7 only
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
+                } else {
+                    // V7 and above
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
+                }
+            }
+            case V8A -> {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V8A only
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(260)).setTargetGuard(true);
+                } else {
+                    // V8A and above
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(260)).setTargetGuard(true);
+                }
+            }
+            case V8B -> {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V8B only
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(261)).setTargetGuard(true);
+                } else {
+                    // V8B and above
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(261)).setTargetGuard(true);
+                }
+            }
+            case V8C -> {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V8C only
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(262)).setTargetGuard(true);
+                } else {
+                    // V8C and above (??)
+                    assembler.createJump(guardLabel, Condition.LESS_THAN, new LogicToken("@blockCount"), LogicNumber.create(262)).setTargetGuard(true);
+                }
+            }
+            default -> throw new MindcodeInternalError("Unhandled processor version " + globalProfile.getProcessorVersion());
+        }
+        assembler.clearContextType(program);
+    }
+
+    private void generateSetrate() {
+        if (!globalProfile.isDefault(CompilerOptions.SETRATE)) {
+            assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
+            assembler.createInstruction(Opcode.SETRATE, LogicNumber.create(globalProfile.getSetrate()));
+            assembler.clearContextType(program);
+        }
+    }
+
+    private void initializeStack() {
+        if (callGraph.containsRecursiveFunction()) {
+            assembler.setContextType(program, AstContextType.STACK, AstSubcontextType.INIT);
+            assembler.createInitStack(assembler.nextLabel(), assembler.nextLabel());
+        }
+    }
+
+    private void setupRemoteSignature() {
+        List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isExport() && f.isEntryPoint()).toList();
+        assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.REMOTE_INIT);
+        String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
+        assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.createSimple(remoteSignature));
+        assembler.clearContextType(program);
+
+        assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
+        if (globalProfile.isSymbolicLabels()) {
+            assembler.createSet(LogicVariable.remoteWaitAddr(), LogicBuiltIn.COUNTER);
+        }
+        remoteWaitLabel = assembler.nextLabel().withoutStateTransfer();
+        assembler.createLabel(remoteWaitLabel);
+        assembler.createWrite(LogicNumber.YIELD_WAIT, LogicVariable.remoteCaller(), LogicVariable.remoteWait().getMlogVariableName());
+        assembler.createSet(LogicVariable.remoteCaller(), LogicBoolean.FALSE);
+        assembler.setSubcontextType(AstSubcontextType.BODY, 1.0);
+        findBackgroundProcessFunction().ifPresent(functionCompiler::placeFunctionBody);
+        assembler.suspendExecution();
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
+        assembler.createJumpUnconditional(remoteWaitLabel);
+        assembler.clearSubcontextType();
+        assembler.clearContextType(program);
+    }
+
+    private Optional<MindcodeFunction> findBackgroundProcessFunction() {
+        return callGraph.getFunctions().stream().filter(MindcodeFunction::isBackgroundProcess).findFirst();
+    }
+
+    private @Nullable AstContext mainBodyContext;
+    private int mainBodyEndIndex;
+
+    private void addMissingPrintflush() {
+        List<LogicInstruction> program = assembler.getInstructions();
+        if (!globalProfile.isAutoPrintflush()
+                || program.stream().noneMatch(ix -> ix instanceof PrintingInstruction)
+                || program.stream().anyMatch(ix -> ix.getOpcode() == Opcode.PRINTFLUSH
+                || ix instanceof DrawInstruction dix && dix.getType().getKeyword().equals("print"))) {
+            return;
+        }
+
+        program.add(mainBodyEndIndex,
+                context.instructionProcessor().createPrintflush(Objects.requireNonNull(mainBodyContext),
+                        LogicVariable.block(EMPTY, "message1", "@message")));
+
+        warn(WARN.MISSING_PRINTFLUSH_ADDED);
+    }
+
+    // `true` if a warning about code in global scope was emitted
+    private boolean codeInGlobalScopeWarning = false;
+
+    private void emitWrongScopeMessage(AstMindcodeNode node) {
+        if (!isLocalContext()) {
+            if (codeInGlobalScopeWarning && !node.reportAllScopeErrors()) return;
+            codeInGlobalScopeWarning = true;
+        }
+
+        if (!node.getProfile().isRelaxed() || node.reportAllScopeErrors()) {
+            String message = isLocalContext()
+                    ? ERR.SCOPE_DECLARATION_WITHIN_CODE_BLOCK
+                    : ERR.SCOPE_CODE_OUTSIDE_CODE_BLOCK;
+
+            if (node.getProfile().isStrict() || node.reportAllScopeErrors()) {
+                error(node, "%s", message);
+            } else {
+                warn(node, "%s", message);
+            }
+        }
+    }
+
+    public boolean allowUndeclaredLinks() {
+        return allowUndeclaredLinks;
+    }
+
+    private boolean allowUndeclaredLinks = false;
+    private boolean requireMlogConstant = false;
+
+    public ValueStore visit(AstMindcodeNode astNode, boolean evaluate) {
+        AstMindcodeNode node = NodeTransformation.transform(astNode);
+
+        if (node.getScopeRestriction().disallowed(isLocalContext() ? AstNodeScope.LOCAL : AstNodeScope.GLOBAL)) {
+            emitWrongScopeMessage(node);
+        }
+
+        // Completely skip function declarations to prevent creating AST contexts for them
+        if (node instanceof AstFunctionDeclaration) {
+            return LogicVoid.VOID;
+        }
+
+        // Do not compile code from remote modules
+        if (node instanceof AstModule module && !module.getRemoteProcessors().isEmpty()) {
+            return LogicVoid.VOID;
+        }
+
+        if (node.getScope() == AstNodeScope.LOCAL) nested++;
+        if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = true;
+        if (node instanceof AstParameter || node instanceof AstVariablesDeclaration var && var.isConstantDeclaration()) requireMlogConstant = true;
+
+        AstMindcodeNode evaluated = NodeTransformation.transform(evaluator.evaluate(node, isLocalContext(), requireMlogConstant));
+
+        assembler.enterAstNode(evaluated);
+        variables.enterAstNode();
+        ValueStore result = nodeVisitor.visit(evaluated);
+
+        if (node == program.getMainModule()) {
+            mainBodyContext = assembler.getAstContext();
+            mainBodyEndIndex = assembler.getInstructions().size();
+            if (!program.isMainProgram()) {
+                setupRemoteSignature();
+            }
+        }
+
+        variables.exitAstNode();
+        assembler.exitAstNode(evaluated);
+
+        if (node instanceof AstParameter || node instanceof AstVariablesDeclaration var && var.isConstantDeclaration()) requireMlogConstant = false;
+        if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = false;
+        if (node.getScope() == AstNodeScope.LOCAL) nested--;
+
+        // Reset global scope warning after exiting a code block.
+        if (node instanceof AstCodeBlock) codeInGlobalScopeWarning = false;
+
+        return result;
+    }
+}

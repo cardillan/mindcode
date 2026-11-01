@@ -1,0 +1,454 @@
+// Generated from SchemacodeParser.g4 by ANTLR 4.13.1
+package io.github.cardillan.schemacode.grammar;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+
+/**
+ * This interface defines a complete generic visitor for a parse tree produced
+ * by {@link SchemacodeParser}.
+ *
+ * @param <T> The return type of the visit operation. Use {@link Void} for
+ * operations with no return type.
+ */
+public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#definitions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefinitions(SchemacodeParser.DefinitionsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#definition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefinition(SchemacodeParser.DefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#schematic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSchematic(SchemacodeParser.SchematicContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#schematicItem}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSchematicItem(SchemacodeParser.SchematicItemContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code name}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitName(SchemacodeParser.NameContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code description}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDescription(SchemacodeParser.DescriptionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code dimensions}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDimensions(SchemacodeParser.DimensionsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code schemaTag}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSchemaTag(SchemacodeParser.SchemaTagContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code filename}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFilename(SchemacodeParser.FilenameContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code target}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTarget(SchemacodeParser.TargetContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code mindcodePrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMindcodePrologue(SchemacodeParser.MindcodePrologueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code mlogPrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMlogPrologue(SchemacodeParser.MlogPrologueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#number}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumber(SchemacodeParser.NumberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#versionNumber}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVersionNumber(SchemacodeParser.VersionNumberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#regionDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRegionDefinition(SchemacodeParser.RegionDefinitionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#regionDimensions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRegionDimensions(SchemacodeParser.RegionDimensionsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(SchemacodeParser.BlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#placementMode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPlacementMode(SchemacodeParser.PlacementModeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockElement}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockElement(SchemacodeParser.BlockElementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code namedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedRegion(SchemacodeParser.NamedRegionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code inlinedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInlinedRegion(SchemacodeParser.InlinedRegionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#blockId}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockId(SchemacodeParser.BlockIdContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#labelList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLabelList(SchemacodeParser.LabelListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simplePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimplePosition(SchemacodeParser.SimplePositionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code inclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInclusiveRangePosition(SchemacodeParser.InclusiveRangePositionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExclusiveRangePosition(SchemacodeParser.ExclusiveRangePositionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code areaPosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAreaPosition(SchemacodeParser.AreaPositionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code areaRadius}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAreaRadius(SchemacodeParser.AreaRadiusContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#position}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPosition(SchemacodeParser.PositionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#coordinates}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCoordinates(SchemacodeParser.CoordinatesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#relativeCoordinates}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelativeCoordinates(SchemacodeParser.RelativeCoordinatesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#coordinatesRelativeTo}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCoordinatesRelativeTo(SchemacodeParser.CoordinatesRelativeToContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#translation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTranslation(SchemacodeParser.TranslationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#direction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDirection(SchemacodeParser.DirectionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code virtual}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVirtual(SchemacodeParser.VirtualContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code color}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColor(SchemacodeParser.ColorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code connections}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConnections(SchemacodeParser.ConnectionsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blocktype}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlocktype(SchemacodeParser.BlocktypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unitcommand}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnitcommand(SchemacodeParser.UnitcommandContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code item}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitItem(SchemacodeParser.ItemContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code liquid}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLiquid(SchemacodeParser.LiquidContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unit}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnit(SchemacodeParser.UnitContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code text}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitText(SchemacodeParser.TextContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolean}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolean(SchemacodeParser.BooleanContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code logic}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogic(SchemacodeParser.LogicContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#pattern}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPattern(SchemacodeParser.PatternContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#patternSegment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPatternSegment(SchemacodeParser.PatternSegmentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#colorDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColorDef(SchemacodeParser.ColorDefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#connectionList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConnectionList(SchemacodeParser.ConnectionListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code connAbs}
+	 * labeled alternative in {@link SchemacodeParser#connection}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConnAbs(SchemacodeParser.ConnAbsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code connRel}
+	 * labeled alternative in {@link SchemacodeParser#connection}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConnRel(SchemacodeParser.ConnRelContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code connName}
+	 * labeled alternative in {@link SchemacodeParser#connection}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConnName(SchemacodeParser.ConnNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#processor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProcessor(SchemacodeParser.ProcessorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#processorLinks}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProcessorLinks(SchemacodeParser.ProcessorLinksContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code linkPattern}
+	 * labeled alternative in {@link SchemacodeParser#linkDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLinkPattern(SchemacodeParser.LinkPatternContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code linkPos}
+	 * labeled alternative in {@link SchemacodeParser#linkDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLinkPos(SchemacodeParser.LinkPosContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#program}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgram(SchemacodeParser.ProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code programString}
+	 * labeled alternative in {@link SchemacodeParser#programSnippet}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgramString(SchemacodeParser.ProgramStringContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code programFile}
+	 * labeled alternative in {@link SchemacodeParser#programSnippet}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgramFile(SchemacodeParser.ProgramFileContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code textLiteral}
+	 * labeled alternative in {@link SchemacodeParser#textDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTextLiteral(SchemacodeParser.TextLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code textId}
+	 * labeled alternative in {@link SchemacodeParser#textDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTextId(SchemacodeParser.TextIdContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#parametrization}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParametrization(SchemacodeParser.ParametrizationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#parameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter(SchemacodeParser.ParameterContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#stringValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringValue(SchemacodeParser.StringValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code textLine}
+	 * labeled alternative in {@link SchemacodeParser#stringLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTextLine(SchemacodeParser.TextLineContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code textBlock}
+	 * labeled alternative in {@link SchemacodeParser#stringLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTextBlock(SchemacodeParser.TextBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simpleTextLine}
+	 * labeled alternative in {@link SchemacodeParser#simpleStringLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleTextLine(SchemacodeParser.SimpleTextLineContext ctx);
+}

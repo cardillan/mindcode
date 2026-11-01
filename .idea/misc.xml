@@ -9,7 +9,7 @@
           <option name="outputDir" value="src/main/java" />
           <option name="libDir" value="" />
           <option name="encoding" value="utf-8" />
-          <option name="pkg" value="info.teksol.mindcode.grammar" />
+          <option name="pkg" value="io.github.cardillan.mindcode.grammar" />
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
@@ -19,7 +19,7 @@
           <option name="outputDir" value="src/main/java" />
           <option name="libDir" value="" />
           <option name="encoding" value="utf-8" />
-          <option name="pkg" value="info.teksol.schemacode.grammar" />
+          <option name="pkg" value="io.github.cardillan.schemacode.grammar" />
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>

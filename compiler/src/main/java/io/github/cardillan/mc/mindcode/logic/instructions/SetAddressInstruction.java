@@ -1,0 +1,59 @@
+package io.github.cardillan.mc.mindcode.logic.instructions;
+
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicArgument;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicLabel;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicNumber;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mc.mindcode.logic.opcodes.InstructionParameterType;
+import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+import static io.github.cardillan.mc.mindcode.logic.opcodes.Opcode.SET;
+
+@NullMarked
+public class SetAddressInstruction extends BaseResultInstruction {
+
+    SetAddressInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
+        super(astContext, Opcode.SETADDR, args, params);
+    }
+
+    protected SetAddressInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
+    }
+
+    @Override
+    public SetAddressInstruction withContext(AstContext astContext) {
+        return this.astContext == astContext ? this : new SetAddressInstruction(this, astContext);
+    }
+
+    public final LogicVariable getResult() {
+        return (LogicVariable) getArg(0);
+    }
+
+    public final LogicLabel getLabel() {
+        return (LogicLabel) getArg(1);
+    }
+
+    public final LogicNumber getOffset() {
+        return (LogicNumber) getArg(2);
+    }
+
+    @Override
+    public SetAddressInstruction withResult(LogicVariable result) {
+        return new SetAddressInstruction(astContext, List.of(result, getLabel()), getArgumentTypes()).copyInfo(this);
+    }
+
+    public SetAddressInstruction withLabel(LogicLabel label) {
+        return new SetAddressInstruction(astContext, List.of(getResult(), label), getArgumentTypes()).copyInfo(this);
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        creator(processor, consumer).createInstruction(SET, getResult(), getLabel()).copyComment(this);
+    }
+}

@@ -1,0 +1,232 @@
+package io.github.cardillan.mc.mindcode.compiler.generation.variables;
+
+import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import io.github.cardillan.mc.mindcode.logic.arguments.*;
+import io.github.cardillan.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import io.github.cardillan.mc.mindcode.logic.instructions.InstructionProcessor;
+import io.github.cardillan.mc.util.IntRange;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.stream.IntStream;
+
+import static io.github.cardillan.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
+
+@NullMarked
+public class InternalArray extends ElementsArrayStore {
+    private final LogicKeyword lookupType;
+    private final LogicValue arrayOffset;
+    private final boolean declaredRemote;
+    private final @Nullable MindcodeFunction function;
+    private final @Nullable LogicVariable processor;      // Actual processor in case of shared arrays
+
+    private InternalArray(SourcePosition sourcePosition, LogicKeyword lookupType, String name, boolean declaredRemote,
+            @Nullable MindcodeFunction function, @Nullable LogicVariable processor, LogicValue arrayOffset, int startOffset, int size,
+            List<ValueStore> elements, @Nullable ElementsArrayStore masterArray, ArrayType arrayType, boolean subarray) {
+        super(sourcePosition, name, arrayType, startOffset, size, masterArray, elements, subarray);
+        this.lookupType = lookupType;
+        this.processor = processor;
+        this.function = function;
+        this.declaredRemote = declaredRemote;
+        this.arrayOffset = arrayOffset;
+    }
+
+    public static InternalArray create(InstructionProcessor instructionProcessor, ArrayNameCreator nameCreator,
+            @Nullable MindcodeFunction function, AstIdentifier identifier, int variableIndex, int size,
+            boolean isVolatile, boolean declaredRemote, @Nullable LogicVariable processor, boolean shared) {
+        if (processor != null) {
+            if (function != null && function.isRecursive()) {
+                throw new MindcodeInternalError("Recursive functions can't have remote arrays.");
+            }
+
+            return new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),
+                    nameCreator.arrayBase(null, shared ? "" : processor.getName(), identifier.getName(), variableIndex),
+                    declaredRemote, function, processor, LogicNumber.ZERO, 0, size,
+                    IntStream.range(0, size)
+                            .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
+                                    processor.getName() + "." + identifier.getName() + "[" + index + "]",
+                                    LogicString.createRaw(nameCreator.remoteArrayElement(identifier.getName(), index)),
+                                    instructionProcessor.nextTemp(), false, false, false)).toList(),
+                    null, shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE, false);
+        } else {
+            // Compute the stack depth for recursive functions
+            int stackDepth = function != null && function.isRecursive() ? function.getProfile().getStackDepth() : 1;
+            LogicValue arrayOffset = function != null && function.isRecursive()
+                    ? LogicVariable.fnArrayOffset(function, identifier, nameCreator.arrayOffset(function, identifier.getName(), variableIndex))
+                    : LogicNumber.ZERO;
+
+            InternalArray array = new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),
+                    nameCreator.arrayBase(function, "", identifier.getName(), variableIndex),
+                    declaredRemote, function, null, arrayOffset, 0, size,
+                    IntStream.range(0, size * stackDepth)
+                            .mapToObj(index -> (ValueStore) LogicArrayElement.arrayElement(identifier, index,
+                                    nameCreator.arrayElement(function, identifier.getName(), variableIndex, index), isVolatile)).toList(),
+                    null, ArrayType.INTERNAL, false);
+
+            if (function != null) {
+                function.addArray(array);
+            }
+
+            return array;
+        }
+    }
+
+    public static InternalArray createConst(NameCreator nameCreator, @Nullable MindcodeFunction function, AstIdentifier identifier, List<? extends ValueStore> elements) {
+        List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
+        return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
+                nameCreator.arrayBase(function, "", identifier.getName(), 0),
+                false, null, null, LogicNumber.ZERO, 0, elements.size(),
+                wrappedElements, null, ArrayType.CONSTANT, false);
+    }
+
+    public static InternalArray createInvalid(NameCreator nameCreator, AstIdentifier identifier, int size) {
+        return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
+                nameCreator.arrayBase(null, "", identifier.getName(), 0),
+                false, null, null, LogicNumber.ZERO, 0, size,
+                IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(),
+                null, ArrayType.INTERNAL, false);
+    }
+
+    public LogicKeyword getLookupType() {
+        return lookupType;
+    }
+
+    @Override
+    public boolean valid() {
+        return elements.getFirst() != LogicVariable.INVALID;
+    }
+
+    @Override
+    public boolean isDeclaredRemote() {
+        return declaredRemote;
+    }
+
+    @Override
+    public @Nullable MindcodeFunction getFunction() {
+        return function;
+    }
+
+    @Override
+    public LogicValue getArrayOffset() {
+        return arrayOffset;
+    }
+
+    @Override
+    public boolean optimizeElementAccess() {
+        return !hasArrayOffset();
+    }
+
+    @Override
+    public ArrayStore subarray(SourcePosition sourcePosition, IntRange range) {
+        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + range.min(),
+                range.size(), range.sublist(elements), (ElementsArrayStore) masterArray, arrayType, true);
+    }
+
+    @Override
+    public ArrayStore offset(int offset) {
+        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + offset,
+                size, elements, (ElementsArrayStore) masterArray, arrayType, masterArray.size() != size());
+    }
+
+    @Override
+    public ArrayStore nonrecursive() {
+        return hasArrayOffset()
+                ? new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, LogicNumber.ZERO, startOffset,
+                        size, elements.subList(0, size), (ElementsArrayStore) masterArray, arrayType, masterArray.size() != size())
+                : this;
+    }
+
+    public LogicVariable getProcessor() {
+        return Objects.requireNonNull(processor);
+    }
+
+    @Override
+    public ValueStore getElement(ContextfulInstructionCreator creator, int index) {
+        if (hasArrayOffset()) {
+            return new ArrayElement(sourcePosition, logicArray, LogicNumber.create(index), creator.nextTemp(), true);
+        } else {
+            return elements.get(index);
+        }
+    }
+
+    @Override
+    public ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index,
+            boolean safeAccess) {
+        LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
+        return new ArrayElement(sourcePosition, logicArray, fixedIndex, creator.nextTemp(), safeAccess);
+    }
+
+    @Override
+    public InternalArray withSourcePosition(SourcePosition sourcePosition) {
+        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset,
+                startOffset, size, elements, (ElementsArrayStore) masterArray, arrayType, masterArray.size() != size());
+    }
+
+    private static ValueStore constantWrap(ValueStore valueStore) {
+        return new ConstantArrayElement(valueStore);
+    }
+
+    public static class ConstantArrayElement implements ValueStore {
+        private final ValueStore valueStore;
+
+        public ConstantArrayElement(ValueStore valueStore) {
+            this.valueStore = valueStore;
+        }
+
+        @Override
+        public ValueStore unwrap() {
+            return valueStore.unwrap();
+        }
+
+        @Override
+        public boolean isComplex() {
+            return valueStore.isComplex();
+        }
+
+        @Override
+        public boolean isLvalue() {
+            return false;
+        }
+
+        @Override
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
+            return valueStore.getValue(creator);
+        }
+
+        @Override
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+            valueStore.readValue(creator, target);
+        }
+
+        @Override
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
+        }
+
+        @Override
+        public SourcePosition sourcePosition() {
+            return valueStore.sourcePosition();
+        }
+
+        @Override
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
+        }
+
+        @Override
+        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
+        }
+
+        @Override
+        public void storeValue(ContextfulInstructionCreator creator) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
+        }
+    }
+}

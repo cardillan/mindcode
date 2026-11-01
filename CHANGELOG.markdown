@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking:** Formattable string literals are evaluated in the declaration context instead of the use context. Creating constants from formattable string literals is no longer supported ([#512](https://github.com/cardillan/mindcode/issues/512)).
 
+### Miscellaneous
+
+* The root package of the project was renamed from `info.teksol` to `io.github.cardillan`.
+
 ## 3.20.5 – 2026-11-01
 
 ### Fixed

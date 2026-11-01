@@ -1,0 +1,515 @@
+package io.github.cardillan.schemacode.schematics;
+
+import io.github.cardillan.mc.common.InputFiles;
+import io.github.cardillan.mc.common.SourceElement;
+import io.github.cardillan.mc.common.Statistics;
+import io.github.cardillan.mc.messages.MessageConsumer;
+import io.github.cardillan.mc.messages.MindcodeMessage;
+import io.github.cardillan.mc.messages.ToolMessage;
+import io.github.cardillan.mc.mindcode.compiler.CompilerMessageEmitter;
+import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mc.mindcode.logic.mimex.Icons;
+import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mc.profile.options.Target;
+import io.github.cardillan.mc.util.CollectionUtils;
+import io.github.cardillan.mc.util.MutableInteger;
+import io.github.cardillan.schemacode.SchematicsInternalError;
+import io.github.cardillan.schemacode.SchematicsMetadata;
+import io.github.cardillan.schemacode.ast.*;
+import io.github.cardillan.schemacode.config.*;
+import io.github.cardillan.schemacode.mindustry.Color;
+import io.github.cardillan.schemacode.mindustry.ConfigurationType;
+import io.github.cardillan.schemacode.mindustry.Position;
+import io.github.cardillan.schemacode.mindustry.UnitPlan;
+import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class SchematicsBuilder extends CompilerMessageEmitter {
+    public static final int MAX_SCHEMATIC_SIZE = 65;
+
+    private final ProcessorConfigurationBuilder processorConfigurationBuilder;
+
+    private final InputFiles inputFiles;
+    private final CompilerProfile compilerProfile;
+    private final AstDefinitions astDefinitions;
+
+    private AstSchematic astSchematic;
+    private Map<String, AstText> constants;
+    private SchematicElement schematic;
+    private BlockPositionMap<SchematicElement> astPositionMap;
+    private BlockPositionMap<Block> positionMap;
+
+    // Context used to resolve configuration references. There's no danger of circular references here.
+    final ResolverContext configurationContext = new ResolverContext(false);
+
+    // Elements reported for circular reference errors
+    private final Set<SchematicElement> reportedCircular = new HashSet<>();
+
+    // Global array labels for processor links
+    private final Map<String, MutableInteger> arrayLabels = new HashMap<>();
+    private final Map<String, Set<AstSchemaItem>> reportedErrors = new HashMap<>();
+
+    private boolean error = false;
+
+    private Statistics statistics = new Statistics();
+
+    public SchematicsBuilder(InputFiles inputFiles, CompilerProfile compilerProfile,
+            MessageConsumer messageConsumer, AstDefinitions astDefinitions) {
+        super(messageConsumer);
+        this.processorConfigurationBuilder = new ProcessorConfigurationBuilder(this);
+        this.inputFiles = inputFiles;
+        this.compilerProfile = compilerProfile;
+        this.astDefinitions = astDefinitions;
+    }
+
+    public static SchematicsBuilder create(InputFiles inputFiles, CompilerProfile compilerProfile,
+            AstDefinitions definitions, MessageConsumer messageConsumer) {
+        return new SchematicsBuilder(inputFiles, compilerProfile, messageConsumer, definitions);
+    }
+
+    @Override
+    public synchronized void addMessage(@NonNull MindcodeMessage message) {
+        super.addMessage(message);
+        error |= message.isError();
+    }
+
+    public CompilerProfile getCompilerProfile() {
+        return compilerProfile;
+    }
+
+    public Path getBasePath() {
+        return inputFiles.getBasePath();
+    }
+
+    public InputFiles getInputFiles() {
+        return inputFiles;
+    }
+
+    public boolean externalFilesAllowed() {
+        return !getBasePath().toString().isEmpty();
+    }
+
+    public Schematic buildSchematics() {
+        extractConstants();
+
+        // Add constants as modules
+        constants.forEach((k, v) -> inputFiles.addPackagedFile(k, v.getText(this), v.getTextOffset(this)));
+
+        List<AstSchematic> schematicsList = astDefinitions.definitions().stream()
+                .filter(AstSchematic.class::isInstance)
+                .map(AstSchematic.class::cast)
+                .toList();
+
+        if (schematicsList.isEmpty()) {
+            addMessage(ToolMessage.error("No schematic defined."));
+            return null;
+        } else if (schematicsList.size() > 1) {
+            addMessage(ToolMessage.error("More than one schematic defined."));
+            return null;
+        }
+
+        astSchematic = schematicsList.getFirst();
+
+        processTarget();
+
+        Map<String, Long> labelCounts = astSchematic.blocks().stream()
+                .filter(b -> !b.labels().isEmpty())
+                .flatMap(b -> b.labels().stream())
+                .collect(Collectors.groupingBy(l -> l, Collectors.counting()));
+
+        labelCounts.entrySet().stream()
+                .filter(e -> e.getValue() > 1)
+                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR)
+                .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
+
+        MindustryMetadata metadata = SchematicsMetadata.getMetadata();
+
+        LayoutResolver layoutResolver = new LayoutResolver(this);
+        schematic = layoutResolver.resolve(astSchematic);
+        List<SchematicElement> elements = new ArrayList<>();
+        schematic.forEachBlock(elements::add);
+        elements.sort(Comparator.comparing(BlockPosition::index));
+
+        astPositionMap = BlockPositionMap.forBuilder(messageConsumer, elements);
+        schematic.resolveLabels(layoutResolver.globalLabelResolver());
+
+        Map<SchematicElement, UnresolvedConfiguration> configurations = new HashMap<>();
+        schematic.forEachBlock(element -> configurations.put(element, getConfiguration(element)));
+
+        List<Block> blocks = new ArrayList<>();
+        schematic.forEachBlock(element -> {
+            if (element.valid() && !element.blockType().isAir()) {
+                AstBlock astBlock = element.definition();
+                BlockType type = element.blockType();
+                Configuration configuration = checkType(element, configurations.get(element));
+                Block block = new Block(astBlock.sourcePosition(), element.index(), element.labels(), type, element.position(), element.direction(),
+                        configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
+                configuration.validate(this, astBlock, block);
+                blocks.add(block);
+            }
+        });
+
+        String name = getStringAttribute("name", "");
+        String filename = getStringAttribute("filename", "");
+        String description = unwrap(getStringAttribute("description", ""));
+
+        List<String> schemaLabels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
+        Icons icons = metadata.getIcons();
+        List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(icons::translateIcon).toList();
+        List<String> labels = Stream.concat(schemaLabels.stream(), additionalLabels.stream()).distinct().toList();
+
+        positionMap = BlockPositionMap.forBuilder(_ -> {}, blocks);
+
+        PowerGridSolver.solve(this, blocks);
+        BridgeSolver.solve(this, blocks);
+
+        return createSchematic(name, filename, description, labels, blocks);
+    }
+
+    public void errorOnce(AstSchemaItem node, @PrintFormat String format, Object... args) {
+        if (reportedErrors.computeIfAbsent(format, _ -> new HashSet<>()).add(node)) {
+            error(node, format, args);
+        }
+    }
+
+    private Configuration checkType(SchematicElement element, UnresolvedConfiguration configuration) {
+        Configuration resolvedConfiguration = configuration.resolve();
+
+        if (!element.configurationType().isCompatible(resolvedConfiguration)) {
+            AstConfiguration astConfiguration = element.definition().configuration();
+            if (astConfiguration != null) {
+                error(astConfiguration, "Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
+                        element.blockType().name(), element.position().toStringAbsolute(),
+                        element.configurationType(), ConfigurationType.fromInstance(resolvedConfiguration));
+            }
+            return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
+        } else {
+            return resolvedConfiguration;
+        }
+    }
+
+    private void processTarget() {
+        AstStringLiteral attribute = getAttribute("target", AstStringLiteral.class);
+        if (attribute == null) return;
+
+        String strTarget = attribute.getText(this).trim();
+        if (strTarget.isBlank()) return;
+
+        try {
+            Target target = Target.fromString(strTarget);
+            getCompilerProfile().setTarget(target);
+            SchematicsMetadata.setMetadata(MindustryMetadata.forVersion(target.version()));
+        } catch (IllegalArgumentException e) {
+            error(attribute, "Invalid version specification '%s'.", strTarget);
+        }
+    }
+
+    private Position calculateOrigin(List<Block> blocks) {
+        if (blocks.isEmpty()) {
+            return Position.ORIGIN;
+        } else {
+            int x = blocks.stream().filter(b -> !b.position().invalid()).mapToInt(Block::x).min().orElse(0);
+            int y = blocks.stream().filter(b -> !b.position().invalid()).mapToInt(Block::y).min().orElse(0);
+            return new Position(x, y);
+        }
+    }
+
+    private Position calculateDimensions(List<Block> blocks) {
+        if (blocks.isEmpty()) {
+            return Position.ORIGIN;
+        } else {
+            int x = blocks.stream().mapToInt(Block::xMax).max().orElse(0);
+            int y = blocks.stream().mapToInt(Block::yMax).max().orElse(0);
+            return new Position(x + 1, y + 1);
+        }
+    }
+
+    private Schematic createSchematic(String name, String filename, String description, List<String> labels, List<Block> blocks) {
+        // Compensate for non-zero origin
+        Position origin = calculateOrigin(blocks);
+        List<Block> repositioned = origin.zero() ? blocks : blocks.stream().map(b -> b.remap(p -> p.sub(origin))).toList();
+        if (!origin.zero()) {
+            info("Schematic origin at (%d, %d) adjusted to (0, 0).", origin.x(), origin.y());
+        }
+
+        Position dim = calculateDimensions(repositioned);
+
+        AstCoordinates sourceDim = getAttribute("dimensions", AstCoordinates.class);
+        if (sourceDim != null) {
+            if (sourceDim.relative()) {
+                throw new SchematicsInternalError("Dimensions specified as relative coordinates '%s'.", sourceDim);
+            } else if (!sourceDim.coordinates().equals(dim)) {
+                if (sourceDim.coordinates().x() < dim.x() || sourceDim.coordinates().y() < dim.y()) {
+                    error("Actual schematic dimensions %s are larger than specified dimensions %s.",
+                            dim.toStringAbsolute(), sourceDim.coordinates().toStringAbsolute());
+                } else {
+                    warn("Actual schematic dimensions %s are smaller than specified dimensions %s.",
+                            dim.toStringAbsolute(), sourceDim.coordinates().toStringAbsolute());
+                }
+            }
+        }
+
+        if (dim.x() > MAX_SCHEMATIC_SIZE || dim.y() > MAX_SCHEMATIC_SIZE) {
+            warn("Schematic dimensions %s are larger than the maximum size creatable in Mindustry (%d, %d).",
+                    dim.toStringAbsolute(), MAX_SCHEMATIC_SIZE, MAX_SCHEMATIC_SIZE);
+        }
+
+        Schematic schematic = new Schematic(name, filename, description, labels, dim.x(), dim.y(), repositioned);
+        if (!error) {
+            addMessage(ToolMessage.info("%nCreated schematic '%s' with dimensions %s.", name, dim.toStringAbsolute()));
+        }
+        return schematic;
+    }
+
+    private void extractConstants() {
+        Map<String, List<AstStringConstant>> astConstantLists = astDefinitions.definitions().stream()
+                .filter(AstStringConstant.class::isInstance)
+                .map(AstStringConstant.class::cast)
+                .collect(Collectors.groupingBy(AstStringConstant::name));
+
+        astConstantLists.entrySet().stream()
+                .filter(e -> e.getValue().size() > 1)
+                .flatMap(e -> e.getValue().stream().skip(1))
+                .forEachOrdered(node -> error(node, "Identifier '%s' already defined.", node.name()));
+
+        Map<String, AstStringConstant> astConstants = astConstantLists.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getFirst()));
+
+        // Resolve indirections
+        constants = astConstants.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> resolveConstant(astConstants, new HashSet<>(), e.getValue())));
+
+        // Add all icon constants
+        SchematicsMetadata.getMetadata().getIcons().forEachIcon(
+                (k, v) -> constants.put(k, AstStringLiteral.fromText(v.format(null))));
+    }
+
+    private AstText resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {
+        AstText text = value.value();
+        if (text == null) {
+            throw new SchematicsInternalError("Identifier '%s': unexpected null value.", value.name());
+        } else if (text instanceof AstStringRef ref) {
+            if (!visited.add(ref.reference())) {
+                error(ref, "Circular definition of identifier '%s'.", ref.reference());
+                return AstStringLiteral.fromText("");
+            } else if (!constantLists.containsKey(ref.reference())) {
+                error(ref, "Undefined identifier '%s'.", ref.reference());
+                return AstStringLiteral.fromText("");
+            }
+            return resolveConstant(constantLists, visited, constantLists.get(ref.reference()));
+        } else {
+            return text;
+        }
+    }
+
+    private UnresolvedConfiguration getConfiguration(SchematicElement element) {
+        return switch (element.definition().configuration()) {
+            case AstBlockReference reference -> verifyConfiguration(reference, element, "block");
+            case AstBoolean b -> BooleanConfiguration.of(b.value());
+            case AstConnection c -> c.evaluate(configurationContext, element);
+            case AstConnections c -> new PositionArray(c.connections().stream().mapMulti(
+                    (AstConnection cc, Consumer<Position > consumer) -> cc.evaluateMultiple(consumer, configurationContext, element)).toList());
+            case AstItemReference reference -> verifyConfiguration(reference, element, "item");
+            case AstLiquidReference reference -> verifyConfiguration(reference, element, "liquid");
+            case AstProcessor processor -> processorConfigurationBuilder.fromAstConfiguration(processor, element);
+            case AstRgbaValue rgb -> convertToRgbValue(element, rgb);
+            case AstText t -> new TextConfiguration(t.getText(this));
+            case AstUnitCommandReference reference -> verifyConfiguration(reference, element, "command");
+            case AstUnitReference reference -> decodeUnitConfiguration(reference, element);
+            case null, default -> EmptyConfiguration.EMPTY;
+        };
+    }
+
+    private Color convertToRgbValue(SchematicElement element, AstRgbaValue rgb) {
+        return new Color(
+                clamp(rgb, element, "red", rgb.red()),
+                clamp(rgb, element, "green", rgb.green()),
+                clamp(rgb, element, "blue", rgb.blue()),
+                clamp(rgb, element, "alpha", rgb.alpha())
+        );
+    }
+
+    private Configuration verifyConfiguration(AstContentsReference reference, SchematicElement element, String valueName) {
+        Configuration value = reference.getConfiguration();
+        if (value == null) {
+            error(reference, "Block '%s' at %s: unknown or unsupported %s '%s'.",
+                    element.name(), element.position().toStringAbsolute(), valueName, reference.getConfigurationText());
+            return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
+        } else {
+            return value;
+        }
+    }
+
+    private int clamp(AstRgbaValue rgb, SchematicElement element, String component, int value) {
+        if (value < 0 || value > 255) {
+            error(rgb, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
+                    element.name(), element.position().toStringAbsolute(), value, component);
+        }
+        return Math.max(Math.min(value, 255), 0);
+    }
+
+    private Configuration decodeUnitConfiguration(AstUnitReference reference, SchematicElement element) {
+        return switch (element.configurationType()) {
+            case UNIT_OR_BLOCK -> verifyConfiguration(reference, element, "ref");
+            case UNIT_PLAN -> {
+                if (element.blockType().unitPlans().contains(reference.unit())) {
+                    yield new UnitPlan(reference.unit());
+                } else {
+                    error(reference, "Block '%s' at %s: unknown or unsupported unit type '%s'.",
+                            element.name(), element.position().toStringAbsolute(), reference.unit());
+                    yield EmptyConfiguration.EMPTY;
+                }
+            }
+            default -> {
+                error(reference, "Block '%s' at %s: unknown or unsupported configuration type '%s'.",
+                        element.name(), element.position().toStringAbsolute(), element.configurationType());
+                yield EmptyConfiguration.EMPTY;
+            }
+        };
+    }
+
+    public <T> @Nullable T getAttribute(String name, Class<T> expectedType) {
+        List<AstSchemaAttribute> list = astSchematic.attributes().stream().filter(a -> a.attribute().equals(name)).toList();
+        if (list.isEmpty()) {
+            return null;
+        } else if (list.size() > 1) {
+            list.stream().skip(1).forEach(a -> error(a, "Attribute '%s' is already defined.", name));
+        }
+
+        if (!expectedType.isInstance(list.getFirst().value())) {
+            throw new SchematicsInternalError("Attribute '%s': expected type %s, actual type %s.", name,
+                    expectedType, list.getFirst().value().getClass());
+        } else {
+            return expectedType.cast(list.getFirst().value());
+        }
+    }
+
+    public <T> List<T> getAttributes(String name, Class<T> expectedType) {
+        List<AstSchemaItem> list = astSchematic.attributes().stream()
+                .filter(a -> a.attribute().equals(name))
+                .map(AstSchemaAttribute::value)
+                .toList();
+        Optional<AstSchemaItem> wrongType = list.stream().filter(a -> !expectedType.isInstance(a)).findAny();
+        if (wrongType.isPresent()) {
+            throw new SchematicsInternalError("Attribute '%s': expected type %s, actual type %s.", name,
+                    expectedType, wrongType.get().getClass());
+        }
+        return List.copyOf(list.stream().map(expectedType::cast).toList());
+    }
+
+    private String getStringAttribute(String name, String defaultValue) {
+        AstText text = getAttribute(name, AstText.class);
+        return text == null ? defaultValue : text.getText(this);
+    }
+
+    static String unwrap(String text) {
+        StringBuilder sbr = new StringBuilder(text.length());
+        boolean wasEmpty = false;
+        for (String line : text.lines().toList()) {
+            if (line.isBlank()) {
+                wasEmpty = true;
+                continue;
+            }
+            if (!sbr.isEmpty()) {
+                sbr.append(wasEmpty ? '\n' : ' ');
+            }
+            wasEmpty = false;
+            sbr.append(line);
+        }
+
+        return sbr.toString();
+    }
+
+    public AstText getText(SourceElement element, String reference) {
+        AstText result = constants.get(reference);
+        if (result == null) {
+            error(element, "Undefined identifier '%s'.", reference);
+            return AstStringLiteral.fromText("");
+        }
+        return result;
+    }
+
+    public BlockPosition getBlockPosition(Position position) {
+        return astPositionMap.at(position);
+    }
+
+    public BlockPositionMap<Block> getPositionMap() {
+        return positionMap;
+    }
+
+    public ResolverContext trackingResolverContext() {
+        return new ResolverContext(true);
+    }
+
+    public class ResolverContext {
+        private final boolean trackCircularReferences;
+        private final Set<SchematicElement> visited = new LinkedHashSet<>();
+
+        public ResolverContext(boolean trackCircularReferences) {
+            this.trackCircularReferences = trackCircularReferences;
+        }
+
+        public boolean visited(SchematicElement reference) {
+            return trackCircularReferences && !visited.add(reference);
+        }
+
+        public List<SchematicElement> visitedSince(SchematicElement reference) {
+            ArrayList<SchematicElement> result = new ArrayList<>(visited);
+            int index = CollectionUtils.indexOf(result, e -> e == reference);
+            return index == -1 ? Collections.emptyList() : result.subList(index, result.size());
+        }
+
+        public boolean unreported(SchematicElement reference) {
+            return reportedCircular.add(reference);
+        }
+
+        public SchematicElement getElement(Position position) {
+            return astPositionMap.at(position);
+        }
+
+        public SchematicElement getSchematic() {
+            return Objects.requireNonNull(schematic);
+        }
+
+        public void error(SourceElement node, @PrintFormat String format, Object... args) {
+            SchematicsBuilder.this.error(node, format, args);
+        }
+
+        private final Set<AstSchemaItem> reportedNodes = new HashSet<>();
+        public String resolveGlobalLabel(AstSchemaItem node, String label) {
+            if (label == null || label.isEmpty()) return label;
+
+            return switch (label.charAt(label.length() - 1)) {
+                case LayoutResolver.LOCAL_LABEL_ARRAY_CHAR -> {
+                    if (reportedNodes.add(node)) {
+                        error(node, "Local label array '%s' is not supported as a reference.", label);
+                    }
+                    MutableInteger current = arrayLabels.computeIfAbsent(label, _ -> MutableInteger.zero());
+                    yield label.substring(0, label.length() - 1) + current.incrementAndGet();
+                }
+                case LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR -> {
+                    MutableInteger current = arrayLabels.computeIfAbsent(label, _ -> MutableInteger.zero());
+                    yield label.substring(0, label.length() - 1) + current.incrementAndGet();
+                }
+                default -> label;
+            };
+        }
+    }
+
+    void addStatistics(Statistics otherStatistics) {
+        statistics = statistics.add(otherStatistics);
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+}

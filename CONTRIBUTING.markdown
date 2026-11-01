@@ -106,4 +106,4 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 
 ### IDE
 
-To run the application from your IDE, set the environment variables as described above (some IDEs allow to set them just in the IDE) and set the startup class to `info.teksol.mindcode.webapp.WebappApplication`. When you run or debug the project, the Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
+To run the application from your IDE, set the environment variables as described above (some IDEs allow to set them just in the IDE) and set the startup class to `webapp.io.github.cardillan.mindcode.WebappApplication`. When you run or debug the project, the Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.

@@ -1,0 +1,790 @@
+package io.github.cardillan.mc.mindcode.compiler;
+
+import io.github.cardillan.mc.common.*;
+import io.github.cardillan.mc.emulator.Assertion;
+import io.github.cardillan.mc.emulator.Emulator;
+import io.github.cardillan.mc.emulator.EmulatorMessage;
+import io.github.cardillan.mc.emulator.EmulatorSchematic;
+import io.github.cardillan.mc.emulator.blocks.BlockPosition;
+import io.github.cardillan.mc.emulator.blocks.LogicBlock;
+import io.github.cardillan.mc.emulator.mimex.BasicEmulator;
+import io.github.cardillan.mc.emulator.mimex.LParser;
+import io.github.cardillan.mc.emulator.mimex.LStrings;
+import io.github.cardillan.mc.generated.ast.AstIndentedPrinter;
+import io.github.cardillan.mc.messages.*;
+import io.github.cardillan.mc.mindcode.compiler.antlr.LexerParser;
+import io.github.cardillan.mc.mindcode.compiler.antlr.MindcodeParser.AstModuleContext;
+import io.github.cardillan.mc.mindcode.compiler.ast.AstBuilder;
+import io.github.cardillan.mc.mindcode.compiler.ast.AstBuilderContext;
+import io.github.cardillan.mc.mindcode.compiler.ast.ParserAbort;
+import io.github.cardillan.mc.mindcode.compiler.ast.nodes.*;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.CallGraph;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.CallGraphCreator;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.CallGraphCreatorContext;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import io.github.cardillan.mc.mindcode.compiler.declarations.DeclarationsProcessor;
+import io.github.cardillan.mc.mindcode.compiler.declarations.DeclarationsProcessorContext;
+import io.github.cardillan.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
+import io.github.cardillan.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
+import io.github.cardillan.mc.mindcode.compiler.generation.*;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.*;
+import io.github.cardillan.mc.mindcode.compiler.optimization.DebugPrinter;
+import io.github.cardillan.mc.mindcode.compiler.optimization.DiffDebugPrinter;
+import io.github.cardillan.mc.mindcode.compiler.optimization.NullDebugPrinter;
+import io.github.cardillan.mc.mindcode.compiler.optimization.OptimizationCoordinator;
+import io.github.cardillan.mc.mindcode.compiler.postprocess.*;
+import io.github.cardillan.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
+import io.github.cardillan.mc.mindcode.compiler.preprocess.PreprocessorContext;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicBuiltIn;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicLabel;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicVariable.LogicTemp;
+import io.github.cardillan.mc.mindcode.logic.arguments.arrays.ArrayConstructorContext;
+import io.github.cardillan.mc.mindcode.logic.instructions.*;
+import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mc.profile.DirectiveProcessor;
+import io.github.cardillan.mc.profile.FinalCodeOutput;
+import io.github.cardillan.mc.profile.GlobalCompilerProfile;
+import io.github.cardillan.mc.profile.options.Target;
+import io.github.cardillan.mc.util.CollectionUtils;
+import io.github.cardillan.mc.util.UtfUtils;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.zip.DeflaterOutputStream;
+
+import static io.github.cardillan.mc.mindcode.logic.opcodes.Opcode.*;
+
+@NullMarked
+public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuilderContext, PreprocessorContext,
+        ArrayConstructorContext, CallGraphCreatorContext, DeclarationsProcessorContext, CompileTimeEvaluatorContext,
+        CodeGeneratorContext, VariablesContext, ForcedVariableContext, OptimizerContext, StackContext, StackBuilderContext {
+
+    public static final String REMOTE_PROTOCOL_VERSION = "v2";
+
+    // Inputs, configurations, and tools
+    private final CompilationPhase targetPhase;
+    private final CompilerProfile globalProfile;
+    private final InputFiles inputFiles;
+    private final DirectiveProcessor directiveProcessor;
+    private @Nullable InstructionProcessor instructionProcessor;
+    private @Nullable NameCreator nameCreator;
+    private @Nullable MindustryMetadata metadata;
+    private @Nullable CompileTimeEvaluator compileTimeEvaluator;
+    private @Nullable CodeGenerator codeGenerator;
+
+    // Schemacode-specific
+    private @Nullable Map<String, String> schematicLinks;
+
+    // Intermediate and final results
+    private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
+    private final Map<InputFile, AstModuleContext> parseTrees = new HashMap<>();
+    private final Map<InputFile, AstModule> modules = new HashMap<>();
+    private final Map<AstRequire, InputFile> requiredFiles = new HashMap<>();
+    private final List<AstRequire> requirements = new ArrayList<>();
+    private final Set<LogicVariable> forcedVariables = new LinkedHashSet<>();
+    private final ReturnStack returnStack;
+    private @Nullable StackTracker stackTracker;
+    private @Nullable AstProgram astProgram;
+    private @Nullable AstAllocation heapAllocation;
+    private @Nullable CallGraph callGraph;
+    private @Nullable AstContext rootAstContext;
+    private @Nullable CodeAssembler assembler;
+    private @Nullable Variables variables;
+
+    private List<LogicInstruction> executableInstructions = List.of();
+    private List<LogicInstruction> instructions = List.of();
+    private List<LogicInstruction> unoptimized = List.of();
+    private List<LogicInstruction> unresolved = List.of();
+    private String output = "";
+
+    private Function<Integer, DebugPrinter> debugPrinterProvider = DiffDebugPrinter::new;
+
+    // Run output
+    private Consumer<LogicBlock> logicBlockInitializer = _ -> {};
+    private @Nullable Emulator emulator;
+    private boolean runtimeError = false;
+    private List<Assertion> assertions = List.of();
+    private int steps;
+
+    // Message logger
+    private final ListMessageLogger messageLogger;
+    private boolean internalError;
+
+    // Diagnostic data
+    private final Map<Class<?>, List<Object>> diagnosticData = new HashMap<>();
+
+    // Statistics
+    private int nodeCount;
+    private int moduleCount;
+    private int unoptimizedCount;
+    private int optimizedCount;
+    private int parseTime;
+    private int compileTime;
+    private int optimizeTime;
+    private int runTime;
+    private int passes;
+
+    public MindcodeCompiler(MessageConsumer messageConsumer, CompilerProfile globalProfile, InputFiles inputFiles) {
+        this(CompilationPhase.ALL, messageConsumer, globalProfile, inputFiles);
+    }
+
+    public MindcodeCompiler(CompilationPhase targetPhase, MessageConsumer messageConsumer,
+            CompilerProfile globalProfile, InputFiles inputFiles) {
+        super(new ListMessageLogger(messageConsumer));
+        this.messageLogger = (ListMessageLogger) super.messageConsumer();
+        this.targetPhase = targetPhase;
+        this.globalProfile = globalProfile;
+        this.inputFiles = inputFiles;
+        this.directiveProcessor = new DirectiveProcessor(messageLogger);
+        returnStack = new ReturnStack();
+
+        ContextFactory.setCompilerContext(this);
+    }
+
+    public void setLogicBlockInitializer(Consumer<LogicBlock> logicBlockInitializer) {
+        this.logicBlockInitializer = logicBlockInitializer;
+    }
+
+    public void setDebugPrinterProvider(Function<Integer, DebugPrinter> debugPrinterProvider) {
+        this.debugPrinterProvider = debugPrinterProvider;
+    }
+
+    public void safeCompile() {
+        try {
+            compile();
+        } catch (Exception e) {
+            internalError = true;
+            error(ERR.INTERNAL_ERROR);
+        }
+    }
+
+    public void safeCompile(InputFile file) {
+        try {
+            compile(file);
+        } catch (Exception e) {
+            internalError = true;
+            error(ERR.INTERNAL_ERROR);
+        }
+    }
+
+    public void compile() {
+        compile(inputFiles.getInputFiles());
+    }
+
+    public void compile(InputFile file) {
+        compile(List.of(file));
+    }
+
+    private void compile(List<InputFile> files) {
+        try {
+            compileFiles(files);
+        } catch (Throwable t) {
+            error("%s", switch (t) {
+                case OutOfMemoryError _ -> "The code to be compiled is too complex (out of memory).";
+                case StackOverflowError _ -> "The code to be compiled is too complex (stack overflow).";
+                default -> "An internal error has occurred. Please report the error at https://github.com/cardillan/mindcode/issues.";
+            });
+
+            if (globalProfile.isPrintStackTrace()) {
+                t.printStackTrace(System.err);
+            }
+        }
+    }
+
+    private void compileFiles(List<InputFile> files) {
+        Queue<ModulePlacement> inputs = files.stream()
+                .map(f -> new ModulePlacement(f, Collections.emptySortedSet()))
+                .collect(Collectors.toCollection(LinkedList::new));
+        Set<InputFile> processedFiles = new HashSet<>();
+        List<AstModule> moduleList = new LinkedList<>();
+        RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, globalProfile, inputFiles);
+        Map<AstIdentifier, List<AstIdentifier>> foundProcessors = new HashMap<>();
+
+        // Process all input files including files discovered through the `require` directive.
+        // The first processed module is the main one
+        try {
+            while (!inputs.isEmpty()) {
+                ModulePlacement input = inputs.remove();
+                if (processedFiles.add(input.inputFile)) {
+                    requirements.clear();
+
+                    long parseStart = System.nanoTime();
+                    CommonTokenStream tokenStream = LexerParser.createTokenStream(messageConsumer, input.inputFile);
+                    tokenStreams.put(input.inputFile, tokenStream);
+                    if (targetPhase == CompilationPhase.LEXER) continue;
+
+                    AstModuleContext parseTree = LexerParser.parseTree(messageConsumer, input.inputFile, tokenStream);
+                    parseTrees.put(input.inputFile, parseTree);
+                    if (targetPhase == CompilationPhase.PARSER) continue;
+
+                    // The main module is the first processed one -- the list is still empty
+                    AstModule module = AstBuilder.build(this, input.inputFile, tokenStream, parseTree,
+                            input.remoteProcessors, moduleList.isEmpty());
+                    modules.put(input.inputFile, module);
+                    if (!module.isMain() && module.getDeclaration() == null) {
+                        error(new SourcePosition(input.inputFile, 1, 1), ERR.MISSING_MODULE_DECLARATION);
+                    }
+                    moduleList.addFirst(module);
+                    parseTime += (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
+
+                    Set<InputFile> inputFilesInModule = new HashSet<>();
+
+                    // Requirements are added by the AstBuilder via AstBuilderContext
+                    for (AstRequire requirement : requirements) {
+                        InputFile inputFile = requirementsProcessor.loadFile(requirement);
+
+                        // Error (already reported) loading or resolving the file
+                        if (inputFile == null) continue;
+
+                        if (!inputFilesInModule.add(inputFile)) {
+                            error(requirement, ERR.MULTIPLE_MODULE_REQUESTS, requirement.getName());
+                            continue;
+                        }
+
+                        requiredFiles.put(requirement, inputFile);
+
+                        // Do not process requirements of modules representing remote processors
+                        if (input.remoteProcessors.isEmpty()) {
+                            inputs.add(new ModulePlacement(inputFile, requirement.getProcessors()));
+
+                            for (AstIdentifier processor : requirement.getProcessors()) {
+                                foundProcessors.computeIfAbsent(processor, _ -> new ArrayList<>()).add(processor);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (ParserAbort ignored) {
+            // The error has already been reported
+        }
+
+        // Detect and report errors where the same processor is used with different modules
+        foundProcessors.values().stream().filter(l -> l.size() > 1)
+                .flatMap(Collection::stream)
+                .forEach(p -> error(p, ERR.MULTIPLE_PROCESSOR_BINDINGS, p.getName()));
+
+        if (!modules.isEmpty()) {
+            astProgram = new AstProgram(globalProfile, new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
+            nodeCount = astProgram.nodes();
+            moduleCount = moduleList.size();
+        }
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
+
+        if (astProgram == null) {
+            throw new MindcodeInternalError("Program is empty.");
+        }
+
+        long compileStart = System.nanoTime();
+
+        DirectivePreprocessor.processGlobalDirectives(this, globalProfile, astProgram.getMainModule());
+        astProgram.getModules().stream().filter(m -> !m.isMain())
+                .forEach(module -> DirectivePreprocessor.processModuleDirectives(this, globalProfile, module));
+
+        if (globalProfile.getParseTreeLevel() > 0) {
+            debug("Parse tree:");
+            debug(new AstIndentedPrinter().print(astProgram));
+            debug("");
+        }
+
+        DirectivePreprocessor.processLocalDirectives(this, globalProfile, astProgram);
+
+        if (targetPhase.compareTo(CompilationPhase.PREPROCESSOR) <= 0) return;
+
+        nameCreator = new StandardNameCreator(globalProfile);
+        instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, nameCreator, globalProfile);
+        metadata = instructionProcessor.getMetadata();
+        stackTracker = new StackTracker(instructionProcessor.stackPointer(), instructionProcessor.stackMemory());
+
+        callGraph = CallGraphCreator.createCallGraph(this, astProgram);
+
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.CALL_GRAPH) <= 0) return;
+
+        rootAstContext = AstContext.createRootNode(globalProfile);
+        variables = new Variables(this);
+
+        DeclarationsProcessor.processDeclarations(this, astProgram);
+
+        assembler = new CodeAssembler(this);
+        compileTimeEvaluator = new CompileTimeEvaluator(this);
+
+        codeGenerator = new CodeGenerator(this, astProgram);
+        codeGenerator.generateCode();
+
+        if (assembler.isInternalError() && !hasCompilerErrors()) {
+            throw new MindcodeInternalError("Internal error encountered.");
+        }
+        unoptimized = assembler.getInstructions();
+        unoptimizedCount = unoptimized.stream().mapToInt(LogicInstruction::getRealSize).sum();
+
+        instructions = unoptimized;
+        compileTime = (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
+
+        VirtualInstructionResolver virtualInstructionResolver = new VirtualInstructionResolver(instructionProcessor);
+
+        // OPTIMIZE
+        long optimizeStart = System.nanoTime();
+        final DebugPrinter debugPrinter = globalProfile.getDebugMessages() > 0 && globalProfile.optimizationsActive()
+                ? debugPrinterProvider.apply(globalProfile.getDebugMessages()) : new NullDebugPrinter();
+        OptimizationCoordinator optimizationCoordinator = new OptimizationCoordinator(instructionProcessor, globalProfile, messageConsumer,
+                this, virtualInstructionResolver, !astProgram.isMainProgram());
+        optimizationCoordinator.setDebugPrinter(debugPrinter);
+
+        if (globalProfile.optimizationsActive() && instructions.size() > 1) {
+            instructions = optimizationCoordinator.optimize(callGraph, instructions, rootAstContext);
+            passes = optimizationCoordinator.getPasses();
+            debugPrinter.print(this::debug);
+        }
+        optimizeTime = (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
+
+        unresolved = instructions;
+        if (hasCompilerErrors()) return;
+
+        // We're entering the code resolution phase
+        instructionProcessor.setResolutionPhase(true);
+
+        // Run the program through the array expander again, as optimizations might have been inactive.
+        if (!virtualInstructionResolver.expanded()) {
+            instructions = new ArrayList<>(instructions);
+            virtualInstructionResolver.resolveVirtualInstructions(instructions);
+        }
+
+        instructions = StackBuilder.buildStack(this, optimizationCoordinator, instructions);
+
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
+
+        instructions = AtomicBlockResolver.resolve(instructionProcessor, instructions);
+
+        // Check there are no direct access instructions
+        if (globalProfile.isSymbolicLabels()) {
+            boolean hasLabels = instructions.stream()
+                    .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTIJUMP, MULTILABEL, INITSTACK).negate())
+                    .flatMap(MlogInstruction::inputArgumentsStream)
+                    .anyMatch(LogicLabel.class::isInstance);
+
+            boolean hasDirectAssignment = instructions.stream()
+                    .filter(OpInstruction.class::isInstance)
+                    .map(OpInstruction.class::cast)
+                    .anyMatch(ix -> ix.getResultArgument().equals(LogicBuiltIn.COUNTER)
+                            && !ix.getX().equals(LogicBuiltIn.COUNTER) && !ix.getY().equals(LogicBuiltIn.COUNTER));
+
+            if (hasLabels || hasDirectAssignment) {
+                warn(WARN.ABSOLUTE_ADDRESSING);
+            }
+        }
+
+        if (!OptimizationCoordinator.TRACE) {
+            renumberTemporary(instructions);
+        }
+
+        // Sort variables
+        FinalInstructionResolver resolver = new FinalInstructionResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext);
+        instructions = resolver.sortVariables(instructions);
+
+        // Print unresolved code
+        if (globalProfile.getFinalCodeOutput() != FinalCodeOutput.NONE) {
+            debug("\nFinal code before resolving virtual instructions:\n");
+            debug(LogicInstructionPrinter.toString(globalProfile.getFinalCodeOutput(), instructionProcessor, instructions));
+        }
+
+        // Label resolving
+        instructions = resolver.resolveLabels(instructions, forcedVariables);
+        executableInstructions = instructions.stream().filter(ix -> !(ix instanceof CommentInstruction)).toList();
+        optimizedCount = executableInstructions.size();
+
+        if (globalProfile.isPrintCodeSize()) {
+            outputFunctionSizes();
+        }
+
+        outputSymbolicNameMap();
+
+        if (executableInstructions.size() > Globals.MAX_INSTRUCTIONS) {
+            if (globalProfile.isEnforceSizeLimits()) {
+                error(ERR.INSTRUCTION_LIMIT_EXCEEDED, globalProfile.getInstructionLimit());
+            } else {
+                warn(ERR.INSTRUCTION_LIMIT_EXCEEDED, globalProfile.getInstructionLimit());
+            }
+        }
+
+        String code = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
+                globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent(), true);
+
+        output = globalProfile.isReformatMlog() ? reformat(code) : code;
+
+        int mlogEncodedSize = UtfUtils.utf8Length(output);
+        if (mlogEncodedSize > Globals.MAX_MLOG_BYTE_LENGTH) {
+            if (globalProfile.isEnforceSizeLimits()) {
+                error(ERR.CODE_SIZE_LIMIT_EXCEEDED, Globals.MAX_MLOG_BYTE_LENGTH, mlogEncodedSize - Globals.MAX_MLOG_BYTE_LENGTH);
+            } else {
+                warn(ERR.CODE_SIZE_LIMIT_EXCEEDED, Globals.MAX_MLOG_BYTE_LENGTH, mlogEncodedSize - Globals.MAX_MLOG_BYTE_LENGTH);
+            }
+        }
+
+        if (!globalProfile.isSchematic()) {
+            verifyCodeSize(output);
+        }
+
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
+
+        // RUN if requested
+        // Timing output
+        if (globalProfile.isRun()) {
+            long runStart = System.nanoTime();
+            run();
+            runTime = (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
+            addMessage(TimingMessage.info("Mindcode: %,d AST nodes, instructions: %,d unoptimized, %,d optimized, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
+                    nodeCount, unoptimizedCount, executableInstructions.size(), parseTime, compileTime, optimizeTime, runTime));
+        } else {
+            addMessage(TimingMessage.info("Mindcode: %,d AST nodes, instructions: %,d unoptimized, %,d optimized, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
+                    nodeCount, unoptimizedCount, executableInstructions.size(), parseTime, compileTime, optimizeTime));
+        }
+    }
+
+    private String functionName(LogicInstruction  instruction) {
+        MindcodeFunction function = instruction.getAstContext().getFunctionBody();
+        return function == null || function.isMain()
+                ? "<no function>"
+                : function.getDeclaration().toSourceCode();
+    }
+
+    private int functionCopyNumber(LogicInstruction instruction) {
+        return instruction.getAstContext().getFunctionCopyNumber();
+    }
+
+    private void outputFunctionSizes() {
+        List<LogicInstruction> list = executableInstructions.stream().filter(ix -> ix.getOpcode() != LABEL).toList();
+        Map<String, Integer> sizes = list.stream()
+                .collect(Collectors.groupingBy(this::functionName, Collectors.summingInt(_ -> 1)));
+
+        Map<String, Integer> instances = list.stream().collect(Collectors.groupingBy(this::functionName,
+                Collectors.collectingAndThen(Collectors.mapping(this::functionCopyNumber,
+                        Collectors.toSet()), Set::size)));
+
+        StringBuilder sbr = new StringBuilder()
+                .append("\nCode size and number of instantiations by function:")
+                .append("\n  Size  Times  AvgSize  Function");
+        Formatter fmt = new Formatter(sbr);
+        sizes.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder())
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .forEach(e -> {
+                    int size = e.getValue();
+                    int number = instances.getOrDefault(e.getKey(), 1);
+                    fmt.format("\n%6d  %4dx  %7.1f  %s", e.getValue(), number, (double) size / number, e.getKey());
+                });
+        fmt.close();
+
+        info("%s%n", sbr);
+    }
+
+    private void outputSymbolicNameMap() {
+        Map<String, String> symbolicNameMap = getSymbolicNameMap();
+        if (symbolicNameMap.isEmpty()) return;
+
+        int length = symbolicNameMap.keySet().stream().mapToInt(String::length).max().orElse(0);
+        String format = "\n    %-" + length + "s -> %s";
+
+        StringBuilder sbr = new StringBuilder("\nSymbolic link resolution:");
+        Formatter fmt = new Formatter(sbr);
+        symbolicNameMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(e -> fmt.format(format, e.getKey(), e.getValue()));
+        fmt.close();
+
+        info("%s\n", sbr);
+    }
+
+    private String reformat(String code) {
+        assert metadata != null;
+        Target target = globalProfile.getTarget();
+        LStrings strings = LStrings.create(target.version());
+        LParser parser = LParser.create((_, _) -> false, metadata, strings, code, true, false);
+        return parser.parse().stream().map(Object::toString).collect(Collectors.joining("\n"));
+    }
+
+    private void verifyCodeSize(String pureMlog) {
+        byte[] bytes = pureMlog.getBytes(StandardCharsets.UTF_8);
+        try {
+            var byteStream = new ByteArrayOutputStream();
+            var stream = new DataOutputStream(new DeflaterOutputStream(byteStream));
+
+            //current version of config format
+            stream.write(1);
+
+            //write string data
+            stream.writeInt(bytes.length);
+            stream.write(bytes);
+            stream.close();
+
+            int size = byteStream.size();
+            if (size > globalProfile.getProcessorSizeLimit()) {
+                if (globalProfile.isEnforceSizeLimits()) {
+                    error(ERR.CONFIG_SIZE_LIMIT_EXCEEDED, size, globalProfile.getProcessorSizeLimit());
+                } else {
+                    warn(ERR.CONFIG_SIZE_LIMIT_EXCEEDED, size, globalProfile.getProcessorSizeLimit());
+                }
+            }
+        } catch (IOException e) {
+            throw new MindcodeInternalError(e, "Error encoding processor code.");
+        }
+    }
+
+    private void run() {
+        assert metadata != null;
+        LogicBlock logicBlock = LogicBlock.createProcessor(metadata, compilerProfile().getEmulatorTarget().type(),
+                BlockPosition.ZERO_POSITION, output);
+        logicBlock.createDefaultBlocks(metadata);
+        logicBlockInitializer.accept(logicBlock);
+
+        EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
+        emulator = new BasicEmulator(messageConsumer, globalProfile, schematic);
+
+        emulator.run(globalProfile.getStepLimit());
+        runtimeError = emulator.isError();
+        assertions = emulator.getAllAssertions();
+        steps = emulator.getExecutionSteps();
+    }
+
+    // Compiler outputs
+    public CommonTokenStream getTokenStream(InputFile inputFile) {
+        return tokenStreams.get(inputFile);
+    }
+
+    public AstModuleContext getParseTree(InputFile inputFile) {
+        return parseTrees.get(inputFile);
+    }
+
+    public AstModule getModule(InputFile inputFile) {
+        return modules.get(inputFile);
+    }
+
+    public AstProgram getAstProgram() {
+        return Objects.requireNonNull(astProgram);
+    }
+
+    public CallGraph getCallGraph() {
+        return Objects.requireNonNull(callGraph);
+    }
+
+    public List<MindcodeMessage> getMessages() {
+        return messageLogger.getMessages();
+    }
+
+    public List<LogicInstruction> getExecutableInstructions() {
+        return executableInstructions;
+    }
+
+    public List<LogicInstruction> getInstructions() {
+        return instructions;
+    }
+
+    public List<LogicInstruction> getUnoptimized() {
+        return unoptimized;
+    }
+
+    public List<LogicInstruction> getUnresolved() {
+        return unresolved;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public @Nullable String getProgramId() {
+        return codeGenerator == null ? null : codeGenerator.getProgramId();
+    }
+
+    public List<Assertion> getAssertions() {
+        return assertions;
+    }
+
+    public String getTextBufferOutput() {
+        return emulator == null ? "" : emulator.getExecutorResults(0).getFormattedOutput();
+    }
+
+    public int getSteps() {
+        return steps;
+    }
+
+    public Emulator getEmulator() {
+        return Objects.requireNonNull(emulator);
+    }
+
+    public boolean hasInternalError() {
+        return internalError;
+    }
+
+    public boolean hasCompilerErrors() {
+        return messageLogger.getMessages().stream()
+                .anyMatch(m -> m.level() == MessageLevel.ERROR && !(m instanceof EmulatorMessage));
+    }
+
+    public boolean hasRuntimeError() {
+        return runtimeError;
+    }
+
+    public void setSchematicLinks(Map<String, String> schematicLinks) {
+        this.schematicLinks = schematicLinks;
+    }
+
+    public Map<String, String> getSymbolicNameMap() {
+        return variables == null ? Map.of() : variables.getSymbolicNameMap();
+    }
+
+    public Set<String> getParameterNames() {
+        return variables == null ? Set.of() : variables.getParameterNames();
+    }
+
+    // Context implementations
+    @Override
+    public MessageConsumer messageConsumer() {
+        return super.messageConsumer();
+    }
+
+    @Override
+    public DirectiveProcessor directiveProcessor() {
+        return directiveProcessor;
+    }
+
+    @Override
+    public GlobalCompilerProfile globalCompilerProfile() {
+        return globalProfile;
+    }
+
+    public CompilerProfile compilerProfile() {
+        return globalProfile;
+    }
+
+    @Override
+    public InstructionProcessor instructionProcessor() {
+        return Objects.requireNonNull(instructionProcessor);
+    }
+
+    @Override
+    public NameCreator nameCreator() {
+        return Objects.requireNonNull(nameCreator);
+    }
+
+    @Override
+    public MindustryMetadata metadata() {
+        return Objects.requireNonNull(metadata);
+    }
+
+    @Override
+    public CompileTimeEvaluator compileTimeEvaluator() {
+        return Objects.requireNonNull(compileTimeEvaluator);
+    }
+
+    @Override
+    public void addRequirement(AstRequire requirement) {
+        requirements.add(requirement);
+    }
+
+    public AstModule getModule(AstRequire node) {
+        return modules.get(requiredFiles.get(node));
+    }
+
+    @Override
+    public void setHeapAllocation(AstAllocation heapAllocation) {
+        this.heapAllocation = heapAllocation;
+    }
+
+    @Override
+    public ReturnStack returnStack() {
+        return returnStack;
+    }
+
+    @Override
+    public StackTracker stackTracker() {
+        return Objects.requireNonNull(stackTracker);
+    }
+
+    @Override
+    public @Nullable AstAllocation heapAllocation() {
+        return heapAllocation;
+    }
+
+    @Override
+    public CallGraph callGraph() {
+        return Objects.requireNonNull(callGraph);
+    }
+
+    @Override
+    public AstContext rootAstContext() {
+        return Objects.requireNonNull(rootAstContext);
+    }
+
+    @Override
+    public CodeAssembler assembler() {
+        return Objects.requireNonNull(assembler);
+    }
+
+    @Override
+    public Variables variables() {
+        return Objects.requireNonNull(variables);
+    }
+
+    public @Nullable Map<String, String> schematicLinks() {
+        return schematicLinks;
+    }
+
+    @Override
+    public void addForcedVariable(LogicVariable variable) {
+        forcedVariables.add(variable);
+    }
+
+    public Set<LogicVariable> getForcedVariables() {
+        return forcedVariables;
+    }
+
+    public void addDiagnosticData(Object data) {
+        diagnosticData.computeIfAbsent(data.getClass(), _ -> new ArrayList<>()).add(data);
+    }
+
+    public <T> void addDiagnosticData(Class<T> dataClass, List<T> data) {
+        diagnosticData.computeIfAbsent(dataClass, _ -> new ArrayList<>()).addAll(data);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getDiagnosticData(Class<T> type) {
+        return (List<T>) diagnosticData.getOrDefault(type, List.of());
+    }
+
+    private record ModulePlacement(InputFile inputFile, SortedSet<AstIdentifier> remoteProcessors) {
+    }
+
+    private void renumberTemporary(List<LogicInstruction> instructions) {
+        IdentityHashMap<LogicTemp, LogicTemp> map = new IdentityHashMap<>();
+        for (LogicInstruction instruction : instructions) {
+            instruction.typedArgumentsStream().forEach(arg -> {
+                if (arg.argument() instanceof LogicTemp tmp) {
+                    map.putIfAbsent(tmp, tmp);
+                }
+            });
+        }
+
+        List<LogicTemp> temps = map.keySet().stream().sorted(Comparator.comparingInt(LogicTemp::getIndex)).toList();
+        int index = 0;
+        for (LogicTemp temp : temps) {
+            temp.setIndex(index++);
+        }
+    }
+
+    public Statistics getStatistics() {
+        return new Statistics(nodeCount, moduleCount, unoptimizedCount, optimizedCount, parseTime, compileTime,
+                optimizeTime, runTime, passes, messageLogger.getErrorCount(), messageLogger.getWarningCount());
+    }
+}

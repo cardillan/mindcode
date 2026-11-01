@@ -1,0 +1,31 @@
+package io.github.cardillan.mindcode.exttest;
+
+import io.github.cardillan.mc.common.InputFiles;
+import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mindcode.exttest.cases.TestCaseCreator;
+import org.jspecify.annotations.NullMarked;
+
+import java.nio.file.Path;
+
+@NullMarked
+public interface TestConfiguration {
+    int getThreads();
+    int getTotalCases();
+    int getSampleCount();
+    int getFailureLimit();
+
+    InputFiles getInputFiles();
+    CompilerProfile createCompilerProfile(int testCase);
+
+    boolean containsSetting(Enum<?> setting, Object value);
+
+    String getSourceFileName();
+    Path getResultPath();
+    boolean isRun();
+
+    int getCaseSwitching();
+    TestConfiguration withCaseSwitching(int caseSwitching);
+    boolean isCaseSwitchingTest();
+
+    TestCaseCreator getTestCaseCreator();
+}

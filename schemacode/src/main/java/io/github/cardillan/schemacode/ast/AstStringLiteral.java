@@ -1,0 +1,46 @@
+package io.github.cardillan.schemacode.ast;
+
+import io.github.cardillan.mc.common.InputFile;
+import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.schemacode.schematics.SchematicsBuilder;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+public record AstStringLiteral(SourcePosition sourcePosition, String text) implements AstText {
+
+    public AstStringLiteral(String text) {
+        this(SourcePosition.EMPTY, text);
+    }
+
+    @Override
+    public SourcePosition getTextPosition(SchematicsBuilder builder) {
+        return sourcePosition;
+    }
+
+    @Override
+    public String getText(SchematicsBuilder builder) {
+        return text;
+    }
+
+    public static AstStringLiteral fromTerminalNode(InputFile inputFile, TerminalNode node) {
+        String nodeText = node.getText();
+        String text = nodeText.substring(1, nodeText.length() - 1);
+        int line = node.getSymbol().getLine();
+        int column = node.getSymbol().getCharPositionInLine() + 2;
+        return new AstStringLiteral(new SourcePosition(inputFile, line, column), text);
+    }
+
+    public static AstStringLiteral fromText(String text) {
+        return new AstStringLiteral(SourcePosition.EMPTY, text);
+    }
+
+    public static AstStringLiteral fromText(SourcePosition pos, String text) {
+        return new AstStringLiteral(pos, text);
+    }
+
+    @Override
+    public AstStringLiteral withEmptyPosition() {
+        return new AstStringLiteral(SourcePosition.EMPTY, text);
+    }
+}

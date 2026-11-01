@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>info.teksol.mindcode</groupId>
+        <groupId>io.github.cardillan.mindcode</groupId>
         <artifactId>mindcode</artifactId>
         <version>${revision}</version>
     </parent>
@@ -20,7 +20,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>info.teksol.mindcode</groupId>
+            <groupId>io.github.cardillan.mindcode</groupId>
             <artifactId>mindcode-compiler</artifactId>
             <version>${revision}</version>
         </dependency>
@@ -102,7 +102,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>info.teksol.mindcode.exttest.ExtendedTests</mainClass>
+                            <mainClass>io.github.cardillan.mindcode.exttest.ExtendedTests</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

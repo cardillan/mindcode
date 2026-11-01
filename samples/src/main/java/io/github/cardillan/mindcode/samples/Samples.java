@@ -1,0 +1,77 @@
+package io.github.cardillan.mindcode.samples;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class Samples {
+
+    // TODO: load the list of samples from the json file
+    public static Map<String, Sample> loadMindcodeSamples() {
+        final List<String> sampleNames = List.of(
+                "control-multiple-units",
+                "relaxed:one-thorium",
+                "relaxed:many-thorium",
+                "heal-damaged-building",
+                "mining-drone",
+                "item-transport",
+                "upgrade-conveyors",
+                "run:sum-of-primes"
+        );
+
+        return sampleNames.stream().map(Samples::loadMindcodeSample)
+                .collect(Collectors.toMap(Sample::name, s -> s));
+    }
+
+    // TODO: load the list of samples from the json file
+    public static Map<String, Sample> loadSchemacodeSamples() {
+        final List<String> sampleNames = List.of(
+                "detector",
+                "healing-center",
+                "on-off-switch",
+                "regulator",
+                "slow:overdrive-dome-supply",
+                "worker-recall-station",
+                "scrap-to-metaglass-2",
+                "item-transport",
+                "payload-hub",
+                "slow:mandelbrot-generator-8"
+        );
+
+        return sampleNames.stream().map(Samples::loadSchemacodeSample)
+                .collect(Collectors.toMap(Sample::name, s -> s));
+    }
+
+    private static Sample loadMindcodeSample(String sampleName) {
+        return loadSample("samples/mindcode/", sampleName, ".mnd");
+    }
+
+    private static Sample loadSchemacodeSample(String sampleName) {
+        return loadSample("samples/schematics/", sampleName, ".sdf");
+    }
+
+    private static Sample loadSample(String path, String sampleName, String extension) {
+        boolean runnable = sampleName.contains("run:");
+        boolean slow = sampleName.contains("slow:");
+        boolean relaxed = sampleName.contains("relaxed:");
+        String fileName = sampleName.replaceAll(".*:", "");
+
+        URL sample = Samples.class.getClassLoader().getResource(path + fileName + extension);
+        if (sample == null) {
+            throw new RuntimeException("Cannot locate sample file: " + fileName);
+        }
+
+        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(sample.openStream()))) {
+            final StringWriter out = new StringWriter();
+            reader.transferTo(out);
+            return new Sample(fileName, out.toString(), runnable, slow, relaxed);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read sample file: " + fileName);
+        }
+    }
+}

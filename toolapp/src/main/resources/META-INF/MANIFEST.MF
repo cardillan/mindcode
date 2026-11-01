@@ -1,3 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: info.teksol.mindcode.cmdline.Main
-
+Main-Class: io.github.cardillan.mindcode.cmdline.Main

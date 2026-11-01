@@ -1,0 +1,147 @@
+package io.github.cardillan.mc.mindcode.compiler.ast.nodes;
+
+import io.github.cardillan.annotations.AstNode;
+import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.mc.mindcode.compiler.DataType;
+import io.github.cardillan.mc.mindcode.compiler.FunctionModifier;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContextType;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import io.github.cardillan.mc.util.CollectionUtils;
+import io.github.cardillan.mc.util.IntRange;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@NullMarked
+@AstNode
+public class AstFunctionDeclaration extends AstDeclaration {
+    private final AstIdentifier identifier;
+    private final DataType dataType;
+    private final List<AstFunctionParameter> parameters;
+    private final List<AstMindcodeNode> body;
+    private final List<AstFunctionModifier> modifiers;
+    private final List<AstDirectiveSet> directives = new ArrayList<>();
+
+    public AstFunctionDeclaration(SourcePosition sourcePosition, @Nullable AstDocComment docComment, AstIdentifier identifier,
+            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body, List<AstFunctionModifier> modifiers) {
+        super(sourcePosition, children(list(identifier), parameters, body), docComment);
+        this.identifier = identifier;
+        this.dataType = dataType;
+        this.parameters = parameters;
+        this.body = body;
+        this.modifiers = modifiers;
+    }
+
+    public void addDirectives(List<AstDirectiveSet> directives) {
+        this.directives.addAll(directives);
+    }
+
+    public List<AstDirectiveSet> getDirectives() {
+        return directives;
+    }
+
+    public AstIdentifier getIdentifier() {
+        return identifier;
+    }
+
+    public String getName() {
+        return identifier.getName();
+    }
+
+    public DataType getDataType() {
+        return dataType;
+    }
+
+    public List<AstFunctionParameter> getParameters() {
+        return parameters;
+    }
+
+    public AstFunctionParameter getParameter(int index) {
+        return parameters.get(index);
+    }
+
+    public List<AstMindcodeNode> getBody() {
+        return body;
+    }
+
+    public List<AstFunctionModifier> getModifiers() {
+        return modifiers;
+    }
+
+    public boolean hasModifier(FunctionModifier modifier) {
+        return modifiers.stream().anyMatch(m -> m.getModifier() == modifier);
+    }
+
+    public boolean isVarargs() {
+        return !parameters.isEmpty() && parameters.getLast().isVarargs();
+    }
+
+    public IntRange getParameterCount() {
+        if (parameters.isEmpty()) {
+            return IntRange.closed(0, 0);
+        } else if (isVarargs()) {
+            int min = CollectionUtils.lastIndexOf(parameters.subList(0, parameters.size() - 1), AstFunctionParameter::isCompulsory) + 1;
+            return IntRange.closed(min, Integer.MAX_VALUE);
+        } else {
+            int min = CollectionUtils.lastIndexOf(parameters, AstFunctionParameter::isCompulsory) + 1;
+            return IntRange.closed(min, parameters.size());
+        }
+    }
+
+    public int computeCallSize() {
+        // Call size: setting up a return address, jump to the function, jump back from the function, plus passing arguments
+        // Note: the function return value is set by the function and not generated at the call site,
+        //       therefore, it is not counted.
+        return 3 + parameters.stream().mapToInt(AstFunctionParameter::callSize).sum();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AstFunctionDeclaration that = (AstFunctionDeclaration) o;
+        return Objects.equals(modifiers, that.modifiers) && identifier.equals(that.identifier) && dataType == that.dataType
+               && parameters.equals(that.parameters) && body.equals(that.body);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = identifier.hashCode();
+        result = 31 * result + dataType.hashCode();
+        result = 31 * result + parameters.hashCode();
+        result = 31 * result + body.hashCode();
+        result = 31 * result + modifiers.hashCode();
+        return result;
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.FUNCTION_DEF;
+    }
+
+    @Override
+    public AstSubcontextType getSubcontextType() {
+        return AstSubcontextType.BODY;
+    }
+
+    public String toSourceCode() {
+        StringBuilder sb = new StringBuilder();
+        modifiers.forEach(modifier -> sb.append(modifier.getModifier().keyword()).append(' '));
+        sb.append(dataType.keyword).append(' ');
+        sb.append(identifier.getName()).append('(');
+        for (int i = 0; i < parameters.size(); i++) {
+            if (i > 0) sb.append(", ");
+            AstFunctionParameter parameter = parameters.get(i);
+            if (parameter.isInput()) sb.append("in ");
+            if (parameter.isOutput()) sb.append("out ");
+            sb.append(parameter.getName());
+            if (parameter.isVarargs()) sb.append("...");
+        }
+        sb.append(')');
+
+        return sb.toString();
+    }
+}

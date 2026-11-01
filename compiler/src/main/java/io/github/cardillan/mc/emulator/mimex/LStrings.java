@@ -1,0 +1,38 @@
+package io.github.cardillan.mc.emulator.mimex;
+
+import io.github.cardillan.mc.emulator.mimex.target60.LStrings60;
+import io.github.cardillan.mc.emulator.mimex.target70.LStrings70;
+import io.github.cardillan.mc.emulator.mimex.target80.LStrings80;
+import io.github.cardillan.mc.emulator.mimex.target81.LStrings81;
+import io.github.cardillan.mc.emulator.mimex.target82.LStrings82;
+import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorVersion;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+public interface LStrings {
+    boolean canParseInt(String s);
+
+    boolean canParsePositiveInt(String s);
+
+    int parseInt(String s);
+
+    int parseInt(String s, int defaultValue);
+
+    int parseInt(String s, int radix, int defaultValue);
+
+    int parseInt(String s, int radix, int defaultValue, int start, int end);
+
+    long parseLong(String s, int radix, int start, int end, long defaultValue);
+
+    double parseDouble(String value, double defaultValue);
+
+    static LStrings create(ProcessorVersion version) {
+        return switch (version) {
+            case V6         -> new LStrings60();
+            case V7, V7A    -> new LStrings70();
+            case V8A        -> new LStrings80();
+            case V8B        -> new LStrings81();
+            case V8C, MAX   -> new LStrings82();
+        };
+    }
+}

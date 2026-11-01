@@ -1,0 +1,61 @@
+package io.github.cardillan.schemacode.mindustry;
+
+import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mc.mindcode.logic.mimex.ContentType;
+import io.github.cardillan.schemacode.SchematicsMetadata;
+
+import java.util.Objects;
+
+public final class BlockConfiguration implements UnitOrBlockConfiguration {
+    private final BlockType blockType;
+
+    private BlockConfiguration(BlockType blockType) {
+        this.blockType = Objects.requireNonNull(blockType);
+    }
+
+    @Override
+    public ContentType getContentType() {
+        return ContentType.BLOCK;
+    }
+
+    @Override
+    public int getId() {
+        return blockType.id();
+    }
+
+    @Override
+    public String getContentName() {
+        return blockType.contentName();
+    }
+
+    public String getName() {
+        return blockType.name();
+    }
+
+    public static BlockConfiguration forBlockType(BlockType blockType) {
+        return blockType == null ? null : new BlockConfiguration(blockType);
+    }
+
+    public static BlockConfiguration forId(int id) {
+        return forBlockType(SchematicsMetadata.getMetadata().getBlockById(id));
+    }
+
+    public static BlockConfiguration forName(String name) {
+        return forBlockType(SchematicsMetadata.getMetadata().getBlockByName(name));
+    }
+
+    @Override
+    public String toString(){
+        return "Block(name=" + getName() + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o || o instanceof BlockConfiguration c && blockType.equals(c.blockType);
+    }
+
+    @Override
+    public int hashCode() {
+        return blockType.hashCode();
+    }
+}

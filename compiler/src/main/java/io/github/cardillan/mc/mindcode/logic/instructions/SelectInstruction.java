@@ -1,0 +1,91 @@
+package io.github.cardillan.mc.mindcode.logic.instructions;
+
+import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mc.mindcode.logic.arguments.Condition;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicArgument;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicValue;
+import io.github.cardillan.mc.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mc.mindcode.logic.opcodes.InstructionParameterType;
+import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+@NullMarked
+public class SelectInstruction extends BaseResultInstruction implements ConditionalInstruction {
+
+    SelectInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
+        super(astContext, Opcode.SELECT, args, params);
+    }
+
+    protected SelectInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
+    }
+
+    @Override
+    public SelectInstruction withContext(AstContext astContext) {
+        return this.astContext == astContext ? this : new SelectInstruction(this, astContext);
+    }
+
+    @Override
+    public SelectInstruction withResult(LogicVariable result) {
+        assert getArgumentTypes() != null;
+        return new SelectInstruction(astContext, List.of(result, getCondition(), getX(), getY(), getTrueValue(), getFalseValue()), getArgumentTypes()).copyInfo(this);
+    }
+
+    @Override
+    public SelectInstruction withOperands(Condition condition, LogicValue x, LogicValue y) {
+        assert getArgumentTypes() != null;
+        ensureConditional();
+        return new SelectInstruction(astContext, List.of(getResultArgument(), condition, x, y, getTrueValue(), getFalseValue()), getArgumentTypes()).copyInfo(this);
+    }
+
+    @Override
+    public final Condition getCondition() {
+        return (Condition) getArg(1);
+    }
+
+    @Override
+    public final LogicValue getX() {
+        ensureConditional();
+        return (LogicValue) getArg(2);
+    }
+
+    @Override
+    public final LogicValue getY() {
+        ensureConditional();
+        return (LogicValue) getArg(3);
+    }
+
+    public final LogicValue getTrueValue() {
+        return (LogicValue) getArg(4);
+    }
+
+    public final LogicValue getFalseValue() {
+        if (getArg(5) instanceof LogicValue value) return value;
+        throw new MindcodeInternalError("Unexpected argument type " + getArg(5));
+    }
+
+    private void ensureConditional() {
+        if (isUnconditional()) {
+            throw new IllegalArgumentException("Conditional jump required, got " + this);
+        }
+    }
+
+    public LogicValue getResultValue() {
+        return (LogicValue) getArg(resultIndex);
+    }
+
+    @Override
+    public void resolve(InstructionProcessor processor, Consumer<LogicInstruction> consumer) {
+        if (getCondition() == Condition.STRICT_NOT_EQUAL) {
+            creator(processor, consumer).createSelect(getResult(), Condition.STRICT_EQUAL,
+                    getX(), getY(), getFalseValue(), getTrueValue()).copyComment(this);
+        } else {
+            consumer.accept(this);
+        }
+    }
+}

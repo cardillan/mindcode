@@ -1,0 +1,14 @@
+package io.github.cardillan.mindcode.webapp;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class WebappApplicationTests {
+
+	@SuppressWarnings("EmptyMethod")
+	@Test
+	void contextLoads() {
+	}
+
+}

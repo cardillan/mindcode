@@ -1,0 +1,356 @@
+package io.github.cardillan.mc.mindcode.compiler.generation;
+
+import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.mc.messages.ERR;
+import io.github.cardillan.mc.mindcode.compiler.CompilerMessageEmitter;
+import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
+import io.github.cardillan.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstContextType;
+import io.github.cardillan.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import io.github.cardillan.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import io.github.cardillan.mc.mindcode.compiler.generation.variables.*;
+import io.github.cardillan.mc.mindcode.logic.arguments.*;
+import io.github.cardillan.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import io.github.cardillan.mc.mindcode.logic.instructions.CustomInstruction;
+import io.github.cardillan.mc.mindcode.logic.instructions.InstructionProcessor;
+import io.github.cardillan.mc.mindcode.logic.instructions.LogicInstruction;
+import io.github.cardillan.mc.mindcode.logic.opcodes.InstructionParameterType;
+import io.github.cardillan.mc.mindcode.logic.opcodes.NamedParameter;
+import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
+import io.github.cardillan.mc.mindcode.logic.opcodes.OpcodeVariant;
+import io.github.cardillan.mc.profile.GlobalCompilerProfile;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.*;
+
+import static io.github.cardillan.mc.mindcode.logic.opcodes.Opcode.BREAKPOINT;
+import static io.github.cardillan.mc.mindcode.logic.opcodes.Opcode.WAIT;
+
+/// CodeAssembler provides means for creating code from the AST tree: methods for creating individual instructions
+/// and methods for maintaining and tracking AST context. The AST context tracked by this instance is automatically
+/// injected into all created instructions so that the caller doesn't have to handle that.
+///
+/// Labels and temporary variables may also be generated through CodeAssembler.
+@NullMarked
+public class CodeAssembler extends CompilerMessageEmitter implements ContextfulInstructionCreator {
+    private final GlobalCompilerProfile globalCompilerProfile;
+    private final InstructionProcessor processor;
+    private final Variables variables;
+    private final List<LogicInstruction> instructions = new ArrayList<>();
+    private AstContext astContext;
+    private boolean internalError = false;
+
+    /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
+    private boolean active = true;
+
+    public CodeAssembler(CodeAssemblerContext context) {
+        super(context.messageConsumer());
+        globalCompilerProfile = context.globalCompilerProfile();
+        processor = context.instructionProcessor();
+        variables = context.variables();
+        astContext = context.rootAstContext();
+    }
+
+    public NameCreator nameCreator() {
+        return variables.nameCreator();
+    }
+
+    public InstructionProcessor getProcessor() {
+        return processor;
+    }
+
+    public LogicLabel nextLabel() {
+        return processor.nextLabel();
+    }
+
+    public LogicLabel nextMarker() {
+        return processor.nextMarker();
+    }
+
+    /// Allocates a new temporary variable whose lifespan doesn't enter another node (child, sibling or parent).
+    /// The variable will **NOT** be pushed on the stack for recursive calls.
+    ///
+    /// @return a temporary variable for use strictly within the current AST node
+    public LogicVariable unprotectedTemp() {
+        return processor.nextTemp();
+    }
+
+    /// Allocates a new temporary variable whose scope is limited to a node (i.e. not needed outside that node).
+    /// The variable will be pushed on the stack if needed.
+    ///
+    /// @return a temporary variable for use within and below the current AST node
+    public LogicVariable nextTemp() {
+        LogicVariable variable = processor.nextTemp();
+        variables.registerNodeVariable(variable);
+        return variable;
+    }
+
+    /// Allocates a new temporary variable which transfers a value from child to parent node.
+    /// The variable will be pushed on the stack if needed.
+    ///
+    /// @return a temporary variable for use within the parent of the current AST node
+    public LogicVariable nextNodeResultTemp() {
+        LogicVariable variable = processor.nextTemp();
+        variables.registerParentNodeVariable(variable);
+        return variable;
+    }
+
+    /// Provides an unchanging representation of the given ValueStore at the moment this method is called.
+    /// The returned value is guaranteed not to change. If `valueStore` is a literal, returns the literal
+    /// directly, as it cannot be changed.
+    ///
+    /// @param valueStore the value to use
+    /// @return a LogicValue capturing the current value of the valueStore
+    public LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
+        if (valueStore instanceof LogicValue value && value.isImmutable()) {
+            return value;
+        } else {
+            LogicVariable tmp = processor.nextTemp().withType(argumentType);
+            variables.registerNodeVariable(tmp);
+            createSet(tmp, valueStore.getValue(this));
+            return tmp;
+        }
+    }
+
+    /// This is the sole method that adds an instruction to the list.
+    private LogicInstruction addInstruction(LogicInstruction instruction) {
+        if (active) {
+            instructions.add(instruction);
+        }
+        return instruction;
+    }
+
+    /// Sets internal error indication.
+    ///
+    /// Internal errors may arise from compiling invalid source code. In such case it is possible that
+    /// unsupported methods may get called (such as writing a value into input argument of a function).
+    ///
+    /// When other errors are encountered and reported while compiling source code, it is assumed that
+    /// all internal errors arose due to the errors in the source code. However, when internal errors
+    /// are indicated without a syntax error being reported, it means a bug in the compiler.
+    /// Produced code is probably invalid and must not be published.
+    public void setInternalError() {
+        internalError = true;
+    }
+
+    public boolean isInternalError() {
+        return internalError;
+    }
+
+    @Override
+    public void accept(LogicInstruction instruction) {
+        addInstruction(instruction.withContext(astContext));
+    }
+
+    /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
+    public boolean isActive() {
+        return active;
+    }
+
+    /// Activates/deactivates assembler status. An inactive assembler ignores generated instructions. This is
+    /// useful to compile unreachable code (e.g., unused function) to validate syntax but avoid generating code.
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public AstContext getAstContext() {
+        return astContext;
+    }
+
+    public List<LogicInstruction> getInstructions() {
+        return instructions;
+    }
+
+    public void enterAstNode(AstMindcodeNode node) {
+        if (active) {
+            enterAstNode(node, node.getContextType());
+        }
+    }
+
+    public void enterAstNode(AstMindcodeNode node, AstContextType contextType) {
+        if (active) {
+            if (contextType != AstContextType.NONE) {
+                astContext = astContext.createChild(node, contextType);
+            }
+        }
+    }
+
+    public void enterFunctionAstNode(MindcodeFunction function, AstFunctionDeclaration node, double weight) {
+        if (active) {
+            astContext = astContext.createFunctionDeclaration(function, node, node.getContextType(), weight);
+        }
+    }
+
+    public void enterFunctionBodyAstNode(MindcodeFunction function, AstMindcodeNode node, AstContextType contextType) {
+        if (active) {
+            astContext = astContext.createFunctionBody(function, node, contextType);
+        }
+    }
+
+    public void exitAstNode(AstMindcodeNode node) {
+        exitAstNode(node, node.getContextType());
+    }
+
+    public void exitAstNode(AstMindcodeNode node, AstContextType contextType) {
+        if (active) {
+            if (contextType != AstContextType.NONE) {
+                if (astContext.subcontextType() != node.getSubcontextType() || astContext.node() != node) {
+                    throw new MindcodeInternalError("Unexpected AST context " + astContext);
+                }
+                astContext = Objects.requireNonNull(astContext.parent());
+            }
+        }
+    }
+
+    public void setSubcontextType(AstSubcontextType subcontextType, double multiplier) {
+        if (active) {
+            if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
+                clearSubcontextType();
+            }
+            astContext = astContext.createSubcontext(subcontextType, multiplier);
+        }
+    }
+
+    public void setSubcontextType(MindcodeFunction function, AstSubcontextType subcontextType) {
+        if (active) {
+            if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
+                clearSubcontextType();
+            }
+            astContext = astContext.createSubcontext(function, subcontextType, 1.0);
+        }
+    }
+
+    public void clearSubcontextType() {
+        if (active) {
+            assert astContext.parent() != null;
+            astContext = astContext.parent();
+        }
+    }
+
+    public void setContextType(AstMindcodeNode node, AstContextType contextType, AstSubcontextType subcontextType) {
+        if (active) {
+            astContext = astContext.createChild(node, contextType, subcontextType);
+        }
+    }
+
+    public void clearContextType(AstMindcodeNode node) {
+        if (active) {
+            if (astContext.node() != node) {
+                throw new MindcodeInternalError("Unexpected AST context " + astContext);
+            }
+
+            assert astContext.parent() != null;
+            astContext = astContext.parent();
+        }
+    }
+
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
+        return addInstruction(processor.createInstruction(astContext, opcode, arguments));
+    }
+
+    public void createCompilerEnd() {
+        if (active) {
+            setSubcontextType(AstSubcontextType.END, 1.0);
+            createEnd();
+            clearSubcontextType();
+        }
+    }
+
+    /// Suspends code execution. Used by remote processors to wait until a remote call is initiated.
+    /// The current implementation uses a very long wait (over 30,000 years)
+    public void suspendExecution() {
+        if (processor.isSupported(WAIT)) {
+            createWait(LogicNumber.SUSPEND_WAIT);
+        }
+    }
+
+    /// Yields the execution for the rest of the tick. Used when waiting for a remote processor to update variables
+    /// or provide results.
+    public void createYieldExecution() {
+        if (processor.isSupported(WAIT)) {
+            createWait(globalCompilerProfile.isZeroWaitYields() ? LogicNumber.ZERO : LogicNumber.YIELD_WAIT);
+        }
+    }
+
+    public LogicLabel createNextLabel() {
+        return createLabel(nextLabel()).getLabel();
+    }
+
+    // A regular instruction cannot be created from a custom one for protected opcodes.
+    private static final Set<Opcode> convertibleOpcodes = Set.of(BREAKPOINT);
+
+    public LogicInstruction createCustomInstruction(boolean safe, boolean text, boolean label, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+        Opcode opcodeEnum = Opcode.fromOpcode(opcode);
+        OpcodeVariant opcodeVariant = opcodeEnum == null || !convertibleOpcodes.contains(opcodeEnum) ? null : processor.getOpcodeVariant(opcodeEnum, args);
+        if (opcodeVariant != null) {
+            List<LogicArgument> arguments = new ArrayList<>();
+            for (int i = 0; i < args.size(); i++) {
+                LogicArgument argument = args.get(i);
+                InstructionParameterType type = opcodeVariant.parameterTypes().get(i);
+                LogicArgument converted = argument instanceof LogicKeyword keyword ? type.convertKeyword(keyword) : argument;
+                if (converted == null) break;
+                arguments.add(converted);
+            }
+
+            if (arguments.size() == args.size()) {
+                return createInstruction(opcodeEnum, arguments);
+            }
+        }
+
+        return addInstruction(new CustomInstruction(astContext, safe, text, label, opcode, args, params));
+    }
+
+    public LogicKeyword validateKeyword(NamedParameter parameter, FunctionArgument argument, boolean requireValidKeyword) {
+        if (argument.hasInModifier() || argument.hasOutModifier()) {
+            error(argument, ERR.ARGUMENT_KEYWORD_IN_OUT_NOT_ALLOWED);
+            return LogicKeyword.INVALID;
+        }
+
+        Collection<String> parameterValues = processor.getParameterValues(parameter.type());
+
+        LogicKeyword keyword = toKeyword(argument, requireValidKeyword);
+        if (!keyword.getKeyword().isEmpty()) {
+            if (!parameterValues.contains(keyword.getKeyword())) {
+                error(argument, ERR.ARGUMENT_KEYWORD_INVALID_VALUE, keyword.getKeywordLiteral(),
+                        ":" + String.join("', ':", parameterValues));
+                // Fill in one of the valid keywords to avoid further errors
+                return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
+                        parameterValues.iterator().next()) : LogicKeyword.INVALID;
+            }
+
+            return keyword;
+        } else {
+            error(argument, ERR.ARGUMENT_KEYWORD_UNSPECIFIED_VALUE,
+                    ":" + String.join("', ':", parameterValues));
+            // Fill in one of the valid keywords to avoid further errors
+            return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
+                    parameterValues.iterator().next()) : LogicKeyword.INVALID;
+        }
+    }
+
+    private LogicKeyword toKeyword(FunctionArgument argument, boolean requireValidKeyword) {
+        if (argument.unwrap() instanceof LogicKeyword keyword) {
+            return keyword;
+        } else if (argument instanceof IdentifierFunctionArgument ifa) {
+            if (requireValidKeyword) {
+                error(argument.sourcePosition(), ERR.MISSING_MLOG_KEYWORD_PREFIX, ifa.getIdentifier().getName());
+            }
+            return ifa.getKeyword();
+        } else if (argument.unwrap() instanceof LogicBoolean bool) {
+            return LogicKeyword.create(argument.unwrap().sourcePosition(), bool.toMlog());
+        } else {
+            return LogicKeyword.INVALID;
+        }
+    }
+
+    public void createLog(String message) {
+        List<LogicArgument> list = new ArrayList<>(Collections.nCopies(11, LogicNull.NULL));
+        list.set(0, LogicKeyword.create("info"));
+        list.set(1, LogicString.createRaw(message));
+        createInstruction(Opcode.LOG, list);
+
+    }
+}

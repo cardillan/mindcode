@@ -1,0 +1,43 @@
+package io.github.cardillan.schemacode.ast;
+
+import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+
+@NullMarked
+public record AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element, PlacementMode placementMode,
+                       AstBlockPosition position, @Nullable AstTranslation translation, @Nullable AstDirection direction,
+                       @Nullable AstConfiguration configuration) implements AstSchemaItem {
+
+    public AstBlock(List<String> labels, AstSchemaElement element,
+            AstCoordinates anchor, @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
+        this(SourcePosition.EMPTY, labels, element, PlacementMode.DEFAULT, new AstBlockPosition(anchor.sourcePosition(), anchor), null, direction, configuration);
+    }
+
+    public AstCoordinates coordinates() {
+        return position.coordinates();
+    }
+
+    public boolean isCluster() {
+        return !(element instanceof AstSchemaBlock);
+    }
+
+    public String type() {
+        if (element instanceof AstSchemaBlock block) return block.type();
+        throw new MindcodeInternalError("Type not available for a compound block.");
+    }
+
+    @Override
+    public AstBlock withEmptyPosition() {
+        return new AstBlock(SourcePosition.EMPTY, labels,
+                erasePosition(element),
+                placementMode,
+                erasePosition(position),
+                eraseNullablePosition(translation),
+                eraseNullablePosition(direction),
+                eraseNullablePosition(configuration));
+    }
+}
