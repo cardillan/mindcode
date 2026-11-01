@@ -885,7 +885,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 return number.getIntValue();
             }
         } else if (range != null) {
-            AstMindcodeNode element = first ? range.getFirstValue() : range.getLastValue();
+            AstMindcodeNode element = first ? range.getFirst() : range.getLast();
             int correction = !first && range.isExclusive() ? -1 : 0;
             ValueStore value = evaluate(element);
             if (!(value instanceof LogicReadable number && number.isNumericConstant())) {
@@ -941,8 +941,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
     }
 
     public static List<AstIdentifier> createLinkedIdentifiersList(CompilerMessageEmitter messageEmitter, AstRange range) {
-        AstIdentifier firstId = getLinkIdentifier(messageEmitter, range.getFirstValue());
-        AstIdentifier lastId = getLinkIdentifier(messageEmitter, range.getLastValue());
+        AstIdentifier firstId = getLinkIdentifier(messageEmitter, range.getFirst());
+        AstIdentifier lastId = getLinkIdentifier(messageEmitter, range.getLast());
         Tuple2<String, Integer> first = extractIndex(messageEmitter, firstId);
         Tuple2<String, Integer> last = extractIndex(messageEmitter, lastId);
         if (first == null || last == null) return List.of();  // Error already reported

@@ -24,9 +24,11 @@ import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
 import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorVersion;
 import io.github.cardillan.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -101,6 +103,7 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
             case AstOperatorBinary n -> evaluateBinaryOp(n, local);
             case AstOperatorTernary n -> evaluateTernaryOp(n, local);
             case AstIfExpression n -> evaluateIfExpression(n, local);
+            case AstCaseExpression n -> evaluateCaseExpression(n, local);
             case AstParentheses n -> evaluateParentheses(n, local);
             case AstPropertyAccess n -> evaluatePropertyAccess(n, local);
             case AstFunctionCall n when !n.hasObject() -> evaluateFunctionCall(n, local);
@@ -226,7 +229,7 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
         // - true: the body of the `if` branch is selected,
         // - false: the next `if` branch is evaluated,
         // - indeterminate: the expression can't be completely evaluated, but we know that
-        //   none of the previous `if` branches gets executed and strip them away.
+        //   none of the previous `if` branches get executed and strip them away.
         // When all `if` branches' conditions evaluate to false, the else branch is selected.
         int size = node.getIfBranches().size();
         for (int i = 0; i < size; i++) {
@@ -234,12 +237,8 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
             AstMindcodeNode conditionValue = evaluateNode(branch.getCondition(), local);
             if (conditionValue instanceof AstLiteralNumeric n) {
                 // When true, return the branch's body
-                // We need to wrap it in a statement list -- this is a hack to prevent not well-understood problems
-                // with case expressions, but the entire conditional compilation should be implemented differently
-                // in the future.
                 if (ExpressionEvaluator.isTrue(n.getDoubleValue())) {
-                    AstMindcodeNode body = evaluateBody(branch.getBody(), local);
-                    return new AstStatementList(body.sourcePosition(), List.of(body));
+                    return evaluateBody(branch, branch.getBody(), local);
                 }
 
                 //  When false, continue evaluating the other branches
@@ -247,12 +246,72 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
                 // Can't determine the value of this branch.
                 // Peel away the branches known to be false
                 return i == 0 ? node : new AstIfExpression(node.sourcePosition(),
-                        node.getIfBranches().subList(i, size), node.getElseBranch());
+                        node.getIfBranches().subList(i, size), node.getElseBranch()).setProfile(branch.getProfile());
             }
         }
         // All `if` branch conditions evaluated to false: the result is the else branch.
-        return evaluateBody(node.getElseBranch(), local);
+        return evaluateBody(node, node.getElseBranch(), local);
     }
+
+    private AstMindcodeNode evaluateCaseExpression(AstCaseExpression node, boolean local) {
+        // The processing is analogous to the evaluateIfExpression one
+        ExpressionValue caseValue = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(node.getExpression(), local));
+        if (!caseValue.isValid()) {
+            return node;
+        }
+
+        int size = node.getAlternatives().size();
+        for (int i = 0; i < size; i++) {
+            AstCaseAlternative branch = node.getAlternatives().get(i);
+            Boolean result = evaluateWhenValues(caseValue, branch, local);
+
+            if (result == null) {
+                // Can't determine the value of this branch.
+                // Peel away the previous branches (known to be false)
+                return i == 0 ? node : new AstCaseExpression(node.sourcePosition(), node.getExpression(),
+                        node.getAlternatives().subList(i, size), node.getElseBranch(), node.isElseDefined()).setProfile(node.getProfile());
+            } else if (result) {
+                // When true, return the branch's body
+                AstMindcodeNode body = evaluateBody(branch, branch.getBody(), local);
+                return new AstStatementList(body.sourcePosition(), List.of(body));
+            }
+            //  When false, continue evaluating the other branches
+        }
+        // All `if` branch conditions evaluated to false: the result is the else branch.
+        return evaluateBody(node, node.getElseBranch(), local);
+    }
+
+    private @Nullable Boolean evaluateWhenValues(ExpressionValue caseValue, AstCaseAlternative branch, boolean local) {
+        for (AstExpression exp : branch.getValues()) {
+            Boolean result = evaluateWhenValue(caseValue, exp, local);
+            if (result != Boolean.FALSE) return result;
+        }
+        // All were false
+        return Boolean.FALSE;
+    }
+
+    private @Nullable Boolean evaluateWhenValue(ExpressionValue caseValue, AstExpression value, boolean local) {
+        if (value instanceof AstRange range) {
+            ExpressionValue low = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(range.getFirst(), local));
+            ExpressionValue high = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(range.getLast(), local));
+            BooleanSupplier comparison = range.isExclusive()
+                    ? () -> caseValue.getDoubleValue() < high.getDoubleValue()
+                    : () -> caseValue.getDoubleValue() <= high.getDoubleValue();
+
+            if (low.isValid() && high.isValid()) {
+                return caseValue.getDoubleValue() >= low.getDoubleValue() && comparison.getAsBoolean();
+            } else if (low.isValid() && caseValue.getDoubleValue() < low.getDoubleValue()) {
+                return Boolean.FALSE;
+            } else if (high.isValid() && !comparison.getAsBoolean()) {
+                return Boolean.FALSE;
+            }
+            return null;
+        } else {
+            ExpressionValue expressionValue = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(value, local));
+            return expressionValue.isValid() ? ExpressionEvaluator.equals(caseValue, expressionValue) : null;
+        }
+    }
+
 
     private static final Map<String, BiFunction<SourcePosition, MindustryContent, AstLiteral>> PROPERTY_MAPPER = Map.of(
             "@id",(sp, c) -> new AstLiteralDecimal(sp, String.valueOf(c.logicId())),
@@ -282,9 +341,10 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
         return PROPERTY_MAPPER.get(property.getName()).apply(node.sourcePosition(), namedContent);
     }
 
-    private AstMindcodeNode evaluateBody(List<AstMindcodeNode> body, boolean local) {
-        return body.size() == 1 ? evaluateNode(body.getFirst(), local)
-                : new AstStatementList(body.isEmpty() ? SourcePosition.EMPTY : body.getFirst().sourcePosition(), body);
+    private AstMindcodeNode evaluateBody(AstMindcodeNode parent, List<AstMindcodeNode> body, boolean local) {
+        return body.size() == 1
+                ? new AstStatementList(parent.sourcePosition(),List.of(evaluateNode(body.getFirst(), local))).setProfile(parent.getProfile())
+                : new AstStatementList(parent.sourcePosition(), body).setProfile(parent.getProfile());
     }
 
     private AstMindcodeNode evaluateFunctionCall(AstFunctionCall node, boolean local) {

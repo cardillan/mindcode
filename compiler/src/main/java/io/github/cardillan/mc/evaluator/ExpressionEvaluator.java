@@ -77,7 +77,7 @@ public class ExpressionEvaluator {
     }
 
     public static boolean isFalse(double a) {
-        return Math.abs(a) <= 0.000001;
+        return Math.abs(a) < 0.000001;
     }
 
     private static final Map<Operation, LogicOperation> OPERATIONS = createOperationsMap();

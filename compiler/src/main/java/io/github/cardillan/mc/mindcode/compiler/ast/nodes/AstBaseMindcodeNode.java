@@ -59,6 +59,9 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
 
     @Override
     public CompilerProfile getProfile() {
+        if (profile == null) {
+            throw new IllegalStateException("Profile not set");
+        }
         return Objects.requireNonNull(profile);
     }
 

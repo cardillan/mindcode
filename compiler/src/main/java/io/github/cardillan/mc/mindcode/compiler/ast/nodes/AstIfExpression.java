@@ -9,6 +9,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+// Note: this node is not handled by the code generator because it gets transformed into AstTernaryOperator
+// by NodeTransformation.
 @NullMarked
 @AstNode
 public class AstIfExpression extends AstExpression {

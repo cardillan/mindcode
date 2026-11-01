@@ -13,6 +13,17 @@ public class CollectionUtils {
     private static final Object NULL = new Object();
 
     @SafeVarargs
+    public static <T> List<T> merge(List<T>... lists) {
+        if (lists.length == 0) return List.of();
+        if (lists.length == 1) return List.copyOf(lists[0]);
+        List<T> result = new ArrayList<>(lists[0].size() + lists[1].size() * lists.length);
+        for (List<T> list : lists) {
+            result.addAll(list);
+        }
+        return List.copyOf(result);
+    }
+
+    @SafeVarargs
     public static <T extends @Nullable Object> boolean containsAny(Set<? extends T> set, T... values) {
         for (T value : values) {
             if (set.contains(value)) return true;

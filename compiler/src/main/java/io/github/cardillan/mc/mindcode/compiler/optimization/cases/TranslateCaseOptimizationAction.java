@@ -355,7 +355,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
             // 1. Null/void on a regular branch
             // 2. Null/void on an else branch, while the map is not compact (the map is always compact when unsafe because
             //    unhandled values aren't supposed to occur).
-            t.handleOutputNull = nullOnRegularBranch || t.nullOnElseBranch && (!compact || expression.firstKey() != 0);
+            t.handleOutputNull = nullOnRegularBranch || t.nullOnElseBranch && !compact;
             t.handleOutputVoid = voidOnRegularBranch || t.voidOnElseBranch;
 
             Integer zeroValue = Optional.of(expression.getBranch(0)).map(b -> b.getIntegerValue(variable)).orElse(null);

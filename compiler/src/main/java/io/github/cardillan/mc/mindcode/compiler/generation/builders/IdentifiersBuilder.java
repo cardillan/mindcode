@@ -62,7 +62,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
         // Compatible evaluation: evaluate stable numerical builtins
         BuiltinEvaluation evaluation = node.getProfile().getBuiltinEvaluation();
         return evaluation == BuiltinEvaluation.FULL || evaluation == BuiltinEvaluation.COMPATIBLE && metadata.isStableBuiltin(node.getName())
-                ? LogicBuiltinConst.create(processor, node.sourcePosition(), node.getName())
+                ? LogicBuiltInConst.create(processor, node.sourcePosition(), node.getName())
                 : LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
     }
 
@@ -169,11 +169,11 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
             error = true;
         }
         if (start < 0 || start >= size) {
-            error(node.getRange().getFirstValue(), ERR.SUBARRAY_INDEX_OUT_OF_BOUNDS, start, 0, size - 1);
+            error(node.getRange().getFirst(), ERR.SUBARRAY_INDEX_OUT_OF_BOUNDS, start, 0, size - 1);
             error = true;
         }
         if (end < 0 || end >= size) {
-            error(node.getRange().getLastValue(), ERR.SUBARRAY_INDEX_OUT_OF_BOUNDS, end, 0, size - 1);
+            error(node.getRange().getLast(), ERR.SUBARRAY_INDEX_OUT_OF_BOUNDS, end, 0, size - 1);
             error = true;
         }
 
@@ -181,7 +181,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
     }
 
     private int getIndex(AstRange range, boolean first) {
-        AstMindcodeNode element = first ? range.getFirstValue() : range.getLastValue();
+        AstMindcodeNode element = first ? range.getFirst() : range.getLast();
         int correction = !first && range.isExclusive() ? -1 : 0;
         ValueStore value = evaluate(element);
         if (!(value instanceof LogicReadable number && number.isNumericConstant())) {

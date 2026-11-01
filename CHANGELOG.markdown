@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.21.0 – Unreleased
 
+### Fixed
+
+* Fixed the [Value translation optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#value-translation) including an unneeded `null` correction in some cases.
+
 ### Added
 
 * Added the [`debug` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#debug-variables) to variable declarations ([#513](https://github.com/cardillan/mindcode/issues/513)).
+* Added conversion of chained if-else statements into a case expression, allowing case-expression optimizations for them.
 
 ### Changed
 

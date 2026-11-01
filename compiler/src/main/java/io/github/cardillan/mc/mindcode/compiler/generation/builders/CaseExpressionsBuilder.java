@@ -43,11 +43,11 @@ public class CaseExpressionsBuilder extends AbstractCodeBuilder implements AstCa
                         // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
                         LogicLabel nextExp = assembler.nextLabel();       // Next value in when list
-                        ValueStore minValue = evaluate(range.getFirstValue());
+                        ValueStore minValue = evaluate(range.getFirst());
                         assembler.createJump(nextExp, Condition.LESS_THAN, caseValue, minValue.getValue(assembler));
                         // The max value is only evaluated when the min value lets us through
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
-                        ValueStore maxValue = evaluate(range.getLastValue());
+                        ValueStore maxValue = evaluate(range.getLast());
                         assembler.createJump(bodyLabel, insideRangeCondition(range), caseValue, maxValue.getValue(assembler));
                         assembler.createLabel(nextExp);
                     } else if (value instanceof AstLiteralNull) {

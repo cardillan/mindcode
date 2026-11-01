@@ -5,11 +5,16 @@ import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
 import io.github.cardillan.mc.mindcode.compiler.ast.nodes.*;
 import io.github.cardillan.mc.mindcode.logic.instructions.InstructionProcessor;
 import io.github.cardillan.mc.mindcode.logic.mimex.LVariable;
+import io.github.cardillan.mc.mindcode.logic.mimex.MindustryContent;
+import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
 import io.github.cardillan.mc.profile.BuiltinEvaluation;
 import io.github.cardillan.mc.util.EscapeClass;
 import io.github.cardillan.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import static io.github.cardillan.mc.profile.BuiltinEvaluation.COMPATIBLE;
+import static io.github.cardillan.mc.profile.BuiltinEvaluation.FULL;
 
 /// The ExpressionValue class holds an immutable value that can be passed to the expression evaluator.
 /// Only nulls, numeric values, and String objects are supported, and strings are contained as plain strings.
@@ -32,7 +37,7 @@ class ExpressionValue implements LogicReadable {
     public static ExpressionValue create(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor, AstMindcodeNode node) {
         try {
             return switch (node) {
-                case AstLiteralNull n -> new ExpressionValue(processor, null, null);
+                case AstLiteralNull _ -> new ExpressionValue(processor, null, null);
                 case AstLiteralBoolean n -> new ExpressionValue(processor, null, n.getValue() ? 1 : 0);
                 case AstLiteralDecimal n -> new ExpressionValue(processor, null, n.getLongValue());
                 case AstLiteralBinary n -> new ExpressionValue(processor, null, n.getLongValue());
@@ -44,7 +49,7 @@ class ExpressionValue implements LogicReadable {
                 case AstIdentifier n -> processor.getMetadata().getIcons().isIconName(n.getName())
                         ? new ExpressionValue(processor, processor.escapedString(processor.getMetadata().getIcons().getIconValue(n.getName())), null)
                         : new InvalidValue(processor);
-                case AstLiteral n ->
+                case AstLiteral _ ->
                         throw new MindcodeInternalError("Unhandled constant node " + node.getClass().getSimpleName());
                 case AstBuiltInIdentifier b -> evaluateBuiltin(builtinEvaluation, processor, b);
                 default -> new InvalidValue(processor);
@@ -54,16 +59,20 @@ class ExpressionValue implements LogicReadable {
         }
     }
 
-    private static ExpressionValue evaluateBuiltin(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor,
-            AstBuiltInIdentifier b) {
-        if (builtinEvaluation != BuiltinEvaluation.NONE) {
-            LVariable var = processor.getMetadata().getLVar(b.getName());
-            return var != null && var.isNumericConstant()
-                   && (builtinEvaluation == BuiltinEvaluation.FULL || processor.getMetadata().isStableBuiltin(var.name()))
-                    ? new ExpressionValue(processor, null, var.numericValue()) : new InvalidValue(processor);
-        } else {
-            return new InvalidValue(processor);
+    private static ExpressionValue evaluateBuiltin(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor, AstBuiltInIdentifier b) {
+        MindustryMetadata metadata = processor.getMetadata();
+        eval: if (builtinEvaluation == FULL || builtinEvaluation == COMPATIBLE && metadata.isStableBuiltin(b.getName())) {
+            LVariable var = metadata.getLVar(b.getName());
+            if (var == null) break eval;
+
+            if (var.isNumericConstant()) {
+                return new ExpressionValue(processor, null, var.numericValue());
+            } else {
+                MindustryContent content = metadata.getNamedContent(b.getName());
+                return new ExpressionValue(processor, content, null);
+            }
         }
+        return new InvalidValue(processor);
     }
 
     public static ExpressionValue zero(InstructionProcessor processor) {

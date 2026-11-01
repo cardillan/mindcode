@@ -28,8 +28,8 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
     @Override
     public ValueStore visitRangedForLoopStatement(AstRangedForLoopStatement node) {
         // TODO Compute number of repetitions only when requested by compiler option
-        AstMindcodeNode lowerBound = compileTimeEvaluator.evaluate(node.getRange().getFirstValue(), isLocalContext(), false);
-        AstMindcodeNode upperBound = compileTimeEvaluator.evaluate(node.getRange().getLastValue(), isLocalContext(), false);
+        AstMindcodeNode lowerBound = compileTimeEvaluator.evaluate(node.getRange().getFirst(), isLocalContext(), false);
+        AstMindcodeNode upperBound = compileTimeEvaluator.evaluate(node.getRange().getLast(), isLocalContext(), false);
 
         int multiplier = lowerBound instanceof LogicLiteral lowerValue && lowerValue.isNumericLiteral()
                          && upperBound instanceof LogicLiteral upperValue && upperValue.isNumericLiteral()
@@ -39,8 +39,8 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
 
         // Encapsulate both: they're evaluated just here and not propagated anywhere
-        ValueStore lowerValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getFirstValue()));
-        ValueStore upperValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getLastValue()));
+        ValueStore lowerValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getFirst()));
+        ValueStore upperValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getLast()));
 
         if (node.hasDeclaration()) {
             if (node.getVariable() instanceof AstIdentifier identifier) {

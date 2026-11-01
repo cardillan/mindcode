@@ -5,25 +5,28 @@ import io.github.cardillan.mc.common.SourcePosition;
 import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
 import io.github.cardillan.mc.mindcode.compiler.ast.nodes.*;
 import io.github.cardillan.mc.mindcode.logic.arguments.Operation;
+import io.github.cardillan.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
 public class NodeTransformation {
+    private static final AstIdentifier INVALID = new AstIdentifier(SourcePosition.EMPTY, "");
 
     public static AstMindcodeNode transform(AstMindcodeNode node) {
-        return node instanceof AstExpression expression ? transform(expression) : node;
+        return node instanceof AstExpression expression ? transform(expression, true) : node;
     }
 
-    public static AstExpression transform(AstExpression expression) {
+    public static AstExpression transform(AstExpression expression, boolean topLevel) {
         return switch (expression) {
-            case AstIfExpression node       -> transformIfExpression(node);
+            case AstIfExpression node       -> transformIfExpression(node, topLevel);
             case AstOperatorInList node     -> transformInList(node);
             case AstOperatorInRange node    -> transformInRange(node);
             case AstOperatorTernary node    -> transformTernary(node);
             case AstOperatorUnary node      -> transformUnaryNegation(node);
-            case AstParentheses node        -> transform(node.getExpression());
+            case AstParentheses node        -> transform(node.getExpression(), topLevel);
             default -> expression;
         };
     }
@@ -32,7 +35,7 @@ public class NodeTransformation {
     // TODO In the past, elsif branches were emulated as nested else if expressions.
     //      Code optimizers might therefore have problems if we encoded elsif branches more effectively.
     //      Change the implementation to a more efficient one and update the optimizers.
-    private static AstExpression transformIfExpression(AstIfExpression node) {
+    private static AstExpression transformIfExpression(AstIfExpression node, boolean topLevel) {
         if (node.getIfBranches().isEmpty()) {
             throw new MindcodeInternalError("Invalid If expression structure (missing if branch).");
         }
@@ -51,20 +54,17 @@ public class NodeTransformation {
             result.setProfile(branch.getProfile());
         }
 
-        return transformTernary(result);
+        return topLevel ? transformTernary(result) : result;
     }
 
     private static AstMindcodeNode repackageBody(AstIfBranch branch, List<AstMindcodeNode> expressions) {
         SourcePosition position = branch.getCondition().sourcePosition();
-        if (expressions.size() == 1 && expressions.getFirst() instanceof AstExpression exp) return exp;
+        if (expressions.size() == 1 && expressions.getFirst() instanceof AstExpression exp)
+            return transform(exp, false);
 
         AstStatementList result = new AstStatementList(expressions.isEmpty() ? position : expressions.getFirst().sourcePosition(), expressions);
         result.setProfile(branch.getProfile());
         return result;
-    }
-
-    private static SourcePosition pos(SourceElement start, SourceElement end) {
-        return start.sourcePosition().upTo(end.sourcePosition());
     }
 
     private static SourcePosition pos(List<? extends SourceElement> elements) {
@@ -103,18 +103,18 @@ public class NodeTransformation {
             result = new AstOperatorShortCircuiting(node.sourcePosition(),
                     Operation.LOGICAL_OR,
                     new AstOperatorBinary(node.getRange().sourcePosition(),
-                            Operation.LESS_THAN, cached, node.getRange().getFirstValue()),
+                            Operation.LESS_THAN, cached, node.getRange().getFirst()),
                     new AstOperatorBinary(node.getRange().sourcePosition(),
                             AbstractCodeBuilder.outsideRangeCondition(node.getRange()).toOperation(),
-                            cached, node.getRange().getLastValue()));
+                            cached, node.getRange().getLast()));
         } else {
             result = new AstOperatorShortCircuiting(node.sourcePosition(),
                     Operation.LOGICAL_AND,
                     new AstOperatorBinary(node.getRange().sourcePosition(),
-                            Operation.GREATER_THAN_EQ, cached, node.getRange().getFirstValue()),
+                            Operation.GREATER_THAN_EQ, cached, node.getRange().getFirst()),
                     new AstOperatorBinary(node.getRange().sourcePosition(),
                             AbstractCodeBuilder.insideRangeCondition(node.getRange()).toOperation(),
-                            cached, node.getRange().getLastValue()));
+                            cached, node.getRange().getLast()));
         }
 
         result.setProfile(node.getProfile());
@@ -124,11 +124,39 @@ public class NodeTransformation {
     }
 
     private static AstExpression transformTernary(AstOperatorTernary node) {
-        return node.getCondition() instanceof AstOperatorInList inListNode
-                ? transformInList(inListNode, node.getTrueBranch(), node.getFalseBranch(), inListNode.isNegated())
-                : transform(node.getCondition()) instanceof AstOperatorInList inListNode
-                ? transformInList(inListNode, node.getTrueBranch(), node.getFalseBranch(), inListNode.isNegated())
-                : node;
+        if (node.getCondition() instanceof AstOperatorInList inListNode) {
+            return transformInList(inListNode, node.getTrueBranch(), node.getFalseBranch(), inListNode.isNegated());
+        }
+
+        if (transform(node.getCondition(), false) instanceof AstOperatorInList inListNode) {
+            return transformInList(inListNode, node.getTrueBranch(), node.getFalseBranch(), inListNode.isNegated());
+        }
+
+        List<AstExpression> values = new ArrayList<>();
+
+        AstIdentifier decisionVariable = extractDecisionVariable(node.getCondition(), values);
+        if (decisionVariable == INVALID) return node;
+
+        // Initialize
+        List<IfBranch> branches = new ArrayList<>();
+        branches.add(new IfBranch(node.sourcePosition(), node.getCondition(), node.getTrueBranch(), node.getProfile()));
+        AstMindcodeNode elseBranch = node.getFalseBranch();
+
+        while (elseBranch instanceof AstOperatorTernary ternary) {
+            AstIdentifier variable = extractDecisionVariable(ternary.getCondition(), values);
+            if (!variable.equals(decisionVariable)) break;
+
+            branches.add(new IfBranch(ternary.sourcePosition(), ternary.getCondition(), ternary.getTrueBranch(), ternary.getProfile()));
+            elseBranch = ternary.getFalseBranch();
+        }
+
+        int limit = values.stream().anyMatch(v -> v instanceof AstBuiltInIdentifier b) ? 4 : 3;
+        if (values.size() < limit) return node;
+
+        List<AstCaseAlternative> alternatives = branches.stream().map(NodeTransformation::convertToWhenBranch).toList();
+        AstCaseExpression caseStatement = new AstCaseExpression(node.sourcePosition(), decisionVariable, alternatives, List.of(elseBranch), true);
+        caseStatement.setProfile(node.getProfile());
+        return caseStatement;
     }
 
     private static AstExpression transformUnaryNegation(AstOperatorUnary node) {
@@ -150,5 +178,91 @@ public class NodeTransformation {
                 }
             }
         }
+    }
+
+    private record IfBranch(SourcePosition sourcePosition, AstExpression condition, AstMindcodeNode branch, CompilerProfile profile) {}
+
+    private static AstIdentifier extractDecisionVariable(AstExpression condition, List<AstExpression> values) {
+        List<AstExpression> conditions = new ArrayList<>();
+        unwrapOr(condition, conditions);
+
+        AstIdentifier result = extractDecisionVariableSingle(conditions.getFirst(), values);
+        if (result == INVALID) {
+            return INVALID;
+        }
+
+        for (int i = 1; i < conditions.size(); i++) {
+            AstIdentifier variable = extractDecisionVariableSingle(conditions.get(i), values);
+            if (!result.equals(variable)) {
+                return INVALID;
+            }
+        }
+
+        return result;
+    }
+
+    private static AstIdentifier extractDecisionVariableSingle(AstExpression condition, List<AstExpression> values) {
+        switch (condition) {
+            case AstOperatorBinary op when op.getOperation() == Operation.EQUAL -> {
+                if (op.getLeft() instanceof AstIdentifier id && builtinOrLiteral(op.getRight())) {
+                    values.add(op.getRight());
+                    return id;
+                } else if (op.getRight() instanceof AstIdentifier id && builtinOrLiteral(op.getLeft())) {
+                    values.add(op.getLeft());
+                    return id;
+                }
+            }
+            case AstOperatorInRange op -> {
+                if (op.getValue() instanceof AstIdentifier id && op.getRange().getFirst() instanceof AstLiteralNumeric
+                        && op.getRange().getLast() instanceof AstLiteralNumeric) {
+                    values.add(op.getRange());
+                    return id;
+                }
+            }
+            case AstOperatorInList op -> {
+                if (op.getValue() instanceof AstIdentifier id && op.getValues().stream().allMatch(v -> v instanceof AstLiteralNumeric)) {
+                    values.addAll(op.getValues());
+                    return id;
+                }
+            }
+            default -> {
+            }
+        }
+        return INVALID;
+    }
+
+    private static void unwrapOr(AstExpression condition, List<AstExpression> conditions) {
+        if (condition instanceof AstOperatorShortCircuiting op && op.getOperation() == Operation.LOGICAL_OR) {
+            unwrapOr(op.getLeft(), conditions);
+            unwrapOr(op.getRight(), conditions);
+        } else {
+            conditions.add(condition);
+        }
+    }
+
+    private static boolean builtinOrLiteral(AstExpression value) {
+        return value instanceof AstLiteral || value instanceof AstBuiltInIdentifier;
+    }
+
+    private static AstCaseAlternative convertToWhenBranch(IfBranch branch) {
+        List<AstExpression> conditions = new ArrayList<>();
+        unwrapOr(branch.condition, conditions);
+
+        List<AstExpression> whenValues = new ArrayList<>();
+        for (AstExpression condition : conditions) {
+            switch (condition) {
+                case AstOperatorBinary op when op.getOperation() == Operation.EQUAL ->
+                        whenValues.add(op.getLeft() instanceof AstIdentifier ? op.getRight() : op.getLeft());
+                case AstOperatorInRange op -> whenValues.add(op.getRange());
+                case AstOperatorInList op -> whenValues.addAll(op.getValues());
+                default -> {
+                    throw new MindcodeInternalError("Unexpected condition: " + condition);
+                }
+            }
+        }
+
+        AstCaseAlternative caseAlternative = new AstCaseAlternative(branch.sourcePosition, whenValues, List.of(branch.branch));
+        caseAlternative.setProfile(branch.profile);
+        return caseAlternative;
     }
 }

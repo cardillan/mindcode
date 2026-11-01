@@ -16,8 +16,7 @@ public class AstOperatorShortCircuiting extends AstExpression implements AstNega
     private final AstExpression right;
     private final boolean negated;
 
-    private AstOperatorShortCircuiting(SourcePosition sourcePosition, Operation operation,
-            AstExpression left, AstExpression right, boolean negated) {
+    private AstOperatorShortCircuiting(SourcePosition sourcePosition, Operation operation, AstExpression left, AstExpression right, boolean negated) {
         super(sourcePosition, children(left, right));
         this.operation = Objects.requireNonNull(operation);
         this.left = Objects.requireNonNull(left);
@@ -25,8 +24,7 @@ public class AstOperatorShortCircuiting extends AstExpression implements AstNega
         this.negated = negated;
     }
 
-    public AstOperatorShortCircuiting(SourcePosition sourcePosition, Operation operation,
-            AstExpression left, AstExpression right) {
+    public AstOperatorShortCircuiting(SourcePosition sourcePosition, Operation operation, AstExpression left, AstExpression right) {
         this(sourcePosition, operation, left, right, false);
     }
 

@@ -326,7 +326,8 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
     }
 
     protected void evaluateCondition(AstExpression expression, LogicLabel falseLabel, AstContextType contextType) {
-        AstExpression node = transform(expression);
+        // TopLevel is false because we already see transformed nodes here
+        AstExpression node = transform(expression, false);
         if (node instanceof AstOperatorShortCircuiting shortCircuitingNode) {
             assembler.enterAstNode(shortCircuitingNode, contextType);
             LogicLabel trueLabel = assembler.nextLabel();
@@ -340,7 +341,8 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
     }
 
     protected void evaluateInvertedCondition(AstExpression expression, LogicLabel trueLabel, LogicLabel falseLabel) {
-        AstExpression node = transform(expression);
+        // TopLevel is false because we already see transformed nodes here
+        AstExpression node = transform(expression, false);
         final AstContextType contextType = AstContextType.SCBE_COND;
         if (node instanceof AstOperatorShortCircuiting shortCircuitingNode) {
             assembler.enterAstNode(shortCircuitingNode, contextType);
@@ -362,10 +364,12 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
 
     private void evaluateShortCircuit(AstOperatorShortCircuiting node, LogicLabel shortCircuitLabel, LogicLabel fullEvaluationLabel) {
         LogicLabel intraNodeNextLabel = assembler.nextLabel();
-        evaluateShortCircuitNode(node, transform(node.getLeft()), shortCircuitLabel, intraNodeNextLabel);
+        // TopLevel is false because we already see transformed nodes here
+        evaluateShortCircuitNode(node, transform(node.getLeft(), false), shortCircuitLabel, intraNodeNextLabel);
         assembler.createLabel(intraNodeNextLabel);
 
-        evaluateShortCircuitNode(node, transform(node.getRight()), shortCircuitLabel, fullEvaluationLabel);
+        // TopLevel is false because we already see transformed nodes here
+        evaluateShortCircuitNode(node, transform(node.getRight(), false), shortCircuitLabel, fullEvaluationLabel);
         assembler.createJumpUnconditional(fullEvaluationLabel);
     }
 

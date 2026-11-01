@@ -9,10 +9,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 @NullMarked
-public class LogicBuiltinConst extends LogicBuiltIn {
+public class LogicBuiltInConst extends LogicBuiltIn {
     private final double value;
 
-    private LogicBuiltinConst(SourcePosition sourcePosition, String name, double value) {
+    private LogicBuiltInConst(SourcePosition sourcePosition, String name, double value) {
         super(sourcePosition, name);
         this.value = value;
     }
@@ -48,7 +48,7 @@ public class LogicBuiltinConst extends LogicBuiltIn {
     public static LogicBuiltIn create(InstructionProcessor processor, SourcePosition sourcePosition, String name) {
         LVariable var = processor.getMetadata().getLVar(name);
         return var != null && var.isNumericConstant()
-                ? new LogicBuiltinConst(sourcePosition, name, var.numericValue())
+                ? new LogicBuiltInConst(sourcePosition, name, var.numericValue())
                 : LogicBuiltIn.create(processor, sourcePosition, name);
     }
 }

@@ -93,8 +93,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                 AstAllocations{allocations = AstAllocation{type = STACK, parameters = AstExternalParameters {
                                     memory = AstIdentifier{name = "bank1", external = false},
                                     range = AstRange {
-                                        firstValue = AstLiteralDecimal{literal = "0", suppressWarning = false},
-                                        lastValue = AstLiteralDecimal{literal = "512", suppressWarning = false},
+                                        first = AstLiteralDecimal{literal = "0", suppressWarning = false},
+                                        last = AstLiteralDecimal{literal = "512", suppressWarning = false},
                                         exclusive = true
                                     },
                                     startIndex = null,
