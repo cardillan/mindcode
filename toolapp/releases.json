@@ -8,6 +8,13 @@
       ]
     },
     {
+      "version": "3.20.5",
+      "importance": "recommended",
+      "features": [
+        "Fix: internal error calling an exported function from a locally imported module"
+      ]
+    },
+    {
       "version": "3.20.3",
       "importance": "recommended",
       "features": [

@@ -97,7 +97,7 @@ public class CallGraphCreator extends CompilerMessageEmitter {
         return sbr.toString();
     }
 
-    private Set<FunctionModifier> getEffectiveModifiers(List<AstFunctionModifier> functionModifiers) {
+    private Set<FunctionModifier> getEffectiveModifiers(List<AstFunctionModifier> functionModifiers, boolean skipExport) {
         EnumSet<FunctionModifier> allModifiers = EnumSet.noneOf(FunctionModifier.class);
         EnumSet<FunctionModifier> modifiers = EnumSet.noneOf(FunctionModifier.class);
 
@@ -112,7 +112,7 @@ public class CallGraphCreator extends CompilerMessageEmitter {
             }
 
             allModifiers.add(modifier);
-            if (!invalid) {
+            if (!invalid && modifier != FunctionModifier.EXPORT || !skipExport) {
                 modifiers.add(modifier);
             }
         }
@@ -135,8 +135,9 @@ public class CallGraphCreator extends CompilerMessageEmitter {
 
     private void visitFunctionDeclaration(AstFunctionDeclaration functionDeclaration) {
         Objects.requireNonNull(activeModule, "No active module");
+        boolean skipExport = activeModule != program.getMainModule() && activeModule.getRemoteProcessors().isEmpty();
 
-        Set<FunctionModifier> modifiers = getEffectiveModifiers(functionDeclaration.getModifiers());
+        Set<FunctionModifier> modifiers = getEffectiveModifiers(functionDeclaration.getModifiers(), skipExport);
         boolean isExported = modifiers.contains(FunctionModifier.EXPORT);
 
         if (activeModule.getRemoteProcessors().isEmpty()) {
