@@ -1,0 +1,20 @@
+package io.github.cardillan.mindcode.toolapp.mlogwatcher.api;
+
+public class TextResult implements Results {
+    private String text;
+
+    public TextResult() {
+    }
+
+    public TextResult(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+}

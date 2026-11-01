@@ -71,13 +71,14 @@ It is possible to display the command line help by using a `-h` or `--help` argu
 ## General help
 
 ```
-usage: mindcode [-h] [-v] ACTION ...
+usage: mindcode [-h] [-v] [--no-update-check] ACTION ...
 
 Mindcode/Schemacode command-line compiler.
 
 named arguments:
   -h, --help             show this help message and exit
   -v, --version          show program's version number and exit
+  --no-update-check      do not perform periodic update check, do not announce new versions
 
 Actions:
   Specifies the type of processing to be performed

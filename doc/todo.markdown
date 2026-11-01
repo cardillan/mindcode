@@ -10,21 +10,29 @@ See [changelog in the development branch](https://github.com/cardillan/mindcode/
 
 Changes intended for the next regular release.
 
-**Done**
+### Done
 
-* **Doing**
+* Add `update.json` to the repo, lists new versions and their level:
+  * Optional: no bug fixes
+  * Recommended: no critical bug fixes
+  * Required: critical bug fixes, critical updates to match the latest Mindustry version.
+* Add checking for new versions:
+  * Downloads the `update.json` locally once per hour or day.
+  * Reports the most serious update level available since the current version.
 
+### Doing
 
-* **Planned**
-
+* Convert chained if/elsif to case expression when possible
 * Internal subarrays optimization: for shared tables, the master array is used; when inlining, the subarray is used.
+
+### Considering
+
 * Large heap
   * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays.
-
-* Remove lookup/sensor id in front of case statements
 * If expression telescoping optimization
+* ? Remove lookup/sensor id in front of case statements
 * Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
-
+* Recursive functions: reuse array offset variable for identically sized arrays.
 
 * Automatically make global variables accessed by a background process volatile.
   * Might need a category for volatile, but removable variables.
@@ -33,32 +41,25 @@ Changes intended for the next regular release.
 * Allow using linked arrays in the `remote require` clause.
 * After updating a processor via MlogWatcher, download the processor's content again and compare to determine whether Mindustry parsing causes some changes; if so, it is an error - command line app only.
 * Add support for Mindcode user preferences: allow setting command-line options in them.
-* Add `update.json` to the repo, lists new versions and their level:
-  * Optional: no bug fixes
-  * Recommended: no critical bug fixes
-  * Required: critical bug fixes, critical updates to match the latest Mindustry version.
-* Add checking for new versions:
-  * Downloads the `update.json` locally once per hour or day.
-  * Reports the most serious update level available since the current version.   
 
 * Support for mlogls directives
-* Recursive functions: reuse array offset variable for same-sized arrays.
 * Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
 * Invoke properties on any expression, including arrays.
 
-* **Quick ideas**
+### Quick ideas
 
 ## Next release
+
+* Modules/namespaces (see #149)
+  * Implement public/private modifiers for variables, functions, and constants.
+  * [Refactoring of Mindustry Logic functions](#refactoring-of-mindustry-logic-functions)
 
 ## Further down the road
 
 These are topics that I'm spending time thinking about. Some of these should appear in the next release after the upcoming one.
 
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
-* Modules/namespaces (see #149)
-  * Implement public/private modifiers for variables, functions, and constants.
-  * [Refactoring of Mindustry Logic functions](#refactoring-of-mindustry-logic-functions)
 * [Variable types](https://github.com/cardillan/mindcode/issues/232)
   * "Natural" types
   * Structures/records, including arrays of structures
