@@ -212,21 +212,22 @@ Final code before resolving virtual instructions:
         label *label2
   150:  sensor *tmp30 :displaySize:display @type
   151:  set :displaySize:type *tmp30
-  152:  op equal *tmp31 :displaySize:type @logic-display
-  153:  jump *label62 equal *tmp31 false
-  154:  set *tmp32 80
-  155:  jump *label63 always 0 0
-        label *label62
-  156:  op equal *tmp33 :displaySize:type @large-logic-display
-  157:  jump *label64 equal *tmp33 false
-  158:  set *tmp34 176
-  159:  jump *label65 always 0 0
+  152:  set *tmp32 :displaySize:type
+  153:  jump *label64 equal *tmp32 @logic-display
+  154:  jump *label63 always 0 0
         label *label64
-  160:  set *tmp34 null
-        label *label65
-  161:  set *tmp32 *tmp34
+  155:  set *tmp31 80
+  156:  jump *label62 always 0 0
         label *label63
-  162:  set :displaySize*retval *tmp32
+  157:  jump *label66 equal *tmp32 @large-logic-display
+  158:  jump *label65 always 0 0
+        label *label66
+  159:  set *tmp31 176
+  160:  jump *label62 always 0 0
+        label *label65
+  161:  set *tmp31 null
+        label *label62
+  162:  set :displaySize*retval *tmp31
         label *label61
   163:  return :displaySize*retaddr
   164:  end

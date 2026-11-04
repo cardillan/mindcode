@@ -60,40 +60,37 @@ class LogicInstructionPrinterTest extends AbstractCodeOutputTest {
                         print "\\n"
                         set :n 0
                         op lessThan *tmp1 :n @links
-                        jump 45 equal *tmp1 false
+                        jump 42 equal *tmp1 false
                         getlink *tmp2 :n
                         set :building *tmp2
                         sensor *tmp3 :building @type
                         set :type *tmp3
-                        op equal *tmp4 :type @conveyor
-                        jump 22 notEqual *tmp4 false
-                        op equal *tmp5 :type @titanium-conveyor
-                        jump 22 notEqual *tmp5 false
-                        jump 19 always 0 0
-                        op equal *tmp6 :type @plastanium-conveyor
-                        jump 22 notEqual *tmp6 false
-                        jump 42 always 0 0
-                        sensor *tmp8 :building @firstItem
-                        set :resource *tmp8
-                        op notEqual *tmp9 :resource null
-                        jump 39 equal *tmp9 false
-                        sensor *tmp11 nucleus1 :resource
-                        set :level *tmp11
-                        set *tmp12 :building
-                        op lessThan *tmp13 :level :capacity
-                        control enabled *tmp12 *tmp13 0 0 0
+                        set *tmp5 :type
+                        jump 19 equal *tmp5 @conveyor
+                        jump 19 equal *tmp5 @titanium-conveyor
+                        jump 19 equal *tmp5 @plastanium-conveyor
+                        jump 39 always 0 0
+                        sensor *tmp6 :building @firstItem
+                        set :resource *tmp6
+                        op notEqual *tmp7 :resource null
+                        jump 36 equal *tmp7 false
+                        sensor *tmp9 nucleus1 :resource
+                        set :level *tmp9
+                        set *tmp10 :building
+                        op lessThan *tmp11 :level :capacity
+                        control enabled *tmp10 *tmp11 0 0 0
                         print "\\n"
                         print :n
                         print ": "
                         print :resource
                         print " @ "
                         print :level
-                        set *tmp10 :level
+                        set *tmp8 :level
+                        jump 37 always 0 0
+                        set *tmp8 null
+                        set *tmp4 *tmp8
                         jump 40 always 0 0
-                        set *tmp10 null
-                        set *tmp7 *tmp10
-                        jump 43 always 0 0
-                        set *tmp7 null
+                        set *tmp4 null
                         op add :n :n 1
                         jump 8 always 0 0
                         printflush .MSG

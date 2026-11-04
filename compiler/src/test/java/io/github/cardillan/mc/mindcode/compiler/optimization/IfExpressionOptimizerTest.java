@@ -453,13 +453,16 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                             value = $x == 1 or $x == 2 ? $low : $high;
                             print(value);
                             """,
-                    createInstruction(READ, ":value", "cell1", "1"),
                     createInstruction(READ, tmp(2), "cell1", "0"),
-                    createInstruction(JUMP, label(1), "equal", tmp(2), "1"),
-                    createInstruction(READ, tmp(4), "cell1", "0"),
-                    createInstruction(JUMP, label(1), "equal", tmp(4), "2"),
-                    createInstruction(READ, ":value", "cell1", "2"),
+                    createInstruction(JUMP, label(2), "equal", tmp(2), "1"),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(2), "2"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(READ, tmp(1), "cell1", "1"),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(1)),
+                    createInstruction(READ, tmp(1), "cell1", "2"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":value", tmp(1)),
                     createInstruction(PRINT, ":value")
             );
         }
@@ -589,14 +592,15 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                             """,
                     createInstruction(OP, "rand", ":y1", "0"),
                     createInstruction(SET, ":x1", "@thisx"),
-                    createInstruction(JUMP, label(2), "equal", ":x1", "1"),
-                    createInstruction(JUMP, label(0), "notEqual", ":x1", "2"),
+                    createInstruction(SET, tmp(2), ":x1"),
+                    createInstruction(JUMP, label(2), "equal", tmp(2), "1"),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(2), "2"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(OP, "add", ":y1", ":y1", "1"),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(OP, "sub", ":y1", ":y1", "1"),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "sub", ":y1", ":y1", "1"),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ":y1")
             );
         }

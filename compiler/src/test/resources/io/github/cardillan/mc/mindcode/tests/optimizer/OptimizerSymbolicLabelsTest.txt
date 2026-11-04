@@ -9,7 +9,7 @@ instant-overdrive-dome-01.mnd:                    854   FC2767B9BB219136   A3C6C
 item-counter-00.mnd:                               90   DBF0CE14BD53EC86   4337E743A1DE8D65
 item-counter-micro-00.mnd:                        128   AB81229C62913E11   F809124D6203B90D
 item-rate-display-00.mnd:                         657   B3F3156754BCE6C9   55858232F75BFBB7
-item-rate-meter-00.mnd:                            92   199812ADE3D3F8C3   8452043A435205F1
+item-rate-meter-00.mnd:                            90   199812ADE3D3F8C3   8E796AECF8144BE4
 level-display-00.mnd:                              86   B0F2701257FEF4C3   6A16B8A7975B1D03
 level-display-water-cryo-00.mnd:                   80   3B59D99D61A51686   C5C33CC7767584A0
 level-meter-00.mnd:                               287   C7BCD2A84C470E15   4E2916C72A474E0B

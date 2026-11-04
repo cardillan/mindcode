@@ -137,12 +137,12 @@ public class CaseSwitcher extends BaseOptimizer {
         if (caseExpression == null || analyzer.getContentType() == null) return;
 
         ConvertCaseActionParameters param = new ConvertCaseActionParameters(groupCount, context, caseExpression.getVariable(), caseExpression,
-                caseExpression.getOriginalCost(), caseExpression.getOriginalSteps(), analyzer.isMindustryContent(), removeRangeCheck,
+                caseExpression.getOriginalCost(), caseExpression.getOriginalSteps(), analyzer.getContentType(), removeRangeCheck,
                 getGlobalProfile().isSymbolicLabels(), caseExpression.hasDeclaredElseBranch() && caseExpression.getElseValues() > 0);
 
         List<ConvertCaseOptimizationAction> actions = new ArrayList<>();
-        if (caseExpression.supportsTranslation()) {
-            TranslateCaseOptimizationAction.create(++actionCounter, optimizationContext,
+        if (caseExpression.supportsTranslation() && (param.context().getLocalProfile().isUseTextTranslations() || param.context().getGlobalProfile().isUseSelectCase())) {
+            TranslateCaseOptimization.create(++actionCounter, optimizationContext,
                     this::applyTranslatedOptimization, param).ifPresent(actions::add);
         }
 

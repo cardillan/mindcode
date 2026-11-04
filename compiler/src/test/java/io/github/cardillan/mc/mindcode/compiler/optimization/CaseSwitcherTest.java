@@ -25,7 +25,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
 
     @Override
     protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile().setGoal(GenerationGoal.SPEED);
+        return super.createCompilerProfile().setGoal(GenerationGoal.SPEED).setUseSelectCase(false);
     }
 
     @Nested
@@ -1006,20 +1006,22 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         }
 
         @Test
-        void processesNonNullElseAndNUllBranch() {
+        void processesNonNullElseAndNullBranch() {
             assertCompilesTo("""
+                            #set goal = size;
                             param input = 0;
                             print(case input
                                 when 0 then 'a';
                                 when 1 then null;
                                 when 4 then 'b';
-                                else 'c';
+                                when 5 then 'c';
+                                else 'd';
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("adccb"), "input"),
-                    createInstruction(SELECT, tmp(2), "equal", tmp(1), "100", "null", tmp(1)),
-                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "99", tmp(2)),
+                    createInstruction(READ, tmp(1), q("aeddbc"), "input"),
+                    createInstruction(SELECT, tmp(2), "equal", tmp(1), "101", "null", tmp(1)),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "100", tmp(2)),
                     createInstruction(PRINT, tmp(0))
             );
         }
@@ -1032,13 +1034,14 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             print(case input
                                 when 0 then 1;
                                 when 1 then null;
+                                when 3, 5 then 3;
                                 when 4 then 2;
                                 else 0;
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("\\u0001\\u0003\\u0000\\u0000\\u0002"), "input"),
-                    createInstruction(SELECT, tmp(2), "equal", tmp(1), "3", "null", tmp(1)),
+                    createInstruction(READ, tmp(1), q("\\u0001\\u0004\\u0000\\u0003\\u0002\\u0003"), "input"),
+                    createInstruction(SELECT, tmp(2), "equal", tmp(1), "4", "null", tmp(1)),
                     createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "0", tmp(2)),
                     createInstruction(PRINT, tmp(0))
             );

@@ -116,8 +116,14 @@ public class CaseExpression {
         return declaredElseBranch;
     }
 
+    // @returns the total size, including the else values
     public int getTotalSize() {
         return totalSize;
+    }
+
+    // @returns the size used for the originalSteps computation
+    public int getStepsSize() {
+        return declaredElseBranch ? totalSize : size();
     }
 
     public int getElseValues() {
@@ -286,6 +292,10 @@ public class CaseExpression {
         return targets.entrySet();
     }
 
+    public Set<Integer> keySet() {
+        return targets.keySet();
+    }
+
     public @Nullable LogicLabel getNullTarget() {
         return nullTarget;
     }
@@ -372,8 +382,12 @@ public class CaseExpression {
             return cardinality;
         }
 
+        public LogicValue getAssignedValue(LogicVariable variable, LogicValue defaultValue) {
+            return assignments.getOrDefault(variable, defaultValue);
+        }
+
         public LogicValue getAssignedValue(LogicVariable variable) {
-            return assignments.getOrDefault(variable, LogicVoid.VOID);
+            return getAssignedValue(variable, LogicVoid.VOID);
         }
 
         public LogicValue getAssignedValueLiteral(LogicVariable variable, boolean mindustryContent) {
@@ -583,7 +597,7 @@ public class CaseExpression {
             }
 
             // Unsupported case expressions: no input variable, inconsistent types, no branches or range too large
-            if (variable == null || variable.getType() == ArgumentType.BUILT_IN|| analyzer.getContentType() == null
+            if (variable == null || variable.getType() == ArgumentType.BUILT_IN || analyzer.getContentType() == null
                     || caseExpression.isEmpty() || caseExpression.range() > MAX_CASE_RANGE) {
                 return null;
             }

@@ -150,8 +150,7 @@ public class NodeTransformation {
             elseBranch = ternary.getFalseBranch();
         }
 
-        int limit = values.stream().anyMatch(v -> v instanceof AstBuiltInIdentifier b) ? 4 : 3;
-        if (values.size() < limit) return node;
+        if (values.size() < 2) return node;
 
         List<AstCaseAlternative> alternatives = branches.stream().map(NodeTransformation::convertToWhenBranch).toList();
         AstCaseExpression caseStatement = new AstCaseExpression(node.sourcePosition(), decisionVariable, alternatives, List.of(elseBranch), true);

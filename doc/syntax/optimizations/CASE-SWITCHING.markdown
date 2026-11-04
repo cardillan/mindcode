@@ -19,6 +19,7 @@ The following conditions must be met for a case expression to be processed by th
 
 Depending on the target version and other compiler options, three different optimization techniques are available:
 
+* [Select transformation](#select-transformation),
 * [Value translation](#value-translation),
 * [Fast dispatch](#fast-dispatch),
 * [Jump tables](#jump-tables).
@@ -60,14 +61,54 @@ If you activate the `unsafe-case-optimization` option, and an unhandled input va
 
 The range check is also partially or fully removed when the following conditions are met:
 
-* There is a `when` branch corresponding to the Mindustry content with a zero ID: in this case, Mindcode knows when the minimum possible numerical value of the ID (that is, zero) is handled by the case expression and may omit the check for values less than zero.
-* There is a `when` branch corresponding to the Mindustry content with a maximum ID, and `builtin-evaluation` is set to `full`: in this case, Mindcode knows when the maximum possible numerical value of the ID (that is, zero) is handled by the case expression and may omit the check for values greater than that.
+* There is a `when` branch corresponding to the Mindustry content with a zero ID: in this case, Mindcode knows when the case expression handles the minimum possible numerical value of the ID (that is, zero) and may omit the check for values less than zero.
+* There is a `when` branch corresponding to the Mindustry content with a maximum ID, and `builtin-evaluation` is set to `full`: in this case, Mindcode knows when the case expression handles the maximum possible numerical value of the ID (that is, zero) and may omit the check for values greater than that.
 
 Mindcode may use [Jump table padding](#jump-table-padding) to be able to remove the range checks in the above two cases.
 
+## Select transformation
+
+A case expression can also be implemented as a sequence of `select` instructions, each matching one of the `when` values. In some cases, this approach may produce both the smallest and sometimes also the fastest code. Since the `select` instruction can compare and assign Mindustry content directly, it is not necesary to perform any conversions to or from logic IDs.
+
+The select transformation is preferred over other implementations whose size and performance are identical, as it is more readable in the compiled code.   
+
+```Mindcode
+#set remarks = comments;
+param p = 1;
+
+print(case p
+    when 0 then "zero";
+    when 1 then "one";
+    else "many";
+end);
+
+/// Variable reassignments are also supported
+var q = items[rand(length(items))];
+case q
+    when @coal then q = @graphite;
+    when @sand then q = @silicon;
+end;
+print(q);
+```
+
+compiles to:
+
+```mlog
+set p 1
+select *tmp2 equal p 0 "zero" "many"
+select *tmp0 equal p 1 "one" *tmp2
+print *tmp0
+# Variable reassignments are also supported
+op rand *tmp1 16 0
+lookup item .q *tmp1
+select *tmp3 equal .q @sand @silicon .q
+select .q equal .q @coal @graphite *tmp3
+print .q
+```
+
 ## Value translation
 
-In Mindustry 8, it is possible to [read character values from a string](../MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. When the case expression assigns a single new value to a variable in each branch, and the values can be represented as integers in a reasonable range, the entire expression can be encoded as a `read` from a string containing the encoded values. In the basic case, the entire case expression can be replaced by a single `read` instruction. In more complex case expressions, additional instructions may be needed to handle some more specific cases.
+In Mindustry 8, it is possible to [read character values from a string](../MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. When the case expression assigns a single value to a variable in each branch, and the values can be represented as integers, the entire expression can be encoded as a `read` from a string containing the encoded values. In the basic case, the entire case expression can be replaced by a single `read` instruction. In more complex case expressions, additional instructions may be needed to handle some more specific cases.
 
 Assuming the case expression conforms to the requirements described above, the following prerequisites need to be met for this optimization to be applied:
 
@@ -151,11 +192,11 @@ The most complex value translations consist of up to eight instructions. When th
 #set goal = size;
 volatile var value;
 case value
-    when @copper      then value = @silicon;
-    when null         then value = @lead;                   // would cause case 2 in target 8.1
-    when @coal        then value = @copper;                 // causes case 3.1
-    when @lead        then value = null;                    // causes case 4.1
-    when @silicon     then null;                            // causes case 4.2
+    when @copper, @titanium   then value = @silicon;
+    when null, @plastanium    then value = @lead;                   // would cause case 2 in target 8.1
+    when @coal, @metaglass    then value = @copper;                 // causes case 3.1
+    when @lead, @graphite     then value = null;                    // causes case 4.1
+    when @silicon, @sand      then null;                            // causes case 4.2
     else value = @scrap;                                    // causes case 5.1
 end;
 ```
@@ -164,7 +205,7 @@ produces
 
 ```mlog
 sensor *tmp0 .value @id
-read *tmp1 "\u0009\n\u0008\u0008\u0008\u0000\u0008\u0008\u0008\u000b" *tmp0
+read *tmp1 "\u0009\n\u0000\n\u000b\u0000\u0009\u0008\u0008\u000b\u0001" *tmp0
 select *tmp2 strictEqual *tmp0 null 1 *tmp1
 select *tmp3 equal *tmp1 10 null *tmp2
 select *tmp4 strictEqual *tmp1 null 8 *tmp3

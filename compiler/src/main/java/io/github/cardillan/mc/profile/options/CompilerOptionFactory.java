@@ -386,6 +386,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 true));
 
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_SELECT_CASE, "",
+                "allows converting case statements to a sequence of 'select' instructions",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.NONE, category,
+                true));
+
         list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_SHORT_ARRAYS, "",
                 "allows using specialized implementation of short arrays (2-4 elements)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,

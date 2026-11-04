@@ -204,6 +204,10 @@ public interface GlobalCompilerProfile {
         return getBooleanValue(OptimizationOptions.USE_LOOKUP_ARRAYS);
     }
 
+    default boolean isUseSelectCase() {
+        return getBooleanValue(OptimizationOptions.USE_SELECT_CASE);
+    }
+
     default boolean useShortArrays() {
         return getBooleanValue(OptimizationOptions.USE_SHORT_ARRAYS);
     }

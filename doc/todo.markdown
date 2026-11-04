@@ -19,14 +19,17 @@ Changes intended for the next regular release.
 * Add checking for new versions:
   * Downloads the `update.json` locally once per hour or day.
   * Reports the most serious update level available since the current version.
+* Convert chained if/elsif to case expression when possible
 
 ### Doing
 
-* Convert chained if/elsif to case expression when possible
-* Internal subarrays optimization: for shared tables, the master array is used; when inlining, the subarray is used.
+* `select` transformation for case expressions: support noninteger assignments.
 
 ### Considering
 
+* Converting arrays to const arrays when possible
+* Compressing jump tables of constant arrays (identical values get handled by the same branch)
+* Internal subarrays optimization: for shared tables, the master array is used; when inlining, the subarray is used.
 * Large heap
   * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays.
 * If expression telescoping optimization
@@ -43,7 +46,6 @@ Changes intended for the next regular release.
 * Add support for Mindcode user preferences: allow setting command-line options in them.
 
 * Support for mlogls directives
-* Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
 * Invoke properties on any expression, including arrays.
 

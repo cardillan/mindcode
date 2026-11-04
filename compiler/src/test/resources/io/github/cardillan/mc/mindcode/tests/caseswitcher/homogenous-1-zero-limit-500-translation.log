@@ -10,7 +10,7 @@
     17 instructions after optimizations.
 
 Pass 1: size optimization selection (cost limit 456):
-  * Translate case at line 10:5                                  size   -26, benefit      571.4, efficiency     26.000 (-26 instructions)
+  * Translate case at line 10:5                                  size   -26, benefit      569.0, efficiency     26.000 (-26 instructions)
     Convert case at line 10:5 (segments: 7)                      size    -5, benefit      470.5, efficiency      5.000
     Convert case at line 10:5 (segments: 15)                     size    -4, benefit      525.8, efficiency      4.000
 

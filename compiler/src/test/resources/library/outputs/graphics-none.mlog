@@ -150,17 +150,17 @@ draw scale *tmp28 *tmp29 0 0 0 0
 end
 sensor *tmp30 :displaySize:display @type
 set :displaySize:type *tmp30
-op equal *tmp31 :displaySize:type @logic-display
-jump 156 equal *tmp31 false
-set *tmp32 80
+set *tmp32 :displaySize:type
+jump 155 equal *tmp32 @logic-display
+jump 157 always 0 0
+set *tmp31 80
 jump 162 always 0 0
-op equal *tmp33 :displaySize:type @large-logic-display
-jump 160 equal *tmp33 false
-set *tmp34 176
+jump 159 equal *tmp32 @large-logic-display
 jump 161 always 0 0
-set *tmp34 null
-set *tmp32 *tmp34
-set :displaySize*retval *tmp32
+set *tmp31 176
+jump 162 always 0 0
+set *tmp31 null
+set :displaySize*retval *tmp31
 set @counter :displaySize*retaddr
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

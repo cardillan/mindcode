@@ -1,31 +1,38 @@
    165 instructions before optimizations.
      8 instructions eliminated by Temp Variables Elimination (5 iterations).
-     5 instructions eliminated by Case Expression Optimization.
+     6 instructions eliminated by Case Expression Optimization.
     15 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Condition Optimization (5 iterations).
      1 instruction eliminated by Single Step Elimination (5 iterations).
-     6 instructions eliminated by Boolean Optimization (6 iterations).
-       2 fully-evaluated expressions optimized using 'select's.
-    32 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
-     2 instructions eliminated by Function Inlining (3 iterations).
+    32 instructions eliminated by Data Flow Optimization (2 passes, 11 iterations).
+     3 instructions added by Function Inlining (5 iterations).
      2 function calls inlined by Function Inlining.
-    10 instructions eliminated by Jump Straightening (5 iterations).
+    10 instructions eliminated by Case Switching (5 iterations).
+     2 case expressions converted to value translations by Case Switching.
+    12 instructions eliminated by Jump Straightening (5 iterations).
     84 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 909):
-  * Inline function 'displaySize' defined at *graphics:102:1     size    +2, benefit        7.0, efficiency      3.500 (-6 instructions)
-    Inline function call at line 10:38                           size    +3, benefit        3.5, efficiency      1.167
-    Inline function call at line 11:38                           size    +3, benefit        3.5, efficiency      1.167
+Pass 1: speed optimization selection (cost limit 904):
+  * Inline function 'displaySize' defined at *graphics:102:1     size    +7, benefit        7.0, efficiency      1.000 (-1 instructions)
+    Inline function call at line 10:38                           size    +8, benefit        3.5, efficiency      0.438
+    Inline function call at line 11:38                           size    +8, benefit        3.5, efficiency      0.438
+  o Select case at *graphics:104:5                               size    -5, benefit        2.0, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 905):
+  * Select case at *graphics:104:5                               size    -5, benefit        1.0, efficiency   Infinity (-5 instructions)
+  o Select case at *graphics:104:5                               size    -5, benefit        1.0, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 910):
+  * Select case at *graphics:104:5                               size    -5, benefit        1.0, efficiency   Infinity (-5 instructions)
 
 Final code before resolving virtual instructions:
 
     0:  sensor :displaySize:type display1 @type
-    1:  select *tmp6 equal :displaySize:type @large-logic-display 176 null
-    2:  select *tmp5 equal :displaySize:type @logic-display 80 *tmp6
+    1:  select *tmp6 equal :displaySize:type @logic-display 80 null
+    2:  select *tmp5 equal :displaySize:type @large-logic-display 176 *tmp6
     3:  assertequals 176 *tmp5 "large display size"
     4:  sensor :displaySize:type display5 @type
-    5:  select *tmp6 equal :displaySize:type @large-logic-display 176 null
-    6:  select *tmp5 equal :displaySize:type @logic-display 80 *tmp6
+    5:  select *tmp7 equal :displaySize:type @logic-display 80 null
+    6:  select *tmp5 equal :displaySize:type @large-logic-display 176 *tmp7
     7:  assertequals 80 *tmp5 "small display size"
     8:  assertequals 0.2 0.2 "red channel"
     9:  assertequals 0.4 0.4 "green channel"

@@ -1,10 +1,10 @@
 sensor :displaySize:type display1 @type
-select *tmp6 equal :displaySize:type @large-logic-display 176 null
-select *tmp5 equal :displaySize:type @logic-display 80 *tmp6
+select *tmp6 equal :displaySize:type @logic-display 80 null
+select *tmp5 equal :displaySize:type @large-logic-display 176 *tmp6
 assertequals 176 *tmp5 "large display size"
 sensor :displaySize:type display5 @type
-select *tmp6 equal :displaySize:type @large-logic-display 176 null
-select *tmp5 equal :displaySize:type @logic-display 80 *tmp6
+select *tmp7 equal :displaySize:type @logic-display 80 null
+select *tmp5 equal :displaySize:type @large-logic-display 176 *tmp7
 assertequals 80 *tmp5 "small display size"
 assertequals 0.2 0.2 "red channel"
 assertequals 0.4 0.4 "green channel"

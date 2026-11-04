@@ -34,7 +34,7 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
 
     @Override
     protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile().setUseTextJumpTables(false).setUseTextTranslations(false);
+        return super.createCompilerProfile().setUseTextJumpTables(false).setUseTextTranslations(false).setUseSelectCase(false);
     }
 
     @AfterAll

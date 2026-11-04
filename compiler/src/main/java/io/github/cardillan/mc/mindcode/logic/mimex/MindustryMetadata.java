@@ -451,6 +451,17 @@ public class MindustryMetadata {
             case null, default -> null;
         };
     }
+
+    public @Nullable MindustryContent getNamedContentByLogicId(@Nullable ContentType type, int id) {
+        return switch (type) {
+            case BLOCK -> getBlockByLogicId(id);
+            case ITEM -> getItemByLogicId(id);
+            case LIQUID -> getLiquidByLogicId(id);
+            case TEAM -> getTeamByLogicId(id);
+            case UNIT -> getUnitByLogicId(id);
+            case null, default -> null;
+        };
+    }
     //</editor-fold>
 
     //<editor-fold desc="Block types">
@@ -472,6 +483,10 @@ public class MindustryMetadata {
 
     public @Nullable BlockType getBlockById(int id) {
         return getBlockIdMap().get(id);
+    }
+
+    public @Nullable BlockType getBlockByLogicId(int id) {
+        return getBlockLogicIdMap().get(id);
     }
 
     public Collection<BlockType> getAllBlocks() {
@@ -502,6 +517,10 @@ public class MindustryMetadata {
         return getItemIdMap().get(id);
     }
 
+    public @Nullable Item getItemByLogicId(int id) {
+        return getItemLogicIdMap().get(id);
+    }
+
     public Set<String> getItemNames() {
         return getItemMap().keySet();
     }
@@ -522,6 +541,10 @@ public class MindustryMetadata {
 
     public @Nullable Liquid getLiquidById(int id) {
         return getLiquidIdMap().get(id);
+    }
+
+    public @Nullable Liquid getLiquidByLogicId(int id) {
+        return getLiquidLogicIdMap().get(id);
     }
 
     public Collection<Liquid> getAllLiquids() {
@@ -556,6 +579,10 @@ public class MindustryMetadata {
         return getTeamIdMap().get(id);
     }
 
+    public @Nullable Team getTeamByLogicId(int id) {
+        return getTeamLogicIdMap().get(id);
+    }
+
     public Collection<Team> getAllTeams() {
         return getTeamMap().values();
     }
@@ -572,6 +599,10 @@ public class MindustryMetadata {
 
     public @Nullable Unit getUnitById(int id) {
         return getUnitIdMap().get(id);
+    }
+
+    public @Nullable Unit getUnitByLogicId(int id) {
+        return getUnitLogicIdMap().get(id);
     }
 
     public Collection<Unit> getAllUnits() {

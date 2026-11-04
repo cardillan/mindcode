@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added the [`debug` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#debug-variables) to variable declarations ([#513](https://github.com/cardillan/mindcode/issues/513)).
 * Added conversion of chained if-else statements into a case expression, allowing case-expression optimizations for them.
+* Added a select transformation optimization to the [Case Switching optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown).
 
 ### Changed
 

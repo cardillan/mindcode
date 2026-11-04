@@ -14,7 +14,7 @@ public class CaseSwitcherSymbolicLabelsProcessorTest extends CaseSwitcherProcess
 
     @Override
     protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile().setUseTextTranslations(false);
+        return super.createCompilerProfile().setUseTextTranslations(false).setUseSelectCase(false);
     }
 
     @Override

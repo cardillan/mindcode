@@ -263,13 +263,18 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
-    public CompilerProfile setUseTextJumpTables(boolean textJumpTables) {
-        getOption(OptimizationOptions.USE_TEXT_JUMP_TABLES).setValue(textJumpTables);
+    public CompilerProfile setUseSelectCase(boolean useSelectCase) {
+        getOption(OptimizationOptions.USE_SELECT_CASE).setValue(useSelectCase);
         return this;
     }
 
-    public CompilerProfile setUseTextTranslations(boolean textJumpTables) {
-        getOption(OptimizationOptions.USE_TEXT_TRANSLATIONS).setValue(textJumpTables);
+    public CompilerProfile setUseTextJumpTables(boolean useTextJumpTables) {
+        getOption(OptimizationOptions.USE_TEXT_JUMP_TABLES).setValue(useTextJumpTables);
+        return this;
+    }
+
+    public CompilerProfile setUseTextTranslations(boolean useTextTranslations) {
+        getOption(OptimizationOptions.USE_TEXT_TRANSLATIONS).setValue(useTextTranslations);
         return this;
     }
     //</editor-fold>

@@ -13,7 +13,7 @@ public class CaseSwitcherProcessorTest extends CaseSwitcherProcessorTestBase {
 
     @Override
     protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile().setUseTextTranslations(false);
+        return super.createCompilerProfile().setUseTextTranslations(false).setUseSelectCase(false);
     }
 
     @AfterAll
