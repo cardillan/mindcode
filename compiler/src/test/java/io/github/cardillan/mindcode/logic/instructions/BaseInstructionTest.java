@@ -1,0 +1,44 @@
+package io.github.cardillan.mindcode.logic.instructions;
+
+import io.github.cardillan.mindcode.compiler.AbstractCompilerTestBase;
+import io.github.cardillan.mindcode.compiler.CompilationPhase;
+import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static io.github.cardillan.mindcode.logic.opcodes.Opcode.ULOCATE;
+
+@NullMarked
+class BaseInstructionTest extends AbstractCompilerTestBase {
+
+    @Override
+    protected CompilationPhase getTargetPhase() {
+        return CompilationPhase.COMPILER;
+    }
+
+    @Test
+    void providesCorrectMetadata_TotalInputs() {
+        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
+        Assertions.assertEquals(1, ix.getInputs());
+    }
+
+    @Test
+    void providesCorrectMetadata_TotalOutputs() {
+        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
+        Assertions.assertEquals(4, ix.getOutputs());
+    }
+
+    @Test
+    void providesCorrectMetadata_InputValues() {
+        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
+        Assertions.assertEquals(List.of(_logic("@lead")), ix.inputArgumentsStream().toList());
+    }
+
+    @Test
+    void providesCorrectMetadata_OutputValues() {
+        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
+        Assertions.assertEquals(_logic("outx", "outy", "found", "building"), ix.outputArgumentsStream().toList());
+    }
+}

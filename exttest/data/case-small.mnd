@@ -1,6 +1,7 @@
 #set builtin-evaluation = full;
 #set err-invalid-lookup = false;
 #set use-text-translations = false;
+#set use-select-case = false;
 //#set single-step-elimination = none;
 //#set jump-straightening = none;
 //#set jump-threading = none;

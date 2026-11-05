@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.mindustry;
 
-import io.github.cardillan.mc.mindcode.logic.mimex.*;
-import io.github.cardillan.mc.util.Tuple2;
+import io.github.cardillan.mindcode.logic.mimex.*;
+import io.github.cardillan.mindcode.util.Tuple2;
 import io.github.cardillan.schemacode.SchematicsInternalError;
 import io.github.cardillan.schemacode.SchematicsMetadata;
 import io.github.cardillan.schemacode.config.*;

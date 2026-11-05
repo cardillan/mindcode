@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.mindustry;
 
-import io.github.cardillan.mc.emulator.blocks.BlockPosition;
+import io.github.cardillan.mindcode.emulator.blocks.BlockPosition;
 import io.github.cardillan.schemacode.config.Configuration;
 import io.github.cardillan.schemacode.config.PositionArray;
 import io.github.cardillan.schemacode.schematics.Block;

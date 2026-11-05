@@ -1,8 +1,8 @@
 package io.github.cardillan.mindcode.toolapp.mlogwatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.cardillan.mc.mindcode.compiler.ToolMessageEmitter;
-import io.github.cardillan.mc.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mindcode.compiler.ToolMessageEmitter;
+import io.github.cardillan.mindcode.logic.arguments.LogicVariable;
 import io.github.cardillan.mindcode.toolapp.mlogwatcher.api.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

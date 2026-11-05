@@ -1,0 +1,300 @@
+package io.github.cardillan.mindcode.compiler.postprocess;
+
+
+import io.github.cardillan.mindcode.compiler.ContextFactory;
+import io.github.cardillan.mindcode.compiler.ast.nodes.AstIdentifier;
+import io.github.cardillan.mindcode.compiler.generation.StackTracker;
+import io.github.cardillan.mindcode.logic.arguments.LogicParameter;
+import io.github.cardillan.mindcode.logic.arguments.LogicString;
+import io.github.cardillan.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
+import io.github.cardillan.mindcode.profile.SortCategory;
+import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@NullMarked
+class FinalInstructionResolverTest extends AbstractCodeOutputTest {
+
+    @BeforeEach
+    void setupContext() {
+        ContextFactory.setArrayConstructorContext(this);
+        ContextFactory.setStackContext(StackTracker::mockExternalStack);
+    }
+
+    @Test
+    void initializesRemoteVariables() {
+        assertOutputs("""
+                        module foo;
+                        export v;
+                        export a[10];
+                        """,
+                """
+                        set *signature "0:v2"
+                        write 1e-15 *caller "*remotewait"
+                        set *caller false
+                        wait 1e12
+                        jump 1 always 0 0
+                        end
+                        draw triangle .v .a*0 .a*1 .a*2 .a*3 .a*4
+                        draw triangle .a*5 .a*6 .a*7 .a*8 .a*9 0
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void resolvesAbsoluteAddressesOfLabels() {
+        assertOutputs("""
+                        while true do
+                            n = n + 1;
+                        end;
+                        """,
+                """
+                        jump 4 equal true false
+                        op add *tmp0 :n 1
+                        set :n *tmp0
+                        jump 0 always 0 0
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void processesSortVariables() {
+        assertOutputs("""
+                        #set sort-variables = params, globals;
+                        param MAX = 10;
+                        A = 20;
+                        i = 3;
+                        print(MAX, A, i);
+                        """,
+                """
+                        jump 2 always 0 0
+                        draw triangle MAX .A 0 0 0 0
+                        set MAX 10
+                        set .A 20
+                        set :i 3
+                        print MAX
+                        print .A
+                        print :i
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void processesSortVariablesInRemoteModules() {
+        assertOutputs("""
+                        #set sort-variables = params, globals;
+                        module test;
+                        param MAX = 10;
+                        var A = 20;
+                        export void foo(i)
+                            print(MAX, A, i);
+                        end;
+                        """,
+                """
+                        jump 3 always 0 0
+                        jump 11 always 0 0
+                        draw triangle MAX .A 0 0 0 0
+                        set MAX 10
+                        set .A 20
+                        set *signature "3c05035f1bf6650b:v2"
+                        write 1e-15 *caller "*remotewait"
+                        set *caller false
+                        wait 1e12
+                        jump 6 always 0 0
+                        end
+                        print MAX
+                        print .A
+                        print :foo:i
+                        set :foo*finished true
+                        jump 6 always 0 0
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void resolvesDisabledRemarks() {
+        assertOutputs("""
+                        #set remarks = none;
+                        remark("This is a remark");
+                        print("Hello");
+                        """,
+                """
+                        print "Hello"
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void resolvesPassiveRemarks() {
+        assertOutputs("""
+                        #set remarks = passive;
+                        remark("This is a remark");
+                        print("Hello");
+                        """,
+                """
+                        jump 2 always 0 0
+                        print "This is a remark"
+                        print "Hello"
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void resolvesActiveRemarks() {
+        assertOutputs("""
+                        #set remarks = active;
+                        remark("This is a remark");
+                        print("Hello");
+                        """,
+                """
+                        print "This is a remark"
+                        print "Hello"
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void resolvesRemarksWithLocalOptions() {
+        assertOutputs("""
+                        #set remarks = comments;
+                        remark("Start");
+                        #setlocal remarks = passive;    remark("Passive");
+                        #setlocal remarks = active;     remark("Active");
+                        #setlocal remarks = none;       remark("none");
+                        remark("Finish");
+                        """,
+                """
+                        # Start
+                        jump 2 always 0 0
+                        print "Passive"
+                        print "Active"
+                        # Finish
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+        );
+    }
+
+    @Test
+    void sortsCategories() {
+        LogicVariable global1 = global("b1");
+        LogicVariable global2 = global("b2");
+        LogicVariable main1 = main("a1");
+        LogicVariable main2 = main("a2");
+        LogicVariable param = LogicParameter.parameter(new AstIdentifier(EMPTY, "p"), LogicString.createSimple("x"));
+        Set<LogicVariable> variables = new HashSet<>(List.of(global1, global2, main1, main2, param));
+
+        List<LogicVariable> expected = List.of(main1, main2, global1, global2, param);
+        List<LogicVariable> actual = FinalInstructionResolver.orderVariables(variables, List.of(SortCategory.ALL, SortCategory.PARAMS));
+
+        assertEquals(expected, actual);
+    }
+
+    @Nested
+    class ErrorFunction {
+        @Test
+        void compilesFormattableErrorFunctionSimple() {
+            assertOutputs("""
+                            #set error-reporting = simple;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error($"Index $i out of bounds ($min, $max)!");
+                            """,
+                    """
+                            set max 8
+                            set i 10
+                            set *ERROR_0 "Index {1} out of bounds (0, {2})!"
+                            set *ERROR_1 i
+                            set *ERROR_2 max
+                            stop
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+
+        @Test
+        void compilesFormattableErrorFunctionAssert() {
+            assertOutputs("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error($"Index $i out of bounds ($min, $max)!");
+                            """,
+                    """
+                            set max 8
+                            set i 10
+                            error "Index {1} out of bounds (0, {2})!" i max null null null null null null null
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+
+        @Test
+        void compilesNormalErrorFunctionSimple() {
+            assertOutputs("""
+                            #set error-reporting = simple;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error("Index out of bounds: ", i, min, max);
+                            """,
+                    """
+                            set max 8
+                            set i 10
+                            set *ERROR_0 "Index out of bounds: "
+                            set *ERROR_1 i
+                            set *ERROR_2 0
+                            set *ERROR_3 max
+                            stop
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+
+        @Test
+        void compilesNormalErrorFunctionAssert() {
+            assertOutputs("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error("Index out of bounds: ", i, min, max);
+                            """,
+                    """
+                            set max 8
+                            set i 10
+                            error "Index out of bounds: " i 0 max null null null null null null
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+    }
+
+}

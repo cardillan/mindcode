@@ -1,8 +1,8 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.InputFile;
-import io.github.cardillan.mc.common.SourcePosition;
-import io.github.cardillan.mc.messages.SourcePositionTranslator;
+import io.github.cardillan.mindcode.common.InputFile;
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.messages.SourcePositionTranslator;
 import io.github.cardillan.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 

@@ -1,0 +1,181 @@
+package io.github.cardillan.mindcode.compiler.generation.builders;
+
+import io.github.cardillan.mindcode.compiler.generation.AbstractCodeGeneratorTest;
+import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import static io.github.cardillan.mindcode.logic.opcodes.Opcode.*;
+
+@NullMarked
+class WhileLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
+
+    @Nested
+    class DoWhileLoops {
+        @Test
+        void compilesDoWhileLoop() {
+            assertCompilesTo("""
+                            do
+                                cell1[a++] = cell1[b--];
+                            while a < b;
+                            """,
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "add", ":a", ":a", "1"),
+                    createInstruction(SET, tmp(1), tmp(0)),
+                    createInstruction(SET, tmp(3), ":b"),
+                    createInstruction(OP, "sub", ":b", ":b", "1"),
+                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(READ, tmp(5), "cell1", tmp(4)),
+                    createInstruction(WRITE, tmp(5), "cell1", tmp(1)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(OP, "lessThan", tmp(6), ":a", ":b"),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(6), "false"),
+                    createInstruction(LABEL, label(3))
+            );
+        }
+
+        @Test
+        void compilesEmptyDoWhileLoop() {
+            assertCompilesTo("""
+                            do while cell1[a++] > 0;
+                            """,
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "add", ":a", ":a", "1"),
+                    createInstruction(SET, tmp(1), tmp(0)),
+                    createInstruction(READ, tmp(2), "cell1", tmp(1)),
+                    createInstruction(OP, "greaterThan", tmp(3), tmp(2), "0"),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(3), "false"),
+                    createInstruction(LABEL, label(3))
+            );
+        }
+
+        @Test
+        void compilesDoWhileLoopWithParentheses() {
+            assertCompilesTo("""
+                            do
+                                x = rand(10);
+                                y = rand(10);
+                            while (x < 5 and y < 5);
+                            print(x);
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "rand", tmp(0), "10"),
+                    createInstruction(SET, ":x", tmp(0)),
+                    createInstruction(OP, "rand", tmp(1), "10"),
+                    createInstruction(SET, ":y", tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "lessThan", tmp(2), ":x", "5"),
+                    createInstruction(JUMP, label(2), "equal", tmp(2), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "lessThan", tmp(3), ":y", "5"),
+                    createInstruction(JUMP, label(2), "equal", tmp(3), "false"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, ":x")
+            );
+        }
+    }
+
+    @Nested
+    class InfiniteLoops {
+        @Test
+        void compilesInfiniteLoop() {
+            assertCompilesTo("""
+                            loop
+                                cell1[a++] = cell1[b--];
+                            end;
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "add", ":a", ":a", "1"),
+                    createInstruction(SET, tmp(1), tmp(0)),
+                    createInstruction(SET, tmp(3), ":b"),
+                    createInstruction(OP, "sub", ":b", ":b", "1"),
+                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(READ, tmp(6), "cell1", tmp(4)),
+                    createInstruction(WRITE, tmp(6), "cell1", tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesEmptyInfiniteLoop() {
+            assertCompilesTo("""
+                            loop
+                            end;
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void refusesAssigningLoopsToVariables() {
+            assertGeneratesMessages(expectedMessages()
+                            .addRegex("Parse error: .*").atLeast(1),
+                    """
+                            a = loop print("Hello"); end;
+                            """);
+        }
+    }
+
+    @Nested
+    class WhileLoops {
+        @Test
+        void compilesWhileLoop() {
+            assertCompilesTo("""
+                            while a < b do
+                                cell1[a++] = cell1[b--];
+                            end;
+                            """,
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "lessThan", tmp(0), ":a", ":b"),
+                    createInstruction(JUMP, label(3), "equal", tmp(0), "false"),
+                    createInstruction(SET, tmp(1), ":a"),
+                    createInstruction(OP, "add", ":a", ":a", "1"),
+                    createInstruction(SET, tmp(2), tmp(1)),
+                    createInstruction(SET, tmp(4), ":b"),
+                    createInstruction(OP, "sub", ":b", ":b", "1"),
+                    createInstruction(SET, tmp(5), tmp(4)),
+                    createInstruction(READ, tmp(6), "cell1", tmp(5)),
+                    createInstruction(WRITE, tmp(6), "cell1", tmp(2)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
+            );
+        }
+
+        @Test
+        void compilesEmptyWhileLoop() {
+            assertCompilesTo("""
+                            while a++ < 10 do
+                            end;
+                            """,
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "add", ":a", ":a", "1"),
+                    createInstruction(OP, "lessThan", tmp(1), tmp(0), "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(1), "false"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
+            );
+        }
+
+        @Test
+        void refusesAssigningLoopsToVariables() {
+            assertGeneratesMessages(expectedMessages()
+                            .addRegex("Parse error: .*").atLeast(1),
+                    """
+                            a = while b do b--; end;
+                            """);
+        }
+    }
+}

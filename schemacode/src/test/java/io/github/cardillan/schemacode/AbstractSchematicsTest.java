@@ -1,12 +1,12 @@
 package io.github.cardillan.schemacode;
 
-import io.github.cardillan.mc.common.InputFiles;
-import io.github.cardillan.mc.common.SourcePosition;
-import io.github.cardillan.mc.messages.ExpectedMessages;
-import io.github.cardillan.mc.messages.MessageConsumer;
-import io.github.cardillan.mc.messages.MindcodeMessage;
-import io.github.cardillan.mc.messages.SourcePositionTranslator;
-import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mindcode.common.InputFiles;
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.messages.ExpectedMessages;
+import io.github.cardillan.mindcode.messages.MessageConsumer;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.messages.SourcePositionTranslator;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.schemacode.ast.AstDefinitions;
 import io.github.cardillan.schemacode.config.Configuration;
 import io.github.cardillan.schemacode.config.PositionArray;

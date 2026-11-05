@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.mindcode.common.SourcePosition;
 import io.github.cardillan.schemacode.mindustry.ProcessorConfiguration.Link;
 import io.github.cardillan.schemacode.schematics.SchematicElement;
 import io.github.cardillan.schemacode.schematics.SchematicsBuilder;

@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.SourcePosition;
-import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

@@ -1,15 +1,15 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.async.AsyncExecutor;
-import io.github.cardillan.mc.common.InputFile;
-import io.github.cardillan.mc.messages.MindcodeMessage;
-import io.github.cardillan.mc.messages.ToolMessage;
-import io.github.cardillan.mc.mindcode.compiler.MindcodeCompiler;
-import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
-import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorType;
-import io.github.cardillan.mc.profile.CompilerProfile;
-import io.github.cardillan.mc.profile.options.Target;
-import io.github.cardillan.mc.util.MutableInteger;
+import io.github.cardillan.mindcode.async.AsyncExecutor;
+import io.github.cardillan.mindcode.common.InputFile;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.messages.ToolMessage;
+import io.github.cardillan.mindcode.compiler.MindcodeCompiler;
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.logic.opcodes.ProcessorType;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
+import io.github.cardillan.mindcode.profile.options.Target;
+import io.github.cardillan.mindcode.util.MutableInteger;
 import io.github.cardillan.schemacode.ast.*;
 import io.github.cardillan.schemacode.config.Configuration;
 import io.github.cardillan.schemacode.config.EmptyConfiguration;

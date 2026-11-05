@@ -1,0 +1,557 @@
+package io.github.cardillan.mindcode.profile.options;
+
+import io.github.cardillan.mindcode.common.Globals;
+import io.github.cardillan.mindcode.compiler.optimization.Optimization;
+import io.github.cardillan.mindcode.compiler.optimization.OptimizationLevel;
+import io.github.cardillan.mindcode.emulator.ExecutionFlag;
+import io.github.cardillan.mindcode.logic.opcodes.ProcessorType;
+import io.github.cardillan.mindcode.logic.opcodes.ProcessorVersion;
+import io.github.cardillan.mindcode.profile.*;
+import io.github.cardillan.mindcode.util.EscapeClass;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+@NullMarked
+public class CompilerOptionFactory {
+    public static final int MAX_INSTRUCTIONS_CMDLINE = 100_000;
+    public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
+
+    public static final int DEFAULT_PASSES_CMDLINE = 50;
+    public static final int DEFAULT_PASSES_WEBAPP = 15;
+    public static final int MAX_PASSES_CMDLINE = 1000;
+    public static final int MAX_PASSES_WEBAPP = 50;
+
+    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 3;
+    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 2;
+    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 6;
+    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 4;
+
+    public static final int MAX_MLOG_INDENT = 8;
+
+    public static final int DEFAULT_STEP_LIMIT_CMDLINE = 10_000_000;
+    public static final int DEFAULT_STEP_LIMIT_WEBAPP = 1_000_000;
+    public static final int MAX_STEP_LIMIT_CMDLINE = 1_000_000_000;
+    public static final int MAX_STEP_LIMIT_WEBAPP = 100_000_000;
+
+    public static final Map<String, Enum<?>> DIRECTIVE_OPTION_MAP =
+            CompilerOptionFactory.createCompilerOptions(false).values().stream()
+                    .filter(value -> value.availability.isDirective())
+                    .collect(Collectors.toMap(CompilerOptionValue::getOptionName, CompilerOptionValue::getOption));
+
+    public static SequencedMap<Enum<?>, CompilerOptionValue<?>> createCompilerOptions(boolean webApp) {
+        List<CompilerOptionValue<?>> list = new ArrayList<>();
+
+        addInputOutputOptions(list, webApp);
+        addSchematicsOptions(list, webApp);
+        addEnvironmentOptions(list, webApp);
+        addMlogFormatOptions(list, webApp);
+        addCompilerOptions(list, webApp);
+        addRuntimeChecksOptions(list, webApp);
+        addOptimizationsOptions(list, webApp);
+        addOptimizationLevels(list, webApp);
+        addDebuggingOptions(list, webApp);
+        addEmulatorOptions(list, webApp);
+
+        return list.stream().collect(Collectors.toMap(CompilerOptionValue::getOption, e -> e,
+                (v1, v2) -> {throw new IllegalStateException("Conflicting compiler option " + v1.option);}, LinkedHashMap::new));
+    }
+
+    private static void addInputOutputOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.INPUT_OUTPUT;
+
+        list.add(new EnumCompilerOptionValue<>(InputOutputOptions.FILE_REFERENCES, "",
+                "specifies the format in which a reference to a location in a source file is output on console and into the log",
+                FileReferences.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.COMMAND_LINE, category,
+                FileReferences.PATH));
+    }
+
+    private static void addSchematicsOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.SCHEMATICS;
+
+        list.add(new StringCompilerOptionValue(SchematicOptions.ADD_TAG, "a",
+                "defines additional tag(s) to add to the schematic, plain text and symbolic icon names are supported",
+                "TAG",
+                OptionMultiplicity.ZERO_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.COMMAND_LINE, category,
+                List.of()));
+
+        list.add(new BooleanCompilerOptionValue(SchematicOptions.ALLOW_LINK_GAPS, "",
+                "gaps in numerical sequences of linked block names only produce a warning",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new BooleanCompilerOptionValue(SchematicOptions.ALLOW_UNSATISFIED_LINKS, "",
+                "linked blocks declared in Mindcode source code but not present in the schematic only produce a warning",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new TargetCompilerOptionValue(SchematicOptions.SCHEMATIC_TARGET, "",
+                "target processor version and type as specified in schematics definition",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.NONE, category,
+                new Target(ProcessorVersion.V8C, ProcessorType.MICRO_PROCESSOR)));
+    }
+
+    private static void addEnvironmentOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.ENVIRONMENT;
+
+        list.add(new TargetCompilerOptionValue(EnvironmentOptions.TARGET, "t",
+                "selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.MODULE,
+                OptionAvailability.UNIVERSAL, category,
+                new Target(ProcessorVersion.V8C, ProcessorType.S)));
+
+        list.add(new IntegerCompilerOptionValue(EnvironmentOptions.INSTRUCTION_LIMIT, "i",
+                "sets the maximal number of instructions for the speed optimizations",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, webApp ? MAX_INSTRUCTIONS_WEBAPP : MAX_INSTRUCTIONS_CMDLINE, 1000));
+
+        list.add(new EnumCompilerOptionValue<>(EnvironmentOptions.BUILTIN_EVALUATION, "",
+                "sets the level of compile-time evaluation of numeric builtin constants",
+                BuiltinEvaluation.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                BuiltinEvaluation.COMPATIBLE));
+
+        list.add(new BooleanCompilerOptionValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP, "",
+                "when active, Mindcode assumes assigning a 'null' to '@counter' is ignored by the processor " +
+                "and may produce code depending on this behavior",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new IntegerCompilerOptionValue(EnvironmentOptions.PROCESSOR_SIZE_LIMIT, "",
+                "sets the maximum supported size of the processor's configuration in the game (in bytes)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 1_000_000, Globals.MAX_PROCESSOR_CFG_SIZE - Globals.CFG_SIZE_SAFETY_MARGIN));
+
+        list.add(new BooleanCompilerOptionValue(EnvironmentOptions.ZERO_WAIT_YIELDS, "",
+                "when active, Mindcode assumes executing 'wait 0' yields the execution",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+    }
+
+    private static void addMlogFormatOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.MLOG_FORMAT;
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.SYMBOLIC_LABELS, "",
+                "generate symbolic labels for jump instructions where possible",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(MlogFormatOptions.MLOG_INDENT, "",
+                "the amount of indenting applied to logical blocks in the compiled mlog code",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, MAX_MLOG_INDENT, -1));
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.NO_ARGUMENT_PADDING, "",
+                "when set, mlog instructions emitted by the compiler are not padded with zeroes for unused arguments",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.FUNCTION_PREFIX, "",
+                "specifies the how the function prefix of local variables is generated (either a short common prefix " +
+                "for all functions, or a potentially long prefix derived from function name)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                "short", "long", false));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.AUTHOR, "",
+                "adds an author to the list of authors which is then output similarly to the compiler's signature",
+                "author",
+                OptionMultiplicity.ONCE_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of()).setAdditive());
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.SIGNATURE, "no-signature", "",
+                "prevents appending a signature '" + CompilerProfile.SIGNATURE_VERSION + "' at the end of the final code",
+                OptionMultiplicity.ZERO, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.COMMAND_LINE, category,
+                true).setConstValue(false));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.PROCESSOR_ID, "",
+                "sets the processor ID to be stored in the compiled code",
+                "processor_ID",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of("")));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.PROGRAM_NAME, "",
+                "sets the program name to be stored in the compiled code",
+                "program_name",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of("")));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.PROGRAM_VERSION, "",
+                "sets the program version to be stored in the compiled code",
+                "program_version",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of("")));
+
+        list.add(new EnumCompilerOptionValue<>(MlogFormatOptions.UNICODE_ESCAPES, "",
+                "encode all unprintable characters using unicode escapes (has no effects for target '8.2' or lower)",
+                EscapeClass.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                EscapeClass.NON_PRINTABLE));
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS, "",
+                "allow encoding zero characters into mlog string literals (WARNING: the resulting code " +
+                        "can't be edited as a text or copied/pasted to/from the clipboard!)",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.REFORMAT_MLOG, "",
+                "reformats the generated mlog code the same way in-game processors do (removes comments, labels and indents)",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+    }
+
+    private static void addCompilerOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.COMPILER;
+
+        list.add(new EnumCompilerOptionValue<>(CompilerOptions.SYNTAX, "y",
+                "specifies syntactic mode used to compile the source code",
+                SyntacticMode.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.MODULE,
+                OptionAvailability.UNIVERSAL, category,
+                SyntacticMode.RELAXED));
+
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.TARGET_GUARD, "",
+                "generates guard code at the beginning of the program ensuring the processor runs in the " +
+                "Mindustry version compatible with the 'target' and 'builtin-evaluation' options",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.STACK_DEPTH, "",
+                "number of stack frames to reserve for recursive functions on the stack",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 10000, 10));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.SETRATE, "",
+                "generates a 'setrate' instruction with the specified value in the initialization code," +
+                        " and sets the IPT value for the compiler to use",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 1000, 8));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.IPT, "",
+                "sets the IPT value for the compiler to use without generating the 'setrate' instruction",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 1000, 8));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.ARRAY_ITERATION_THRESHOLD, "",
+                "specifies the minimum size of an array for which iteration loops are preferred over expanded code",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 1000, 25));
+
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.ATOMIC_FULL_PROTECTION, "",
+                "when set to 'false', nonvolatile variables are not protected by atomic blocks",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.ATOMIC_MERGE_LEVEL, "",
+                "specifies the length limit (in ticks) of an atomic section created by merging shorter atomic sections",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, 5, 1));
+
+        list.add(new DoubleCompilerOptionValue(CompilerOptions.ATOMIC_SAFETY_MARGIN, "",
+                "number of ticks to add to the wait duration at the beginning of an atomic section",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, 4, 0));
+
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.EMULATE_STRICT_NOT_EQUAL, "",
+                "use the 'select' instruction to emulate jump with the !== (strict not equal) condition",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.ENFORCE_SIZE_LIMITS, "",
+                "generate compilation error when the instruction or size limits are exceeded",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false));
+
+        list.add(new EnumCompilerOptionValue<>(CompilerOptions.REMARKS, "r",
+                "controls remarks propagation to the compiled code: none (remarks are removed), " +
+                "comments (included as mlog comments), passive (included as 'print' but not not executed), or " +
+                "active (included as 'print' and printed)",
+                Remarks.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                Remarks.PASSIVE));
+
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.AUTO_PRINTFLUSH, "",
+                "automatically add a 'printflush message1' instruction at the end of the program if one is missing",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+    }
+
+    private static void addRuntimeChecksOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.RUNTIME_CHECKS;
+
+        list.add(new EnumCompilerOptionValue<>(RuntimeChecksOptions.ERROR_REPORTING, "",
+                "specifies the mechanism used by the compiler when generating runtime checks",
+                RuntimeErrorReporting.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                RuntimeErrorReporting.NONE));
+
+        list.add(new BooleanCompilerOptionValue(RuntimeChecksOptions.ERROR_FUNCTION, "",
+                "activates or deactivates the error() function (when set to 'false', error() function does nothing)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(RuntimeChecksOptions.BOUNDARY_CHECKS, "",
+                "activates or deactivates runtime checks to catch indexes being out of range when accessing arrays",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(RuntimeChecksOptions.STACK_OVERFLOW_CHECKS, "",
+                "activates or deactivates runtime checks to catch stack overflow",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+    }
+
+    private static void addOptimizationsOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.OPTIMIZATIONS;
+
+        list.add(new EnumCompilerOptionValue<>(OptimizationOptions.GOAL, "g",
+                "sets code generation goal: minimize code size, minimize execution speed, or no specific preference",
+                GenerationGoal.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                GenerationGoal.SPEED));
+
+        list.add(new DoubleCompilerOptionValue(OptimizationOptions.WEIGHT, "",
+                "alters the code weight by a given factor",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.DIRECTIVE, category,
+                1e-10, 1e10, 1.0));
+
+        list.add(new IntegerCompilerOptionValue(OptimizationOptions.PASSES, "e",
+                "sets the number of optimization passes to perform",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, webApp ? MAX_PASSES_WEBAPP : MAX_PASSES_CMDLINE,
+                webApp ? DEFAULT_PASSES_WEBAPP : DEFAULT_PASSES_CMDLINE));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.UNSAFE_CASE_OPTIMIZATION, "",
+                "omits range checking of case expressions without an else branch during optimization",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.UNSTABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH, "",
+                "sets the strength of case switching optimization: higher number means more case configurations " +
+                "are considered, potentially producing a more efficient code, at the cost of longer compilation time",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, webApp ? MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP : MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE,
+                webApp ? DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP : DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.MLOG_BLOCK_OPTIMIZATION, "",
+                "allows (limited) optimization of code inside mlog blocks",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_LOOKUP_ARRAYS, "",
+                "allows using the lookup mechanism for implementing internal arrays",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_SELECT_CASE, "",
+                "allows converting case statements to a sequence of 'select' instructions",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_SHORT_ARRAYS, "",
+                "allows using specialized implementation of short arrays (2-4 elements)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_TEXT_JUMP_TABLES, "",
+                "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
+                        "a single 'read' instruction to directly set the counter to the target address (target '8.0' or higher required)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_TEXT_TRANSLATIONS, "",
+                "allows using 'read' instruction to implement simple case expressions",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+    }
+
+    private static void addOptimizationLevels(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.OPTIMIZATION_LEVELS;
+        List<CompilerOptionValue<OptimizationLevel>> optList = new ArrayList<>();
+
+        for (Optimization optimization : Optimization.LIST) {
+            optList.add(new OptimizationOptionValue(optimization, optimization.getOptionName(), "",
+                    "sets the optimization level of " + optimization.getDescription(),
+                    OptimizationLevel.class,
+                    OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                    OptionAvailability.UNIVERSAL, category,
+                    OptimizationLevel.ADVANCED));
+        }
+
+        list.add(new OptimizationLevelCompilerValue(OptimizationOptions.OPTIMIZATION, "",
+                "sets global optimization level for all optimizers",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.DIRECTIVE, category,
+                optList));
+
+        list.add(new IntOptimizationLevelCompilerValue(OptimizationOptions.OPTIMIZATION_LEVEL, "",  "O",
+                "sets global optimization level for all optimizers",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.COMMAND_LINE, category,
+                optList));
+
+        list.addAll(optList);
+    }
+
+    private static void addDebuggingOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.DEBUGGING;
+
+        list.add(new EnumCompilerOptionValue<>(DebuggingOptions.SORT_VARIABLES, "",
+                "prepends the final code with instructions that ensure variables are created inside the processor " +
+                " in a well-defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
+                " Category ALL represents all remaining, not-yet processed variables. When --sort-variables is given without" +
+                " specifying any category, " + SortCategory.usefulCategories() + " are used.",
+                SortCategory.class,
+                OptionMultiplicity.ZERO_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                SortCategory.NONE).setValueProcessor(CompilerOptionFactory::normalizeSortVariables));
+
+        list.add(new IntegerCompilerOptionValue(DebuggingOptions.PARSE_TREE, "",
+                "sets the detail level of parse tree output into the log file, 0 = off",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, 2, 0));
+
+        list.add(new BooleanCompilerOptionValue(DebuggingOptions.DEBUG, "",
+                "activates or deactivates generation of debug code",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.UNSTABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(DebuggingOptions.DEBUG_MESSAGES, "d",
+                "sets the detail level of debug messages, 0 = off",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, 3, 0));
+
+        list.add(new BooleanCompilerOptionValue(DebuggingOptions.DEBUG_OUTPUT, "",
+                "activates debug output on stdout",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.DIRECTIVE, category,
+                false));
+
+        list.add(new BooleanCompilerOptionValue(DebuggingOptions.PRINT_CODE_SIZE, "",
+                "outputs final code size broken down by function",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new EnumCompilerOptionValue<>(DebuggingOptions.PRINT_UNRESOLVED, "u",
+                "activates output of the unresolved code (before virtual instructions resolution) of given type" +
+                " (instruction numbers are included in the output)",
+                FinalCodeOutput.class,
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                FinalCodeOutput.NONE).setConstValue(FinalCodeOutput.PLAIN));
+
+        list.add(new BooleanCompilerOptionValue(DebuggingOptions.PRINT_STACKTRACE, "stacktrace", "s",
+                "outputs a stack trace onto stderr when an unhandled exception occurs",
+                OptionMultiplicity.ZERO, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.COMMAND_LINE, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(DebuggingOptions.CASE_CONFIGURATION, "",
+                "sets a specific id of case configuration to perform",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.DIRECTIVE, category,
+                0, Integer.MAX_VALUE, 0));
+    }
+
+    private static void addEmulatorOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.EMULATOR;
+
+        list.add(new TargetCompilerOptionValue(EmulatorOptions.EMULATOR_TARGET, "",
+                "selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                new Target(ProcessorVersion.V7A, ProcessorType.S)));
+
+        list.add(new DoubleCompilerOptionValue(EmulatorOptions.EMULATOR_FPS, "",
+                "the fps used by the emulator",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 240, 60));
+
+        list.add(new BooleanCompilerOptionValue(EmulatorOptions.RUN, "",
+                "run the compiled code on an emulated processor",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(EmulatorOptions.RUN_STEPS, "",
+                "the maximum number of instruction executions to emulate, the execution stops when this limit is reached",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, webApp ? MAX_STEP_LIMIT_WEBAPP : MAX_STEP_LIMIT_CMDLINE,
+                webApp ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE));
+
+        list.add(new BooleanCompilerOptionValue(EmulatorOptions.OUTPUT_PROFILING, "",
+                "output the profiling data into the log file",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        for (ExecutionFlag flag : ExecutionFlag.LIST) {
+            list.add(new BooleanCompilerOptionValue(flag, "",
+                    flag.getDescription(),
+                    OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                    flag.isSettable() ? OptionAvailability.UNIVERSAL : OptionAvailability.NONE, category,
+                    flag.getDefaultValue()));
+        }
+    }
+
+    private static List<SortCategory> normalizeSortVariables(@Nullable List<SortCategory> sortVariables) {
+        if (sortVariables == null || sortVariables.isEmpty()) {
+            return SortCategory.getAllCategories();
+        } else {
+            return sortVariables;
+        }
+    }
+}

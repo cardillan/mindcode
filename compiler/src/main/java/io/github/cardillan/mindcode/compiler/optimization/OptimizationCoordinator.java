@@ -1,0 +1,417 @@
+package io.github.cardillan.mindcode.compiler.optimization;
+
+import io.github.cardillan.mindcode.compiler.CompilerMessageEmitter;
+import io.github.cardillan.mindcode.compiler.InstructionCounter;
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.compiler.StackParameters;
+import io.github.cardillan.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mindcode.compiler.astcontext.AstContextType;
+import io.github.cardillan.mindcode.compiler.astcontext.AstSubcontextType;
+import io.github.cardillan.mindcode.compiler.callgraph.CallGraph;
+import io.github.cardillan.mindcode.compiler.callgraph.MindcodeFunction;
+import io.github.cardillan.mindcode.compiler.generation.variables.ArrayStore;
+import io.github.cardillan.mindcode.compiler.generation.variables.OptimizerContext;
+import io.github.cardillan.mindcode.compiler.postprocess.VirtualInstructionResolver;
+import io.github.cardillan.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mindcode.logic.instructions.*;
+import io.github.cardillan.mindcode.messages.ERR;
+import io.github.cardillan.mindcode.messages.MessageConsumer;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.messages.WARN;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
+import io.github.cardillan.mindcode.profile.GenerationGoal;
+import io.github.cardillan.mindcode.util.TraceFile;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static io.github.cardillan.mindcode.compiler.optimization.OptimizationPhase.*;
+
+@NullMarked
+public class OptimizationCoordinator extends CompilerMessageEmitter {
+    public static final boolean TRACE = false;
+    public static final boolean DEBUG_PRINT = TRACE;
+    public static final boolean SYSTEM_OUT = false;
+
+    public static final int TRACING_RUN = -1;
+    public static final boolean IGNORE_UNINITIALIZED = TRACE;
+    public static final boolean IGNORE_UNKNOWN_LABELS = false;
+
+    private final List<LogicInstruction> program = new ArrayList<>();
+    private final CallGraph callGraph;
+    private final InstructionProcessor instructionProcessor;
+    private final AstContext rootAstContext;
+    private final OptimizerContext optimizerContext;
+    private final VirtualInstructionResolver virtualInstructionResolver;
+    private final boolean remoteLibrary;
+    private final boolean externalStack;
+    private final CompilerProfile globalProfile;
+    private DebugPrinter debugPrinter = new NullDebugPrinter();
+    private @Nullable OptimizationContext optimizationContext;
+
+    private int passes = 0;
+
+    public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile globalProfile,
+            MessageConsumer messageConsumer, OptimizerContext optimizerContext,
+            VirtualInstructionResolver virtualInstructionResolver, boolean remoteLibrary) {
+        super(messageConsumer);
+        this.callGraph = optimizerContext.callGraph();
+        this.instructionProcessor = instructionProcessor;
+        this.rootAstContext = optimizerContext.rootAstContext();
+        this.optimizerContext = optimizerContext;
+        this.globalProfile = globalProfile;
+        this.virtualInstructionResolver = virtualInstructionResolver;
+        this.remoteLibrary = remoteLibrary;
+        this.externalStack = optimizerContext.stackTracker().externalStack();
+    }
+
+    public static boolean isDebugOn() {
+        return TRACE || DEBUG_PRINT || IGNORE_UNINITIALIZED;
+    }
+
+    public void setDebugPrinter(DebugPrinter debugPrinter) {
+        this.debugPrinter = debugPrinter;
+    }
+
+    protected Map<Optimization, Optimizer> createOptimizers() {
+        assert optimizationContext != null;
+
+        Map<Optimization, Optimizer> result = new LinkedHashMap<>();
+        for (Optimization optimization : Optimization.LIST) {
+            OptimizationLevel level = globalProfile.getOptimizationLevel(optimization);
+            if (level != OptimizationLevel.NONE && optimization.isAvailable(optimizationContext)) {
+                Optimizer optimizer = optimization.getInstanceCreator().apply(optimizationContext);
+                optimizer.setDebugPrinter(debugPrinter);
+                optimizer.setLevel(level);
+                result.put(optimization, optimizer);
+            }
+        }
+
+        return result;
+    }
+
+    public CompilerProfile getGlobalProfile() {
+        return globalProfile;
+    }
+
+    private final List<MindcodeMessage> optimizationStatistics = new ArrayList<>();
+
+    public List<LogicInstruction> optimize(CallGraph callGraph, List<LogicInstruction> instructions, AstContext rootAstContext) {
+        program.addAll(instructions);
+        boolean passesExceeded;
+
+        try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
+            optimizationContext = new OptimizationContext(traceFile, messageConsumer, globalProfile, instructionProcessor,
+                    optimizerContext, program, callGraph, rootAstContext, remoteLibrary);
+
+            int count = codeSize();
+            optimizationContext.emitMessage("%6d instruction§ before optimizations.", count);
+
+            debugPrinter.registerIteration(null, "", List.copyOf(program));
+
+            Map<Optimization, Optimizer> optimizers = createOptimizers();
+
+            optimizePhase(INITIAL, optimizers, 0);
+
+            // Always two passes
+            optimizePhase(ITERATED, optimizers, ++passes);
+
+            boolean modified = true;
+
+            timedExecution:
+            {
+                // We reserve one pass for the phase after the expansion
+                while (modified && passes < globalProfile.getOptimizationPasses()) {
+                    if (globalProfile.timeQuotaExhausted()) {
+                        messageConsumer.accept(CompilerMessage.warn(WARN.TIME_QUOTA_EXCEEDED));
+                        break timedExecution;
+                    }
+                    modified = optimizePhase(ITERATED, optimizers, ++passes);
+                }
+
+                modified = virtualInstructionResolver.resolveVirtualInstructions(program);
+                if (modified) {
+                    debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
+                }
+                optimizationContext.setExpanded(modified);
+
+                while (modified && passes <= globalProfile.getOptimizationPasses()) {
+                    modified = optimizePhase(ITERATED, optimizers, ++passes);
+                }
+
+                passesExceeded = modified;
+
+                do {
+                    if (globalProfile.timeQuotaExhausted()) {
+                        messageConsumer.accept(CompilerMessage.warn(WARN.TIME_QUOTA_EXCEEDED));
+                        break timedExecution;
+                    }
+                    modified = optimizePhase(JUMPS, optimizers, ++passes);
+                } while (modified && passes <= globalProfile.getOptimizationPasses());
+
+                if (passesExceeded || modified) {
+                    messageConsumer.accept(CompilerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, globalProfile.getOptimizationPasses()));
+                }
+            }
+
+            optimizePhase(FINAL, optimizers, 0);
+
+            optimizers.values().forEach(Optimizer::generateFinalMessages);
+            int newCount = codeSize();
+            optimizationContext.emitMessage("%6d instruction§ after optimizations.", newCount);
+
+            optimizationContext.removeInactiveInstructions();
+            optimizationStatistics.forEach(messageConsumer);
+
+            optimizationContext.outputUninitializedVariables(messageConsumer);
+
+            return List.copyOf(program);
+        }
+    }
+
+    public int getPasses() {
+        return passes;
+    }
+
+    private boolean optimizePhase(OptimizationPhase phase, Map<Optimization, Optimizer> optimizers, int pass) {
+        assert optimizationContext != null;
+
+        boolean modified = false;
+        for (Optimization optimization : phase.optimizations) {
+            optimizationContext.rebuildIndexes();
+            if (phase.breaksContextStructure()) {
+                optimizationContext.removeInactiveInstructions();
+            }
+
+            Optimizer optimizer = optimizers.get(optimization);
+            if (optimizer != null) {
+                if (optimizer.optimize(phase, pass)) modified = true;
+            }
+        }
+
+        if (phase != ITERATED) {
+            return modified;
+        }
+
+        List<Optimization> disabledOptimizations = new ArrayList<>();
+
+        while (true) {
+            updateFunctionArrays();
+
+            int initialSize = codeSize();
+            int stackRequirement = externalStack ? 0 : computeStackRequirement();
+            int availableSpace = globalProfile.getInstructionLimit() - initialSize - stackRequirement;
+            int costLimit = Math.max(0, availableSpace);
+            int expandedCostLimit = 500 + costLimit;
+
+            optimizationContext.setSizeGoalForced(availableSpace < 0);
+            optimizationContext.prepare();
+            List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
+                    .filter(o -> !disabledOptimizations.contains(o))
+                    .map(optimizers::get)
+                    .filter(Objects::nonNull)
+                    .flatMap(o -> o.getPossibleOptimizations(expandedCostLimit).stream())
+                    .filter(this::acceptOptimization)
+                    .toList();
+            optimizationContext.finish();
+
+            if (possibleOptimizations.isEmpty()) {
+                break;
+            }
+
+            GenerationGoal goal = possibleOptimizations.stream().map(OptimizationAction::goal).min(Comparator.naturalOrder()).get();
+
+            Set<OptimizationAction> considered = Collections.newSetFromMap(new IdentityHashMap<>());
+            OptimizationAction selectedAction = selectAction(goal, possibleOptimizations, costLimit, considered);
+            if (selectedAction != null) {
+                optimizationContext.prepare();
+                optimizationContext.debugPrintProgram(String.format("%n*** Performing optimization %s ***%n", selectedAction), true);
+                OptimizationResult result = selectedAction.apply(costLimit);
+                optimizationContext.finish();
+
+                if (result == OptimizationResult.REALIZED) {
+                    Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
+                    if (selectedAction.runDataFlowOptimization() && optimizer != null) {
+                        optimizationContext.debugPrintProgram(String.format("%n*** Performing Data Flow optimization after %s ***%n", selectedAction), true);
+                        optimizationContext.prepare();
+                        optimizer.optimize(phase, pass);
+                        optimizationContext.finish();
+                    }
+                    modified = true;
+                } else {
+                    disabledOptimizations.add(selectedAction.optimization());
+                    error(ERR.INTERNAL_ERROR_OPTIMIZER_ACTION, selectedAction.optimization().getName(), selectedAction.optimization().getOptionName());
+                    throw new MindcodeInternalError("Error applying dynamic optimization: " + selectedAction);
+                }
+            }
+
+            int difference = codeSize() - initialSize;
+            optimizationStatistics.add(CompilerMessage.debug(
+                    "\nPass %d: %s optimization selection (cost limit %d):", pass, goal.toString().toLowerCase(), costLimit));
+            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
+
+            if (selectedAction == null) {
+                break;
+            }
+        }
+
+        return modified;
+    }
+
+    private void updateFunctionArrays() {
+        assert optimizationContext != null;
+        if (!optimizationContext.isExpanded()) {
+            @SuppressWarnings("NullableProblems")
+            Map<MindcodeFunction, Set<ArrayStore>> arrays = program.stream()
+                    .filter(ArrayAccessInstruction.class::isInstance)
+                    .map(ix -> ((ArrayAccessInstruction) ix).getArray().getArrayStore())
+                    .filter(a -> a.getFunction() != null)
+                    .collect(Collectors.groupingBy(ArrayStore::getFunction,
+                            Collectors.toCollection(() -> Collections.newSetFromMap(new IdentityHashMap<>()))));
+
+            arrays.forEach(MindcodeFunction::setArrays);
+        }
+    }
+
+    public @Nullable StackParameters computeStackParameters(MindcodeFunction function, List<LogicInstruction> instructions) {
+        program.clear();
+        program.addAll(instructions);
+        return computeStackParameters(function);
+    }
+
+    private int computeStackRequirement() {
+        int stackSize = callGraph.getFunctions().stream().filter(MindcodeFunction::isRecursive)
+                .map(this::computeStackParameters)
+                .filter(Objects::nonNull)
+                .mapToInt(StackParameters::totalSize).sum();
+
+        return stackSize > 0 && globalProfile.isSymbolicLabels() ? stackSize + 1 : stackSize;
+    }
+
+    private @Nullable StackParameters computeStackParameters(MindcodeFunction function) {
+        AstContext functionContext = rootAstContext.findContext(ctx -> ctx.function() == function &&
+                ctx.matches(AstContextType.FUNCTION_DEF, AstSubcontextType.BODY));
+        if (functionContext == null) return null;
+
+        List<LogicVariable> variables = program.stream()
+                .filter(ix -> ix.getAstContext().belongsTo(functionContext) && ix instanceof PushInstruction)
+                .map(ix -> ((PushInstruction) ix).getVariable())
+                .distinct()
+                .toList();
+        boolean fixedDepth = !isFullyRecursive(function);
+        int depth = fixedDepth ? 1 : function.getProfile().getStackDepth();
+        int frameSize = 2 * variables.size() + 3;
+        int returnOffset = variables.size() + 1;
+
+        int stackOverflowCheck = switch (function.getProfile().getErrorReporting()) {
+            case NONE -> 0;
+            case ASSERT, MINIMAL, SIMPLE -> 1;
+            case DESCRIBED -> 2;
+        };
+        int additionalSize = stackOverflowCheck + (function.getProfile().isSymbolicLabels() ? 2 : 0);
+
+        function.setMaxDepth(depth);
+        return new StackParameters(function, variables, depth, fixedDepth, frameSize, returnOffset, additionalSize);
+    }
+
+    private boolean isRecursiveCall(CallRecInstruction call) {
+        MindcodeFunction callee = Objects.requireNonNull(call.getAstContext().function());
+        MindcodeFunction caller = call.getAstContext().existingParent().function();
+        return caller != null && caller.isRecursiveCall(callee);
+    }
+
+    private boolean isFullyRecursive(MindcodeFunction function) {
+        return program.stream().anyMatch(ix -> ix instanceof CallRecInstruction call
+                && call.getAstContext().function() == function && isRecursiveCall(call));
+    }
+
+    private boolean acceptOptimization(OptimizationAction action) {
+        return switch (action.goal()) {
+            case SIZE    -> action.cost() < 0;
+            case NEUTRAL -> action.totalImprovement();
+            case SPEED   -> action.benefit() > 0;
+        };
+    }
+
+    /// Selects an optimization action, taking action groups into account.
+    private @Nullable OptimizationAction selectAction(GenerationGoal goal, List<OptimizationAction> possibleOptimizations,
+            int costLimit, Set<OptimizationAction> considered) {
+        return switch (goal) {
+            case SIZE -> selectActionForSize(possibleOptimizations);
+            case NEUTRAL -> selectActionNeutral(possibleOptimizations);
+            case SPEED -> selectActionForSpeed(possibleOptimizations, costLimit, considered);
+        };
+    }
+
+    private static final Comparator<OptimizationAction> SIZE_GOAL_COMPARATOR =
+            Comparator.comparingDouble(OptimizationAction::sizeEfficiency)
+                    .thenComparingDouble(OptimizationAction::benefit);
+
+    /// Selects an optimization action, taking action groups into account.
+    private @Nullable OptimizationAction selectActionForSize(List<OptimizationAction> possibleOptimizations) {
+        return possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.SIZE).max(SIZE_GOAL_COMPARATOR).orElse(null);
+    }
+
+    // We're maximizing the effect of the optimization: instructions saved times execution benefit.
+    private static final Comparator<OptimizationAction> NEUTRAL_GOAL_COMPARATOR =
+            Comparator.comparingDouble(OptimizationAction::neutralEfficiency);
+
+    /// Selects an optimization action, taking action groups into account.
+    private @Nullable OptimizationAction selectActionNeutral(List<OptimizationAction> possibleOptimizations) {
+        return possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.NEUTRAL).max(NEUTRAL_GOAL_COMPARATOR).orElse(null);
+    }
+
+    private static final Comparator<OptimizationAction> SPEED_GOAL_COMPARATOR =
+            Comparator.comparingDouble(OptimizationAction::speedEfficiency)
+                    .thenComparingDouble(OptimizationAction::benefit)
+                    .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed()).reversed();
+
+    /// Selects an optimization action, taking action groups into account.
+    private @Nullable OptimizationAction selectActionForSpeed(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
+        List<OptimizationAction> actions = possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.SPEED).sorted(SPEED_GOAL_COMPARATOR).toList();
+
+        // Last considered action cost per group
+        Map<String, Integer> actionCosts = new HashMap<>();
+        OptimizationAction candidate = null;
+
+        for (OptimizationAction action : actions) {
+            int effectiveLimit = costLimit + actionCosts.getOrDefault(action.getGroup(), 0);
+            if (action.cost() > effectiveLimit) continue;
+
+            if (action.getGroup() == null) {
+                return action;
+            } else if (candidate == null || candidate.getGroup().equals(action.getGroup())) {
+                if (candidate == null || action.benefit() > candidate.benefit()) {
+                    // The action in this group has a lower efficiency but greater benefit
+                    candidate = action;
+                }
+            }
+
+            costLimit = costLimit - action.cost() + actionCosts.getOrDefault(action.getGroup(), 0);
+            actionCosts.put(action.getGroup(), action.cost());
+            considered.add(action);
+        }
+        return candidate;
+    }
+
+    private int codeSize() {
+        return InstructionCounter.globalSize(program);
+    }
+
+    private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference,
+            Set<OptimizationAction> considered) {
+
+        if (opt == selected) {
+            optimizationStatistics.add(
+                    CompilerMessage.debug("  * %-60s size %+5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
+                            opt, opt.cost(), opt.benefit(), opt.efficiency(), difference));
+        } else {
+            optimizationStatistics.add(
+                    CompilerMessage.debug("  %s %-60s size %+5d, benefit %10.1f, efficiency %10.3f",
+                            opt.cost() > costLimit ? "!" : considered.contains(opt) ? "o" : " ",
+                            opt, opt.cost(), opt.benefit(), opt.efficiency()));
+        }
+    }
+}

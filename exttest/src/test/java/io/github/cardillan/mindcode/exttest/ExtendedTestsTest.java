@@ -1,7 +1,7 @@
 package io.github.cardillan.mindcode.exttest;
 
-import io.github.cardillan.mc.mindcode.compiler.optimization.Optimization;
-import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mindcode.compiler.optimization.Optimization;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;

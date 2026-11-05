@@ -1,14 +1,14 @@
 package io.github.cardillan.mindcode.toolapp;
 
-import io.github.cardillan.mc.common.PositionFormatter;
-import io.github.cardillan.mc.emulator.Emulator;
-import io.github.cardillan.mc.emulator.EmulatorMessageEmitter;
-import io.github.cardillan.mc.emulator.EmulatorSchematic;
-import io.github.cardillan.mc.emulator.mimex.BasicEmulator;
-import io.github.cardillan.mc.mindcode.compiler.ToolMessageEmitter;
-import io.github.cardillan.mc.profile.CompilerProfile;
-import io.github.cardillan.mc.profile.options.CompilerOptionValue;
-import io.github.cardillan.mc.profile.options.OptionCategory;
+import io.github.cardillan.mindcode.common.PositionFormatter;
+import io.github.cardillan.mindcode.emulator.Emulator;
+import io.github.cardillan.mindcode.emulator.EmulatorMessageEmitter;
+import io.github.cardillan.mindcode.emulator.EmulatorSchematic;
+import io.github.cardillan.mindcode.emulator.mimex.BasicEmulator;
+import io.github.cardillan.mindcode.compiler.ToolMessageEmitter;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
+import io.github.cardillan.mindcode.profile.options.CompilerOptionValue;
+import io.github.cardillan.mindcode.profile.options.OptionCategory;
 import io.github.cardillan.mindcode.toolapp.mlogwatcher.MlogWatcherClient;
 import io.github.cardillan.mindcode.toolapp.mlogwatcher.MlogWatcherCommand;
 import io.github.cardillan.schemacode.SchematicsMetadata;

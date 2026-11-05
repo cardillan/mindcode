@@ -1,8 +1,8 @@
 package io.github.cardillan.mindcode.toolapp;
 
-import io.github.cardillan.mc.common.PositionFormatter;
-import io.github.cardillan.mc.messages.ListMessageLogger;
-import io.github.cardillan.mc.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.common.PositionFormatter;
+import io.github.cardillan.mindcode.messages.ListMessageLogger;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.File;

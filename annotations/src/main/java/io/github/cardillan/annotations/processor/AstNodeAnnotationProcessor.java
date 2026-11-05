@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 @SupportedAnnotationTypes({"io.github.cardillan.annotations.AstNode", "io.github.cardillan.annotations.BaseClass"})
 @SupportedSourceVersion(SourceVersion.RELEASE_22)
 public class AstNodeAnnotationProcessor extends AbstractProcessor {
-    private static final String GENERATED_PACKAGE_NAME = "io.github.cardillan.mc.generated.ast";
-    private static final String GENERATED_PACKAGE_NAME_VISITORS = "io.github.cardillan.mc.generated.ast.visitors";
+    private static final String GENERATED_PACKAGE_NAME = "io.github.cardillan.mindcode.generated.ast";
+    private static final String GENERATED_PACKAGE_NAME_VISITORS = "io.github.cardillan.mindcode.generated.ast.visitors";
     private static final String NODE_BASE_CLASS = "AstMindcodeNode";
 
     private static final String VISITOR_ROOT_INTERFACE_NAME = "SingleAstNodeVisitor";

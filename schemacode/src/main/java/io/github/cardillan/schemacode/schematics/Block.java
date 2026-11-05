@@ -1,11 +1,11 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.common.SourcePosition;
-import io.github.cardillan.mc.emulator.mimex.LParser;
-import io.github.cardillan.mc.emulator.mimex.LStrings;
-import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
-import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
-import io.github.cardillan.mc.profile.options.Target;
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.emulator.mimex.LParser;
+import io.github.cardillan.mindcode.emulator.mimex.LStrings;
+import io.github.cardillan.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mindcode.profile.options.Target;
 import io.github.cardillan.schemacode.config.Configuration;
 import io.github.cardillan.schemacode.config.PositionArray;
 import io.github.cardillan.schemacode.mindustry.Direction;

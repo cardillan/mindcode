@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.InputFile;
-import io.github.cardillan.mc.common.SourcePosition;
+import io.github.cardillan.mindcode.common.InputFile;
+import io.github.cardillan.mindcode.common.SourcePosition;
 import io.github.cardillan.schemacode.schematics.SchematicsBuilder;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.jspecify.annotations.NullMarked;

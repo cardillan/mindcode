@@ -1,0 +1,62 @@
+package io.github.cardillan.mindcode.logic.arguments.arrays;
+
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.compiler.generation.variables.ValueStore;
+import io.github.cardillan.mindcode.logic.arguments.LogicValue;
+import io.github.cardillan.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
+import io.github.cardillan.mindcode.logic.instructions.SideEffects;
+import io.github.cardillan.mindcode.logic.instructions.WriteArrInstruction;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
+import java.util.function.BiFunction;
+
+@NullMarked
+public class WriteSharedArrayConstructor extends RegularSharedArrayConstructor {
+    private final WriteArrInstruction instruction;
+
+    public WriteSharedArrayConstructor(ArrayConstructorContext context, WriteArrInstruction instruction) {
+        super(context, instruction, "wind", "wret", "w");
+        this.instruction = instruction;
+    }
+
+    @Override
+    public boolean folded() {
+        return false;
+    }
+
+    @Override
+    public boolean canFold() {
+        return false;
+    }
+
+    @Override
+    public SideEffects createSideEffects() {
+        LogicVariable sharedProc = shared ? proc : null;
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? variables(arrayInd, sharedProc)
+                : variables(arrayElem, sharedProc);
+        return SideEffects.of(reads, List.of(), arrayElements());
+    }
+
+    @Override
+    public String getJumpTableId() {
+        return arrayStore.getName() + "-w";
+    }
+
+    @Override
+    protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> elementValueExtractor() {
+        throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
+    }
+
+    @Override
+    protected void prepareTableCall(LocalContextfulInstructionsCreator creator) {
+        if (shared) creator.createSet(proc, arrayStore.getProcessor());
+        creator.createSet(arrayElem, instruction.getValue());
+    }
+
+    @Override
+    protected void finishTableCall(LocalContextfulInstructionsCreator creator) {
+        // Do nothing
+    }
+}

@@ -1,0 +1,307 @@
+package io.github.cardillan.mindcode.compiler.optimization;
+
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.compiler.ast.nodes.AstFunctionCall;
+import io.github.cardillan.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mindcode.compiler.astcontext.AstContextType;
+import io.github.cardillan.mindcode.compiler.callgraph.MindcodeFunction;
+import io.github.cardillan.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import io.github.cardillan.mindcode.logic.arguments.LogicLabel;
+import io.github.cardillan.mindcode.logic.instructions.*;
+import io.github.cardillan.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import static io.github.cardillan.mindcode.compiler.astcontext.AstSubcontextType.*;
+
+/// Inlines functions
+@NullMarked
+class FunctionInliner extends BaseOptimizer {
+    private static final int LIMIT = Integer.MAX_VALUE;
+
+    private int invocations = 0;
+    private int count = 0;
+    private int optimizations = 0;
+
+    public FunctionInliner(OptimizationContext optimizationContext) {
+        super(Optimization.FUNCTION_INLINING, optimizationContext);
+    }
+
+    @Override
+    public void generateFinalMessages() {
+        iterations = invocations;
+        super.generateFinalMessages();
+        if (count > 0) {
+            emitMessage("%6d function call§ inlined by %s.", count, getName());
+        }
+    }
+
+    @Override
+    protected boolean optimizeProgram(OptimizationPhase phase) {
+        return false;
+    }
+
+    @Override
+    public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
+        invocations++;
+        List<OptimizationAction> actions = new ArrayList<>();
+        if (this.optimizations < LIMIT) {
+            actions.addAll(forEachContext(AstContextType.FUNCTION_DEF, BODY,
+                    context -> findPossibleInlining(context, costLimit)));
+            actions.addAll(forEachContext(c -> c.matches(OUT_OF_LINE_CALL, RECURSIVE_CALL),
+                    context -> findPossibleCallInlining(context, costLimit)));
+        }
+        return actions;
+    }
+
+
+    private double computeInliningBenefit(AstContext call) {
+        if (call.node() instanceof AstFunctionCall functionCall) {
+            int arguments = functionCall.getArguments().stream()
+                    .mapToInt(arg -> arg.hasExpression() ? arg.isInput() && arg.isOutput() ? 2 : 1 : 0).sum();
+
+            // We assume that the inlining will successfully remove only half of the arguments.
+            return call.totalWeight() * (3.0 + arguments / 2.0);
+        } else {
+            throw new MindcodeInternalError("Expected AstFunctionCall node, got " + call);
+        }
+    }
+
+    private @Nullable OptimizationAction findPossibleInlining(AstContext context, int costLimit) {
+        if (context.function() == null) {
+            // The function is declared but not used.
+            return null;
+        }
+        MindcodeFunction function = context.function();
+        if (function.isRecursive() || function.isInline() || function.cannotInline()) {
+            return null;
+        }
+
+        List<AstContext> calls = contexts(
+                c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
+
+        double benefit = calls.stream().mapToDouble(this::computeInliningBenefit).sum();
+
+        // Cost: body size minus one (return) times the number of calls minus body size (we'll remove the original)
+        LogicList body = stripReturnInstructions(contextInstructions(context));
+        if (body == null) {
+            return null;
+        }
+
+        int bodySize = body.realSize();
+        int cost = (bodySize - 1) * calls.size() - bodySize;
+
+        return cost <= costLimit ? new InlineFunctionAction(context, cost, benefit) : null;
+    }
+
+    private @Nullable LogicList stripReturnInstructions(@Nullable LogicList body) {
+        if (body == null || body.isEmpty()) {
+            return null;
+        }
+
+        int index = body.size() - 1;
+        while (index > 0 && (body.get(index) instanceof EndInstruction || body.get(index) instanceof EmptyInstruction)) {
+            index--;
+        }
+
+        if (index <= 0) {
+            return null;
+        } else if (!(body.get(index) instanceof ReturnInstruction) && !(body.get(index) instanceof ReturnRecInstruction)) {
+            throw new MindcodeInternalError("Unexpected function body structure.");
+        }
+
+        return body.subList(0, index);
+    }
+
+    private OptimizationResult inlineFunction(AstContext context, int costLimit) {
+        optimizations++;
+        MindcodeFunction function = Objects.requireNonNull(context.function());
+        if (function.isRecursive() || function.isInline()) {
+            return OptimizationResult.INVALID;
+        }
+
+        LogicList body = stripReturnInstructions(contextInstructions(context));
+        if (body == null) {
+            return OptimizationResult.INVALID;
+        }
+
+        List<AstContext> calls = contexts(
+                c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
+
+        List<LogicInstruction> callIxs = calls.stream()
+                .flatMap(call -> contextStream(call.parent())
+                        .filter(ix -> ix.getOpcode() == Opcode.CALL && ix.getAstContext() == call))
+                .toList();
+
+        if (calls.size() != callIxs.size()) {
+            return OptimizationResult.INVALID;
+        }
+
+        trace(() -> "Inlining function " + function.getName());
+
+        for (int i = 0; i < calls.size(); i++) {
+            AstContext call = calls.get(i);
+            LogicInstruction cix = callIxs.get(i);
+
+            assert call.parent() != null;
+            AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
+            int insertionPoint = firstInstructionIndex(call);
+            LogicList newBody = body.duplicateToContextForInlining(newContext, l -> true);
+            insertInstructions(insertionPoint, newBody);
+            // Remove original call instructions
+            removeMatchingInstructions(ix -> ix.belongsTo(call));
+            if (!LogicLabel.EMPTY.equals(cix.getHoistId())) {
+                removeMatchingInstructions(ix -> ix.getHoistId().equals(cix.getHoistId()));
+            }
+        }
+
+        // Remove the original function
+        removeMatchingInstructions(ix -> ix.belongsTo(context));
+
+        function.setInlined();
+        count += calls.size();
+
+        return OptimizationResult.REALIZED;
+    }
+
+    private class InlineFunctionAction extends AbstractOptimizationAction {
+        public InlineFunctionAction(AstContext astContext, int cost, double benefit) {
+            super(astContext, cost, benefit);
+        }
+
+        @Override
+        public OptimizationResult apply(int costLimit) {
+            return applyOptimization(() -> inlineFunction(astContext(), costLimit), toString());
+        }
+
+        @Override
+        public String toString() {
+            assert astContext.node() != null;
+            assert astContext.function() != null;
+            return "Inline function '" + astContext.function().getName() + "' defined at " + astContext.node().sourcePosition().formatForLog();
+        }
+    }
+
+
+    private boolean canInlineRecursive(AstContext call, MindcodeFunction function) {
+        if (!advanced(call) || !advanced(function)) return false;
+        if (optimizationContext.getStackTracker().externalStack()) return true;
+
+        MindcodeFunction enclosingFunction = call.existingParent().function();
+        return enclosingFunction != null && enclosingFunction.isRecursiveCall(function);
+    }
+
+    private @Nullable OptimizationAction findPossibleCallInlining(AstContext call, int costLimit) {
+        MindcodeFunction function = call.function();
+        MindcodeFunction from = call.existingParent().function();
+        if (function == null || function.isInline() || function.cannotInline()
+                || function.isRecursive() && !canInlineRecursive(call, function)
+                || call.existingParent().matchesRecursively(c -> c.function() == function)) {
+            return null;
+        }
+
+        double benefit = computeInliningBenefit(call);
+
+        // Need to find the function body
+        LogicList body = stripReturnInstructions(
+                contextInstructions(
+                        existingContext(
+                                c -> c.function() == call.function()
+                                     && c.matches(AstContextType.FUNCTION_DEF, BODY)
+                        )
+                )
+        );
+        if (body == null || body.stream().anyMatch(ix -> !ix.getAstContext().matches(AstContextType.CALL) && ix.getAstContext().function() == from)) {
+            return null;
+        }
+
+        int runtimeChecksRemoved = from == null || !from.isRecursiveCall(function)
+                ? body.stream()
+                    .filter(ix -> ix instanceof AssertBoundsInstruction abi
+                            && abi.getValue() == instructionProcessor.stackPointer()
+                            && ix.getAstContext().function() == function)
+                    .limit(1)
+                    .mapToInt(LogicInstruction::getRealSize)
+                    .sum()
+                : 0;
+
+        // Cost: body size minus one (return) times the number of calls minus body size (we'll remove the original)
+        int cost = body.realSize() - 1 - runtimeChecksRemoved;
+        return cost <= costLimit ? new InlineFunctionCallAction(call, cost, benefit, runtimeChecksRemoved > 0) : null;
+    }
+
+    private OptimizationResult inlineFunctionCall(AstContext call, boolean removeOverflowCheck) {
+        optimizations++;
+        Optional<LogicInstruction> cix = contextStream(call.parent())
+                .filter(ix -> ix.getAstContext() == call && (ix.getOpcode() == Opcode.CALL || ix.getOpcode() == Opcode.CALLREC)).findFirst();
+        MindcodeFunction function = call.existingFunction();
+        MindcodeFunction from = call.existingParent().function();
+        if (cix.isEmpty() || function.isInline() || call.existingParent().matchesRecursively(c -> c.function() == function)) {
+            return OptimizationResult.INVALID;
+        }
+
+        LogicList body = stripReturnInstructions(
+                contextInstructions(
+                        existingContext(c -> c.function() == call.function()
+                                        && c.matches(AstContextType.FUNCTION_DEF, BODY)
+                        )
+                )
+        );
+        if (body == null || body.stream().anyMatch(ix -> !ix.getAstContext().matches(AstContextType.CALL) && ix.getAstContext().function() == from)) {
+            return OptimizationResult.INVALID;
+        }
+
+        trace(() -> "Inlining call " + call + " of function " + function.getName() + " at " + call.sourcePosition());
+
+        CallRecInstruction callRecInstruction = (CallRecInstruction) optimizationContext.firstInstruction(
+                ix -> ix.getOpcode() == Opcode.CALLREC && ix.belongsTo(call));
+        LogicLabel callLabel = callRecInstruction == null ? null : callRecInstruction.getCallAddr();
+
+        AstContext newContext = Objects.requireNonNull(call.parent())
+                .createSubcontext(INLINE_CALL, 1.0);
+        int insertionPoint = firstInstructionIndex(call);
+        LogicList newBody = body.duplicateToContextForInlining(newContext, l -> !l.equals(callLabel));
+        if (removeOverflowCheck) {
+            newBody.removeIf(ix -> ix instanceof AssertBoundsInstruction abi
+                            && abi.getValue() == instructionProcessor.stackPointer()
+                            && ix.getAstContext().function() == function);
+        }
+        insertInstructions(insertionPoint, newBody);
+        // Remove original call instructions, including hoisted ones
+        removeMatchingInstructions(ix -> ix.belongsTo(call));
+        if (!LogicLabel.EMPTY.equals(cix.get().getHoistId())) {
+            removeMatchingInstructions(ix -> ix.getHoistId().equals(cix.get().getHoistId()));
+        }
+
+        count += 1;
+        return OptimizationResult.REALIZED;
+    }
+
+    private class InlineFunctionCallAction extends AbstractOptimizationAction {
+        private final boolean removeOverflowCheck;
+
+        public InlineFunctionCallAction(AstContext astContext, int cost, double benefit, boolean removeOverflowCheck) {
+            super(astContext, cost, benefit);
+            this.removeOverflowCheck = removeOverflowCheck;
+            debugOutput("Created action: " + this);
+        }
+
+        @Override
+        public OptimizationResult apply(int costLimit) {
+            debugOutput("Applying action: " + this + "\n\n");
+            return applyOptimization(() -> inlineFunctionCall(astContext(), removeOverflowCheck), toString());
+        }
+
+        @Override
+        public String toString() {
+            assert astContext.node() != null;
+            return "Inline function call at " + astContext.node().sourcePosition().formatForLog()
+                    + (isDebugOutput() ? "(ctx " + astContext.id + ")" : "");
+        }
+    }
+}

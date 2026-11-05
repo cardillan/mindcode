@@ -1,0 +1,745 @@
+package io.github.cardillan.mindcode.compiler.optimization;
+
+import io.github.cardillan.mindcode.logic.arguments.*;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
+import io.github.cardillan.mindcode.profile.GenerationGoal;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static io.github.cardillan.mindcode.logic.opcodes.Opcode.*;
+
+@NullMarked
+class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer> {
+
+    @Override
+    protected Class<ExpressionOptimizer> getTestedClass() {
+        return ExpressionOptimizer.class;
+    }
+
+    @Override
+    protected List<Optimization> getAllOptimizations() {
+        return List.of(Optimization.EXPRESSION_OPTIMIZATION);
+    }
+
+    @Nested
+    class LookupInstruction {
+        @Test
+        void optimizesLookup() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(LOOKUP, item, tmp0, P1)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, lead)
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class OpConstantOperand {
+
+        @Test
+        void optimizesMulBy0() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.MUL, tmp0, a, P0),
+                            createInstruction(OP, Operation.MUL, tmp1, P0, b)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, P0),
+                            createInstruction(SET, tmp1, P0)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesMulBy1() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.MUL, tmp0, a, P1),
+                            createInstruction(OP, Operation.MUL, tmp1, P1, b)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, a),
+                            createInstruction(SET, tmp1, b)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesDivBy1() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.DIV, tmp0, a, P1),
+                            createInstruction(OP, Operation.DIV, tmp1, P1, b)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, a),
+                            createInstruction(OP, Operation.DIV, tmp1, P1, b)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesAddOf0() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.ADD, tmp0, a, P0),
+                            createInstruction(OP, Operation.ADD, tmp1, P0, b)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, a),
+                            createInstruction(SET, tmp1, b)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesSubOf0() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.SUB, tmp0, a, P0),
+                            createInstruction(OP, Operation.SUB, tmp1, P0, b)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, a),
+                            createInstruction(OP, Operation.SUB, tmp1, P0, b)
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class OpIdenticalOperands {
+
+        @Test
+        void optimizesEqualitiesOnIdentity() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.EQUAL, tmp0, a, a),
+                            createInstruction(OP, Operation.LESS_THAN_EQ, tmp1, a, a),
+                            createInstruction(OP, Operation.GREATER_THAN_EQ, tmp2, a, a),
+                            createInstruction(OP, Operation.STRICT_EQUAL, tmp3, a, a)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, LogicBoolean.TRUE),
+                            createInstruction(SET, tmp1, LogicBoolean.TRUE),
+                            createInstruction(SET, tmp2, LogicBoolean.TRUE),
+                            createInstruction(SET, tmp3, LogicBoolean.TRUE)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesInequalitiesOnIdentity() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.NOT_EQUAL, tmp0, a, a),
+                            createInstruction(OP, Operation.LESS_THAN, tmp1, a, a),
+                            createInstruction(OP, Operation.GREATER_THAN, tmp2, a, a)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, LogicBoolean.FALSE),
+                            createInstruction(SET, tmp1, LogicBoolean.FALSE),
+                            createInstruction(SET, tmp2, LogicBoolean.FALSE)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesSubXorOnIdentity() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, Operation.SUB, tmp0, a, a),
+                            createInstruction(OP, Operation.BITWISE_XOR, tmp1, a, a)
+                    ),
+                    List.of(
+                            createInstruction(SET, tmp0, P0),
+                            createInstruction(SET, tmp1, P0)
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class OpBooleanOrSimplification {
+
+        @Test
+        void simplifiesChainedOr() {
+            assertCompilesTo("""
+                        noinit var a, b, c;
+                        print(a || b || c);
+                        """,
+                    createInstruction(OP, "or", tmp(0), ".a", ".b"),
+                    createInstruction(OP, "or", tmp(2), tmp(0), ".c"),
+                    createInstruction(OP, "notEqual", tmp(1), tmp(2), "false"),
+                    createInstruction(PRINT, tmp(1))
+            );
+        }
+
+        @Test
+        void normalizesVolatileVariables() {
+            assertCompilesTo("""
+                        noinit var a, b;
+                        volatile x = a || b;
+                        """,
+                    createInstruction(OP, "or", tmp(1), ".a", ".b"),
+                    createInstruction(OP, "notEqual", tmp(0), tmp(1), "false"),
+                    createInstruction(SET, ".x", tmp(0))
+            );
+        }
+
+        @Test
+        void simplifiesBooleanOperands() {
+            assertCompilesTo("""
+                        #set optimization = experimental;
+                        noinit var a, b, c;
+                        print(a && b || !c);
+                        """,
+                    createInstruction(OP, "land", tmp(0), ".a", ".b"),
+                    createInstruction(OP, "equal", tmp(1), ".c", "false"),
+                    createInstruction(OP, "or", tmp(2), tmp(0), tmp(1)),
+                    createInstruction(PRINT, tmp(2))
+            );
+        }
+
+        @Test
+        void simplifiesConditions() {
+            assertCompilesTo("""
+                        noinit var a, b, c;
+                        if a || b then
+                            print("Yes");
+                        end;
+                        """,
+                    createInstruction(OP, "or", tmp(0), ".a", ".b"),
+                    createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
+                    createInstruction(PRINT, q("Yes")),
+                    createInstruction(SET, tmp(1), q("Yes")),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(LABEL, label(1))
+            );
+        }
+    }
+
+    @Nested
+    class OpExpressionSimplifications {
+        @Test
+        void optimizesMulThenFloor1() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, mul, tmp0, value, K1000),
+                            createInstruction(OP, floor, result, tmp0)
+                    ),
+                    List.of(
+                            createInstruction(OP, idiv, result, value, K0001)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesMulThenFloor2() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, mul, tmp0, K1000, value),
+                            createInstruction(OP, floor, result, tmp0)
+                    ),
+                    List.of(
+                            createInstruction(OP, idiv, result, value, K0001)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesDivThenFloor() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, div, tmp0, value, K1000),
+                            createInstruction(OP, floor, result, tmp0)
+                    ),
+                    List.of(
+                            createInstruction(OP, idiv, result, value, K1000)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesNonConstantDivThenFloor() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, div, tmp0, value, divisor),
+                            createInstruction(OP, floor, result, tmp0)
+                    ),
+
+                    List.of(
+                            createInstruction(OP, idiv, result, value, divisor)
+                    )
+            );
+        }
+
+        @Test
+        void protectsNonTemporaryVariables() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(OP, div, foo, value, K1000),
+                            createInstruction(OP, floor, result, foo)
+                    ),
+
+                    List.of(
+                            createInstruction(OP, div, foo, value, K1000),
+                            createInstruction(OP, idiv, result, value, K1000)
+                    )
+            );
+        }
+
+        @Test
+        void ignoresVariablesWithMultipleUsage() {
+            assertDoesNotOptimize(
+                    createInstruction(OP, div, tmp0, value, K1000),
+                    createInstruction(OP, floor, result, tmp0),
+                    createInstruction(SET, another, tmp0)
+            );
+        }
+
+        @Test
+        void ignoresInstructionsInWrongOrder() {
+            assertDoesNotOptimize(
+                    createInstruction(OP, floor, result, tmp0),
+                    createInstruction(OP, div, tmp0, value, K1000)
+            );
+        }
+
+        @Test
+        void ignoresNonConstantMultiplicands() {
+            assertDoesNotOptimize(
+                    createInstruction(OP, mul, tmp0, value, divisor),
+                    createInstruction(OP, floor, result, tmp0)
+            );
+        }
+    }
+
+    @Nested
+    class PackColorInstruction {
+        @Test
+        void optimizesPackColor() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(PACKCOLOR, tmp0, P0_5, P0, P1, P1)
+                    ),
+                    List.of(
+                            createInstruction(SET, tmp0, LogicColor.create(EMPTY, "%7f00ff"))
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class SetInstruction {
+        @Test
+        void optimizesUselessSet() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SET, tmp0, tmp0),
+                            createInstruction(SET, a, a),
+                            createInstruction(SET, tmp1, tmp0)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp1, tmp0)
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class SelectInstruction {
+        @Test
+        void optimizesTrueCondition() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SELECT, var, Condition.EQUAL, P0, P0, c, d),
+                            createInstruction(SELECT, var, Condition.LESS_THAN, P0, P1, c, d)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, var, c),
+                            createInstruction(SET, var, c)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesFalseCondition() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SELECT, var, Condition.EQUAL, P0, P1, c, d),
+                            createInstruction(SELECT, var, Condition.GREATER_THAN, P0, P1, c, d)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, var, d),
+                            createInstruction(SET, var, d)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesSameArgumentsEqualCondition() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SELECT, var, Condition.EQUAL, a, a, c, d),
+                            createInstruction(SELECT, var, Condition.GREATER_THAN_EQ, a, a, c, d),
+                            createInstruction(SELECT, var, Condition.LESS_THAN_EQ, a, a, c, d),
+                            createInstruction(SELECT, var, Condition.STRICT_EQUAL, a, a, c, d)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, var, c),
+                            createInstruction(SET, var, c),
+                            createInstruction(SET, var, c),
+                            createInstruction(SET, var, c)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesSameArgumentsNotEqualCondition() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SELECT, var, Condition.NOT_EQUAL, a, a, c, d),
+                            createInstruction(SELECT, var, Condition.GREATER_THAN, a, a, c, d),
+                            createInstruction(SELECT, var, Condition.LESS_THAN, a, a, c, d)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, var, d),
+                            createInstruction(SET, var, d),
+                            createInstruction(SET, var, d)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesIdenticalTrueFalseValues() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SELECT, var, Condition.LESS_THAN, a, b, c, c)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, var, c)
+                    )
+            );
+        }
+
+        @Test
+        void doesNotOptimizeGeneralCase() {
+            assertDoesNotOptimize(
+                    createInstruction(SELECT, var, Condition.LESS_THAN, a, b, c, d)
+            );
+        }
+
+        @Test
+        void turnsSelectIntoOp() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SELECT, var, Condition.LESS_THAN_EQ, a, b, P0, P1),
+                            createInstruction(SELECT, var, Condition.LESS_THAN_EQ, a, b, P1, P0)
+                    ),
+
+                    List.of(
+                            createInstruction(OP, Condition.GREATER_THAN, var, a, b),
+                            createInstruction(OP, Condition.LESS_THAN_EQ, var, a, b)
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class SensorInstruction {
+        @Test
+        void optimizesThisXY() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SENSOR, tmp0, thiz, x),
+                            createInstruction(SENSOR, tmp1, thiz, y)
+                    ),
+
+                    List.of(
+                            createInstruction(SET, tmp0, thisx),
+                            createInstruction(SET, tmp1, thisy)
+                    )
+            );
+        }
+
+        @Test
+        void optimizesIdName() {
+            assertOptimizesTo(
+                    List.of(
+                            createInstruction(SENSOR, tmp0, lead, id),
+                            createInstruction(SENSOR, tmp1, oreCoal, name)
+                    ),
+                    List.of(
+                            createInstruction(SET, tmp0, P1),
+                            createInstruction(SET, tmp1, LogicString.createSimple("ore-coal"))
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class CompiledCode {
+        @Test
+        void optimizesArrayAccess() {
+            assertCompilesTo("""
+                        var a[10];
+                        a[0] = 1;
+                        a[1] = 2;
+                        a[2] = 3;
+                        print(a[0], a[1], a[2]);
+                        """,
+                    createInstruction(SET, ".a*0", "1"),
+                    createInstruction(SET, ".a*1", "2"),
+                    createInstruction(SET, ".a*2", "3"),
+                    createInstruction(PRINT, ".a*0"),
+                    createInstruction(PRINT, ".a*1"),
+                    createInstruction(PRINT, ".a*2")
+            );
+        }
+
+        @Test
+        void observesLocalOptions() {
+            assertCompilesTo("""
+                        param a = 0;
+                        print(0 / a);
+                        #setlocal expression-optimization = basic;
+                        print(0 / b);
+                        """,
+                    createInstruction(SET, "a", "0"),
+                    createInstruction(SET, tmp(0), "0"),
+                    createInstruction(PRINT, tmp(0)),
+                    createInstruction(OP, "div", tmp(1), "0", ":b"),
+                    createInstruction(PRINT, tmp(1))
+            );
+        }
+
+        @Test
+        void replacesFloorWithRound() {
+            assertCompilesTo("""
+                        #set data-flow-optimization = experimental;
+                        print(floor(@second + 0.5));
+                        """,
+                    createInstruction(OP, "round", tmp(1), "@second"),
+                    createInstruction(PRINT, tmp(1))
+            );
+        }
+    }
+
+    @Nested
+    class NonNegativeIntConversion extends AbstractOptimizerTest<ArrayOptimizer> {
+
+        @Override
+        protected @Nullable Class<ArrayOptimizer> getTestedClass() {
+            return ArrayOptimizer.class;
+        }
+
+        @Override
+        protected List<Optimization> getAllOptimizations() {
+            return Optimization.LIST;
+        }
+
+        @Override
+        protected CompilerProfile createCompilerProfile() {
+            return super.createCompilerProfile().setGoal(GenerationGoal.SIZE);
+        }
+
+        @Test
+        void handlesElseIfArray2() {
+            assertCompilesTo("""
+                            #set target = 7.0;
+
+                            var array[2];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "1", q("position 5:1: index out of bounds (0 to 1)")),
+                    createInstruction(JUMP, label(0), "greaterThanEq", "p", "1"),
+                    createInstruction(PRINT, ".array*0"),
+                    createInstruction(JUMP, "__start__", "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, ".array*1")
+            );
+        }
+
+        @Test
+        void handlesElseIfArray3() {
+            assertCompilesTo("""
+                            #set target = 7.0;
+                            #set array-optimization = basic;
+
+                            var array[3];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "2", q("position 6:1: index out of bounds (0 to 2)")),
+                    createInstruction(JUMP, label(0), "greaterThanEq", "p", "1"),
+                    createInstruction(SET, tmp(3), ".array*0"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(3), ".array*2"),
+                    createInstruction(JUMP, label(3), "greaterThanEq", "p", "2"),
+                    createInstruction(SET, tmp(3), ".array*1"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(PRINT, tmp(3))
+            );
+        }
+
+        @Test
+        void handlesSelectArray2() {
+            assertCompilesTo("""
+                            #set use-text-jump-tables = false;
+
+                            var array[2];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "1", q("position 5:1: index out of bounds (0 to 1)")),
+                    createInstruction(SELECT, tmp(3), "lessThan", "p", "1", ".array*0", ".array*1"),
+                    createInstruction(PRINT, tmp(3))
+            );
+        }
+
+        @Test
+        void handlesSelectArray3() {
+            assertCompilesTo("""
+                            #set use-lookup-arrays = false;
+                            #set use-text-jump-tables = false;
+
+                            var array[3];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "2", q("position 6:1: index out of bounds (0 to 2)")),
+                    createInstruction(SELECT, tmp(3), "lessThan", "p", "1", ".array*0", ".array*1"),
+                    createInstruction(SELECT, tmp(3), "lessThan", "p", "2", tmp(3), ".array*2"),
+                    createInstruction(PRINT, tmp(3))
+            );
+        }
+
+        @Test
+        void handlesSelectArray4() {
+            assertCompilesTo("""
+                            #set use-lookup-arrays = false;
+                            #set use-text-jump-tables = false;
+
+                            var array[4];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "3", q("position 6:1: index out of bounds (0 to 3)")),
+                    createInstruction(SELECT, tmp(4), "lessThan", "p", "1", ".array*0", ".array*1"),
+                    createInstruction(SELECT, tmp(5), "lessThan", "p", "3", ".array*2", ".array*3"),
+                    createInstruction(SELECT, tmp(3), "lessThan", "p", "2", tmp(4), tmp(5)),
+                    createInstruction(PRINT, tmp(3))
+            );
+        }
+
+        @Test
+        void handlesLookupArray() {
+            assertCompilesTo("""
+                            #set use-text-jump-tables = false;
+
+                            var array[6];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "5", q("position 5:1: index out of bounds (0 to 5)")),
+                    createInstruction(LOOKUP, "team", tmp(4), "p"),
+                    createInstruction(SENSOR, ".array*elem", tmp(4), "@name"),
+                    createInstruction(READ, tmp(3), "@this", ".array*elem"),
+                    createInstruction(PRINT, tmp(3))
+            );
+        }
+
+        @Test
+        void handlesCounterArray() {
+            assertCompilesTo("""
+                            #set target = 7;
+
+                            var array[6];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "5", q("position 5:1: index out of bounds (0 to 5)")),
+                    createInstruction(OP, "shl", tmp(4), "p", "1"),
+                    createInstruction(MULTIJUMP, label(1), tmp(4), "0"),
+                    createInstruction(MULTILABEL, label(1)),
+                    createInstruction(PRINT, ".array*0"),
+                    createInstruction(JUMP, "__start__", "always"),
+                    createInstruction(MULTILABEL, label(2)),
+                    createInstruction(PRINT, ".array*1"),
+                    createInstruction(JUMP, "__start__", "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(PRINT, ".array*2"),
+                    createInstruction(JUMP, "__start__", "always"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(PRINT, ".array*3"),
+                    createInstruction(JUMP, "__start__", "always"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(PRINT, ".array*4"),
+                    createInstruction(JUMP, "__start__", "always"),
+                    createInstruction(MULTILABEL, label(6)),
+                    createInstruction(PRINT, ".array*5")
+            );
+        }
+
+        @Test
+        void handlesJumpTableArray() {
+            assertCompilesTo("""
+                            #set use-lookup-arrays = false;
+
+                            var array[6];
+                            param p = 0.9999999;
+                            print(array[floor(p)]);
+                            """,
+                    createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "5", q("position 5:1: index out of bounds (0 to 5)")),
+                    createInstruction(MULTIJUMP, "p", "0", "0"),
+                    createInstruction(MULTILABEL, label(1)),
+                    createInstruction(SELECT, tmp(3), "lessThan", "p", "3", ".array*2", ".array*5"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(2)),
+                    createInstruction(SELECT, tmp(3), "lessThan", "p", "3", ".array*1", ".array*4"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(SELECT, tmp(3), "lessThan", "p", "3", ".array*0", ".array*3"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(3))
+            );
+        }
+    }
+}

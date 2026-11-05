@@ -1,9 +1,9 @@
 package io.github.cardillan.mindcode.exttest.cases;
 
-import io.github.cardillan.mc.common.InputFile;
-import io.github.cardillan.mc.emulator.Assertion;
-import io.github.cardillan.mc.messages.MindcodeMessage;
-import io.github.cardillan.mc.mindcode.compiler.MindcodeCompiler;
+import io.github.cardillan.mindcode.common.InputFile;
+import io.github.cardillan.mindcode.emulator.Assertion;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.compiler.MindcodeCompiler;
 import io.github.cardillan.mindcode.exttest.ErrorResult;
 import io.github.cardillan.mindcode.exttest.TestProgress;
 import org.jspecify.annotations.NullMarked;

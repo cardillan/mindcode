@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.messages.ExpectedMessages;
-import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mindcode.messages.ExpectedMessages;
+import io.github.cardillan.mindcode.logic.mimex.BlockType;
 import io.github.cardillan.schemacode.AbstractSchematicsTest;
 import io.github.cardillan.schemacode.SchematicsMetadata;
 import org.junit.jupiter.api.DynamicTest;

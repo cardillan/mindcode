@@ -1,0 +1,76 @@
+package io.github.cardillan.mindcode.logic.instructions;
+
+import io.github.cardillan.mindcode.compiler.astcontext.AstContext;
+import io.github.cardillan.mindcode.compiler.astcontext.AstContextType;
+import io.github.cardillan.mindcode.compiler.astcontext.AstSubcontextType;
+import io.github.cardillan.mindcode.logic.arguments.LogicArgument;
+import io.github.cardillan.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+@NullMarked
+public class LocalContextfulInstructionsCreator implements ContextfulInstructionCreator {
+    private final InstructionProcessor processor;
+    private final Consumer<LogicInstruction> consumer;
+    private AstContext astContext;
+    private boolean subcontextTypeSet = false;
+
+    public LocalContextfulInstructionsCreator(InstructionProcessor processor, AstContext astContext, Consumer<LogicInstruction> consumer) {
+        this.processor = processor;
+        this.astContext = astContext;
+        this.consumer = consumer;
+    }
+
+    public void pushContext(AstContextType contextType, AstSubcontextType subcontextType) {
+        assert astContext.node() != null;
+        astContext = astContext.createChild(astContext.node(), contextType, subcontextType);
+        subcontextTypeSet = false;
+    }
+
+    public void popContext() {
+        assert astContext.parent() != null;
+        astContext = astContext.parent();
+        subcontextTypeSet = true;
+    }
+
+    public void setSubcontextType(AstSubcontextType subcontextType, double multiplier) {
+        if (subcontextTypeSet) {
+            assert astContext.parent() != null;
+            astContext = astContext.parent();
+        }
+        astContext = astContext.createSubcontext(subcontextType, multiplier);
+        subcontextTypeSet = true;
+    }
+
+    public void clearSubcontextType() {
+        if (subcontextTypeSet) {
+            assert astContext.parent() != null;
+            astContext = astContext.parent();
+            subcontextTypeSet = false;
+        }
+    }
+
+    @Override
+    public InstructionProcessor getProcessor() {
+        return processor;
+    }
+
+    @Override
+    public AstContext getAstContext() {
+        return astContext;
+    }
+
+    @Override
+    public void accept(LogicInstruction instruction) {
+        consumer.accept(instruction.withContext(astContext));
+    }
+
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
+        LogicInstruction instruction = processor.createInstruction(astContext, opcode, arguments);
+        consumer.accept(instruction);
+        return instruction;
+    }
+}

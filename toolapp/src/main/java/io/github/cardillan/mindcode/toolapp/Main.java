@@ -1,7 +1,7 @@
 package io.github.cardillan.mindcode.toolapp;
 
-import io.github.cardillan.mc.Version;
-import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mindcode.Version;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.DefaultSettings;
 import net.sourceforge.argparse4j.impl.Arguments;

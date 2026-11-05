@@ -118,7 +118,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
+                [--use-select-case {true,false}] [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
@@ -307,6 +307,8 @@ Optimization options:
                          allows (limited) optimization of code inside mlog blocks
   --use-lookup-arrays {true,false}
                          allows using the lookup mechanism for implementing internal arrays
+  --use-select-case {true,false}
+                         allows converting case statements to a sequence of 'select' instructions
   --use-short-arrays {true,false}
                          allows using specialized implementation of short arrays (2-4 elements)
   --use-text-jump-tables {true,false}
@@ -618,7 +620,7 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
+                [--use-select-case {true,false}] [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
@@ -812,6 +814,8 @@ Optimization options:
                          allows (limited) optimization of code inside mlog blocks
   --use-lookup-arrays {true,false}
                          allows using the lookup mechanism for implementing internal arrays
+  --use-select-case {true,false}
+                         allows converting case statements to a sequence of 'select' instructions
   --use-short-arrays {true,false}
                          allows using specialized implementation of short arrays (2-4 elements)
   --use-text-jump-tables {true,false}

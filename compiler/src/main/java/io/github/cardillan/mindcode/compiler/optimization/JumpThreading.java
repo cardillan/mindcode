@@ -1,0 +1,175 @@
+package io.github.cardillan.mindcode.compiler.optimization;
+
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import io.github.cardillan.mindcode.logic.arguments.LogicArgument;
+import io.github.cardillan.mindcode.logic.arguments.LogicLabel;
+import io.github.cardillan.mindcode.logic.instructions.*;
+import io.github.cardillan.mindcode.logic.opcodes.ProcessorType;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@NullMarked
+class JumpThreading extends BaseOptimizer {
+    private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
+    boolean hasStartLabel;
+    int count = 0;
+    int callCount = 0;
+
+    public JumpThreading(OptimizationContext optimizationContext) {
+        super(Optimization.JUMP_THREADING, optimizationContext);
+    }
+
+    @Override
+    protected boolean optimizeProgram(OptimizationPhase phase) {
+        hasStartLabel = hasStartLabel();
+        LogicInstruction lastCall = null;
+        SetAddressInstruction setAddress = null;
+
+        try (LogicIterator it = createIterator()) {
+            if (!it.hasNext()) return false;
+
+            while (it.hasNext()) {
+                LogicInstruction instruction = it.next();
+                if (instruction instanceof JumpInstruction jump) {
+                    // Target of the jump
+                    JumpRedirection redirection = findJumpRedirection(jump);
+                    LogicInstruction target = labeledInstruction(redirection.target);
+                    boolean replaceAdvanced = jump.isUnconditional() && target != null && canMoveTarget(target);
+
+                    if (replaceAdvanced) {
+                        it.set(target.withContext(jump.getAstContext()));
+                        count++;
+                    } else {
+                        if (jump.isUnconditional() && setAddress != null) {
+                            replaceInstruction(setAddress, setAddress.withLabel(redirection.target));
+                            lastCall.setCallReturn(redirection.target);
+                            callCount++;
+                        }
+
+                        // Any jump needs to reset the setAddress
+                        setAddress = null;
+
+                        if (!redirection.target.equals(jump.getTarget())) {
+                            // Update the target of the original jump
+                            JumpInstruction updated = jump.withTarget(redirection.target);
+                            if (redirection.callReturn != null) {
+                                updated.setCallReturn(redirection.callReturn);
+                            }
+                            it.set(updated);
+                            count++;
+                        }
+                    }
+                } else if (advanced(instruction) && !getGlobalProfile().isSymbolicLabels()
+                           && instruction.getCallReturn() == LogicLabel.EMPTY
+                           && (instruction instanceof CallInstruction || instruction instanceof MultiCallInstruction)) {
+                    setAddress = (SetAddressInstruction) optimizationContext.firstInstruction(
+                            ix -> ix instanceof SetAddressInstruction && ix.getHoistId().equals(instruction.getHoistId()));
+                    lastCall = instruction;
+                } else if (instruction.isReal()) {
+                    // Anything, even label, breaks the threading
+                    setAddress = null;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean canMoveTarget(LogicInstruction target) {
+        return target instanceof ReturnInstruction
+                || !getGlobalProfile().isSymbolicLabels()
+                && (target instanceof MultiJumpInstruction || target instanceof MultiCallInstruction)
+                && !target.isFallThrough();
+    }
+
+    private boolean hasStartLabel() {
+        return instructionAt(0) instanceof LabelInstruction ix && ix.getLabel().equals(FIRST_LABEL);
+    }
+
+    private void createStartLabel() {
+        if (!hasStartLabel) {
+            insertInstruction(0, createLabel(optimizationContext.getRootContext(), FIRST_LABEL));
+            hasStartLabel = true;
+        }
+    }
+
+    @Override
+    public void generateFinalMessages() {
+        if (count > 0) {
+            emitMessage("%6d instruction§ updated by %s.", count, getName());
+        }
+        if (callCount > 0) {
+            emitMessage("%6d call§ threaded by %s.", callCount, getName());
+        }
+    }
+
+    // Determines the final target of a given jump
+    private JumpRedirection findJumpRedirection(JumpInstruction firstJump) {
+        JumpRedirection target = new JumpRedirection(firstJump.getTarget(), null);
+        Set<LogicLabel> labels = new HashSet<>();       // Cycle detection
+        labels.add(target.target);
+        while (true) {
+            JumpRedirection redirected = evaluateJumpRedirection(firstJump, target.target);
+            if (redirected == null || !labels.add(redirected.target)) {
+                return target;
+            }
+            // Do not redirect jumps to the start label further
+            if (redirected.target == FIRST_LABEL) {
+                return redirected;
+            }
+            target = redirected;
+        }
+    }
+
+    // Determines the jump redirection (one level only)
+    private @Nullable JumpRedirection evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
+        int target = firstInstructionIndex(in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
+        if (target < 0) {
+            throw new MindcodeInternalError("Could not find label " + label);
+        }
+
+        // Find next real instruction
+        // If null, it means the jump leads to a label which doesn't have a valid instruction after
+        LogicInstruction next = firstInstruction(target + 1, LogicInstruction::isReal);
+        if (next == null && getGlobalProfile().getTarget().type() == ProcessorType.NO_PROCESSOR) {
+            throw new MindcodeInternalError("Jump to the program end");
+        }
+
+        // Redirect compatible jumps
+        if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {
+            return new JumpRedirection(ix.getTarget(), null);
+        }
+
+        // Jump to call can get redirected
+        if (advanced(firstJump) && !getGlobalProfile().isSymbolicLabels() && next instanceof CallInstruction call) {
+            return new JumpRedirection(call.getCallAddr(), call.getMarker());
+        }
+
+        // Handle end instruction
+        if (getGlobalProfile().getTarget().type() != ProcessorType.NO_PROCESSOR && (next == null || (next instanceof EndInstruction))) {
+            createStartLabel();
+            return new JumpRedirection(FIRST_LABEL, null);
+        }
+
+        // Not an unconditional or compatible jump: no redirection
+        return null;
+    }
+
+    // Returns true if the next jump is semantically identical to the first jump
+    private boolean isIdenticalJump(JumpInstruction firstJump, JumpInstruction nextJump) {
+        List<LogicArgument> args1 = firstJump.getArgs();
+        List<LogicArgument> args2 = nextJump.getArgs();
+
+        // Compare everything but labels; exclude volatile variables
+        return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size()))
+                && args1.stream().noneMatch(LogicArgument::isVolatile);
+    }
+
+    private record JumpRedirection(LogicLabel target, @Nullable LogicLabel callReturn) {
+    }
+}

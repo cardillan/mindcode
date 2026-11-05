@@ -1,7 +1,7 @@
 package io.github.cardillan.mindcode.toolapp;
 
-import io.github.cardillan.mc.emulator.ExecutionFlag;
-import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mindcode.emulator.ExecutionFlag;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.toolapp.mlogwatcher.MlogWatcherCommand;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;

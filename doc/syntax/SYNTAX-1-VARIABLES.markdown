@@ -35,7 +35,7 @@ Producing integer numbers this large would be somewhat unusual in a typical Mind
 
 ## Linked blocks
 
-Linked blocks provide the most basic means for a processor to interact with blocks (i.e., buildings) in the Mindustry World. When a block is linked to a processor, a special, read-only variable which represents the linked block is created in the processor. The variable name is created using a base block name, i.e., the one-word representation of the block type name (e.g., `battery` for `@battery-large` or `cell` for `@memory-cell`) and a unique number starting from one.
+Linked blocks provide the most basic means for a processor to interact with blocks (i.e., buildings) in the Mindustry world. When a block is linked to a processor, a special, read-only variable which represents the linked block is created in the processor. The variable name is created using a base block name, i.e., the one-word representation of the block type name (e.g., `battery` for `@battery-large` or `cell` for `@memory-cell`) and a unique number starting from one.
 
 > [!IMPORTANT]
 > Logic processors silently ignore assignments to variables representing linked blocks. When a processor variable with the same name as a newly linked block exists in a processor when the block is linked, it is removed from the processor and replaced by a processor variable representing the linked block.
@@ -185,9 +185,9 @@ Mindustry provides special blocks that are capable of holding values independent
 
 All these blocks consist of individual elements, which are identified by an index.
 
-Values written to the elements of these blocks are available to all processors that have a reference to the block (with possible exception to team rules) and can be used to communicate between processors. Once written, the values remain in the memory block until the block is destroyed.
+Values written to the elements of these blocks are available to all processors that have a reference to the block (with possible exception due to team rules) and can be used to communicate between processors. Once written, the values remain in the memory block until the block is destroyed.
 
-Memory block elements can store any value that a processor variable can.
+The values supported by external memory depend on the Mindustry target version. In build 160, all values are supported. in earlier build, external memory supports numeric values only.
 
 # Mindcode variables
 
@@ -232,7 +232,7 @@ Variables are limited to a certain scope and are considered nonexistent outside 
 
 ## Implicit variables
 
-Implicit variables are only supported in the [`relaxed` syntax](SYNTAX-0-BASICS.markdown#syntax-modes) , and are created when first encountered in the code. The kind and scope of the variable is determined by the name of the variable:
+Implicit variables are variables that haven't been explicitly declared, and are only supported in the [`relaxed` syntax](SYNTAX-0-BASICS.markdown#syntax-modes). Implicit variables are created when first encountered in the code. The kind and scope of the variable is determined by the name of the variable:
 
 * **Linked variables**: if the variable name corresponds to a known linked block (e.g., `cell1` or `switch2`), it is automatically regarded as a linked variable referring to that block, and its scope is global. To use a linked block not recognized by Mindcode (e.g., a block provided by a mod extension), an explicit declaration is required.
 * **External variables**: if the variable name starts with the `$` prefix (e.g., `$Total`), the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global. See [Heap](#heap) for information on heap declaration.
@@ -315,7 +315,10 @@ Arrays consist of elements which can be accessed via an integer index. The index
 
 ## Implicit arrays
 
-All [memory blocks](#external-memory) can be accessed as an array in Mindcode. These arrays do not need to be declared and are used by referencing the memory block directly: `cell1[0] = 10;` writes the value of `10` to the first element of the `cell1` memory cell. It is possible to access an implicit array even when the reference to the memory block is stored in another variable: `memory = bank1; print(memory[8]);`. The array size depends on the memory block used, and Mindcode doesn't check bounds when accessing implicit arrays in any way.
+All [memory blocks](#external-memory) can be accessed as an array in Mindcode. These arrays do not need to be declared and are used by referencing the memory block directly: `cell1[0] = 10;` writes the value of `10` to the first element of the `cell1` memory cell. It is possible to access an implicit array even when the reference to the memory block is stored in another variable: `memory = bank1; print(memory[8]);`. The array size depends on the memory block used.
+
+> [!NOTE]
+> Implicit arrays representing memory blocks do not support compiler-generated boundary checks. The programmer is responsible for ensuring that all indexes are within the capacity of the referenced memory block.
 
 It is also possible to store statically or dynamically linked blocks in regular variables or to pass them to non-recursive functions:
 
@@ -338,13 +341,13 @@ end;
 External arrays are explicitly declared and are allocated on the [heap](#heap) similarly to other external variables. The array size is specified when declaring the array.
 Accessing an element outside the bounds of an external array may cause other elements or variables stored on the heap to be accessed instead.
 
-When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the metod specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
+When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the method specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
 
 ## Large arrays
 
 Large arrays are external arrays spanning several memory blocks. The size of large arrays is therefore not limited by the memory block size.
 
-Large arrays require a separate array of memory blocks to be maintained. Currently, this array is always implemented as an internal array. Access to individual array elements consists of finding the memory block containing the element and accessing the element within that block, adding a not insignificant overhead compared to a simple external array. Mindcode provides several optimizations to reduce this overhead as much as possible (the best results are achieved when text jump tables can be generated, i.e., with [absolute addressing](SYNTAX-5-OTHER.markdown#option-symbolic-labels)).
+Large arrays require a separate array of memory blocks to be maintained. Currently, this array is always implemented as an internal array. Access to individual array elements consists of finding the memory block containing the element and accessing the element within that block, adding a significant overhead compared to a simple external array. Mindcode provides several optimizations to reduce this overhead as much as possible (the best results are achieved when text jump tables can be generated, i.e., with [absolute addressing](SYNTAX-5-OTHER.markdown#option-symbolic-labels)).
 
 Using [list iteration loops](SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) to iterate over the entire array or a subarray provides significant performance improvements over using direct index-based access, and is the recommended way to access large arrays.
 
@@ -358,7 +361,7 @@ It is possible to determine the length of the array at runtime using the `length
 
 Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _`@counter` arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings, and so on.
 
-When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the metod specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
+When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the method specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
 
 Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, with a performance better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
 
@@ -408,7 +411,7 @@ Variables and arrays may be declared in the same declaration.
 
 Examples of variable declarations:
 
-```
+```mindcode
 var a, b[10], c = rand(10), d[3] = ("x", "y", "z");
 ```
 
@@ -419,7 +422,7 @@ Modifiers provide additional information about the variable. There are two kinds
 
 Some modifiers accept additional parameters, which are specified in parentheses after the modifier name. For example:
 
-```
+```mindcode
 external(cell1) var foo[4];
 ```
 
@@ -440,13 +443,13 @@ Storage modifiers except `const` are only allowed in the global scope. At most o
 
 Other modifiers are compatible only with specific storage modifiers. This table specifies which modifiers are compatible with which storage modifiers and scopes:
 
-| Modifier   | Compatible with                                 | Scope           |
-|------------|-------------------------------------------------|-----------------|
-| `cached`   | `external`, `remote`                            | global          |
-| `guarded`  | `linked` or none                                | global          |
-| `mlog`     | `debug`, export`, `remote` or none              | global          |
-| `noinit`   | `export`, `external`, `linked`, remote` or none | global or local |
-| `volatile` | `export`, `linked` or none                      | global          |
+| Modifier   | Compatible with                                  | Scope           |
+|------------|--------------------------------------------------|-----------------|
+| `cached`   | `external`, `remote`                             | global          |
+| `guarded`  | `linked` or none                                 | global          |
+| `mlog`     | `debug`, `export`, `remote` or none              | global          |
+| `noinit`   | `export`, `external`, `linked`, `remote` or none | global or local |
+| `volatile` | `export`, `linked` or none                       | global          |
 
 ### `cached` modifier
 
@@ -485,10 +488,11 @@ stop
 
 ### `mlog` modifier
 
-Can be used with the `export` or `remote` modifier, or without a storage modifier.
+Can be used with the `debug`, `export` or `remote` modifier, or without a storage modifier.
 
 By using the `mlog` modifier, it is possible to specify the mlog name of the variable or array elements, as stored in the current or remote processor. The name(s) must be specified as a list of constant string expressions enclosed in parentheses, or as a single specification of a lookup type (in case of arrays). Only names representing valid mlog variables according to the compilation target are allowed.
 
+The `mlog` modifier doesn't change where the variable is stored, only specifies the name or names under which the variable or array elements are repesented in mlog.  
 Specifying an mlog name is useful when accessing the variable indirectly, by the current or other processors.
 
 > [!NOTE]
@@ -496,7 +500,7 @@ Specifying an mlog name is useful when accessing the variable indirectly, by the
 
 When using the `mlog` modifier, only one variable or array can be specified per declaration (as multiple variables would share the same mlog name otherwise). Examples of declarations using the `mlog` modifier:
 
-```
+```mindcode
 mlog("foo") var foo;
 mlog("a", "b", "c") var bar[3];
 mlog(:liquid) var baz[10];
@@ -540,7 +544,7 @@ The `noinit` modifier can be used with `export`, `external` or `remote` modifier
 * To suppress the "uninitialized variable" warning for the declared variable. Uninitialized global variables retain the last value assigned to them in the last iteration of the program.
 * When used with the `cached` modifier, the initial value of the variable is not read from the external memory or remote processor at all; the variable only allows writing new values to the memory/processor.
 
-Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors in situations where the variable is also read locally, and is read more often then it is written to. The variable is read without any performance penalty, but all the writes are automatically propagated to the external memory.
+Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors in situations where the variable is also read locally, and is read more often than it is written to. The variable is read without any performance penalty, but all the writes are automatically propagated to the external memory.
 
 When used with the `linked` modifier, the `noinit` modifier suppresses the "unsatisfied link" error or warning. This message is generated when no link specified in the schematic definition file matches the link name (either the literal or the symbolic one). This situation usually means that a block expected by the code is missing from the schematic. If the linked block is intentionally not included in the schematic (for example, to be provided by a player after the schematic is built in the game), use this modifier to suppress the message.
 
@@ -548,9 +552,22 @@ When used with the `linked` modifier, the `noinit` modifier suppresses the "unsa
 
 Can be used with the `export` modifier, `linked` modifier, or without a storage modifier. Variables declared `export` are automatically volatile, so this modifier has no effect on `export` variables, but can be used for better clarity. The only difference between `export` and `volatile` is that `volatile` variables aren't imported to modules which require the current module.
 
-The compiler assumes that volatile variables or array can be changed externally (for example, by other processors, or via the `sync` instruction) or indirectly (via the `read` or `write` using `@this` as the processor) and handles them accordingly. A volatile variable is guaranteed to exist in the processor (and can be accessed remotely or indirectly), even if it is not directly accessed by an mlog instruction.
+The compiler assumes that volatile variables or arrays can be changed externally (for example, by other processors, or via the `sync` instruction) or indirectly (via the `read` or `write` using `@this` as the processor) and handles them accordingly. A volatile variable is guaranteed to exist in the processor (and can be accessed remotely or indirectly), even if it is not directly accessed by an mlog instruction.
 
 # Types of variables
+
+The basic types of Mindcode variables are summarized in the following table:
+
+| Type              | Storage               | Typical purpose                                  |
+|-------------------|-----------------------|--------------------------------------------------|
+| Regular           | Current processor     | Ordinary program variables                       |
+| Constant          | Compile time only     | Values substituted directly into code            |
+| Debug             | Current processor     | Inspecting values while debugging                |
+| Linked            | Existing linked block | Accessing a block connected to the processor     |
+| External          | Memory cell or bank   | Persistent or shared storage                     |
+| Exported          | Current processor     | Making variables available to importing modules  |
+| Remote            | Another processor     | Accessing variables stored by another processor  |
+| Program parameter | Current processor     | Allowing users to modify values in compiled mlog |
 
 ## Regular variables
 
@@ -562,10 +579,10 @@ When declaring regular variables, these additional modifiers can be used:
 * [`noinit`](#noinit-modifier)
 * [`volatile`](#volatile-modifier)
 
-Example
+Example:
 
 ```mindcode
-noinit volatile var a;      // Uninitalized volatile global variable
+noinit volatile var a;      // Uninitialized volatile global variable
 var b;                      // "Normal" global variable
 
 begin
@@ -1452,7 +1469,7 @@ Debug variables are meant to help with debugging your code. They only exist in t
 
 It is only possible to write values to debug variables, which can then be inspected on the **Vars** screen. Using a value of a `debug` variable in any other way is not possible in Mindcode — for example, the following code doesn't compile (regardless of the value of the `debug` option):
 
-```
+```mindcode-invalid
 debug foo;
 foo = 10;       // Okay
 print(foo);     // Compile error
@@ -1475,7 +1492,7 @@ print @time
 
 Compiled with `debug = true`:
 
-```
+```mlog
 set *tmp0 @time
 set .time *tmp0
 print *tmp0
@@ -1536,7 +1553,7 @@ linked(@memory-cell) memory = cell4;    // Default literal link name
 linked onOff = switch2;                 // Reserves literal link name 'switch2'
 
 // Here we're using literal link names assinged by the compiler to 'up' and 'down'.
-// This is only posible in relaxed syntax mode and is strongly discouraged.
+// This is only possible in relaxed syntax mode and is strongly discouraged.
 switch3.enabled = false;
 switch4.enabled = false;
 ```
@@ -1616,14 +1633,14 @@ When no storage clause is specified, the declared variables are placed in the he
 
 A [large array](#large-arrays) may be created when specifying multiple memory blocks in the storage clause. Each large array must start at an empty cell/bank, so the total space required might not be equal to a simple sum of array sizes:
 
-```
+```mindcode-invalid
 // Error: not enough capacity
 external(cell1 .. cell3) var a[80], b[80];
 ```
 
 It is, however, possible to mix large and simple arrays in a suitable order in the same declaration:
 
-```
+```mindcode
 external(cell1 .. cell4) var a[80], c[40], b[80], d[40];
 ```
 
@@ -1652,7 +1669,7 @@ allocate heap in cell4[32 ... 64];
 $dx = 1;
 $dy = 1;
 
-// Explicity declared varaibles
+// Explicitly declared variables
 cached external a, b = 10;
 noinit cached external(bank1) c;
 external(bank1[256 ... 512]) d[256];
@@ -1697,7 +1714,7 @@ All exported variables are implicitly `volatile`, so this modifier has no effect
 Example:
 
 ```mindcode
-// Exported variables, a unitialized, b initialized
+// Exported variables: a is uninitialized, b initialized
 export a, b = 10;
 
 // Exported arrays: initialized and uninitialized
@@ -1738,7 +1755,7 @@ Using the `mlog` modifier allows specifying the mlog name of the remote variable
 * The remote variable was itself created by Mindcode using the `mlog` modifier. The same mlog name must be specified in the remote variable declaration.
 
 > [!IMPORTANT]
-> Mindcode variables to be accessed remotely from different processor must be declared as `volatile` variables.
+> Mindcode variables which are not declared `export` and are nevertheless accessed remotely from different processor must be declared as `volatile`.
 
 ## Program parameters
 
@@ -1859,7 +1876,7 @@ Implicit and explicit variable names used in source code are translated to mlog 
 * temporary variables: `*tmpX` (`*tmp` + counter)
 * function return address/value: `:fnX*retaddr`/`:fnX*retval`
 * stack pointer (external stack): `*sp`
-* stack frame pointer (internal stack, per function): `:fnX*sfp`/`:fnX*sfp`
+* stack frame pointer (internal stack, per function): `:fnX*sfp`
 * stack frame transfer variable (internal stack): `:fnX:variable*s0`
 * stack frame variable (internal stack): `:fnX:variable*s` + stack frame index (starting at 1)
 * remote function parameters: `:function:parameter` (using actual function and parameter name)

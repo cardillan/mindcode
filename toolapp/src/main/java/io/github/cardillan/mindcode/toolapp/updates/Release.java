@@ -2,7 +2,7 @@ package io.github.cardillan.mindcode.toolapp.updates;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.github.cardillan.mc.Version;
+import io.github.cardillan.mindcode.Version;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.mindustry;
 
-import io.github.cardillan.mc.mindcode.logic.mimex.UnitCommand;
+import io.github.cardillan.mindcode.logic.mimex.UnitCommand;
 import io.github.cardillan.schemacode.SchematicsMetadata;
 import io.github.cardillan.schemacode.config.Configuration;
 

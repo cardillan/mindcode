@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.SourceElement;
+import io.github.cardillan.mindcode.common.SourceElement;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

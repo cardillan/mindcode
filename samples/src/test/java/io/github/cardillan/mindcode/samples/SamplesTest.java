@@ -1,11 +1,11 @@
 package io.github.cardillan.mindcode.samples;
 
-import io.github.cardillan.mc.common.InputFiles;
-import io.github.cardillan.mc.messages.MindcodeMessage;
-import io.github.cardillan.mc.mindcode.compiler.MindcodeCompiler;
-import io.github.cardillan.mc.mindcode.compiler.optimization.OptimizationLevel;
-import io.github.cardillan.mc.profile.CompilerProfile;
-import io.github.cardillan.mc.profile.SyntacticMode;
+import io.github.cardillan.mindcode.common.InputFiles;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.compiler.MindcodeCompiler;
+import io.github.cardillan.mindcode.compiler.optimization.OptimizationLevel;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
+import io.github.cardillan.mindcode.profile.SyntacticMode;
 import io.github.cardillan.schemacode.SchemacodeCompiler;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;

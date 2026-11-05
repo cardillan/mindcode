@@ -1,10 +1,10 @@
 package io.github.cardillan.mindcode.exttest;
 
 import com.amihaiemil.eoyaml.*;
-import io.github.cardillan.mc.common.InputFiles;
-import io.github.cardillan.mc.profile.options.CompilerOptionFactory;
-import io.github.cardillan.mc.profile.options.CompilerOptionValue;
-import io.github.cardillan.mc.profile.options.EmulatorOptions;
+import io.github.cardillan.mindcode.common.InputFiles;
+import io.github.cardillan.mindcode.profile.options.CompilerOptionFactory;
+import io.github.cardillan.mindcode.profile.options.CompilerOptionValue;
+import io.github.cardillan.mindcode.profile.options.EmulatorOptions;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

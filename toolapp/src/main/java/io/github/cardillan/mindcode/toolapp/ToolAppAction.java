@@ -1,7 +1,7 @@
 package io.github.cardillan.mindcode.toolapp;
 
-import io.github.cardillan.mc.async.AsyncExecutor;
-import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mindcode.async.AsyncExecutor;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.toolapp.updates.UpdateChecker;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.Namespace;

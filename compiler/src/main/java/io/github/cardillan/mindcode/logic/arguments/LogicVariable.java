@@ -1,0 +1,616 @@
+package io.github.cardillan.mindcode.logic.arguments;
+
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.compiler.ContextFactory;
+import io.github.cardillan.mindcode.compiler.PositionalMessage;
+import io.github.cardillan.mindcode.compiler.ast.nodes.AstFunctionParameter;
+import io.github.cardillan.mindcode.compiler.ast.nodes.AstIdentifier;
+import io.github.cardillan.mindcode.compiler.callgraph.MindcodeFunction;
+import io.github.cardillan.mindcode.compiler.generation.variables.FunctionParameter;
+import io.github.cardillan.mindcode.compiler.generation.variables.NameCreator;
+import io.github.cardillan.mindcode.compiler.generation.variables.ValueStore;
+import io.github.cardillan.mindcode.logic.instructions.ContextfulInstructionCreator;
+import io.github.cardillan.mindcode.logic.instructions.InstructionProcessor;
+import io.github.cardillan.mindcode.messages.ERR;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import static io.github.cardillan.mindcode.common.SourcePosition.EMPTY;
+import static io.github.cardillan.mindcode.logic.arguments.ArgumentType.*;
+import static io.github.cardillan.mindcode.logic.arguments.LogicVariable.Flags.*;
+
+@NullMarked
+public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress, FunctionParameter {
+    // Looks like a variable but translates to 0 in mlog.
+    private static final LogicVariable UNUSED_VARIABLE = new LogicVariable(EMPTY,
+            PRESERVED, ValueMutability.IMMUTABLE, "0", "0", null);
+
+    // This variable never makes it into a compiled file - it is only used to recover from compiler errors
+    // When errors happen, the code is not given away. The name can be hard-coded
+    public static final LogicVariable INVALID = LogicVariable.preserved("*invalid");
+
+    public static final String RETURN_VALUE_NAME = "*retval";
+    public static final String RETURN_ADDRESS_NAME = "*retaddr";
+    public static final String STACK_FRAME_POINTER = "*sfp";
+    public static final String ARRAY_OFFSET = "*arroffset";
+    public static final String FUNCTION_FINISHED_NAME = "*finished";
+    public static final String REMOTE_WAIT_ADDRESS_NAME = "*waitaddr";
+    public static final String REMOTE_WAIT_NAME = "*remotewait";
+    public static final String REMOTE_CALLER_NAME = "*caller";
+    public static final String PROGRAM_ID_NAME = "*id";
+
+    protected final SourcePosition sourcePosition;
+    protected final String functionPrefix;
+    protected final String name;
+    protected final String fullName;
+    protected final String mlog;
+    protected final @Nullable String blockType;
+    protected final boolean isVolatile;
+    protected final boolean noinit;
+    protected final boolean input;
+    protected final boolean output;
+    protected final boolean constant;
+    protected final boolean reference;
+    protected final boolean optional;
+    protected final boolean preserved;
+
+    // Copy constructor
+    private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability,
+            String functionPrefix, String name, String fullName, String mlog, boolean isVolatile, boolean noinit,
+            boolean input, boolean output, boolean constant, boolean reference, boolean optional, boolean preserved) {
+        super(argumentType, mutability);
+        this.sourcePosition = sourcePosition;
+        this.functionPrefix = functionPrefix;
+        this.name = name;
+        this.fullName = fullName;
+        this.mlog = mlog;
+        this.blockType = null;
+        this.isVolatile = isVolatile;
+        this.noinit = noinit;
+        this.input = input;
+        this.output = output;
+        this.constant = constant;
+        this.reference = reference;
+        this.optional = optional;
+        this.preserved = preserved;
+    }
+
+    // For block/parameter
+    protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability,
+            String name, String mlog, @Nullable String blockType) {
+        super(argumentType, mutability);
+        this.sourcePosition = sourcePosition;
+        this.functionPrefix = "";
+        this.name = Objects.requireNonNull(name);
+        this.mlog = Objects.requireNonNull(mlog);
+        this.fullName = name;
+        this.blockType = blockType;
+        this.isVolatile = false;
+        this.noinit = false;
+        this.input = false;
+        this.output = false;
+        this.constant = false;
+        this.reference = false;
+        this.optional = false;
+        this.preserved = false;
+    }
+
+    // For built-in
+    protected LogicVariable(SourcePosition sourcePosition, ValueMutability mutability, String name) {
+        super(BUILT_IN, mutability);
+        this.sourcePosition = sourcePosition;
+        this.functionPrefix = "";
+        this.name = Objects.requireNonNull(name);
+        this.mlog = Objects.requireNonNull(name);
+        this.fullName = name;
+        this.blockType = null;
+        this.isVolatile = mutability == ValueMutability.VOLATILE;
+        this.noinit = true;
+        this.input = false;
+        this.output = false;
+        this.constant = mutability == ValueMutability.CONSTANT;
+        this.reference = false;
+        this.optional = false;
+        this.preserved = false;
+    }
+
+    // Global/main
+    protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog, FlagSet flags) {
+        super(argumentType, flags.contains(Flags.fVolatile) ? ValueMutability.VOLATILE : ValueMutability.MUTABLE);
+        this.sourcePosition = sourcePosition;
+        this.functionPrefix = "";
+        this.name = Objects.requireNonNull(name);
+        this.mlog = mlog;
+        this.fullName = name;
+        this.blockType = null;
+        this.isVolatile = flags.contains(Flags.fVolatile);
+        this.noinit = flags.contains(Flags.fNoInit);
+        this.input = flags.contains(Flags.fInput);
+        this.output = flags.contains(Flags.fOutput);
+        this.constant = flags.contains(Flags.fConstant);
+        this.reference = flags.contains(Flags.fReference);
+        this.optional = flags.contains(Flags.fOptional);
+        this.preserved = flags.contains(Flags.fPreserved);
+    }
+
+    // Local/function parameter
+    private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String functionName,
+            String functionPrefix, String name, String mlog, FlagSet flags) {
+        super(argumentType, ValueMutability.MUTABLE);
+        this.sourcePosition = sourcePosition;
+        this.functionPrefix = Objects.requireNonNull(functionPrefix);
+        if (functionPrefix.isEmpty()) {
+            throw new IllegalArgumentException("functionPrefix must not be empty");
+        }
+        if (Objects.requireNonNull(functionName).isEmpty()) {
+            throw new IllegalStateException("Empty function name.");
+        }
+        this.name = Objects.requireNonNull(name);
+        this.fullName = functionName + "." + name;
+        this.mlog = mlog;
+        this.blockType = null;
+        this.isVolatile = flags.contains(Flags.fVolatile);
+        this.noinit = flags.contains(Flags.fNoInit);
+        this.input = flags.contains(Flags.fInput);
+        this.output = flags.contains(Flags.fOutput);
+        this.constant = flags.contains(Flags.fConstant);
+        this.reference = flags.contains(Flags.fReference);
+        this.optional = flags.contains(Flags.fOptional);
+        this.preserved = flags.contains(Flags.fPreserved);
+    }
+
+    @Override
+    public SourcePosition sourcePosition() {
+        return sourcePosition;
+    }
+
+    @Override
+    public String format(@Nullable InstructionProcessor instructionProcessor) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isUserVariable() {
+        return getType() == PROGRAM_PARAMETER || isUserWritable();
+    }
+
+    @Override
+    public boolean isUserWritable() {
+        return getType() == GLOBAL_VARIABLE || getType() == FUNCTION_PARAMETER || getType() == LOCAL_VARIABLE;
+    }
+
+    @Override
+    public boolean isGlobalVariable() {
+        return getType() == PROGRAM_PARAMETER || getType() == GLOBAL_VARIABLE || getType() == GLOBAL_PRESERVED;
+    }
+
+    @Override
+    public boolean isMainVariable() {
+        return getType() == LOCAL_VARIABLE && functionPrefix.isEmpty();
+    }
+
+    @Override
+    public boolean isTemporaryVariable() {
+        return getType() == TMP_VARIABLE;
+    }
+
+    @Override
+    public boolean isLocalVariable() {
+        return getType() == FUNCTION_PARAMETER || getType() == LOCAL_VARIABLE && !functionPrefix.isEmpty();
+    }
+
+    @Override
+    public boolean isPreserved() {
+        return preserved || getType() == PRESERVED || getType() == MLOG_VARIABLE || getType() == GLOBAL_PRESERVED;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public String getFunctionPrefix() {
+        return functionPrefix;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public @Nullable String getBlockType() {
+        return blockType;
+    }
+
+    @Override
+    public LogicString getMlogVariableName() {
+        return LogicString.createRaw(sourcePosition, toMlog());
+    }
+
+    /// @return true if the parameter is effectively input
+    @Override
+    public boolean isInput() {
+        return input;
+    }
+
+    @Override
+    public boolean isOutput() {
+        return output;
+    }
+
+    @Override
+    public boolean isConstant() {
+        return constant;
+    }
+
+    @Override
+    public boolean isConstantValue() {
+        return constant || argumentType == BLOCK;
+    }
+
+    public boolean isOptional() {
+        return optional || output && !input;
+    }
+
+    public boolean isReference() {
+        return reference;
+    }
+
+    public boolean isNoinit() {
+        return noinit;
+    }
+
+    @Override
+    public boolean isVolatile() {
+        return isVolatile;
+    }
+
+    @Override
+    public String toMlog() {
+        return mlog;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        LogicVariable that = (LogicVariable) o;
+        return mlog.equals(that.mlog);
+    }
+
+    @Override
+    public int hashCode() {
+        return mlog.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "LogicVariable{" +
+                "argumentType=" + argumentType +
+                ", fullName='" + getFullName() + '\'' +
+                ", functionPrefix='" + functionPrefix + '\'' +
+                ", isVolatile=" + isVolatile +
+                ", input=" + input +
+                ", output=" + output +
+                '}';
+    }
+
+    // CREATION
+
+    public static LogicVariable block(SourcePosition sourcePosition, String name, String blockType) {
+        return new LogicVariable(sourcePosition, BLOCK, ValueMutability.IMMUTABLE, name, name, blockType);
+    }
+
+    public static LogicVariable block(AstIdentifier identifier, @Nullable String blockType) {
+        return new LogicVariable(identifier.sourcePosition(), BLOCK, ValueMutability.IMMUTABLE,
+                identifier.getName(), identifier.getName(), blockType);
+    }
+
+    public static LogicVariable block(AstIdentifier identifier, String mlog, boolean isVolatile, @Nullable String blockType) {
+        return new LogicVariable(identifier.sourcePosition(), BLOCK, isVolatile ? ValueMutability.VOLATILE : ValueMutability.IMMUTABLE,
+                identifier.getName(), mlog, blockType);
+    }
+
+    public static LogicVariable debug(AstIdentifier identifier, String mlog) {
+        return new LogicDebug(identifier, mlog);
+    }
+
+    public static LogicVariable global(AstIdentifier identifier, String mlog) {
+        return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
+                identifier.getName(), mlog, f());
+    }
+
+    public static LogicVariable global(AstIdentifier identifier, String mlog, boolean volatileVar, boolean noinit, boolean optional) {
+        return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
+                identifier.getName(), mlog, f().set(fVolatile, volatileVar).set(fNoInit, noinit).set(fOptional, optional));
+    }
+
+    @SuppressWarnings("ConfusingMainMethod")
+    public static LogicVariable main(AstIdentifier identifier, String mlog) {
+        return main(identifier, mlog, false, false);
+    }
+
+    @SuppressWarnings("ConfusingMainMethod")
+    public static LogicVariable main(AstIdentifier identifier, String mlog, boolean noinit, boolean optional) {
+        return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE,
+                identifier.getName(), mlog, f().set(fNoInit, noinit).set(fOptional, optional));
+    }
+
+    public static LogicVariable local(AstIdentifier identifier, MindcodeFunction function, String mlog, boolean noinit, boolean optional) {
+        return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, function.getName(),
+                function.getPrefix(), identifier.getName(), mlog, f().set(fNoInit, noinit).set(fOptional, optional));
+    }
+
+    public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function, String mlog, boolean preserved) {
+        AstIdentifier identifier = parameter.getIdentifier();
+        return new LogicVariable(identifier.sourcePosition(), FUNCTION_PARAMETER, function.getName(),
+                function.getPrefix(), identifier.getName(), mlog,
+                f().set(fInput, parameter.isInput()).set(fOutput, parameter.isOutput()).set(fConstant, parameter.isConstant())
+                        .set(fReference, parameter.isReference()).set(fPreserved, preserved));
+    }
+
+    public static LogicVariable temporary(NameCreator nameCreator, int index) {
+        return new LogicTemp(nameCreator, ArgumentType.TMP_VARIABLE, index, nameCreator.temp(index));
+    }
+
+    public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
+        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETVAL,
+                function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE_NAME,
+                mlog, f(fNoInit, fOutput).set(fPreserved, function.isExport()));
+    }
+
+    public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
+        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE,
+                function.getPrefix() + RETURN_ADDRESS_NAME, mlog, null);
+    }
+
+    public static LogicVariable fnStackFrame(MindcodeFunction function, String mlog) {
+        return new LogicVariable(function.getSourcePosition(), FUNCTION_STACKFRAME, ValueMutability.MUTABLE,
+                function.getPrefix() + STACK_FRAME_POINTER, mlog, null);
+    }
+
+    public static LogicVariable fnArrayOffset(MindcodeFunction function, AstIdentifier identifier, String mlog) {
+        return new LogicVariable(identifier.sourcePosition(), FUNCTION_ARRAYOFFSET, function.getName(),
+                function.getPrefix(), identifier.getName() + ARRAY_OFFSET, mlog, f(fNoInit));
+    }
+
+    public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {
+        return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
+                function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED_NAME,
+                mlog,f(fOutput, fPreserved));
+    }
+
+    public static LogicVariable remoteWaitAddr() {
+        return new LogicVariable(EMPTY, ADDRESS, ValueMutability.IMMUTABLE, REMOTE_WAIT_ADDRESS_NAME,
+                REMOTE_WAIT_ADDRESS_NAME, null);
+    }
+
+    public static LogicVariable remoteWait() {
+        return new LogicVariable(EMPTY, ADDRESS, REMOTE_WAIT_NAME, REMOTE_WAIT_NAME, f(fVolatile, fNoInit));
+    }
+
+    public static LogicVariable remoteCaller() {
+        return new LogicVariable(EMPTY, ADDRESS, REMOTE_CALLER_NAME, REMOTE_CALLER_NAME, f(fVolatile, fNoInit));
+    }
+
+    public static LogicVariable preserved(String name) {
+        return new LogicVariable(EMPTY, PRESERVED, ValueMutability.IMMUTABLE, name, name, null);
+    }
+
+    public static LogicVariable mlogVariable(String name) {
+        return new LogicVariable(EMPTY, MLOG_VARIABLE, name, name, f(fVolatile, fNoInit));
+    }
+
+    public static LogicVariable arrayAccess(String arrayName, String suffix, String mlog) {
+        return new LogicVariable(EMPTY, GLOBAL_VARIABLE, arrayName + suffix, mlog, f(fNoInit, fOptional));
+    }
+
+    public static LogicVariable arrayReturn(String arrayName, String suffix, String mlog) {
+        return new LogicVariable(EMPTY, FUNCTION_RETADDR, arrayName + suffix, mlog, f(fNoInit));
+    }
+
+    public static LogicVariable error(int index) {
+        return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE,
+                "ERROR_" + index, "*ERROR_" + index, null);
+    }
+
+    //
+    //  Variable modifications
+    //
+    /////////////////////////////////////////////////////////////////////////////////
+
+    public LogicVariable stackFrame(String suffix) {
+        return new LogicVariable(sourcePosition, FUNCTION_STACKFRAME, ValueMutability.MUTABLE, name + suffix, mlog + suffix, null);
+    }
+
+    /// Return the variable passed as an argument to unused instruction parameters.
+    /// @return variable for unused instruction parameters
+    public static LogicVariable unusedVariable() {
+        return UNUSED_VARIABLE;
+    }
+
+    // TEST SUPPORT
+
+    public static LogicVariable ast(String name) {
+        return new LogicVariable(EMPTY, AST_VARIABLE, ValueMutability.MUTABLE, name, name, null);
+    }
+
+    public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
+        return new LogicVariable(EMPTY, FUNCTION_RETVAL,
+                functionName, functionPrefix, functionPrefix + RETURN_VALUE_NAME,
+                functionPrefix + RETURN_VALUE_NAME, f(fNoInit, fOutput));
+    }
+
+    // ValueStore methods
+
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
+
+    @Override
+    public boolean isLvalue() {
+        // Only user-declared variables are l-values
+        // Invalids are l-values to suppress further errors
+        return isUserWritable() || this == INVALID;
+    }
+
+    @Override
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+        creator.createSet(this, value);
+    }
+
+    @Override
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+        valueSetter.accept(this);
+    }
+
+    public LogicVariable withType(ArgumentType argumentType) {
+        return new LogicVariable(sourcePosition, argumentType, mutability, functionPrefix, name, fullName, mlog,
+                isVolatile, noinit, input, output, constant, reference, optional, preserved);
+    }
+
+    public static class LogicTemp extends LogicVariable {
+        private final NameCreator nameCreator;
+        private String name;
+        private int index;
+
+        LogicTemp(NameCreator nameCreator, ArgumentType argumentType, int index, String name) {
+            super(EMPTY, argumentType, ValueMutability.MUTABLE, name, name, null);
+            this.nameCreator = nameCreator;
+            this.name = name;
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+            this.name = nameCreator.temp(index);
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String getFullName() {
+            return name;
+        }
+
+        @Override
+        public String toMlog() {
+            return name;
+        }
+
+        public LogicVariable withType(ArgumentType argumentType) {
+            return new LogicTemp(nameCreator, argumentType, index, name);
+        }
+    }
+
+    public static class LogicDebug extends LogicVariable {
+        LogicDebug(SourcePosition sourcePosition, String name, String mlog) {
+            super(sourcePosition, GLOBAL_VARIABLE, name, mlog, f(fVolatile, fOptional));
+        }
+
+        LogicDebug(AstIdentifier identifier, String mlog) {
+            this(identifier.sourcePosition(), identifier.getName(), mlog);
+        }
+
+        @Override
+        public ValueStore withSourcePosition(SourcePosition sourcePosition) {
+            return new LogicDebug(sourcePosition, name, mlog);
+        }
+
+        public LogicVariable withType(ArgumentType argumentType) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
+            ContextFactory.getMessageContext().addMessage(PositionalMessage.error(creator.getAstContext().sourcePosition(), ERR.VARIABLE_CANNOT_READ_DEBUG, name));
+            return INVALID;
+        }
+
+        @Override
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+            ContextFactory.getMessageContext().addMessage(PositionalMessage.error(creator.getAstContext().sourcePosition(), ERR.VARIABLE_CANNOT_READ_DEBUG, name));
+        }
+
+        @Override
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+            if (creator.getAstContext().getLocalProfile().isDebug()) {
+                super.setValue(creator, value);
+            }
+        }
+
+        @Override
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+            if (creator.getAstContext().getLocalProfile().isDebug()) {
+                super.writeValue(creator, valueSetter);
+            }
+        }
+
+        @Override
+        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+            return creator.getAstContext().getLocalProfile().isDebug() ? super.getWriteVariable(creator) : INVALID;
+        }
+
+        @Override
+        public void storeValue(ContextfulInstructionCreator creator) {
+            if (creator.getAstContext().getLocalProfile().isDebug()) {
+                super.storeValue(creator);
+            }
+        }
+    }
+
+    protected enum Flags {
+        fVolatile,
+        fNoInit,
+        fInput,
+        fOutput,
+        fConstant,
+        fReference,
+        fOptional,
+        fPreserved,
+    }
+
+    protected static class FlagSet {
+        private final Set<Flags> flags = EnumSet.noneOf(Flags.class);
+
+        private FlagSet() {
+        }
+
+        public boolean contains(Flags flag) {
+            return flags.contains(flag);
+        }
+
+        public FlagSet set(Flags flag, boolean present) {
+            if (present) {
+                flags.add(flag);
+            } else {
+                flags.remove(flag);
+            }
+            return this;
+        }
+    }
+
+    static FlagSet f() {
+        return new FlagSet();
+    }
+
+    static FlagSet f(Flags... flags) {
+        FlagSet set = new FlagSet();
+        Collections.addAll(set.flags, flags);
+        return set;
+    }
+}

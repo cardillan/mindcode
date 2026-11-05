@@ -1,8 +1,8 @@
 package io.github.cardillan.schemacode.mindustry;
 
-import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
-import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
-import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorVersion;
+import io.github.cardillan.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 

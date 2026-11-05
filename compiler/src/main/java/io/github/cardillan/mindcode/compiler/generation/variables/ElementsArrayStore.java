@@ -1,0 +1,29 @@
+package io.github.cardillan.mindcode.compiler.generation.variables;
+
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.logic.arguments.LogicNumber;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+
+/// Array implementation with a pre-created list of elements.
+@NullMarked
+public abstract class ElementsArrayStore extends AbstractArrayStore {
+    /// Actual list of elements
+    protected final List<ValueStore> elements;
+
+    public ElementsArrayStore(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size,
+            @Nullable ArrayStore masterArray, List<ValueStore> elements, boolean subarray) {
+        super(sourcePosition, name, arrayType, startOffset, size, LogicNumber.create(size), masterArray, subarray);
+        this.elements = elements;
+    }
+
+    public List<ValueStore> getElements() {
+        return elements;
+    }
+
+    public int fullSize() {
+        return getElements().size();
+    }
+}

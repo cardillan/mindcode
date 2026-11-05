@@ -1,0 +1,19 @@
+package io.github.cardillan.mindcode.compiler.antlr;
+
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Token;
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+public class MissingSemicolonException extends RecognitionException {
+    private final Token nextToken;
+
+    public MissingSemicolonException(Token nextToken) {
+        super(null, null, null);
+        this.nextToken = nextToken;
+    }
+
+    public Token getNextToken() {
+        return nextToken;
+    }
+}

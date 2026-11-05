@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.mindcode.compiler.MindcodeInternalError;
-import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.logic.mimex.BlockType;
 import io.github.cardillan.schemacode.ast.AstBlock;
 import io.github.cardillan.schemacode.ast.AstLabel;
 import io.github.cardillan.schemacode.ast.PlacementMode;

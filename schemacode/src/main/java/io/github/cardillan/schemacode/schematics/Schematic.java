@@ -1,11 +1,11 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.emulator.EmulatorSchematic;
-import io.github.cardillan.mc.emulator.blocks.*;
-import io.github.cardillan.mc.emulator.blocks.BlockPosition;
-import io.github.cardillan.mc.emulator.blocks.graphics.LogicDisplay;
-import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
-import io.github.cardillan.mc.mindcode.logic.opcodes.ProcessorType;
+import io.github.cardillan.mindcode.emulator.EmulatorSchematic;
+import io.github.cardillan.mindcode.emulator.blocks.*;
+import io.github.cardillan.mindcode.emulator.blocks.BlockPosition;
+import io.github.cardillan.mindcode.emulator.blocks.graphics.LogicDisplay;
+import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mindcode.logic.opcodes.ProcessorType;
 import io.github.cardillan.schemacode.mindustry.Position;
 import io.github.cardillan.schemacode.mindustry.ProcessorConfiguration;
 import org.jspecify.annotations.NullMarked;

@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.config;
 
-import io.github.cardillan.mc.common.SourceElement;
+import io.github.cardillan.mindcode.common.SourceElement;
 import io.github.cardillan.schemacode.SchematicsInternalError;
 import io.github.cardillan.schemacode.mindustry.Position;
 import io.github.cardillan.schemacode.schematics.Block;

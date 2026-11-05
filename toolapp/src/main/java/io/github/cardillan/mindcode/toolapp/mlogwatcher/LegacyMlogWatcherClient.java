@@ -1,6 +1,6 @@
 package io.github.cardillan.mindcode.toolapp.mlogwatcher;
 
-import io.github.cardillan.mc.mindcode.compiler.ToolMessageEmitter;
+import io.github.cardillan.mindcode.compiler.ToolMessageEmitter;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

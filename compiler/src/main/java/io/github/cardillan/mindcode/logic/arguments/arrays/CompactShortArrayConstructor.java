@@ -1,0 +1,91 @@
+package io.github.cardillan.mindcode.logic.arguments.arrays;
+
+import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
+import io.github.cardillan.mindcode.compiler.generation.variables.NameCreator;
+import io.github.cardillan.mindcode.compiler.postprocess.JumpTable;
+import io.github.cardillan.mindcode.logic.arguments.LogicBuiltIn;
+import io.github.cardillan.mindcode.logic.arguments.LogicValue;
+import io.github.cardillan.mindcode.logic.arguments.LogicVariable;
+import io.github.cardillan.mindcode.logic.instructions.ArrayAccessInstruction;
+import io.github.cardillan.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
+import io.github.cardillan.mindcode.logic.instructions.LogicInstruction;
+import io.github.cardillan.mindcode.logic.instructions.SideEffects;
+import io.github.cardillan.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
+@NullMarked
+public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
+    private final int arraySize;
+    private final boolean useSelects;
+    private final LogicVariable arrayElem;
+
+    public CompactShortArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction);
+
+        NameCreator nameCreator = context.nameCreator();
+        String baseName = arrayStore.getName();
+        arraySize = arrayStore.fullSize();
+        useSelects = processor.isSupported(Opcode.SELECT);
+        arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
+
+        int limit = useSelects ? 4 : 3;
+        if (arraySize < 2 || arraySize > limit) throw new MindcodeInternalError("Expected array of size 2 to " + limit);
+
+        instruction.setIndirectVariables(arrayElements());
+    }
+
+    @Override
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        if (useSelects) {
+            // It's always a "read" select list, plus one instruction for actual variable access
+            return boundsCheckSize() + offsetInstructions() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+        } else {
+            return boundsCheckSize() + offsetInstructions() + (arraySize == 2 ? 5 : 8);
+        }
+    }
+
+    @Override
+    public double getExecutionSteps() {
+        if (useSelects) {
+            return boundsCheckExecutionSteps() + offsetInstructions() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+        } else {
+            return boundsCheckExecutionSteps() + offsetInstructions() + (arraySize == 2 ? 3.5 : (4 + 5 + 4) / 3.0);
+        }
+    }
+
+    @Override
+    public LogicVariable getElementNameVariable() {
+        return arrayElem;
+    }
+
+    @Override
+    public SideEffects createSideEffects() {
+        return switch (accessType) {
+            case READ -> SideEffects.of(arrayElements(), List.of(arrayElem), List.of());
+            case WRITE -> SideEffects.of(List.of(), List.of(arrayElem), arrayElements());
+        };
+    }
+
+    @Override
+    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
+        LocalContextfulInstructionsCreator creator = prepareExpansion(consumer);
+        LogicValue index = computeIndex(creator);
+
+        if (!instruction.isCompactAccessTarget()) {
+            if (useSelects) {
+                createNameSelect(creator, index, arrayElem);
+            } else {
+                expandAccess(creator, index, element -> creator.createSet(arrayElem, element.getMlogVariableName()));
+            }
+        }
+
+        LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
+        LocalContextfulInstructionsCreator creator2 = new LocalContextfulInstructionsCreator(processor, instruction.getAstContext(), consumer);
+        createCompactAccessInstruction(creator2, storageProcessor, arrayElem);
+    }
+}

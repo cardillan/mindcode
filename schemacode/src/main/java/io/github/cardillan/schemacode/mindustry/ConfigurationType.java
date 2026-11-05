@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.mindustry;
 
-import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mindcode.logic.mimex.BlockType;
 import io.github.cardillan.schemacode.config.*;
 
 import java.util.function.Supplier;

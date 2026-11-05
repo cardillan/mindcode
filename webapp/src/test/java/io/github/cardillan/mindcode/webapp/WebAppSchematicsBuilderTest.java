@@ -1,8 +1,8 @@
 package io.github.cardillan.mindcode.webapp;
 
-import io.github.cardillan.mc.common.InputFiles;
-import io.github.cardillan.mc.messages.MindcodeMessage;
-import io.github.cardillan.mc.profile.CompilerProfile;
+import io.github.cardillan.mindcode.common.InputFiles;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.schemacode.SchemacodeCompiler;
 import org.junit.jupiter.api.Test;
 

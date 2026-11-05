@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.SourcePosition;
-import io.github.cardillan.mc.common.TextOffset;
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.common.TextOffset;
 import io.github.cardillan.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 

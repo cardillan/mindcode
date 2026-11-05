@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.messages.ExpectedMessages;
-import io.github.cardillan.mc.messages.MessageLevel;
+import io.github.cardillan.mindcode.messages.ExpectedMessages;
+import io.github.cardillan.mindcode.messages.MessageLevel;
 import io.github.cardillan.schemacode.AbstractSchematicsTest;
 import io.github.cardillan.schemacode.SchematicsMetadata;
 import io.github.cardillan.schemacode.config.BooleanConfiguration;

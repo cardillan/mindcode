@@ -1,0 +1,69 @@
+package io.github.cardillan.mindcode.profile.options;
+
+import org.jspecify.annotations.NullMarked;
+
+import java.util.Optional;
+import java.util.stream.Stream;
+
+@NullMarked
+public enum OptionCategory {
+    INPUT_OUTPUT("Input/output options", """
+            """),
+
+    SCHEMATICS("Schematic creation", """
+            Options that affect the way schematics are created.
+            """),
+
+    ENVIRONMENT("Environment options", """
+            Options to specify the target environment for the code being compiled. This includes the Mindustry version,
+            as well as prescribing which specific processor features may or may not be used.
+            """),
+
+    MLOG_FORMAT("Mlog formatting options", """
+            Options determining how the mlog code is generated and formatted, including instructions generated to
+            carry over specific information into the compiled program (such as signature or processor ID).
+            """),
+
+    COMPILER("Compiler options", """
+            Options which affect the way the source code is compiled.
+            """),
+
+    RUNTIME_CHECKS("Runtime checks options", """
+            Options which govern whether and how Mindcode generates runtime checks.
+            """),
+
+    OPTIMIZATIONS("Optimization options", """
+            Options guiding the overall optimization of the compiled code or activating/deactivating specific
+            optimization actions.
+            """),
+
+    OPTIMIZATION_LEVELS("Optimization levels", """
+            Options specifying the global and individual optimization levels. Individual optimizers use global level
+            when not explicitly set. Available optimization levels are {none, basic, advanced, experimental}.
+            """),
+
+    DEBUGGING("Debugging options", """
+            Options to activate debugging features or additional output from the compiler.
+            """),
+
+    EMULATOR("Emulator options", """
+            Options to specify whether and how to run the code or schematic in an emulated environment. The emulated
+            processor is much faster than Mindustry processors, but can't run instructions which obtain information
+            from the Mindustry World. Memory cells/banks and other processors can be read from or written to if part
+            of the schematic or, when running just the code, the default processor configuration provided by Mindcode.
+            """),
+
+    ;
+
+    public final String title;
+    public final String description;
+
+    OptionCategory(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
+    public static Optional<OptionCategory> fromTitle(String title) {
+        return Stream.of(values()).filter(c -> c.title.equals(title)).findFirst();
+    }
+}

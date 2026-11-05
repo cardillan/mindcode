@@ -1,8 +1,8 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.messages.MessageConsumer;
-import io.github.cardillan.mc.messages.ToolMessage;
-import io.github.cardillan.mc.util.Tuple2;
+import io.github.cardillan.mindcode.messages.MessageConsumer;
+import io.github.cardillan.mindcode.messages.ToolMessage;
+import io.github.cardillan.mindcode.util.Tuple2;
 import io.github.cardillan.schemacode.ast.PlacementMode;
 import io.github.cardillan.schemacode.mindustry.Position;
 import org.jspecify.annotations.NullMarked;

@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.util.Tuple2Nullable;
+import io.github.cardillan.mindcode.util.Tuple2Nullable;
 import io.github.cardillan.schemacode.config.PositionArray;
 
 import java.util.HashSet;

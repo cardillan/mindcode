@@ -1,7 +1,7 @@
 package io.github.cardillan.schemacode.mindustry;
 
-import io.github.cardillan.mc.common.SourceElement;
-import io.github.cardillan.mc.messages.MessageLevel;
+import io.github.cardillan.mindcode.common.SourceElement;
+import io.github.cardillan.mindcode.messages.MessageLevel;
 import io.github.cardillan.schemacode.SchematicsInternalError;
 import io.github.cardillan.schemacode.config.ByteArray;
 import io.github.cardillan.schemacode.config.Configuration;

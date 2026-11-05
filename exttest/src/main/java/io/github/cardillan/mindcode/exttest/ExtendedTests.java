@@ -1,6 +1,6 @@
 package io.github.cardillan.mindcode.exttest;
 
-import io.github.cardillan.mc.mindcode.compiler.optimization.OptimizationCoordinator;
+import io.github.cardillan.mindcode.compiler.optimization.OptimizationCoordinator;
 import io.github.cardillan.mindcode.exttest.cases.TestCaseCreator;
 import io.github.cardillan.mindcode.exttest.cases.TestCaseCreatorScreening;
 import io.github.cardillan.mindcode.exttest.forkjoin.ForkJoinFramework;

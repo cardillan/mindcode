@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mindcode.logic.mimex.BlockType;
 import io.github.cardillan.schemacode.ast.PlacementMode;
 import io.github.cardillan.schemacode.config.Configuration;
 import io.github.cardillan.schemacode.mindustry.ConfigurationType;

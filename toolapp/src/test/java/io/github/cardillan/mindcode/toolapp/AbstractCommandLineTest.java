@@ -1,9 +1,9 @@
 package io.github.cardillan.mindcode.toolapp;
 
-import io.github.cardillan.mc.mindcode.compiler.optimization.Optimization;
-import io.github.cardillan.mc.mindcode.compiler.optimization.OptimizationLevel;
-import io.github.cardillan.mc.profile.*;
-import io.github.cardillan.mc.profile.options.Target;
+import io.github.cardillan.mindcode.compiler.optimization.Optimization;
+import io.github.cardillan.mindcode.compiler.optimization.OptimizationLevel;
+import io.github.cardillan.mindcode.profile.*;
+import io.github.cardillan.mindcode.profile.options.Target;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;

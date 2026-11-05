@@ -2,7 +2,7 @@
 
 ## Program structure
 
-Mindcode program is a sequence of declarations, expressions, and statements. Semicolons separate declarations, statements, and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored, as well as indentation.
+A Mindcode program is a sequence of declarations, expressions, and statements. Semicolons separate declarations, statements, and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored, as well as indentation.
 
 Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second is not and could be used as a variable or function name).
 
@@ -12,7 +12,7 @@ Mindcode also supports [enhanced comments](SYNTAX-4-FUNCTIONS.markdown#enhanced-
 
 Some declarations (such as function declarations or some compiler options) may only appear at the top-level of the program, i.e., must not be nested inside functions or code blocks.
 
-[Function declarations](SYNTAX-4-FUNCTIONS.markdown#user-defined-functions) may appear in any order and may be called from a place in the source code which precedes their definition. [Global variables and constants](SYNTAX-1-VARIABLES.markdown#mindcode-variables), as well as [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), must be declared before their first use. If a function call accesses a global variable which has not been declared yet, the compiler generates an error, even if the function being called does not precede the declaration of the variable. Example:
+[Function declarations](SYNTAX-4-FUNCTIONS.markdown#user-defined-functions) may appear in any order and may be called from a place in the source code which precedes their definition. [Constants](SYNTAX-1-VARIABLES.markdown#constants), [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters) and [global variables (when declared)](SYNTAX-1-VARIABLES.markdown#variable-scope), must be declared before their first use. If a function call accesses a global variable before its declaration has been processed, the compiler generates an error, even if the function being called does not precede the declaration of the variable. Example:
 
 ```mindcode-invalid
 increase(5);
@@ -40,7 +40,7 @@ A source file contains either a program or a module. Modules are declared using 
 
 ### Libraries and external files
 
-Mindcode language contains several [system libraries](SYSTEM-LIBRARY.markdown). To add a system library or an external file to compiled code, use the `require` statement:
+The Mindcode language contains several [system libraries](SYSTEM-LIBRARY.markdown). To add a system library or an external file to compiled code, use the `require` statement:
 
 ```mindcode-fragment
 require units;
@@ -338,7 +338,7 @@ building = ulocate(keyword, :core, enemy, out outx, out outy, out found);
 > [!NOTE]
 > While mlog keywords are prefixed with a colon in Mindcode, they appear without the prefix in mlog. On the other hand, names of local variables in Mindcode have no prefix but are prefixed with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.
 
-<details><summary>Show the full list of available mog keywords.</summary>
+<details><summary>Show the full list of available mlog keywords.</summary>
 
 <!--- list:mlogKeywords --->
 
@@ -600,9 +600,9 @@ Depending on the selected target, the string literal may contain certain escape 
 
 The only escape sequence supported by Mindustry Logic in this target is `\n` (newline). No other escape characters are supported. It might be possible to use nonprintable characters in string literals, but this is not recommended. These characters cannot be used in string literals at all:
 
-* double quote `"` (ASCII value 34)
+* newline (ASCII value 10)
 * carriage return (ASCII value 13)
-* a `\n` sequence (that is, `\` followed by `n`, this sequence will always be interpreted as a newline by Mindustry Logic).
+* double quote `"` (ASCII value 34)
 
 #### Target `8.2` or higher
 
@@ -659,7 +659,7 @@ To find a way around these constraints, Mindcode always reads the value of the n
 1. Floating point literals (i.e., decimal literals containing either decimal point or exponent):
    1. If the value is zero, it is encoded as `0`.
    2. If the value is negative, the absolute value is converted according to the following rules, and a minus sign is prepended to the result.
-   3. **Mindustry Logic version 7 and earlier**: If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way. When used in an expression, the value is created by subtracting `2147483648` from zero. When this is not possible (e.g., when declaring a constant), a compilation error is produced.
+   3. **Mindustry Logic version 7 and earlier**: If the original value is equal to `-2147483648`, it can't be represented as an mlog literal in any way. When used in an expression, the value is created by subtracting `2147483648` from zero. When this is not possible (e.g., when declaring a constant), a compilation error is produced.
    4. If the value is between 10<sup>-20</sup> and 2<sup>63</sup>-1, the number is converted to decimal notation using 20 digits precision and a decimal separator when needed.
    5. **Mindustry Logic version 7 and earlier**: If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation without using a decimal separator, using `float` precision (which will be used by Mindustry processor when reading the literal as well). If the conversion to float causes a loss of precision, a warning is produced.
    6. **Mindustry Logic version 8 and later**: If the value is roughly between 10<sup>-308</sup> and 10<sup>308</sup>, the number is converted to exponential notation without using a decimal separator. Loss of precision doesn't happen.

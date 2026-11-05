@@ -1,10 +1,10 @@
 package io.github.cardillan.mindcode.exttest;
 
-import io.github.cardillan.mc.mindcode.compiler.optimization.Optimization;
-import io.github.cardillan.mc.mindcode.compiler.optimization.OptimizationLevel;
-import io.github.cardillan.mc.profile.GenerationGoal;
-import io.github.cardillan.mc.profile.options.OptimizationOptions;
-import io.github.cardillan.mc.util.StringUtils;
+import io.github.cardillan.mindcode.compiler.optimization.Optimization;
+import io.github.cardillan.mindcode.compiler.optimization.OptimizationLevel;
+import io.github.cardillan.mindcode.profile.GenerationGoal;
+import io.github.cardillan.mindcode.profile.options.OptimizationOptions;
+import io.github.cardillan.mindcode.util.StringUtils;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 

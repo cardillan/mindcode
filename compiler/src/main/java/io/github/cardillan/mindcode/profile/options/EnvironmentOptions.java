@@ -1,0 +1,13 @@
+package io.github.cardillan.mindcode.profile.options;
+
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
+public enum EnvironmentOptions {
+    BUILTIN_EVALUATION,
+    INSTRUCTION_LIMIT,
+    NULL_COUNTER_IS_NOOP,
+    PROCESSOR_SIZE_LIMIT,
+    TARGET,
+    ZERO_WAIT_YIELDS,
+}

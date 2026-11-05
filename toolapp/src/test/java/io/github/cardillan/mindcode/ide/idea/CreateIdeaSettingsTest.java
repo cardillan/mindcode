@@ -1,12 +1,12 @@
 package io.github.cardillan.mindcode.ide.idea;
 
-import io.github.cardillan.mc.mindcode.compiler.antlr.MindcodeLexer;
-import io.github.cardillan.mc.mindcode.logic.mimex.LVariable;
-import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
-import io.github.cardillan.mc.mindcode.logic.opcodes.FunctionMapping;
-import io.github.cardillan.mc.mindcode.logic.opcodes.MindustryOpcodeVariants;
-import io.github.cardillan.mc.mindcode.logic.opcodes.NamedParameter;
-import io.github.cardillan.mc.mindcode.logic.opcodes.Opcode;
+import io.github.cardillan.mindcode.compiler.antlr.MindcodeLexer;
+import io.github.cardillan.mindcode.logic.mimex.LVariable;
+import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mindcode.logic.opcodes.FunctionMapping;
+import io.github.cardillan.mindcode.logic.opcodes.MindustryOpcodeVariants;
+import io.github.cardillan.mindcode.logic.opcodes.NamedParameter;
+import io.github.cardillan.mindcode.logic.opcodes.Opcode;
 import io.github.cardillan.schemacode.grammar.SchemacodeLexer;
 import org.antlr.v4.runtime.Vocabulary;
 import org.junit.jupiter.api.Test;

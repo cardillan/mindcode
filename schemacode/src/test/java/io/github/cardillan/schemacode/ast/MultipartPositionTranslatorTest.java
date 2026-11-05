@@ -1,9 +1,9 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.InputFile;
-import io.github.cardillan.mc.common.InputFiles;
-import io.github.cardillan.mc.common.SourcePosition;
-import io.github.cardillan.mc.messages.SourcePositionTranslator;
+import io.github.cardillan.mindcode.common.InputFile;
+import io.github.cardillan.mindcode.common.InputFiles;
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.messages.SourcePositionTranslator;
 import io.github.cardillan.schemacode.ast.MultipartPositionTranslator.Part;
 import org.junit.jupiter.api.Test;
 

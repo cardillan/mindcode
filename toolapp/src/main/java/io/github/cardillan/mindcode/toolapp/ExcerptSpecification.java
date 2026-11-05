@@ -1,7 +1,7 @@
 package io.github.cardillan.mindcode.toolapp;
 
-import io.github.cardillan.mc.common.TextFilePosition;
-import io.github.cardillan.mc.common.TextOffset;
+import io.github.cardillan.mindcode.common.TextFilePosition;
+import io.github.cardillan.mindcode.common.TextOffset;
 import org.jspecify.annotations.NullMarked;
 
 import java.text.ParseException;

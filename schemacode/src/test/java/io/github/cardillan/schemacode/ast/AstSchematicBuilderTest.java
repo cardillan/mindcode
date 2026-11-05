@@ -1,8 +1,8 @@
 package io.github.cardillan.schemacode.ast;
 
-import io.github.cardillan.mc.common.InputFiles;
-import io.github.cardillan.mc.common.SourcePosition;
-import io.github.cardillan.mc.messages.ExpectedMessages;
+import io.github.cardillan.mindcode.common.InputFiles;
+import io.github.cardillan.mindcode.common.SourcePosition;
+import io.github.cardillan.mindcode.messages.ExpectedMessages;
 import io.github.cardillan.schemacode.AbstractSchematicsTest;
 import io.github.cardillan.schemacode.mindustry.Position;
 import io.github.cardillan.schemacode.schematics.Language;

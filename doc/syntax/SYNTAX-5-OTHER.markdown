@@ -946,6 +946,7 @@ optimization actions.
 | [passes](#option-passes)                                         | global | stable             |
 | [unsafe-case-optimization](#option-unsafe-case-optimization)     | local  | unstable           |
 | [use-lookup-arrays](#option-use-lookup-arrays)                   | global | stable             |
+| [use-select-case](#option-use-select-case)                       | global | stable             |
 | [use-short-arrays](#option-use-short-arrays)                     | global | stable             |
 | [use-text-jump-tables](#option-use-text-jump-tables)             | local  | stable             |
 | [use-text-translations](#option-use-text-translations)           | local  | stable             |
@@ -1018,6 +1019,15 @@ This option activates or deactivates the lookup mechanism for arrays. [Lookup ar
 * `true` (the default value): the compiler generates lookup arrays if possible.
 
 Note that [declaring an array explicitly to use the lookup mechanism](SYNTAX-1-VARIABLES.markdown#mlog-modifier) is possible even when this option is set to `false`.
+
+### Option `use-select-case`
+
+**Option scope: [global](#global-scope)**
+
+This option specifies whether the case switching optimizer may use a sequence of `select` instructions to implement a case expression. Possible values are:
+
+* `false`: the `select` optimization won't be used.
+* `true` (the default value): the optimizer may apply the `select` optimization. 
 
 ### Option `use-short-arrays`
 

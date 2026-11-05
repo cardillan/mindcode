@@ -1,6 +1,6 @@
 package io.github.cardillan.schemacode;
 
-import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;
 
 public class SchematicsMetadata {
     // Always use the latest metadata here - certainly for loading schematics.

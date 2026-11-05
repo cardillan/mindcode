@@ -1,6 +1,6 @@
 package io.github.cardillan.mindcode.webapp;
 
-import io.github.cardillan.mc.common.Statistics;
+import io.github.cardillan.mindcode.common.Statistics;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Immutable;

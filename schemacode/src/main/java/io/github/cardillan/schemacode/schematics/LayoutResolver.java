@@ -1,8 +1,8 @@
 package io.github.cardillan.schemacode.schematics;
 
-import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
-import io.github.cardillan.mc.util.CollectionUtils;
-import io.github.cardillan.mc.util.MutableInteger;
+import io.github.cardillan.mindcode.logic.mimex.BlockType;
+import io.github.cardillan.mindcode.util.CollectionUtils;
+import io.github.cardillan.mindcode.util.MutableInteger;
 import io.github.cardillan.schemacode.SchematicsInternalError;
 import io.github.cardillan.schemacode.SchematicsMetadata;
 import io.github.cardillan.schemacode.ast.*;

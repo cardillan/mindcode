@@ -1,8 +1,8 @@
 package io.github.cardillan.schemacode;
 
-import io.github.cardillan.mc.common.CompilerOutput;
-import io.github.cardillan.mc.messages.MessageConsumer;
-import io.github.cardillan.mc.messages.ToolMessage;
+import io.github.cardillan.mindcode.common.CompilerOutput;
+import io.github.cardillan.mindcode.messages.MessageConsumer;
+import io.github.cardillan.mindcode.messages.ToolMessage;
 import io.github.cardillan.schemacode.mindustry.SchematicsIO;
 import io.github.cardillan.schemacode.schematics.Decompiler;
 import io.github.cardillan.schemacode.schematics.Schematic;
