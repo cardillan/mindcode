@@ -8,11 +8,13 @@ Mindcode identifiers and keywords are case-sensitive -- `if` is different from `
 
 A text enclosed between `/*` and `*/` is a comment that can span several lines. Additionally, anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
 
+Mindcode also supports [enhanced comments](SYNTAX-4-FUNCTIONS.markdown#enhanced-comments). Enhanced comments are single-line comments starting with `///`. These comments are processed according to the value of the [`remarks` compiler option](SYNTAX-5-OTHER.markdown#option-remarks).  
+
 Some declarations (such as function declarations or some compiler options) may only appear at the top-level of the program, i.e., must not be nested inside functions or code blocks.
 
 [Function declarations](SYNTAX-4-FUNCTIONS.markdown#user-defined-functions) may appear in any order and may be called from a place in the source code which precedes their definition. [Global variables and constants](SYNTAX-1-VARIABLES.markdown#mindcode-variables), as well as [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), must be declared before their first use. If a function call accesses a global variable which has not been declared yet, the compiler generates an error, even if the function being called does not precede the declaration of the variable. Example:
 
-```
+```mindcode-invalid
 increase(5);
 
 var level = 0;
@@ -26,11 +28,11 @@ end;
 
 This program generates the following error:
 
-```
+```text
 This function call may execute code accessing a global variable or constant 'level', which has not been created yet.
 ```
 
-To resolvethis error, move the declaration of the `level` variable in front of the function call.
+To resolve this error, move the declaration of the `level` variable in front of the function call.
 
 ### Modules
 
@@ -40,14 +42,14 @@ A source file contains either a program or a module. Modules are declared using 
 
 Mindcode language contains several [system libraries](SYSTEM-LIBRARY.markdown). To add a system library or an external file to compiled code, use the `require` statement:
 
-```
+```mindcode-fragment
 require units;
 require "library\drawings.mnd";
 ```
 
 The `require` statement can appear anywhere in the compiled code, although it is recommended to use it at the top of the source code. The code from the required file is compiled separately and combined with the code from the original file. Syntax errors are reported in the file where they occurred.
 
-A file added though a `require` statement can also use a `require` statement. Circular dependencies between files are resolved, and each file is compiled only once.
+A file added through a `require` statement can also use a `require` statement. Circular dependencies between files are resolved, and each file is compiled only once.
 
 In the web application, the `require` statement can only be used to import system libraries or source code contained in string values within a [Schemacode file](SCHEMACODE.markdown). Using the `require` statement with external files is not supported by the web application.
 
@@ -69,7 +71,7 @@ All examples in this documentation are run on the `experimental` level, unless s
 
 ## Compilation target
 
-By default, Mindcode produces code compatible with Mindustry version 8, build 157.3. It is possible to generate code for different game versions, including the not-yet- released development (a.k.a. "bleeding edge") version. See the [`target` option](SYNTAX-5-OTHER.markdown#option-target) for ways to change the target version, or [Using development versions of Mindustry (PC version)](MINDUSTRY-TIPS-N-TRICKS.markdown#using-development-versions-of-mindustry-pc-version) for more information on running the bleeding-edge version of the game.
+By default, Mindcode produces code compatible with Mindustry version 8, build 160.5 or later. It is possible to generate code for different game versions, including the not-yet- released development (a.k.a. "bleeding edge") version. See the [`target` option](SYNTAX-5-OTHER.markdown#option-target) for ways to change the target version, or [Using development versions of Mindustry (PC version)](MINDUSTRY-TIPS-N-TRICKS.markdown#using-development-versions-of-mindustry-pc-version) for more information on running the bleeding-edge version of the game.
 
 ## Syntax modes
 
@@ -88,6 +90,16 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 * **Code in global scope.** It is permissible to place executable code outside a code block (e.g., `print("Hello!"); printflush(message1);` is a valid Mindcode program).
 * **Optional variable declarations.** While variables can be explicitly declared, these declarations are optional. When variables aren't declared, they can be used freely in the source code, and their scope is determined by a naming convention (variables not containing a lower-case character are global, all other are local).
 
+**Variable declaration rules in relaxed syntax:**
+
+* Variable declarations are optional.
+* Undeclared variables are permitted.
+* The compiler determines the scope of an undeclared variable from its name, not from where it is first used:
+  * Names containing at least one lowercase letter resolve to local variables.
+  * Names containing no lowercase letters resolve to global variables.
+* Identifiers resolving to global variables cannot be used as function parameters.
+* Names of linked blocks cannot be used for other variables.
+
 > [!TIP]
 > Using the naming convention to determine variable scopes leads to some constraints on allowed variable names: names of linked blocks cannot be used to name any other variable, and upper-case variable names (which are global by convention) cannot be used as function parameters.
 
@@ -95,6 +107,17 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 
 * **No code in global scope.** Only declarations are allowed in the global scope. All code must be enclosed either in a [code block](SYNTAX-3-STATEMENTS.markdown#code-blocks) (i.e., between the `begin` and `end` keywords), in an [infinite loop](SYNTAX-3-STATEMENTS.markdown#infinite-loops), or in a function.
 * **Explicit variable declarations.** All variables must be declared before being used, even variables representing linked blocks (the only exception is using a linked block name in the `allocate stack` or `allocate heap` declarations). The variables are valid in the code block in which they were declared.
+
+**Variable declaration rules in strict syntax:**
+
+* Variable declarations are compulsory.
+* Undeclared variables are not permitted.
+* Variable scope is determined by the point of declaration:
+   * Variables declared outside a code block are global.
+   * Variables declared inside a function are valid within the function.
+   * Variables declared inside a code block are valid within the code block.
+   * Variables declared as part of a loop statement are valid within the loop.
+* There are no additional restrictions on variable names, every valid identifier can be used as a variable name.
 
 > [!TIP]
 > At this moment, several code blocks can exist in the global scope. They are compiled in the order in which they're encountered in the program. In future versions of Mindcode, however, multiple top-level code blocks might be disallowed.
@@ -106,7 +129,7 @@ The requirement to declare variables explicitly helps to identify misspelled var
 
 Example of a code adhering to the strict syntax:
 
-```Mindcode
+```mindcode
 #set syntax = strict;
 
 // These are declarations and need to be present in the global scope:
@@ -235,7 +258,7 @@ Some built-in variables represent a constant numerical value, such as `@pi` or `
 
 When the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `compatible` (which is the default value), Mindcode evaluates expressions involving stable numerical built-in variables at compile time, including string conversion for printing. However, when the original value is not affected by expression evaluation, it is written using the symbolic name into mlog:
 
-```Mindcode
+```mindcode
 print(@pi);             // No evaluation
 printflush(message1);
 print(2 * @pi);         // Numeric evaluation
@@ -286,26 +309,209 @@ Some mlog instructions expect one of a predefined set of keywords at certain pos
 Examples of mlog keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`. Note that Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable.
 
 > [!TIP]
-> Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:unitCount`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
+> Like built-in variables, mlog keywords may consist of multiple words. In the latest Mindustry version, multi-word keywords are always specified in camelCase convention (`:unitCount`).
 
-Some of these keywords never appear in Mindcode; for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prefixed with a colon, e.g., `:building`. The function call corresponding to the `ulocate` instruction above is:
+Some of these keywords never appear in Mindcode; for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prefixed with a colon, e.g., `:building`.
 
-```Mindcode
-building = ulocate(:building, :core, enemy, out outx, out outy, out found);
+**Mlog keywords usage rules:**
+
+* Mlog keywords can appear in these contexts in Mindcode:
+  * As an argument to Logic function calls, at positions where a keyword is expected.
+  * As an argument to inline functions. Keywords passed in to an inline function may only be used as arguments to another inline or Logic function.
+  * As a value of a constant definition. Such constants can, again, be only used as arguments to an inline or Logic function.
+* Mlog keywords cannot be stored in variables.
+* In Mindcode, Mlog keywords are prepended by the `:` character. This character is stripped when converting Mindcode to mlog.
+* Mlog keywords use the camelCase convention (e.g., `:solarMultiplier`).
+
+Example:
+
+```mindcode
+// Valid:
+const keyword = :building;
+building = ulocate(keyword, :core, enemy, out outx, out outy, out found);
+
+// Invalid: mlog keywords cannot be stored in variables.
+// var keyword = :building;
+// building = ulocate(keyword, :core, enemy, out outx, out outy, out found); 
 ```
 
 > [!NOTE]
 > While mlog keywords are prefixed with a colon in Mindcode, they appear without the prefix in mlog. On the other hand, names of local variables in Mindcode have no prefix but are prefixed with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.
 
-Mlog keywords can appear in these contexts in Mindcode:
+<details><summary>Show the full list of available mog keywords.</summary>
 
-1. As an argument to Logic function calls, at positions where a keyword is expected.
-2. As an argument to inline functions. Keywords passed in to an inline function may only be used as arguments to another inline or Logic function.
-3. As a value of a constant definition. Such constants can, again, be only used as arguments to an inline or Logic function.
+<!--- list:mlogKeywords --->
 
-As has already been mentioned, it's not possible to store an mlog keyword in a variable.
+* `:active`
+* `:ally`
+* `:ambientLight`
+* `:announce`
+* `:any`
+* `:arc`
+* `:armor`
+* `:attackMode`
+* `:attacker`
+* `:autoscale`
+* `:ban`
+* `:battery`
+* `:blasted`
+* `:block`
+* `:blockDamage`
+* `:blockFall`
+* `:blockHealth`
+* `:boss`
+* `:breakBlock`
+* `:breakProp`
+* `:bubble`
+* `:build`
+* `:buildCount`
+* `:buildSpeed`
+* `:building`
+* `:burning`
+* `:canGameOver`
+* `:circle`
+* `:color`
+* `:colori`
+* `:core`
+* `:coreCount`
+* `:corroded`
+* `:cross`
+* `:crossExplosion`
+* `:currentWaveTime`
+* `:damaged`
+* `:disarmed`
+* `:distance`
+* `:dragMultiplier`
+* `:drawLayer`
+* `:drill`
+* `:drillBig`
+* `:dropZoneRadius`
+* `:dynamic`
+* `:electrified`
+* `:endPos`
+* `:enemy`
+* `:enemyCoreBuildRadius`
+* `:explosion`
+* `:factory`
+* `:false`
+* `:fast`
+* `:floor`
+* `:flushText`
+* `:flying`
+* `:fontSize`
+* `:freezing`
+* `:generator`
+* `:getHud`
+* `:ground`
+* `:health`
+* `:hit`
+* `:hitSquare`
+* `:invincible`
+* `:item`
+* `:labelFlags`
+* `:light`
+* `:lightBlock`
+* `:lighting`
+* `:line`
+* `:lineAlign`
+* `:liquid`
+* `:mapArea`
+* `:maxHealth`
+* `:melting`
+* `:minimap`
+* `:mission`
+* `:muddy`
+* `:musicVolume`
+* `:none`
+* `:notify`
+* `:ore`
+* `:outline`
+* `:overclock`
+* `:overdrive`
+* `:pan`
+* `:pauseDisabled`
+* `:placeBlock`
+* `:placeBlockSpark`
+* `:player`
+* `:playerCount`
+* `:point`
+* `:pos`
+* `:posi`
+* `:quad`
+* `:radius`
+* `:rally`
+* `:reactor`
+* `:rect`
+* `:remove`
+* `:repair`
+* `:resupply`
+* `:rotation`
+* `:rtsMinSquad`
+* `:rtsMinWeight`
+* `:sapped`
+* `:setHud`
+* `:shake`
+* `:shape`
+* `:shapeText`
+* `:shield`
+* `:shielded`
+* `:shocked`
+* `:shootBig`
+* `:shootSmall`
+* `:slow`
+* `:smokeBig`
+* `:smokeCloud`
+* `:smokeColor`
+* `:smokePuff`
+* `:smokeSmall`
+* `:smokeSquare`
+* `:smokeSquareBig`
+* `:solarMultiplier`
+* `:spark`
+* `:sparkBig`
+* `:sparkExplosion`
+* `:sparkShoot`
+* `:sparkShootBig`
+* `:spawn`
+* `:spore-slowed`
+* `:stop`
+* `:storage`
+* `:stroke`
+* `:tarred`
+* `:team`
+* `:text`
+* `:textAlign`
+* `:textHeight`
+* `:texture`
+* `:textureSize`
+* `:toast`
+* `:trail`
+* `:true`
+* `:turret`
+* `:unban`
+* `:unit`
+* `:unitBuildSpeed`
+* `:unitCap`
+* `:unitCost`
+* `:unitCount`
+* `:unitDamage`
+* `:unitHealth`
+* `:unitLight`
+* `:unitMineSpeed`
+* `:unmoving`
+* `:uvi`
+* `:vapor`
+* `:warn`
+* `:wave`
+* `:waveSending`
+* `:waveSpacing`
+* `:waveTimer`
+* `:waves`
+* `:wet`
+* `:world`
+* `:zoom`
 
-Mlog keywords were introduced in Mindcode 3.2.0. For backwards compatibility, it is possible to use a keyword without the `:` prefix in Logic function calls. This way of specifying mlog keywords is deprecated, however, and generates a warning message.
+</details>
 
 ## Literals
 
@@ -365,13 +571,13 @@ Named color literals are written to the mlog as is. Mindcode generates a warning
 
 ### Character literals
 
-Mindcode supports character literals. These consists of a single character enclosed in single quotes: `'a'`. It is possible to use both single- and double quotes in a character literal, i.e., `'\''` and `'"'` respectively.
+Mindcode supports character literals. These consist of a single character enclosed in single quotes: `'a'`. It is possible to use both single- and double quotes in a character literal, i.e., `'\''` and `'"'` respectively.
 
 Character literals have a numeric value equal to the ASCII value of the enclosed character. When converting the literal to mlog, the numeric value is used, as Mindustry Logic doesn't support character literals - `'A'` is equivalent to `65`, `'B'` to `66`, and so on.
 
 Character literals are most useful when combined with the Mindustry Logic 8 `printchar` instruction:
 
-```Mindcode
+```mindcode
 // Prints ABCDEFGHIJKLMNOPQRSTUVWXYZ
 for ch in 'A' .. 'Z' do
    printchar(ch);
@@ -395,8 +601,8 @@ Depending on the selected target, the string literal may contain certain escape 
 The only escape sequence supported by Mindustry Logic in this target is `\n` (newline). No other escape characters are supported. It might be possible to use nonprintable characters in string literals, but this is not recommended. These characters cannot be used in string literals at all:
 
 * double quote `"` (ASCII value 34)
-* carrier return (ASCII value 13)
-* a `\n` sequence (that is, `\` followed by `n`, this seqence will always be interpreted as a newline by Mindustry Logic).
+* carriage return (ASCII value 13)
+* a `\n` sequence (that is, `\` followed by `n`, this sequence will always be interpreted as a newline by Mindustry Logic).
 
 #### Target `8.2` or higher
 
@@ -412,7 +618,7 @@ A backslash followed by a character other than one of the above escape sequences
 
 It is advisable to use the Unicode escape sequence to encode non-printable characters and Unicode surrogate characters, for example:
 
-```Mindcde
+```mindcode
 #set target = 8.2;
 print(
    "ASCII 0 character: \u0000\n" +
@@ -429,7 +635,7 @@ Formattable string literals are a special case of string literals which can only
 
 Concatenation of strings with the formattable string literal is supported through string interpolation:
 
-```Mindcode
+```mindcode
 println($"$ITEM_COAL coal: ${vault1.@coal}");
 ```
 
@@ -439,7 +645,7 @@ If a formattable string literal contains embedded variables or expressions, they
 
 When Mindustry processes the mlog code in Mindustry Logic, it handles numeric literals with some limitations:
 
-* Decimal numeric literal can be an integer, a decimal number, or a number in exponential notation where the mantissa doesn't contain a decimal separator and may include a leading minus. `15`, `-187.5786` and `1e10` are valid numbers, while `1.4e10` is not, as it contains both `.` and `e` characters.
+* A decimal numeric literal can be an integer, a decimal number, or a number in exponential notation where the mantissa doesn't contain a decimal separator and may include a leading minus. `15`, `-187.5786` and `1e10` are valid numbers, while `1.4e10` is not, as it contains both `.` and `e` characters.
 * Binary and hexadecimal literals always start with `0b` or `0x` prefix. In Mindustry 8, it is possible to use a minus sign for negative numbers.
 * Integers and decimal numbers are ultimately stored with `double` precision - this representation supports up to about 16 valid digits. Decimal numbers may specify a lot more digits after the decimal separator, but superfluous ones will be ignored.
 * Some specific literal values (for example, `-2147483648` in Mindustry 7) can't be parsed and are converted to `null`.

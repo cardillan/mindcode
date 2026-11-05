@@ -20,7 +20,7 @@ The tail call optimization can only be applied to simply recursive calls (i.e., 
 
 Example:
 
-```Mindcode
+```mindcode
 #set symbolic-labels = true;
 allocate stack in bank1;
 

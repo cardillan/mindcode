@@ -14,7 +14,7 @@ Full loop rotation copies the loop condition to the end of the loop. The front c
 
 Example:
 
-```Mindcode
+```mindcode
 var a = 105;
 var b = 21;
 
@@ -44,7 +44,7 @@ If the front condition can be eliminated, the full loop rotation typically decre
 
 Note: performing the loop rotation often requires inverting the condition of some conditional jumps in the duplicated condition. When the condition includes a strict equal comparison (`===` or `!==`), such operations may increase the execution time of the rotated condition. This might decrease or outright remove the optimization benefit from loop executions but still saves executing the condition on the first entry to the loop:
 
-```Mindcode
+```mindcode
 #set target = 7m;
 var index = 0;
 var a = 0;
@@ -77,7 +77,7 @@ In a typical case, a partially rotated loop completely avoids the jump returning
 
 Example:
 
-```Mindcode
+```mindcode
 #set symbolic-labels;
 while switch1.enabled and switch2.enabled do
     print("Doing something.");
@@ -105,7 +105,7 @@ label_2:
 
 Coupled with the other optimizations, complex conditions can sometimes be simplified a lot:
 
-```Mindcode
+```mindcode
 #set symbolic-labels;
 a = true;
 c = true;

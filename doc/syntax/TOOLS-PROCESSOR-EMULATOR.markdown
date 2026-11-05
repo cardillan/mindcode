@@ -145,7 +145,7 @@ Firstly, the content of all variables is written to the message log when the `st
 
 Example of the variable dump:
 
-```Mindcode
+```mindcode
 #set sort-variables;
 #set trace-execution = true;
 

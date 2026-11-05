@@ -8,7 +8,7 @@ Some instructions perform implicit integer conversions on their argument(s). Whe
 
 Currently, only array indexes are handled in this way. When a `floor()` function is used on an array index, the corresponding `op floor` instruction may be removed (assuming the value isn't used anywhere else). Example:
 
-```Mindcode
+```mindcode
 volatile var a[6];
 printchar(a[floor(rand(length(a)))]);
 ```
@@ -86,7 +86,7 @@ When both operands of the `op` instruction are known to have the same value, som
 
 The boolean OR operator (`||`) guarantees to always produce a boolean value - `0` or `1`. As mlog itself doesn't guarantee that, an additional instruction must be used to ensure the result is a boolean value:
 
-```Mindcode
+```mindcode
 volatile x = a || b;
 ```
 
@@ -104,7 +104,7 @@ This additional instruction can be removed in either of the following cases:
 
 Examples:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 
 /// a || b is computed first, and as it is used in another `op or` instruction, the additional instruction is removed
@@ -159,7 +159,7 @@ The `read` and `write` instructions accessing variables in current processor usi
 
 Example:
 
-```Mindcode
+```mindcode
 param a = "x";
 param b = "y";
 @this.write(1, a);
@@ -201,7 +201,7 @@ When the [`builtin-evaluation` option](../SYNTAX-5-OTHER.markdown#option-builtin
 
 Some Mindustry content objects may have different logic IDs in different Mindustry versions (these objects are called _unstable_). For these objects, the above optimizations only happen when the `builtin-evaluation` option is set to `full`:
 
-```Mindcode
+```mindcode
 #set target = 7m;
 #set builtin-evaluation = full;
 println(lookup(:item, 18));

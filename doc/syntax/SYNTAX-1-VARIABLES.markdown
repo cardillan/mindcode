@@ -203,7 +203,7 @@ Detailed information on individual kinds of variables and means of their declara
 
 Example:
 
-```Mindcode
+```mindcode
 var a = 10;
 var b = 20;
 print(a);
@@ -241,7 +241,7 @@ Implicit variables are only supported in the [`relaxed` syntax](SYNTAX-0-BASICS.
 
 An example code using implicit variables:
 
-```Mindcode
+```mindcode
 def foo(x)
     MAIN = x + 10;
     local = 10;
@@ -293,7 +293,7 @@ allocate heap in <memory>[<range>];
 
 for example:
 
-```Mindcode
+```mindcode
 allocate heap in cell4[50 ... 64];
 ```
 
@@ -319,7 +319,7 @@ All [memory blocks](#external-memory) can be accessed as an array in Mindcode. T
 
 It is also possible to store statically or dynamically linked blocks in regular variables or to pass them to non-recursive functions:
 
-```Mindcode
+```mindcode
 linked bank1, bank2;
 
 def copy(source, target, size)
@@ -372,7 +372,7 @@ Remote arrays are internal arrays stored in another processor. They are implemen
 
 For some operations, such as array assignments, list-iteration loops, and function calls, it is possible to select a portion of the array for the operation. The syntax for creating subarrays is: `array[range]`, where `range` is a constant range expression. It is possible to create subarrays from implicit, external, large, internal, and remote arrays:
 
-```Mindcode
+```mindcode
 allocate heap in bank1;
 var a[10];
 external $a[10];
@@ -465,7 +465,7 @@ Cached variables are useful in situations where you want to store the latest val
 
 Can be used with the `linked` modifier or without a storage modifier, in which case the `linked` modifier is implied. Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
 
-```Mindcode
+```mindcode
 /// A guard code: loops until message1 is not null
 guarded output = message1;
 print("Here we are");
@@ -516,7 +516,7 @@ When compiling code for Mindustry 8, the `mlog` modifier allows you to create va
 
 Example:
 
-```Mindcode
+```mindcode
 volatile mlog(@ore-copper.@name)  ore_copper = @copper;
 volatile mlog(@ore-lead.@name)    ore_lead = @lead;
 volatile mlog(@ore-coal.@name)    ore_coal = @coal;
@@ -564,7 +564,7 @@ When declaring regular variables, these additional modifiers can be used:
 
 Example
 
-```Mindcode
+```mindcode
 noinit volatile var a;      // Uninitalized volatile global variable
 var b;                      // "Normal" global variable
 
@@ -605,7 +605,7 @@ Additionally, the following values can be used with some limitations:
 
 Example:
 
-```Mindcode
+```mindcode
 const DEBUG = true;
 const HIGH_SPEED = 50;
 const LOW_SPEED = HIGH_SPEED / 2;
@@ -631,7 +631,7 @@ If a numeric value is assigned to a constant, and it isn't possible to [encode t
 
 Among other uses, constants can be used to optionally exclude sections of code while compiling:
 
-```Mindcode
+```mindcode
 const DEBUG = false;
 
 // ...
@@ -664,7 +664,7 @@ User-defined functions can also be used in constant expressions. Currently, only
 
 An example of a constant expression using a user-defined function:
 
-```Mindcode
+```mindcode
 #set optimization = none;
 const OFFSET_X = 100;
 const OFFSET_Y = 200;
@@ -694,7 +694,7 @@ end
 
 By specifying the `const` modifier it is possible to create a constant array. A constant array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for constant array elements; the constant values are used instead.
 
-```Mindcode
+```mindcode
 #set use-text-jump-tables = false;
 
 var array[3] = (rand(5), rand(5), rand(5));
@@ -735,7 +735,7 @@ Mindustry has a set of built-in icons that are represented by specific Unicode c
 
 Printing an icon is as easy as this:
 
-```Mindcode
+```mindcode
 println(ITEM_LEAD, " ", vault1.@lead);       // As a list of values
 println($"$ITEM_COAL ${vault1.@coal}");      // As a formattable literal
 printflush(message1);
@@ -1425,7 +1425,7 @@ Mindcode provides the following built-in constants which reflect the compiler op
 
 Through these constants, it is possible to support several different targets in the same code, for example:
 
-```Mindcode
+```mindcode
 void printExactHex(n)
     for var i in 0 ... 16 descending do
         var digit = (n >> (4 * i)) & 0xF;
@@ -1460,7 +1460,7 @@ print(foo);     // Compile error
 
 An example of using a debug variable is shown below:
 
-```Mindcode
+```mindcode
 debug time;
 
 // This is allowed, because a debug variable is only written to, not read from, in chained assignments:
@@ -1502,7 +1502,7 @@ When declaring linked variables, these additional modifiers can be used:
 
 Example:
 
-```Mindcode
+```mindcode
 guarded on = switch1, memory = cell1;   // These blocks are required
 linked message1;                        // message1 is optional
 
@@ -1528,7 +1528,7 @@ Schemacode and Mindcode support symbolic link names. A symbolic link name can be
 
 To declare a symbolic link, it is necessary to pass the type of the linked block as a parameter to the `linked` modifier. A default literal link name may or may not be provided:
 
-```Mindcode
+```mindcode
 linked switch1;                         // Reserves literal link name 'switch1'
 linked(@switch) up, down;
 linked(@message) output;
@@ -1577,7 +1577,7 @@ Linked arrays create both the array variable and linked variables for each eleme
 
 Example:
 
-```Mindcode
+```mindcode
 // An array of blocks of different types
 linked array[] = (switch1, switch2, message1, display2);
 
@@ -1601,7 +1601,7 @@ The `external` modifier can optionally specify storage for the declared variable
 
 Examples:
 
-```Mindcode
+```mindcode
 allocate heap in cell1[32 ... 64];
 external var foo;
 external(cell1) bar;
@@ -1644,7 +1644,7 @@ When declaring external variables, these additional modifiers can be used:
 
 Example of code using external variables:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 allocate heap in cell4[32 ... 64];
 
@@ -1696,7 +1696,7 @@ All exported variables are implicitly `volatile`, so this modifier has no effect
 
 Example:
 
-```Mindcode
+```mindcode
 // Exported variables, a unitialized, b initialized
 export a, b = 10;
 
@@ -1711,7 +1711,7 @@ Target `8.0` or higher is required to use remote variables.
 
 Remote variables and arrays, stored in another processor, can also be declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block, or a regular variable:
 
-```Mindcode
+```mindcode
 linked processor1, processor2;
 var proc;
 
@@ -1775,7 +1775,7 @@ If a numeric value is assigned to a parameter, and it isn't possible to [encode 
 
 Example (the optimization is turned off to prevent removing unused parameters):
 
-```Mindcode
+```mindcode
 #set optimization = none;
 param unitType = @flare;
 param target = vault1;
@@ -1802,7 +1802,7 @@ As we can see, values assigned through these instructions can be easily changed 
 
 For example, let's say that a parameter is created to specify the percentage of container capacity usage at which some action should happen. Constraining it to a range of `0 .. 100` ensures parameter values outside this range do not break the code:
 
-```Mindcode
+```mindcode
 param CUTOFF_PCT = 50;
 var cutoffPct = max(min(CUTOFF_PCT, 100), 0);
 print(cutoffPct);
@@ -1829,7 +1829,7 @@ Mindustry Logic provides functions which allow you to access linked blocks, or e
 
 These functions return a reference to a block. This reference can be stored in a regular variable, which can then be used to perform operations on the block in the same way as linked variables:
 
-```Mindcode
+```mindcode
 var message = findMessage();
 
 begin
@@ -1869,7 +1869,7 @@ In short, global variables start with `.`, function names and local variables st
 
 If the same main or local variable is declared multiple times in the same function (e.g., in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and further declarations, separated by a `.` (a dot):
 
-```Mindcode
+```mindcode
 #set optimization = none;
 begin var i = 1; end;
 begin var i = 2; end;

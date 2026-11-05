@@ -6,7 +6,7 @@ This optimization consists of several types of modifications performed on blocks
 
 The value of ternary expressions and if expressions is sometimes assigned to a user-defined variable. In these situations, the true and false branches of the if/ternary expression assign the value to a temporary variable, which is then assigned to the user variable. This optimization detects these situations and when possible, assigns the final value to the user variable directly in the true/false branches:
 
-```Mindcode
+```mindcode
 abs = if x < 0 then
     negative += 1;
     -x;
@@ -59,7 +59,7 @@ ucontrol approach @thisx @thisy 12 0 0
 
 The optimization handles even nested `if` expressions, such as
 
-```Mindcode
+```mindcode
 #set target = 7m;       // Prevents using the `select` instruction.
 print(a < 100 ? a < 10 ? "units" : "tens" : a < 1000 ? "hundreds" : "thousands");
 ```
@@ -86,7 +86,7 @@ print "thousands"
 
 Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
 
-```Mindcode
+```mindcode
 x = rand(10) - 5;
 text = x < 0 ? "negative" : "positive";
 print("Value is ", text);
@@ -144,7 +144,7 @@ The instruction generator always generates the true branch first. In some cases,
 The additional instruction can be avoided when the true and false branches in the code are swapped. When this
 optimizer detects such a situation, it does exactly that:
 
-```Mindcode
+```mindcode
 #set target = 7m;       // Prevents using the `select` instruction.
 
 if @unit.@dead === 0 then
@@ -168,7 +168,7 @@ print "alive"
 
 The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
 
-```Mindcode
+```mindcode
 #set target = 7m;       // Prevents using the `select` instruction.
 
 y = if x < 0 then

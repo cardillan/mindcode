@@ -4,20 +4,20 @@ This optimization merges two or more print instructions taking a string literal 
 
 Effectively, this optimization eliminates a `print` instruction by turning this
 
-```Mindcode
+```mindcode
 println("Items: ", itemCount);
 println("Time: ", @time);
 ```
 into this:
 
-```Mindcode
+```mindcode
 print("Items: ", itemCount);
 print("\nTime: ", @time, "\n");
 ```
 
 All constant values - not just string constants - are merged. For example:
 
-```Mindcode
+```mindcode
 const MAX_VALUE = 10;
 println($"Step $i of $MAX_VALUE");
 ```
@@ -59,7 +59,7 @@ The format instruction is used in optimization when these conditions are met:
 
 If the `{0}` placeholder is avoided, the formatting mechanism can be used freely in the code without any limitations and the print merging optimization with the format instruction can still happen. To avoid the `{0}` placeholder, use placeholders starting at `{1}`:
 
-```Mindcode
+```mindcode
 param a = 10;               // prevent a from being propagated as a constant
 println("{2} {1}");         // if you use "{0} {1}" instead - different optimization will happen
 format("Before");

@@ -12,6 +12,9 @@ import io.github.cardillan.mc.mindcode.compiler.optimization.Optimization;
 import io.github.cardillan.mc.mindcode.logic.mimex.BlockType;
 import io.github.cardillan.mc.mindcode.logic.mimex.ContentType;
 import io.github.cardillan.mc.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mc.mindcode.logic.opcodes.FunctionMapping;
+import io.github.cardillan.mc.mindcode.logic.opcodes.MindustryOpcodeVariants;
+import io.github.cardillan.mc.mindcode.logic.opcodes.NamedParameter;
 import io.github.cardillan.mc.profile.CompilerProfile;
 import io.github.cardillan.mc.profile.FileReferences;
 import io.github.cardillan.mc.profile.Remarks;
@@ -270,7 +273,7 @@ public class DocValidatorTest extends AbstractTestBase {
             int start = 0;
 
             while (true) {
-                int index = CollectionUtils.indexOf(lines, start, line -> line.trim().equals("```Mindcode"));
+                int index = CollectionUtils.indexOf(lines, start, line -> line.trim().equals("```mindcode"));
                 if (index < 0) break;
                 int closingIndex = CollectionUtils.indexOf(lines, index + 1, line -> line.trim().equals("```"));
 
@@ -278,7 +281,7 @@ public class DocValidatorTest extends AbstractTestBase {
                         file.toURI().resolve("#L" + (index + 1)),
                         () -> {
                             if (closingIndex < 0) {
-                                fail("Found nonterminated ```Mindcode block in " + uriString(file, index + 1));
+                                fail("Found nonterminated ```mindcode block in " + uriString(file, index + 1));
                             }
 
                             String source = String.join("\n", lines.subList(index + 1, closingIndex));
@@ -375,6 +378,7 @@ public class DocValidatorTest extends AbstractTestBase {
                 case "blocks" -> getBlocks(split[1]);
                 case "icons" -> getIcons(split[1]);
                 case "keywords" -> getKeywords(MindcodeLexer.VOCABULARY);
+                case "mlogKeywords" -> getMlogKeywords();
                 case "namedColors" -> getNamedColors();
                 case "sounds" -> getSounds();
                 default -> List.of();
@@ -408,6 +412,24 @@ public class DocValidatorTest extends AbstractTestBase {
                     .filter(k -> !k.equals("elif") && !k.equals("elseif") && !k.startsWith("#"))
                     .toList();
         }
+
+        private List<String> getMlogKeywords() {
+            return MindustryOpcodeVariants.getAllOpcodeVariants().stream()
+                    .filter(o -> o.functionMapping() != FunctionMapping.NONE)
+                    .flatMap(opcodeVariant -> opcodeVariant.namedParameters().stream())
+                    .filter(p -> (p.type().isKeyword() || p.type().isSelector()) && !p.type().isFunctionName())
+                    .flatMap(this::getAllParameterKeywords)
+                    .sorted()
+                    .distinct()
+                    .map(s -> ':' + s)
+                    .toList();
+        }
+
+        private Stream<String> getAllParameterKeywords(NamedParameter p) {
+            Collection<String> allKeywords = p.type().getAllKeywords();
+            return allKeywords.isEmpty() ? Stream.of(p.name()) : allKeywords.stream();
+        }
+
 
         private Collection<String> getNamedColors() {
             return MindustryMetadata.getLatest().getColorNames();

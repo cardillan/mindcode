@@ -42,7 +42,7 @@ Keywords are declared using `#declare` statement:
 
 Example: if the `ulocate building` instruction was extended to accept additional block groups, the new keywords could be declared like this:
 
-```Mindcode
+```mindcode
 #declare blockGroup :conveyor, :processor;
 
 var x, y;
@@ -62,7 +62,7 @@ format .y
 
 While Mindcode doesn't limit where and how built-in variables are used, it emits a warning when it encounters an unknown built-in variable to help identify typos and mistakes. If a built-in variable unknown to Mindcode is actually valid (e.g., provided by a mod), it is possible to declare such a built-in variable as valid, which suppresses the warning. To declare a built-in variable, use the `#declare` command with a `builtin` category. No warning is then emitted when using the built-in:
 
-```Mindcode
+```mindcode
 // Say we have a mod that creates a new `@dark-matter` item:
 #declare builtin @dark-matter;
 
@@ -78,7 +78,7 @@ control config sorter1 @dark-matter 0 0 0
 
 Mindcode handles identifiers that may represent a linked block specifically. When a mod adds a new type of block, it would need to be explicitly declared at all times, and even then warnings about unknown block names are generated. It is again possible to declare new block names, which instructs Mindcode to handle them identically to known block names. To declare a new block name, use the `#declare` command with a `linkedBlock` category:
 
-```Mindcode
+```mindcode
 // Say we have a mod that creates a new `organic-fridge` block.
 // Such a block would be linked under a `fridge1` or a similar name
 #declare linkedBlock fridge;
@@ -95,7 +95,7 @@ control enabled fridge1 false 0 0 0
 
 Named color literals and built-in color names require an existing color name to be used (such as `%[salmon]` and `@salmon`). It is possible to add a new color name literal and the corresponding built-in constant by using the `#declare` command with a `color` category:
 
-```Mindcode
+```mindcode
 // Say a new Mindustry version adds new colors named 'puce', 'verdigris' and 'sarcoline':
 #declare color puce, verdigris, sarcoline;
 
@@ -160,7 +160,7 @@ For better understanding, the creation of custom instructions will be demonstrat
 
 The `format` instruction was introduced in Mindustry Logic 8. When compiling for Mindustry Logic 7, the instruction isn't available. We can create it using this code:
 
-```Mindcode
+```mindcode
 #set target = 7m;
 inline void format(value)
     mlogText("format", in value);
@@ -188,7 +188,7 @@ By using the `mlogText()` function, we're making sure the Print Merging optimiza
 
 Mindustry 8.0 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the Mindustry Logic 8 language target, this instruction is mapped to the `drawPrint()` function. We can create it explicitly through this:
 
-```Mindcode
+```mindcode
 #set target = 7m;
 inline void drawPrint(x, y, alignment)
     mlogText("draw", "print", in x, in y, alignment, 0, 0, 0);
@@ -215,7 +215,7 @@ Considerations:
 
 The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction that doesn't modify the Mindustry World and therefore is safe. Had it not been known by Mindcode, it could be defined like this:
 
-```Mindcode
+```mindcode
 // Using 'getBlock2' as a name to avoid clashing with the existing function name
 inline def getBlock2(x, y, out type, out floor)
     mlogSafe("ucontrol", :getBlock, in x, in y, out type, out building, out floor);
@@ -355,7 +355,7 @@ The code in an mlog block is generally not optimized. Optimizations such as unre
 
 #### Basic mlog code
 
-```Mindcode
+```mindcode
 const message = "Time measurement\n" +
         "Mlog block demonstration";
 guarded linked switch = switch1;
@@ -403,7 +403,7 @@ printflush message1
 
 To better understand how problems may arise from flow control structures introduced into the code in ways not understood by Mindcode, let's consider this:
 
-```Mindcode
+```mindcode
 var i = 0;
 
 mlog { set address @counter }

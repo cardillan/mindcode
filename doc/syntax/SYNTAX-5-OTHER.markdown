@@ -90,7 +90,7 @@ the loop won't be unrolled, and the code will loop through all unit types availa
 
 The `full` setting ensures even the unstable built-in variables will be compile-time evaluated, using the value corresponding to the Mindustry version specified by the `target` option. This not only allows performing more optimizations (such as unroll loops) but also allows using the built-in variables to specify array sizes. However, the code will only produce a correct result when run on the processor of the correct Mindustry version:
 
-```Mindcode
+```mindcode
 #set target = 7m;
 #set builtin-evaluation = full;
 
@@ -277,7 +277,7 @@ The `author` directive can be specified multiple times, and can be included in a
 
 Example:
 
-```Mindcode
+```mindcode
 #set author = cardillan, "Mickey Mouse";
 #set author = "Rameses Niblick the Third";
 
@@ -357,7 +357,7 @@ Disables padding unused arguments in generated instructions with zero values. Po
 
 Specifies the processor ID, which is an arbitrary string value. Processor ID is encoded, together with the program name and program version, into the `*id` variable, and the encoded value is also available as `@@ID` within Mindcode.
 
-```Mindcode
+```mindcode
 #set processor-id = Main;
 #set program-name = "A sample program";
 #set program-version = "v0.1.0";
@@ -380,7 +380,7 @@ The processor ID is used by the [processor emulator](TOOLS-PROCESSOR-EMULATOR.ma
 
 Specifies the name of the compiled program, which is an arbitrary string value. The program name is encoded, together with the processor ID and program version, into the `*id` variable, and the encoded value is also available as `@@ID` within Mindcode.
 
-```Mindcode
+```mindcode
 #set processor-id = Main;
 #set program-name = "A sample program";
 #set program-version = "v0.1.0";
@@ -403,7 +403,7 @@ Since the `set *id ...` instruction is always the first (or almost first) instru
 
 Specifies the version of the compiled program, which is an arbitrary string value. The program version is encoded, together with the processor ID and program name, into the `*id` variable, and the encoded value is also available as `@@ID` within Mindcode.
 
-```Mindcode
+```mindcode
 #set processor-id = Main;
 #set program-name = "A sample program";
 #set program-version = "v0.1.0";
@@ -459,7 +459,7 @@ The following features are affected when activating symbolic labels:
 
 Example of a program compiled with mlog comments and symbolic labels:
 
-```Mindcode
+```mindcode
 #set syntax = strict;
 #set remarks = comments;
 #set symbolic-labels = true;
@@ -694,7 +694,7 @@ Allows or disallows using the `select` instruction to emulate a `jump strictNotE
 
 Example:
 
-```Mindcode
+```mindcode
 while @unit.@dead === 1 do
     ubind(@mono);
 end;
@@ -743,7 +743,7 @@ This option specifies world processor's speed in instructions per tick. This val
 
 The option has a local scope and can be applied to atomic code blocks to specify the current processor speed for the block:
 
-```Mindcode
+```mindcode
 #set target = 8w;
 
 setrate(500);
@@ -801,7 +801,7 @@ This option specifies world processor's speed in instructions per tick, and gene
 
 Example:
 
-```Mindcode
+```mindcode
 #set target = 8w;
 #set setrate = 750;
 

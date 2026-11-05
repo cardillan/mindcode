@@ -69,7 +69,7 @@ When entering the processor screen while the program is running doesn't stop pro
 
 Example:
 
-```Mindcode
+```mindcode
 #set debug = true;          // Activating debug mode
 
 require units;
@@ -121,7 +121,7 @@ How the function is compiled depends on the `error-reporting` compiler option:
 
 Example:
 
-```Mindcode
+```mindcode
 #set error-reporting = simple;
 #set symbolic-labels = true;
 
@@ -186,7 +186,7 @@ It is possible to use the [`sort-variables`](SYNTAX-5-OTHER.markdown#option-sort
 
 An example of a program created with sorting variables:
 
-```Mindcode
+```mindcode
 #set sort-variables;
 
 param MIN = 10;

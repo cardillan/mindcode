@@ -12,7 +12,7 @@ Using list iteration loops should be preferred when looping over large arrays, a
 
 When only a portion of the array needs to be traversed, use subarrays when the start and end indexes are known at compile time, and consider using a loop over the array terminated by a `break` statement in other cases. If you need to loop over the array from an index till the end of the array, performing a descending loop and using the `break` statement may again provide a better performance. The performance savings are a bit less pronounced in these cases:
 
-```Mindcode
+```mindcode
 #set target = 8m;
 #set loop-unrolling = none;
 
@@ -147,14 +147,14 @@ The most important change in the 3.11 release comes with the ability to short-ci
 > [!NOTE]
 > Short-circuited boolean expressions cannot be reused. In previous versions, the following code
 >
-> ```Mindcode
+> ```mindcode
 > x = a > 0 or b > 0 ? "positive" : "negative";
 > y = a > 0 or b > 0 ? 1 : -1;
 > ```
 >
 > would evaluate the condition `a > 0 or b > 0` only once, reusing it in the second statement. This is no longer the case with short-circuited conditions; in similar situations, use a single `if` statement instead:
 >
-> ```Mindcode
+> ```mindcode
 > if a > 0 or b > 0 then
 >     x = "positive";
 >     y = 1;
@@ -168,7 +168,7 @@ The most important change in the 3.11 release comes with the ability to short-ci
 
 Mindustry Logic provides an instruction which directly computes the length of a vector. The standard formula for vector length is
 
-```Mindcode
+```mindcode
 length = sqrt(x * x + y * y);
 print(length);
 ```
@@ -185,7 +185,7 @@ print :length
 
 A better calculation uses just one instruction, `op len`, which maps to the `len()` function:
 
-```Mindcode
+```mindcode
 length = len(x, y);
 print(length);
 ```
@@ -209,7 +209,7 @@ Mindcode provides a very powerful optimization for `case` expressions, if all th
 
 As an extreme example, in target `8.0` or higher Mindcode may be capable of converting the entire case expression into a single instruction:
 
-```Mindcode
+```mindcode
 volatile output = case input
     when 0 then 'A';
     when 1 then 'B';
@@ -234,7 +234,7 @@ The `and` and `or` operators in Mindcode provide short-circuited evaluation. Thi
 * The evaluation of a condition ends up as soon as its final value is known, avoiding the need to evaluate the remaining condition terms.
 * Relational operators can be evaluated using just one instruction (`jump` or `select`). Compare short-circuited and full evaluation of the same condition:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 
 /// Full evaluation
@@ -274,7 +274,7 @@ Mindustry 8 allows reading a variable from a processor (including the current pr
 
 Mindcode supports specifying mlog variable names when declaring variables, using constant expressions (not just string literals). A variable to be accessed indirectly by its name must be declared `volatile`, for example:
 
-```Mindcode
+```mindcode
 volatile mlog("foo") var foo = 10;
 param variable = "foo";
 @this.write(20, variable);
@@ -292,7 +292,7 @@ print foo
 
 This mechanism can be used to build custom lookups, where the named variable holds the lookup value. At the same time, the `@name` property is compile-time evaluated and thus can be used to define the variable name:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 
 /// Initialization:
@@ -332,7 +332,7 @@ There's a potential problem, though: sand can be mined on both `@sand-floor` and
 
 Since the `@name` property is defined even for Mindustry content which doesn't have a logic ID assigned, a reverse lookup would also be possible:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 
 /// Initialization:
@@ -377,7 +377,7 @@ print .ore
 
 As this technique depends on the values of variables with static names, each content type can be handled by at most one lookup table. It is, however, possible to create the variables in another processor. The remote processor needs to have the variables defined. A Mindcode remote module could be used for that:
 
-```Mindcode
+```mindcode
 module lookup;
 
 volatile mlog(@ore-copper.@name)    var floorCopper = @copper;
@@ -410,7 +410,7 @@ jump 9 always 0 0
 
 This module could be used in a program like this:
 
-```Mindcode
+```mindcode
 linked lookup = processor1;
 
 getBlock(10, 20, , out floor);
@@ -436,7 +436,7 @@ Mindustry 8 allows reading individual characters from a string, resulting in a U
 
 To illustrate this technique, consider this excerpt from the [Base Builder project](https://github.com/cardillan/golem/tree/main/base-builder):
 
-```Mindcode
+```mindcode
 #set symbolic-labels = true;
 
 // The encoded values will be shifted by this offset to avoid unsupported characters in the resulting string
@@ -559,7 +559,7 @@ Furthermore, Mindcode is able to unroll more complex loops on [advanced optimiza
 
 Mindcode determines the number of iterations by analyzing the loop condition. It doesn't take `break` statements into account. The following loop won't get unrolled, even though the maximal number of iterations is obvious:
 
-```Mindcode
+```mindcode
 i = 0;
 while switch1.enabled do
     print(++i);
@@ -569,7 +569,7 @@ end;
 
 You can rewrite the loop to allow unrolling by switching the conditions:
 
-```Mindcode
+```mindcode
 i = 0;
 do
     if not switch1.enabled then break; end;
@@ -581,7 +581,7 @@ while i <= 10;
 
 Sometimes a loop needs to be rewritten so that a single loop control variable is used. Consider this code for reversing an array stored in a memory cell:
 
-```Mindcode
+```mindcode
 const SIZE = 10;
 for var i = 0, j = SIZE - 1; i < j; i++, j-- do
     var t = cell1[i];
@@ -592,7 +592,7 @@ end;
 
 This code can't be unrolled because there are two control variables. A better approach is to use just one loop control variable and derive the other variable from it:
 
-```Mindcode
+```mindcode
 const SIZE = 10;
 for var i in 0 ... SIZE \ 2 do
     var j = SIZE - 1 - i;
@@ -608,7 +608,7 @@ Since `j` isn't used in the loop condition, the loop can be unrolled.
 
 On `advanced` level, loop unrolling is capable to unroll almost any deterministic loop, assuming the updates to the control variable are "simple," meaning they do not depend on any other variable than the loop control variable. More complex expressions might need to be rewritten to multiple simple updates. This loop cannot be unrolled:
 
-```Mindcode
+```mindcode
 i = 0;
 while i < 1000 do
     i = 2 * i + 1;
@@ -618,7 +618,7 @@ end;
 
 but this can:
 
-```Mindcode
+```mindcode
 i = 0;
 while i < 1000 do
     i = 2 * i;
@@ -642,7 +642,7 @@ Mindcode offers two mechanisms to iterate over small arrays: list iteration loop
 
 If the loop over an array or arrays gets unrolled, the produced code is effectively the same in most cases. However, in cases where the loop updates the array, Mindcode is unable to properly resolve the self-referential update and produces suboptimal code in either case:
 
-```Mindcode
+```mindcode
 param p = 0;
 var array[3];
 
@@ -669,7 +669,7 @@ print :a
 
 Index-based approach, on the other hand:
 
-```Mindcode
+```mindcode
 var array[3];
 
 for i in 0 ... length(array) do
@@ -704,7 +704,7 @@ When the loop cannot get unrolled for some reason, list iteration loops are gene
 
 Example of simple array access:
 
-```Mindcode
+```mindcode
 #set symbolic-labels = true;
 #set loop-unrolling = none;
 #set remarks = comments;
@@ -770,7 +770,7 @@ label_16:
 
 The difference increases with each additional array access within the loop:
 
-```Mindcode
+```mindcode
 #set symbolic-labels = true;
 #set loop-unrolling = none;
 #set remarks = comments;
@@ -859,7 +859,7 @@ The reason is that in the list iteration loop, all array accesses are performed 
 
 For example, a list-iteration loop reversing an array can be encoded like this:
 
-```Mindcode
+```mindcode
 #set symbolic-labels = true;
 #set loop-unrolling = none;
 
@@ -881,7 +881,7 @@ print(array);
 
 List-iteration loops are always generated for the entire array. If you want to iterate over a part of the array only, use subarrays instead of the `break` statement to limit the number of iterations, preventing both generation of unwanted iterations and code for computing/testing iterations:
 
-```Mindcode
+```mindcode
 #set symbolic-labels = true;
 #set loop-unrolling = none;
 #set remarks = comments;

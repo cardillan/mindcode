@@ -59,7 +59,7 @@ Currently, the property access syntax cannot be used with the new [`setprop`](FU
 
 The `sensor` method accepts an expression, not just constant property name, as an argument:
 
-```Mindcode
+```mindcode
 var amount = vault1.sensor(useTitanium ? @titanium : @copper);
 ```
 
@@ -71,7 +71,7 @@ Again, the `vault1` or `storage` in the examples can be a variable or a linked b
 
 The `min()` and `max()` functions in Mindcode can take two or more arguments:
 
-```Mindcode
+```mindcode
 print(min(a, b, c));
 var total = max(i, j, k, l);
 ```
@@ -92,7 +92,7 @@ The print function, which corresponds to the `print` instruction, is described i
 
 A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter—a variable to be synchronized across the network (namely, from the server to all clients). A [volatile variable](SYNTAX-1-VARIABLES.markdown#regular-variables) must be passed as an argument to this function, otherwise a compilation error occurs.
 
-```Mindcode
+```mindcode
 #set target = 7w;
 volatile var synced;
 sync(synced);

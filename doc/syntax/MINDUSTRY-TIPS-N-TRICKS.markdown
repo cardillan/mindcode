@@ -23,7 +23,7 @@ A Unicode escape sequence is formed as `\uXXXX`, where `XXXX` is a hexadecimal n
 
 The same escape characters can be used in Mindcode literals. Example:
 
-```Mindcode
+```mindcode
 print("One\n\"Two\"\\\n\\Three\u000Au0022Four\u0022 (using Unicode escape sequences)");
 printflush(message1);
 ```
@@ -44,7 +44,7 @@ One
 
 The color of the text can be set by entering the color in square brackets. Colors can be specified using predefined color names (in uppercase or lowercase, but not mixed-case), or by entering the color in `#RRGGBB` or `#RRGGBBAA` form. The `[]` sequence then restores the previous color. It is therefore possible to use
 
-```Mindcode
+```mindcode
 println("[red]This is red");
 println("[green]This is green");
 println("[]This is red again");
@@ -105,7 +105,7 @@ to print colored texts in the colors indicated in the example.
 
 When a color name or color code is not recognized in square brackets, the text including the brackets is left as is. A sequence of two left square brackets, i.e., `[[`, is always printed as `[` e.g.:
 
-```Mindcode
+```mindcode
 println("The color is [[red]");
 println("The state is [[alarm]");
 printflush(message1);
@@ -124,7 +124,7 @@ In the second case, the doubling of square bracket is not strictly necessary, be
 
 It is also possible to use built-in Mindustry icons in the `print` instruction, for example
 
-```Mindcode
+```mindcode
 println(ITEM_COAL, ": ", vault1.@coal);
 println(ITEM_LEAD, ": ", vault1.@lead);
 println(ITEM_SAND, ": ", vault1.@sand);
@@ -138,7 +138,7 @@ Supported Mindustry icons are available through built-in String constants contai
 
 When printing numbers, Mindustry prints the full representation of a number. It might sometimes be cumbersome, as fractions can produce a lot of digits. To avoid this, use the `floor`, `ceil`, or (in Mindustry 8) the `round` function:
 
-```Mindcode
+```mindcode
 start_time = @time;
 // do some stuff
 duration = @time - start_time;
@@ -179,7 +179,7 @@ You need to specify a unit type when binding a unit (e.g., `ubind(@poly)`). If t
 
 The `@unit` variable is special, as it always contains the unit currently bound to the processor. You can store this value in another variable. One possible reason to do that is that you can use such a variable to determine you've already encountered all existing units:
 
-```Mindcode
+```mindcode
 var count;
 var firstUnit = ubind(@poly);
 if firstUnit != null then
@@ -200,7 +200,7 @@ later.
 
 There's one additional, crucial thing you can do with a unit stored in a variable: it can be used to bind that unit again. For example:
 
-```Mindcode
+```mindcode
 var poly = ubind(@poly);     // We just assume the units exist
 var mega = ubind(@mega);
 
@@ -224,7 +224,7 @@ end;
 
 Each unit has a flag, which can hold a numeric value (integer or decimal values). Initially, each unit has a zero flag. A lot of code that can be seen on the internet uses flags to mark units that are in use so that other processors know to avoid them. Typical code might look like this:
 
-```Mindcode
+```mindcode
 def findFreeUnit(unitType, markFlag)
     do
         ubind(unitType);
@@ -254,7 +254,7 @@ The alternative to using flags is querying the unit to see whether it is free or
 
 A wee bit enhanced `findFreeUnit()` function using the `@controlled` property might look like this:
 
-```Mindcode
+```mindcode
 def findFreeUnit(unitType, initialFlag)
     // Keep looking for unit until one is found
     while true do
@@ -289,7 +289,7 @@ A unit becomes controlled by the processor when it is issued a command. Most [uc
 
 If a unit is not issued commands from a processor for some time, it becomes free again and both `@controlled` and `@controller` properties are cleared. My tests show it takes about 10 seconds:
 
-```Mindcode
+```mindcode
 ubind(@poly);
 start = @time;
 flag(10);
@@ -319,7 +319,7 @@ end;
 
 Once a unit is bound to the processor, it can be issued commands using the [`ucontrol` instruction](FUNCTIONS-80.markdown#instruction-unit-control). There's a concern, though: the processor doesn't wait for the unit to complete the command you've given to it but continues executing your program. If another command is issued to the unit before the previous command has been finished, the unit will abandon the previous command and will start executing the new one. For example:
 
-```Mindcode
+```mindcode
 require units;
 
 findFreeUnit(@mono, 123456789);
@@ -333,7 +333,7 @@ It might appear that this program will bind a single unit (mono) and will make i
 
 The solution to this problem is to detect whether the unit has completed the command, and only when it did, issue another command. In case of movements, you need to verify the unit has arrived at the destination before issuing a new command:
 
-```Mindcode
+```mindcode
 require units;
 
 def moveTo(x, y)
@@ -356,7 +356,7 @@ The above program keeps issuing the `move` command, until the unit is within one
 
 Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that are no longer needed. The simple, but not-so-obvious way of doing so is to drop the item into the air:
 
-```Mindcode
+```mindcode
 itemDrop(@air, @unit.@totalItems);
 ```
 
@@ -370,7 +370,7 @@ Mindustry allows your processors to control and receive information from any all
 
 One of the first things you'll probably want to do is to locate your core, as it is the most important building in the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, issue this command:
 
-```Mindcode
+```mindcode
 found = ulocate(:building, :core, false, out core_x, out core_y, out core);
 ```
 
@@ -396,7 +396,7 @@ which will tell you how bad your silicone situation is.
 
 You can collect building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! The `getBlock` command retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
 
-```Mindcode
+```mindcode
 building = getBlock(x, y, out type, out floor);
 ```
 
@@ -411,7 +411,7 @@ If you don't need some arguments, just omit them: `getBlock(x, y, , out floor)`.
 
 In the example code below, the flare finds the nearest enemy turret and approaches it. If the unit is within range of the turret, checks the building variable. If it's `null`, turret has been destroyed, if not, it still exists. If `ulocate` return 0, no enemy turret was found. Another example [here](https://mindcode.herokuapp.com/?s=upgrade-conveyors).
 
-```Mindcode
+```mindcode
 // This example adheres to the strict syntax:
 // All variables are explicitly declared, code is enclosed in code block.
 

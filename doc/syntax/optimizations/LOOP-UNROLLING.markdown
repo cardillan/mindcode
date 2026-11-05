@@ -6,7 +6,7 @@ Loop unrolling is a [dynamic optimization](../SYNTAX-6-OPTIMIZATIONS.markdown#st
 
 The Loop Unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in a significant speedup of program execution: the jump instruction representing an exit condition, and oftentimes also the instruction(s) updating the loop control variable, can be removed from the unrolled loop, so that only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight"—contain very few instructions apart from the loop itself. The most dramatic practical example is probably something like this (let's see it first without the loop unrolling):
 
-```Mindcode
+```mindcode
 #set loop-unrolling = none;
 for i in 0 ... 10 do
     cell1[i] = 0;
@@ -24,7 +24,7 @@ jump 1 lessThan :i 10
 
 It takes 31 instruction executions to perform this code. With loop unrolling, though, the code is changed to this:
 
-```Mindcode
+```mindcode
 for i in 0 ... 10 do
     cell1[i] = 0;
 end;
@@ -49,7 +49,7 @@ The price for this speedup is the increased number of instructions themselves. S
 
 Apart from removing the superfluous instructions, loop unrolling also replaces variables with constant values. This can make further optimization opportunities arise, especially for a Data Flow Optimizer and possibly for others. A not particularly practical, but nonetheless striking example is this program that computes the sum of numbers from 0 to 100:
 
-```Mindcode
+```mindcode
 sum = 0;
 for i in 0 .. 100 do
     sum += i;
@@ -96,7 +96,7 @@ Furthermore:
 
 Examples of loops that can be unrolled on `basic` optimization level:
 
-```Mindcode
+```mindcode
 // Basic case
 for i in 0 .. 10 do
     cell1[i] = cell1[i + 1];
@@ -144,7 +144,7 @@ end;
 
 Examples of loops that can be unrolled on `advanced` optimization level:
 
-```Mindcode
+```mindcode
 // An operation different from add and sub is supported
 for i = 1; i < 100000; i <<= 1 do
     println(i);
@@ -170,7 +170,7 @@ end;
 
 Examples of loops that **cannot** be unrolled:
 
-```Mindcode
+```mindcode
 // LIMIT is a program parameter and as such the value assigned to it isn't considered constant
 param LIMIT = 10;
 for i in 0 ... LIMIT do
@@ -213,7 +213,7 @@ end;
 
 Nested loops can also be unrolled, and the optimizer prefers unrolling the inner loop:
 
-```Mindcode
+```mindcode
 k = 0;
 for i in 0 ... 100 do
     for j in 0 ... 100 do
@@ -226,7 +226,7 @@ Both loops are eligible for unrolling at the beginning, and the inner one is cho
 
 Sometimes unrolling an outer loop can make the inner loop eligible for unrolling too. In this case, the inner loop cannot be unrolled first, as it is not constant:
 
-```Mindcode
+```mindcode
 #set optimization = advanced;
 first = true;
 for i in 1 .. 5 do

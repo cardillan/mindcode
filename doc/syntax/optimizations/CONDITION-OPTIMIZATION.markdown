@@ -29,7 +29,7 @@ For integer division, the optimization is only performed when the divisor is pos
 
 Example:
 
-```Mindcode
+```mindcode
 volatile x, y;
 x = y + 1 >= 2;
 x = y - 1 >= 2;
@@ -64,7 +64,7 @@ op notEqual .x .y -1
 
 Without the optimization, there would be additional `op` instructions:
 
-```Mindcode
+```mindcode
 #set condition-optimization = none;
 volatile x, y;
 x = y + 1 >= 2;
@@ -85,7 +85,7 @@ op greaterThanEq .x *tmp2 2
 
 The following example demonstrates constant folding applied to multiplication and division, as well as the detection of a precision loss (which typically occurs when handing decimal numbers):
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 volatile x, y;
 
@@ -129,7 +129,7 @@ The optimization doesn't happen when the resulting condition requires strict ine
 
 A typical example of a streamlined condition is:
 
-```Mindcode
+```mindcode
 while !(n < 0) do
     n++;
 end;
@@ -145,7 +145,7 @@ jump 1 greaterThanEq :n 0
 
 The unoptimized version of the same code is:
 
-```Mindcode
+```mindcode
 #set condition-optimization = none;
 while !(n < 0) do
     n++;

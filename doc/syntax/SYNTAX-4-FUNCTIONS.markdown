@@ -27,7 +27,7 @@ There are several kinds of parameters a function can have:
 
 Examples of function definitions and function calls:
 
-```Mindcode
+```mindcode
 // a: input parameter
 // b: output parameter
 // c: input/output parameter
@@ -49,7 +49,7 @@ bar();                    // Calling a function with no parameters
 
 A difference between a reference argument and an output argument:
 
-```Mindcode
+```mindcode
 inline void foo(in out x, ref y)
     x = y = 10;
     println("x: ", x);
@@ -122,7 +122,7 @@ The `println()` function works the same, but outputs an additional newline chara
 
 The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal, as the formatting takes place at compile time (Mindustry Logic doesn't provide the means to do it at runtime).
 
-```Mindcode
+```mindcode
 var x = 3;
 var y = 4;
 println("Position: $, $", x, y);      // No formatting - the first parameter isn't a formattable string literal
@@ -175,7 +175,7 @@ The `remark()` function has the same syntax as the `print()` function and suppor
 
 Example:
 
-```Mindcode
+```mindcode
 #set remarks = passive;
 remark("Configurable options:");
 param MIN = 10;
@@ -208,7 +208,7 @@ jump 8 lessThanEq :i MAX
 
 Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get fully evaluated when possible:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 for var i in 1 .. 3 do
     remark($"Iteration $i:");
@@ -235,7 +235,7 @@ As you can see, remarks produced by two different `remark()` function calls are 
 
 If a region of code is unreachable and is optimized away, the remarks are also stripped:
 
-```Mindcode
+```mindcode
 #set remarks = passive;
 const DEBUG = false;
 
@@ -262,7 +262,7 @@ In strict syntax mode, remarks can only be used inside code blocks.
 
 An alternative way to create a remark is the enhanced comment:
 
-```Mindcode
+```mindcode
 /// This is an enhanced comment
 ```
 
@@ -270,7 +270,7 @@ which produces the same result as `remark("This is an enhanced comment")`. The t
 
 In strict syntax mode, enhanced comments are allowed outside code blocks:
 
-```Mindcode
+```mindcode
 #set syntax = strict;
 
 /// Configurable options:
@@ -291,7 +291,7 @@ end;
 
 If the enhanced comment is used at the end of a line containing a complete statement, the generated output is moved in front of the first such statement:
 
-```Mindcode
+```mindcode
 #set remarks = passive;
 param MIN = 10;       /// Minimal value
 param MAX = 100;      /// Maximal value
@@ -331,7 +331,7 @@ The `ascii()` function takes a string constant as an argument, and returns the A
 
 The function allows converting built-in string constants (most importantly, icons) to their ASCII values and using them with `printchar()`. Since the ASCII values are numbers, they can be stored in external variables:
 
-```Mindcode
+```mindcode
 external(cell1) a = ascii(ITEM_COAL);
 printchar(a);
 ```
@@ -350,7 +350,7 @@ The `char()` function returns the ASCII value of a character at a given position
 
 The values obtained from this function may be used with `printchar()`:
 
-```Mindcode
+```mindcode
 param data = "Dbftbs!djqifs";
 linked message1;
 
@@ -403,7 +403,7 @@ When the function produces a string that cannot be encoded, a compilation error 
 
 Example:
 
-```Mindcode
+```mindcode
 const offset = 35;
 param data = encode(offset, 0, 1, 2, 5, 10, 20, 50);
 
@@ -445,7 +445,7 @@ The `emitLog()` function, which can be used to write information into the Mindus
 
 A `length()` function determines the length of an array passed in as an argument, or the number [vararg](#vararg-functions) elements. `0` is returned when the vararg contains no elements.
 
-```Mindcode
+```mindcode
 inline void foo(args...)
     println(length(args));
 end;
@@ -461,7 +461,7 @@ The function always takes just one argument. When the argument passed in is not 
 
 The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8.0` or higher.
 
-```Mindcode
+```mindcode
 param data = "Dbftbs!djqifs";
 println(strlen(data));
 printflush(message1);
@@ -489,7 +489,7 @@ The functions discussed so far are either mapped directly to Mindustry Logic or 
 
 You may declare your own functions using the `def` keyword:
 
-```Mindcode
+```mindcode
 def sum(x, y)
     x + y;
 end;
@@ -497,7 +497,7 @@ end;
 
 Functions not returning any value must be declared using the `void` keyword:
 
-```Mindcode
+```mindcode
 void update(message, status)
     println($"Status: $status");
     println($"Game time: ${floor(@time) / 1000} sec");
@@ -507,7 +507,7 @@ end;
 
 Functions that do return a value must be declared using the `def` keyword, and they need to provide a return value on all possible code paths. The last statement executed on all code paths must be either an expression providing the function value, or a `return` statement providing the function value:
 
-```Mindcode
+```mindcode
 def foo(number)
     if number < 0 then
         println("negative");
@@ -529,7 +529,7 @@ end;
 
 Loops are statements, not expressions, and provide a value of `null`:
 
-```Mindcode
+```mindcode
 def foo(count)
     sum = 0;
     while count > 0 do
@@ -542,7 +542,7 @@ print(foo(10));       // Prints "null"
 
 As has been described above, function parameters in a user function can be input, output or input/output. Use the `in` and `out` modifiers to properly mark the function parameters:
 
-```Mindcode
+```mindcode
 def function(in x, out y, in out z)
     // ...
 end;
@@ -558,7 +558,7 @@ Function parameters and variables used in functions are local to the function. S
 
 Function declared usinf the `def` keyword return a value. The return value is determined when the function ends (returns to the caller). This happens either when the end of function definition is reached, or when a `return` statement is executed. In the first case, the return value of a function is equal to the last expression evaluated by the function; in the second case, the return value is equal to the expression following the `return` keyword:
 
-```Mindcode
+```mindcode
 def foo(n)
     case n
         when 1 then return "One";
@@ -575,7 +575,7 @@ The output of this program is `One:Two:3`.
 
 Void functions are declared using the `void` keyword instead of `def` keyword. Void functions do not return any value. The `return` statement in a `void` function therefore must not specify a value:
 
-```Mindcode
+```mindcode
 void foo(n)
     if n > 10 then
         return;
@@ -603,7 +603,7 @@ Stackless functions (also out-of-line functions) are compiled once and called fr
 
 Inline functions are compiled into every place they're called from, so there can be several copies of them in the compiled code. This leads to shorter code per call and faster execution. To create an inline function, use `inline` keyword:
 
-```Mindcode
+```mindcode
 inline void printtext(name, value, min, max)
     if value < min then
         println(name, " too low");
@@ -622,7 +622,7 @@ The compiler will automatically make a function inline when it is called just on
 
 To prevent inlining of a particular function, either directly by the compiler or later on by the optimizer, use the `noinline` keyword:
 
-```Mindcode
+```mindcode
 noinline void foo()
     print("This function is not inlined.");
 end;
@@ -636,7 +636,7 @@ Vararg functions are also called "variable arity" functions. These functions can
 
 In Mindcode, only functions declared `inline` may use vararg parameter. The vararg parameter must always be the last one, and is declared by appending `...` after the parameter name. The vararg argument may be used in a list iteration loop within the function or may be passed to another function.
 
-```Mindcode
+```mindcode
 inline void foo(values...)
     for i in values do
         println(i);
@@ -659,7 +659,7 @@ foo(1, 2, 3);
 
 The vararg parameter may be passed to standard functions as well. For example
 
-```Mindcode
+```mindcode
 inline void foo(args...)
     println(min(args));
     println(max(args));
@@ -673,7 +673,7 @@ foo(1, 2, 3, 4);
 
 An `out` argument may also be passed via vararg to a function that accepts it:
 
-```Mindcode
+```mindcode
 inline void foo(arg...)
     bar(arg);
 end;
@@ -693,7 +693,7 @@ foo(1, 2);                  // Also no error, the third argument to bar is optio
 
 The vararg parameter may be mixed with ordinary variables or expressions and used more than once, even in the same list iteration or function call:
 
-```Mindcode
+```mindcode
 inline void foo(arg...)
     bar(10, arg, 20, arg);
 end;
@@ -711,7 +711,7 @@ foo(1, 2, 3);
 
 Functions calling themselves, or two (or more) functions calling each other are _recursive_. Recursive functions require a stack to keep track of the calls in progress and for storing local variables from different invocations of the function.
 
-```Mindcode
+```mindcode
 def fib(n)
     return n < 2 ? max(n, 0) : fib(n - 1) + fib(n - 2);
 end;
@@ -740,7 +740,7 @@ When a function is not recursive, it won't store anything on a stack, even when 
 
 To use an external stack, use the `allocate stack` declaration:
 
-```Mindcode
+```mindcode
 allocate stack in bank1[256...512];
 ```
 
@@ -756,7 +756,7 @@ allocate stack in bank1[256...512];
 
 To use more than a single memory cell or bank for the stack, use a _large stack_ declaration:
 
-```Mindcode
+```mindcode
 allocate stack in (bank1 .. bank4);
 ```
 
@@ -764,7 +764,7 @@ Note that when using a large stack, the entire array of memory blocks is used fo
 
 The list of memory blocks to be used can be declared in a separate array, providing a way to use symbolic link names and to declare the type of the linked block explicitly:
 
-```Mindcode
+```mindcode
 linked(@memory-bank) heapMemory[] = (mem1 .. mem8);
 allocate heap in heapMemory;
 ```
@@ -792,7 +792,7 @@ An atomic function guarantees the function body will be executed atomically. See
 
 It is possible to declare a function as `debug`. In this case, calls to the function will only be compiled when the [`debug` option](SYNTAX-5-OTHER.markdown#option-debug) is set to true. Example:
 
-```Mindcode
+```mindcode
 debug inline void pause(in switch)
     // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
     // Allows the user to inspect the state of the program - the variables at the place where it was called.
@@ -807,7 +807,7 @@ A debug function must not return a value - must be declared `void` - and must no
 
 Mindcode supports function overloading. Several functions can have the same name, provided they differ in the number of arguments they take. For example:
 
-```Mindcode
+```mindcode
 void foo(x)
     println("This is foo(x)");
 end;
@@ -837,7 +837,7 @@ Mindcode will report all conflicts of function declarations as errors, even if t
 
 A user-defined function may have the same name as a Logic function. User-defined functions override Logic functions of the same name. When a function call matches the user-defined function, the user-defined function will be called instead of Logic function:
 
-```Mindcode
+```mindcode
 inline def ulocate(ore, oreType)
     print("Calling user-defined function");
 end;
@@ -848,7 +848,7 @@ found = ulocate(:ore, @copper, out x, out y);     // Calls the Logic function
 
 If, however, the user-defined ulocate function was defined with output variables as well, both calls would call the user-defined function:
 
-```Mindcode
+```mindcode
 inline def ulocate(ore, oreType, out x, out y)
     print("Calling user-defined function");
     x = y = 0;

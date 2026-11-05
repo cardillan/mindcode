@@ -4,7 +4,7 @@ Loop hoisting is an optimization that tries to identify loop invariant code (i.e
 
 For example, in the following code
 
-```Mindcode
+```mindcode
 param MAX = 10;
 for i in 0 ... MAX do
     print(2 * MAX);
@@ -25,7 +25,7 @@ jump 4 lessThan :i MAX
 
 The optimization affects even instructions setting up parameters or return addresses for stackless function calls and array access:
 
-```Mindcode
+```mindcode
 param cnt = 5;
 
 noinline def foo(x)
@@ -60,7 +60,7 @@ Hoisting the instructions setting up return addresses is not possible when [`sym
 
 When the `select` optimization is available, Loop Hoisting is capable of handling some conditional expressions as well:
 
-```Mindcode
+```mindcode
 #set symbolic-labels = true;
 param MAX = 10;
 for i in 1 ... MAX do
@@ -95,7 +95,7 @@ Some details of loop hoisting depend on the exact structure of the loop.
 
 Loops with a condition at the end are either the product of a `do while` loop, or can be created by the [Loop Rotation](LOOP-ROTATION.markdown) optimization. In any case, it is known that such loops always execute at least once, and any loop invariant code can therefore be safely hoisted in front of the loop, where it is executed just once:
 
-```Mindcode
+```mindcode
 #set symbolic-labels;
 param A = 2;
 
@@ -127,7 +127,7 @@ compiles to:
 
 Fully rotated loops have two conditions: the front condition is executed only once and determines whether the loop will be executed at all, while the end condition is executed at the end of each loop and determines when the loop terminates. In this case, the loop invariant code can be hoisted between the front loop condition and the loop body. This code is then executed only once when the loop is entered:
 
-```Mindcode
+```mindcode
 #set symbolic-labels;
 param A = 2;
 
@@ -162,7 +162,7 @@ label_5:
 
 When a fully rotated loop is directly nested within another loop, loop invariant code which has no effect outside the loop is hoisted in front of the inner loop. This allows such code to be hoisted again within the outer loop, recursively. If the inner loop is executed at least once in most cases, the resulting code is more efficient. Example:
 
-```Mindcode
+```mindcode
 #set symbolic-labels;
 
 param A = 2;
@@ -222,7 +222,7 @@ label_10:
 
 Here, `set :status "Entered"` is only hoisted in front of the loop body, because it has an effect outside the loop (and executing it while the loop wasn't actually run would change the program semantics). On the other hand, the instructions setting up `*tmp5` and `*tmp6` are hoisted due to the nested loop hoisting rule, but are never actually used, because `C` is zero. To prevent that, an explicit condition can be used:
 
-```Mindcode
+```mindcode
 #set symbolic-labels;
 
 param A = 2;
@@ -286,7 +286,7 @@ label_8:
 
 When a loop is only partially rotated or not rotated at all, there isn't a place that gets executed upon the first iteration of the loop only, and the execution of the loop is not guaranteed. If the loop is nested in another loop, instructions not having an effect outside the loop are hoisted in front of the loop (similarly to the case of nested, fully rotated loops). Again, this may produce code which is less efficient if the loop is usually not executed:
 
-```Mindcode
+```mindcode
 #set symbolic-labels;
 #set goal = size;
 

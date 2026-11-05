@@ -65,7 +65,7 @@ Variables to be accessed remotely must be declared using the [`export` keyword](
 
 Function to be called remotely must be declared using the `export` keyword:
 
-```Mindcode
+```mindcode
 module library;
 
 export def foo(x, y, out z)
@@ -100,7 +100,7 @@ It is possible to call the `backgroundProcess()` function explicitly. In this ca
 
 Example of a module with a background process:
 
-```Mindcode
+```mindcode
 module backgroundProcess;
 
 linked message1;
@@ -342,7 +342,7 @@ There's no way to define a cleanup routine in case a remote call is terminated, 
 
 Terminating remote calls is possibly safe when performed by the processor that initiated the call. This can be done by calling another remote function. There isn't a built-in function to terminate a remote call, but it can be easily created by defining an empty exported function, such as:
 
-```Mindcode
+```mindcode
 module example;
 
 export void stop()
@@ -383,7 +383,7 @@ Local call of an exported function also sets the function's `:functionName*finis
 
 To access arbitrary remote processor variables using the `read` and `write` instructions., `read(variable)`  and `write(value, variable)` methods must be used, to be called on processors:
 
-```Mindcode
+```mindcode
 print(processor1.read("foo"));
 processor2.write(@coal, "bar");
 ```
@@ -428,7 +428,7 @@ The following restrictions apply to remote variables declared with storage speci
 
 Declaring variables for remote access:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 
 /// Remote variables named using Mindcode's naming convention
@@ -455,7 +455,7 @@ print foo
 
 Accessing remote variables:
 
-```Mindcode
+```mindcode
 #set remarks = comments;
 
 /// Remote variables named using Mindcode's naming convention
@@ -519,7 +519,7 @@ Atomic sections may be nested and may contain calls to atomic functions (both in
 
 The atomic block has the following syntax:
 
-```Mindcode
+```mindcode
 atomic
     // Atomic section of code
 end;
@@ -529,7 +529,7 @@ end;
 
 The `atomic()` function is used to execute a single expression atomically, returning its value:
 
-```Mindcode
+```mindcode
 cell1[1] = atomic(cell[0]++);
 ```
 
@@ -549,7 +549,7 @@ As seen in the above example, instructions needed to store the result aren't par
 
 A function can be declared using the `atomic` keyword, in which case the function body is executed atomically:
 
-```Mindcode
+```mindcode
 atomic def increment()
     cell1[0]++;
 end;
@@ -570,7 +570,7 @@ print *tmp1
 > [!TIP]
 > Inline atomic functions guarantee that access to the arguments passed by reference is protected by the atomic section, but other arguments aren't. Example:
 
-```Mindcode
+```mindcode
 external(cell1[0]) x;
 external(cell1[1]) y;
 
@@ -652,7 +652,7 @@ Merging is possible when the last encountered section is known to be always exec
 
 The `atomic-merge-level` compiler option specifies the limit for merging atomic sections (expressed in ticks). The default value is one tick. When multiple possibilities to merge additional sections exist (e.g., one, two, or three ticks long), the one that has the least amount of instruction quota potentially unused in the final tick of the merged section is chosen.
 
-```Mindcode
+```mindcode
 #set target = 8l;
 
 for i in 0 ... 10 do
@@ -667,7 +667,7 @@ end;
 
 The following code assigns each processor a different value, using a memory cell to store the counter. Multiple processors linked to this memory cell will all end up with a different value.
 
-```Mindcode
+```mindcode
 // Using a microprocessor
 #set target = 8m;
 #set symbolic-labels = true;

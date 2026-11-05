@@ -160,7 +160,7 @@ When choosing which arrays to implement using lookup, Mindcode chooses the large
 
 Example of a lookup array:
 
-```Mindcode
+```mindcode
 #set syntax = strict;
 #set symbolic-labels = true;
 
@@ -403,7 +403,7 @@ Note: multiplexed remote arrays are handled equally to simple remote arrays, as 
 
 Sometimes, the value read from the array is used just once in the following instruction and nowhere else. In these cases, the instruction itself can be embedded in the `@counter` table, if the array elements are stored in the processor, the array access is inlined, and the table is not folded:
 
-```Mindcode
+```mindcode
 const colors[] = ("[red]", "[green]", "[blue]", "[salmon]", "[crimson]");
 print(colors[floor(rand(length(colors)))], "A colorful text.");
 ```
@@ -427,7 +427,7 @@ print "A colorful text."
 
 A more complex injection may happen when an array element is updated. In this case, the entire update operation can be inlined into the table, and the second array access - to write back the resulting value - can be completely avoided:
 
-```Mindcode
+```mindcode
 param p = 0;
 param q = 0;
 volatile var array[5];
@@ -456,7 +456,7 @@ op add .array*0 .array*0 *tmp1          # Origin: 4, keys: 0
 
 This is even supported for two different arrays if they're of the same length:
 
-```Mindcode
+```mindcode
 param p = 0;
 param q = 5;
 var a[5], b[5];

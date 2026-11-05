@@ -20,7 +20,7 @@ Whether the optimization is applied depends on the optimization goal:
 
 Example:
 
-```Mindcode
+```mindcode
 print(rand(10) < 5 ? "low" : "high");
 ```
 
@@ -34,7 +34,7 @@ print *tmp1
 
 The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch.
 
-```Mindcode
+```mindcode
 if switch1.enabled then
     a = "on";
     b = @coal;
@@ -66,7 +66,7 @@ print :c
 
 Even when the assignments modify one or both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can compensate for that:
 
-```Mindcode
+```mindcode
 noinit var a, b;
 
 if a > b then
@@ -96,7 +96,7 @@ Three different optimizations are available for short-circuited expressions. Unl
 
 Pure boolean expressions are expressions over variables using only the `and` and `or` operators. When such an expression has at most three terms (variables), it can be fully evaluated using just two `op` instructions. As this solution is always smaller and faster than the fully evaluated solution, the optimization is always applied for these cases. All six possible forms of a three-variable pure boolean expression, and the resulting optimizations, are demonstrated here:
 
-```Mindcode
+```mindcode
 volatile a, b, c;
 print(a and b and c);
 print(a and (b or c));
@@ -144,7 +144,7 @@ This optimization allows the condition to be processed as a [Fully evaluated exp
 
 Due to the preconditions listed above, the optimization only happens when the second term in the condition is a simple variable when the optimization goal is `speed` or `neutral`. The combined effects of both optimizations taking place can be seen here:
 
-```Mindcode
+```mindcode
 if switch1.enabled and a then
     x = 10; y = 20;
 else
@@ -166,7 +166,7 @@ print :y
 
 Just switching the terms in the condition precludes the optimization:
 
-```Mindcode
+```mindcode
 if a and switch1.enabled then
     x = 10; y = 20;
 else
@@ -194,7 +194,7 @@ print :y
 
 If both the true and the false branches write to just one variable without any additional computations, it is again possible to replace the expression with a sequence of `select` instructions (the `op` instructions can't be used in this case, as they do not allow handling intermediate results). Unlike the case of the fully evaluated condition, each `select` instruction evaluates a piece of the original condition:
 
-```Mindcode
+```mindcode
 print(a > 0 or b > 0 ? 10 : 20);
 ```
 
@@ -213,7 +213,7 @@ This optimization only happens when the short-circuit condition can be converted
 
 An example of the optimization applied under the `size` optimization goal:
 
-```Mindcode
+```mindcode
 #set goal = size;
 volatile x = (switch1.enabled and sorter1.config == @coal);
 ```
@@ -233,7 +233,7 @@ When none of the above optimizations can be made, the optimizer tries to replace
 
 Example:
 
-```Mindcode
+```mindcode
 volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 ```
 
@@ -251,7 +251,7 @@ set .x "no"
 
 For comparison, the unoptimized code would look like this:
 
-```Mindcode
+```mindcode
 #set boolean-optimization = none;
 volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 ```

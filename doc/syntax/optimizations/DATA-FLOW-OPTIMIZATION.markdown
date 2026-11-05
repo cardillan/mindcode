@@ -10,7 +10,7 @@ The data flow analysis reveals cases where variables might not be properly initi
 
 Since Mindustry Logic executes the code repeatedly while preserving variable values, not initializing a variable might be a valid choice, relying on the fact that all variables are assigned a value of `null` by Mindustry at the beginning. If you intentionally leave a variable uninitialized, declare the variable using a `noinit` modifier, which suppresses the warning:
 
-```Mindcode
+```mindcode
 noinit var count;
 count++;
 print(count);
@@ -19,7 +19,7 @@ printflush(message1);
 
 Data Flow Optimization assumes that values assigned to variables detected as uninitialized might be reused on the next program execution. Assignments to uninitialized variables before calling the `end()` function are therefore protected, while assignments to initialized variables aren't—they will be overwritten on the next program execution anyway:
 
-```Mindcode
+```mindcode
 noinit var initialized;
 var foo = rand(10);
 if initialized == 0 then
@@ -51,7 +51,7 @@ Notice the `initialized = 1` statement is preserved, while `foo = 1` is not.
 
 This protection is also applied to assignment to uninitialized variables made before calling a user function which, directly or indirectly, calls or may call the `end()` function:
 
-```Mindcode
+```mindcode
 #set unreachable-code-elimination = none;
 print(foo);
 foo = 5;
@@ -79,7 +79,7 @@ See also [`end()` function](../SYNTAX-3-STATEMENTS.markdown#the-end-function).
 
 All assignments to variables (except global variables) are inspected, and unnecessary assignments are removed. The assignment is unnecessary if the variable is not read after being assigned, or if it is not read before another assignment to the variable is made:
 
-```Mindcode
+```mindcode
 a = rand(10);
 a = rand(20);
 print(a);
@@ -101,7 +101,7 @@ An assignment can also become unnecessary due to other optimizations.
 
 When a variable is used in an instruction and the value of the variable is known to be a constant value, Mindcode replaces the variable with the constant value. This can in turn make the original assignment unnecessary. See, for example:
 
-```Mindcode
+```mindcode
 a = 10;
 b = 20;
 c = @tick + b;
@@ -121,7 +121,7 @@ format :c
 Constant propagation described above ensures that constant values are used instead of variables where possible. When a deterministic operation is performed on constant values (such as addition by the `op add` instruction), constant folding evaluates the expression and replaces the operation with the resulting value, eliminating an instruction.
 For example:
 
-```Mindcode
+```mindcode
 a = 10;
 b = 20;
 c = a + b;
@@ -148,7 +148,7 @@ If the result of a constant expression doesn't have a valid mlog representation,
 
 The Data Flow Optimizer keeps track of expressions that have been evaluated. When the same expression is encountered for a second (third, fourth, ...) time, the result of the last computation is reused instead of evaluating the expression again. In the following code:
 
-```Mindcode
+```mindcode
 a = rand(10);
 b = a + 1;
 c = 2 * (a + 1);
@@ -173,7 +173,7 @@ Again, not every possible opportunity is used. Instructions are not rearranged, 
 
 On the other hand, entire complex expressions are reused if they're identical. In the following code
 
-```Mindcode
+```mindcode
 a = rand(10);
 b = rand(10);
 x = 1 + sqrt(a * a + b * b);
@@ -202,7 +202,7 @@ Backpropagation is a separate optimization that allows modifying instructions pr
 
 This example demonstrates the effects of the backpropagation optimization:
 
-```Mindcode
+```mindcode
 #set optimization = experimental;
 i = rand(10);
 a = i;
