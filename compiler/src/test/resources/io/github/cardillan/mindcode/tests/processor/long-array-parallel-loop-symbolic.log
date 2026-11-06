@@ -1,0 +1,1176 @@
+   456 instructions before optimizations.
+     5 instructions eliminated by Temp Variables Elimination (6 iterations).
+     8 instructions eliminated by Data Flow Optimization (6 iterations).
+   443 instructions after optimizations.
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-8 instructions):
+ 
+    22 set *tmp2 0
+    23 label *label8
+    24 read :x *tmp1 *tmp2
+-    * set *tmp6 *tmp4
+-    * readarr<internal:folded:compact> *tmp7 .b[] *tmp6
+-    * set :y *tmp7
++   25 readarr<internal:folded:compact:src> :y .b[] *tmp4
+    26 set *tmp8 .index
+    27 op add .index .index 1
+    28 set :y *tmp8
+    29 set :x :y
+    30 label *label1
+    31 write :x *tmp1 *tmp2
+-    * set *tmp9 *tmp4
+-    * writearr<internal:folded:compact> :y .b[] *tmp9
++   32 writearr<internal:folded:compact:dst> :y .b[] *tmp4
+    33 op add *tmp2 *tmp2 1
+    34 op add *tmp4 *tmp4 1
+    35 jump *label8 lessThan *tmp2 *tmp0
+ 
+    67 label *label10
+    68 label *label18
+    69 read :x.1 *tmp12 *tmp13
+-    * set *tmp17 *tmp15
+-    * readarr<internal:folded:compact> *tmp18 .b[11...311] *tmp17
+-    * set :y.1 *tmp18
++   70 readarr<internal:folded:compact> :y.1 .b[11...311] *tmp15
+    71 op sub *tmp19 :y.1 :x.1
+    72 op add .sum .sum *tmp19
+    73 label *label11
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    21 label *label0
+    22 set *tmp2 0
+    23 label *label8
+-    * read :x *tmp1 *tmp2
+-    * readarr<internal:folded:compact:src> :y .b[] *tmp4
+    24 set *tmp8 .index
+    25 op add .index .index 1
+    26 set :y *tmp8
+-    * set :x :y
++   27 set :x *tmp8
+    28 label *label1
+-    * write :x *tmp1 *tmp2
+-    * writearr<internal:folded:compact:dst> :y .b[] *tmp4
++   29 write :y *tmp1 *tmp2
++   30 writearr<internal:folded:compact> *tmp8 .b[] *tmp4
+    31 op add *tmp2 *tmp2 1
+    32 op add *tmp4 *tmp4 1
+-    * jump *label8 lessThan *tmp2 *tmp0
++   33 jump *label8 lessThan *tmp2 64
+    34 label *label9
+    35 multijump *tmp5 0 0 (m:marker0)
+    36 multilabel *label7 (m:marker0)
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+     0 set .index 0
+     1 set *tmp1 cell1
+     2 set *tmp4 0
+-    * set *tmp0 64
+     3 op add *tmp5 @counter 1
+     4 jump *label0 always
+     5 multilabel *label3 (m:marker0)
+ 
+    23 set *tmp8 .index
+    24 op add .index .index 1
+    25 set :y *tmp8
+-    * set :x *tmp8
+    26 label *label1
+-    * write :y *tmp1 *tmp2
++   27 write *tmp8 *tmp1 *tmp2
+    28 writearr<internal:folded:compact> *tmp8 .b[] *tmp4
+    29 op add *tmp2 *tmp2 1
+    30 op add *tmp4 *tmp4 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+    22 label *label8
+    23 set *tmp8 .index
+    24 op add .index .index 1
+-    * set :y *tmp8
+    25 label *label1
+    26 write *tmp8 *tmp1 *tmp2
+    27 writearr<internal:folded:compact> *tmp8 .b[] *tmp4
+
+Modifications by Virtual Instruction Expansion:
+ 
+    24 op add .index .index 1
+    25 label *label1
+    26 write *tmp8 *tmp1 *tmp2
+-    * writearr<internal:folded:compact> *tmp8 .b[] *tmp4
++   27 op shl .b*ind *tmp4 1
++   28 call *label20 .b*ret *invalid
++   29 write *tmp8 @this .b*elem
+    30 op add *tmp2 *tmp2 1
+    31 op add *tmp4 *tmp4 1
+    32 jump *label8 lessThan *tmp2 64
+ 
+    64 label *label10
+    65 label *label18
+    66 read :x.1 *tmp12 *tmp13
+-    * readarr<internal:folded:compact> :y.1 .b[11...311] *tmp15
++   67 op add *tmp21 *tmp15 11
++   68 op shl .b*ind *tmp21 1
++   69 call *label20 .b*ret *invalid
++   70 read :y.1 @this .b*elem
+    71 op sub *tmp19 :y.1 :x.1
+    72 op add .sum .sum *tmp19
+    73 label *label11
+ 
+    81 assertequals 300 .sum "long array sum"
+    82 stop
+    83 end
++   84 label *label20 (m:*label20)
++   85 op mod *tmp20 .b*ind 320
++   86 multijump *label21 *tmp20 0 (m:marker2)
++   87 multilabel *label21 (m:marker2)
++   88 select .b*elem lessThan .b*ind 320 ".b*0" ".b*160"
++   89 return .b*ret
++   90 multilabel *label22 (m:marker2)
++   91 select .b*elem lessThan .b*ind 320 ".b*1" ".b*161"
++   92 return .b*ret
++   93 multilabel *label23 (m:marker2)
++   94 select .b*elem lessThan .b*ind 320 ".b*2" ".b*162"
++   95 return .b*ret
++   96 multilabel *label24 (m:marker2)
++   97 select .b*elem lessThan .b*ind 320 ".b*3" ".b*163"
++   98 return .b*ret
++   99 multilabel *label25 (m:marker2)
++  100 select .b*elem lessThan .b*ind 320 ".b*4" ".b*164"
++  101 return .b*ret
++  102 multilabel *label26 (m:marker2)
++  103 select .b*elem lessThan .b*ind 320 ".b*5" ".b*165"
++  104 return .b*ret
++  105 multilabel *label27 (m:marker2)
++  106 select .b*elem lessThan .b*ind 320 ".b*6" ".b*166"
++  107 return .b*ret
++  108 multilabel *label28 (m:marker2)
++  109 select .b*elem lessThan .b*ind 320 ".b*7" ".b*167"
++  110 return .b*ret
++  111 multilabel *label29 (m:marker2)
++  112 select .b*elem lessThan .b*ind 320 ".b*8" ".b*168"
++  113 return .b*ret
++  114 multilabel *label30 (m:marker2)
++  115 select .b*elem lessThan .b*ind 320 ".b*9" ".b*169"
++  116 return .b*ret
++  117 multilabel *label31 (m:marker2)
++  118 select .b*elem lessThan .b*ind 320 ".b*10" ".b*170"
++  119 return .b*ret
++  120 multilabel *label32 (m:marker2)
++  121 select .b*elem lessThan .b*ind 320 ".b*11" ".b*171"
++  122 return .b*ret
++  123 multilabel *label33 (m:marker2)
++  124 select .b*elem lessThan .b*ind 320 ".b*12" ".b*172"
++  125 return .b*ret
++  126 multilabel *label34 (m:marker2)
++  127 select .b*elem lessThan .b*ind 320 ".b*13" ".b*173"
++  128 return .b*ret
++  129 multilabel *label35 (m:marker2)
++  130 select .b*elem lessThan .b*ind 320 ".b*14" ".b*174"
++  131 return .b*ret
++  132 multilabel *label36 (m:marker2)
++  133 select .b*elem lessThan .b*ind 320 ".b*15" ".b*175"
++  134 return .b*ret
++  135 multilabel *label37 (m:marker2)
++  136 select .b*elem lessThan .b*ind 320 ".b*16" ".b*176"
++  137 return .b*ret
++  138 multilabel *label38 (m:marker2)
++  139 select .b*elem lessThan .b*ind 320 ".b*17" ".b*177"
++  140 return .b*ret
++  141 multilabel *label39 (m:marker2)
++  142 select .b*elem lessThan .b*ind 320 ".b*18" ".b*178"
++  143 return .b*ret
++  144 multilabel *label40 (m:marker2)
++  145 select .b*elem lessThan .b*ind 320 ".b*19" ".b*179"
++  146 return .b*ret
++  147 multilabel *label41 (m:marker2)
++  148 select .b*elem lessThan .b*ind 320 ".b*20" ".b*180"
++  149 return .b*ret
++  150 multilabel *label42 (m:marker2)
++  151 select .b*elem lessThan .b*ind 320 ".b*21" ".b*181"
++  152 return .b*ret
++  153 multilabel *label43 (m:marker2)
++  154 select .b*elem lessThan .b*ind 320 ".b*22" ".b*182"
++  155 return .b*ret
++  156 multilabel *label44 (m:marker2)
++  157 select .b*elem lessThan .b*ind 320 ".b*23" ".b*183"
++  158 return .b*ret
++  159 multilabel *label45 (m:marker2)
++  160 select .b*elem lessThan .b*ind 320 ".b*24" ".b*184"
++  161 return .b*ret
++  162 multilabel *label46 (m:marker2)
++  163 select .b*elem lessThan .b*ind 320 ".b*25" ".b*185"
++  164 return .b*ret
++  165 multilabel *label47 (m:marker2)
++  166 select .b*elem lessThan .b*ind 320 ".b*26" ".b*186"
++  167 return .b*ret
++  168 multilabel *label48 (m:marker2)
++  169 select .b*elem lessThan .b*ind 320 ".b*27" ".b*187"
++  170 return .b*ret
++  171 multilabel *label49 (m:marker2)
++  172 select .b*elem lessThan .b*ind 320 ".b*28" ".b*188"
++  173 return .b*ret
++  174 multilabel *label50 (m:marker2)
++  175 select .b*elem lessThan .b*ind 320 ".b*29" ".b*189"
++  176 return .b*ret
++  177 multilabel *label51 (m:marker2)
++  178 select .b*elem lessThan .b*ind 320 ".b*30" ".b*190"
++  179 return .b*ret
++  180 multilabel *label52 (m:marker2)
++  181 select .b*elem lessThan .b*ind 320 ".b*31" ".b*191"
++  182 return .b*ret
++  183 multilabel *label53 (m:marker2)
++  184 select .b*elem lessThan .b*ind 320 ".b*32" ".b*192"
++  185 return .b*ret
++  186 multilabel *label54 (m:marker2)
++  187 select .b*elem lessThan .b*ind 320 ".b*33" ".b*193"
++  188 return .b*ret
++  189 multilabel *label55 (m:marker2)
++  190 select .b*elem lessThan .b*ind 320 ".b*34" ".b*194"
++  191 return .b*ret
++  192 multilabel *label56 (m:marker2)
++  193 select .b*elem lessThan .b*ind 320 ".b*35" ".b*195"
++  194 return .b*ret
++  195 multilabel *label57 (m:marker2)
++  196 select .b*elem lessThan .b*ind 320 ".b*36" ".b*196"
++  197 return .b*ret
++  198 multilabel *label58 (m:marker2)
++  199 select .b*elem lessThan .b*ind 320 ".b*37" ".b*197"
++  200 return .b*ret
++  201 multilabel *label59 (m:marker2)
++  202 select .b*elem lessThan .b*ind 320 ".b*38" ".b*198"
++  203 return .b*ret
++  204 multilabel *label60 (m:marker2)
++  205 select .b*elem lessThan .b*ind 320 ".b*39" ".b*199"
++  206 return .b*ret
++  207 multilabel *label61 (m:marker2)
++  208 select .b*elem lessThan .b*ind 320 ".b*40" ".b*200"
++  209 return .b*ret
++  210 multilabel *label62 (m:marker2)
++  211 select .b*elem lessThan .b*ind 320 ".b*41" ".b*201"
++  212 return .b*ret
++  213 multilabel *label63 (m:marker2)
++  214 select .b*elem lessThan .b*ind 320 ".b*42" ".b*202"
++  215 return .b*ret
++  216 multilabel *label64 (m:marker2)
++  217 select .b*elem lessThan .b*ind 320 ".b*43" ".b*203"
++  218 return .b*ret
++  219 multilabel *label65 (m:marker2)
++  220 select .b*elem lessThan .b*ind 320 ".b*44" ".b*204"
++  221 return .b*ret
++  222 multilabel *label66 (m:marker2)
++  223 select .b*elem lessThan .b*ind 320 ".b*45" ".b*205"
++  224 return .b*ret
++  225 multilabel *label67 (m:marker2)
++  226 select .b*elem lessThan .b*ind 320 ".b*46" ".b*206"
++  227 return .b*ret
++  228 multilabel *label68 (m:marker2)
++  229 select .b*elem lessThan .b*ind 320 ".b*47" ".b*207"
++  230 return .b*ret
++  231 multilabel *label69 (m:marker2)
++  232 select .b*elem lessThan .b*ind 320 ".b*48" ".b*208"
++  233 return .b*ret
++  234 multilabel *label70 (m:marker2)
++  235 select .b*elem lessThan .b*ind 320 ".b*49" ".b*209"
++  236 return .b*ret
++  237 multilabel *label71 (m:marker2)
++  238 select .b*elem lessThan .b*ind 320 ".b*50" ".b*210"
++  239 return .b*ret
++  240 multilabel *label72 (m:marker2)
++  241 select .b*elem lessThan .b*ind 320 ".b*51" ".b*211"
++  242 return .b*ret
++  243 multilabel *label73 (m:marker2)
++  244 select .b*elem lessThan .b*ind 320 ".b*52" ".b*212"
++  245 return .b*ret
++  246 multilabel *label74 (m:marker2)
++  247 select .b*elem lessThan .b*ind 320 ".b*53" ".b*213"
++  248 return .b*ret
++  249 multilabel *label75 (m:marker2)
++  250 select .b*elem lessThan .b*ind 320 ".b*54" ".b*214"
++  251 return .b*ret
++  252 multilabel *label76 (m:marker2)
++  253 select .b*elem lessThan .b*ind 320 ".b*55" ".b*215"
++  254 return .b*ret
++  255 multilabel *label77 (m:marker2)
++  256 select .b*elem lessThan .b*ind 320 ".b*56" ".b*216"
++  257 return .b*ret
++  258 multilabel *label78 (m:marker2)
++  259 select .b*elem lessThan .b*ind 320 ".b*57" ".b*217"
++  260 return .b*ret
++  261 multilabel *label79 (m:marker2)
++  262 select .b*elem lessThan .b*ind 320 ".b*58" ".b*218"
++  263 return .b*ret
++  264 multilabel *label80 (m:marker2)
++  265 select .b*elem lessThan .b*ind 320 ".b*59" ".b*219"
++  266 return .b*ret
++  267 multilabel *label81 (m:marker2)
++  268 select .b*elem lessThan .b*ind 320 ".b*60" ".b*220"
++  269 return .b*ret
++  270 multilabel *label82 (m:marker2)
++  271 select .b*elem lessThan .b*ind 320 ".b*61" ".b*221"
++  272 return .b*ret
++  273 multilabel *label83 (m:marker2)
++  274 select .b*elem lessThan .b*ind 320 ".b*62" ".b*222"
++  275 return .b*ret
++  276 multilabel *label84 (m:marker2)
++  277 select .b*elem lessThan .b*ind 320 ".b*63" ".b*223"
++  278 return .b*ret
++  279 multilabel *label85 (m:marker2)
++  280 select .b*elem lessThan .b*ind 320 ".b*64" ".b*224"
++  281 return .b*ret
++  282 multilabel *label86 (m:marker2)
++  283 select .b*elem lessThan .b*ind 320 ".b*65" ".b*225"
++  284 return .b*ret
++  285 multilabel *label87 (m:marker2)
++  286 select .b*elem lessThan .b*ind 320 ".b*66" ".b*226"
++  287 return .b*ret
++  288 multilabel *label88 (m:marker2)
++  289 select .b*elem lessThan .b*ind 320 ".b*67" ".b*227"
++  290 return .b*ret
++  291 multilabel *label89 (m:marker2)
++  292 select .b*elem lessThan .b*ind 320 ".b*68" ".b*228"
++  293 return .b*ret
++  294 multilabel *label90 (m:marker2)
++  295 select .b*elem lessThan .b*ind 320 ".b*69" ".b*229"
++  296 return .b*ret
++  297 multilabel *label91 (m:marker2)
++  298 select .b*elem lessThan .b*ind 320 ".b*70" ".b*230"
++  299 return .b*ret
++  300 multilabel *label92 (m:marker2)
++  301 select .b*elem lessThan .b*ind 320 ".b*71" ".b*231"
++  302 return .b*ret
++  303 multilabel *label93 (m:marker2)
++  304 select .b*elem lessThan .b*ind 320 ".b*72" ".b*232"
++  305 return .b*ret
++  306 multilabel *label94 (m:marker2)
++  307 select .b*elem lessThan .b*ind 320 ".b*73" ".b*233"
++  308 return .b*ret
++  309 multilabel *label95 (m:marker2)
++  310 select .b*elem lessThan .b*ind 320 ".b*74" ".b*234"
++  311 return .b*ret
++  312 multilabel *label96 (m:marker2)
++  313 select .b*elem lessThan .b*ind 320 ".b*75" ".b*235"
++  314 return .b*ret
++  315 multilabel *label97 (m:marker2)
++  316 select .b*elem lessThan .b*ind 320 ".b*76" ".b*236"
++  317 return .b*ret
++  318 multilabel *label98 (m:marker2)
++  319 select .b*elem lessThan .b*ind 320 ".b*77" ".b*237"
++  320 return .b*ret
++  321 multilabel *label99 (m:marker2)
++  322 select .b*elem lessThan .b*ind 320 ".b*78" ".b*238"
++  323 return .b*ret
++  324 multilabel *label100 (m:marker2)
++  325 select .b*elem lessThan .b*ind 320 ".b*79" ".b*239"
++  326 return .b*ret
++  327 multilabel *label101 (m:marker2)
++  328 select .b*elem lessThan .b*ind 320 ".b*80" ".b*240"
++  329 return .b*ret
++  330 multilabel *label102 (m:marker2)
++  331 select .b*elem lessThan .b*ind 320 ".b*81" ".b*241"
++  332 return .b*ret
++  333 multilabel *label103 (m:marker2)
++  334 select .b*elem lessThan .b*ind 320 ".b*82" ".b*242"
++  335 return .b*ret
++  336 multilabel *label104 (m:marker2)
++  337 select .b*elem lessThan .b*ind 320 ".b*83" ".b*243"
++  338 return .b*ret
++  339 multilabel *label105 (m:marker2)
++  340 select .b*elem lessThan .b*ind 320 ".b*84" ".b*244"
++  341 return .b*ret
++  342 multilabel *label106 (m:marker2)
++  343 select .b*elem lessThan .b*ind 320 ".b*85" ".b*245"
++  344 return .b*ret
++  345 multilabel *label107 (m:marker2)
++  346 select .b*elem lessThan .b*ind 320 ".b*86" ".b*246"
++  347 return .b*ret
++  348 multilabel *label108 (m:marker2)
++  349 select .b*elem lessThan .b*ind 320 ".b*87" ".b*247"
++  350 return .b*ret
++  351 multilabel *label109 (m:marker2)
++  352 select .b*elem lessThan .b*ind 320 ".b*88" ".b*248"
++  353 return .b*ret
++  354 multilabel *label110 (m:marker2)
++  355 select .b*elem lessThan .b*ind 320 ".b*89" ".b*249"
++  356 return .b*ret
++  357 multilabel *label111 (m:marker2)
++  358 select .b*elem lessThan .b*ind 320 ".b*90" ".b*250"
++  359 return .b*ret
++  360 multilabel *label112 (m:marker2)
++  361 select .b*elem lessThan .b*ind 320 ".b*91" ".b*251"
++  362 return .b*ret
++  363 multilabel *label113 (m:marker2)
++  364 select .b*elem lessThan .b*ind 320 ".b*92" ".b*252"
++  365 return .b*ret
++  366 multilabel *label114 (m:marker2)
++  367 select .b*elem lessThan .b*ind 320 ".b*93" ".b*253"
++  368 return .b*ret
++  369 multilabel *label115 (m:marker2)
++  370 select .b*elem lessThan .b*ind 320 ".b*94" ".b*254"
++  371 return .b*ret
++  372 multilabel *label116 (m:marker2)
++  373 select .b*elem lessThan .b*ind 320 ".b*95" ".b*255"
++  374 return .b*ret
++  375 multilabel *label117 (m:marker2)
++  376 select .b*elem lessThan .b*ind 320 ".b*96" ".b*256"
++  377 return .b*ret
++  378 multilabel *label118 (m:marker2)
++  379 select .b*elem lessThan .b*ind 320 ".b*97" ".b*257"
++  380 return .b*ret
++  381 multilabel *label119 (m:marker2)
++  382 select .b*elem lessThan .b*ind 320 ".b*98" ".b*258"
++  383 return .b*ret
++  384 multilabel *label120 (m:marker2)
++  385 select .b*elem lessThan .b*ind 320 ".b*99" ".b*259"
++  386 return .b*ret
++  387 multilabel *label121 (m:marker2)
++  388 select .b*elem lessThan .b*ind 320 ".b*100" ".b*260"
++  389 return .b*ret
++  390 multilabel *label122 (m:marker2)
++  391 select .b*elem lessThan .b*ind 320 ".b*101" ".b*261"
++  392 return .b*ret
++  393 multilabel *label123 (m:marker2)
++  394 select .b*elem lessThan .b*ind 320 ".b*102" ".b*262"
++  395 return .b*ret
++  396 multilabel *label124 (m:marker2)
++  397 select .b*elem lessThan .b*ind 320 ".b*103" ".b*263"
++  398 return .b*ret
++  399 multilabel *label125 (m:marker2)
++  400 select .b*elem lessThan .b*ind 320 ".b*104" ".b*264"
++  401 return .b*ret
++  402 multilabel *label126 (m:marker2)
++  403 select .b*elem lessThan .b*ind 320 ".b*105" ".b*265"
++  404 return .b*ret
++  405 multilabel *label127 (m:marker2)
++  406 select .b*elem lessThan .b*ind 320 ".b*106" ".b*266"
++  407 return .b*ret
++  408 multilabel *label128 (m:marker2)
++  409 select .b*elem lessThan .b*ind 320 ".b*107" ".b*267"
++  410 return .b*ret
++  411 multilabel *label129 (m:marker2)
++  412 select .b*elem lessThan .b*ind 320 ".b*108" ".b*268"
++  413 return .b*ret
++  414 multilabel *label130 (m:marker2)
++  415 select .b*elem lessThan .b*ind 320 ".b*109" ".b*269"
++  416 return .b*ret
++  417 multilabel *label131 (m:marker2)
++  418 select .b*elem lessThan .b*ind 320 ".b*110" ".b*270"
++  419 return .b*ret
++  420 multilabel *label132 (m:marker2)
++  421 select .b*elem lessThan .b*ind 320 ".b*111" ".b*271"
++  422 return .b*ret
++  423 multilabel *label133 (m:marker2)
++  424 select .b*elem lessThan .b*ind 320 ".b*112" ".b*272"
++  425 return .b*ret
++  426 multilabel *label134 (m:marker2)
++  427 select .b*elem lessThan .b*ind 320 ".b*113" ".b*273"
++  428 return .b*ret
++  429 multilabel *label135 (m:marker2)
++  430 select .b*elem lessThan .b*ind 320 ".b*114" ".b*274"
++  431 return .b*ret
++  432 multilabel *label136 (m:marker2)
++  433 select .b*elem lessThan .b*ind 320 ".b*115" ".b*275"
++  434 return .b*ret
++  435 multilabel *label137 (m:marker2)
++  436 select .b*elem lessThan .b*ind 320 ".b*116" ".b*276"
++  437 return .b*ret
++  438 multilabel *label138 (m:marker2)
++  439 select .b*elem lessThan .b*ind 320 ".b*117" ".b*277"
++  440 return .b*ret
++  441 multilabel *label139 (m:marker2)
++  442 select .b*elem lessThan .b*ind 320 ".b*118" ".b*278"
++  443 return .b*ret
++  444 multilabel *label140 (m:marker2)
++  445 select .b*elem lessThan .b*ind 320 ".b*119" ".b*279"
++  446 return .b*ret
++  447 multilabel *label141 (m:marker2)
++  448 select .b*elem lessThan .b*ind 320 ".b*120" ".b*280"
++  449 return .b*ret
++  450 multilabel *label142 (m:marker2)
++  451 select .b*elem lessThan .b*ind 320 ".b*121" ".b*281"
++  452 return .b*ret
++  453 multilabel *label143 (m:marker2)
++  454 select .b*elem lessThan .b*ind 320 ".b*122" ".b*282"
++  455 return .b*ret
++  456 multilabel *label144 (m:marker2)
++  457 select .b*elem lessThan .b*ind 320 ".b*123" ".b*283"
++  458 return .b*ret
++  459 multilabel *label145 (m:marker2)
++  460 select .b*elem lessThan .b*ind 320 ".b*124" ".b*284"
++  461 return .b*ret
++  462 multilabel *label146 (m:marker2)
++  463 select .b*elem lessThan .b*ind 320 ".b*125" ".b*285"
++  464 return .b*ret
++  465 multilabel *label147 (m:marker2)
++  466 select .b*elem lessThan .b*ind 320 ".b*126" ".b*286"
++  467 return .b*ret
++  468 multilabel *label148 (m:marker2)
++  469 select .b*elem lessThan .b*ind 320 ".b*127" ".b*287"
++  470 return .b*ret
++  471 multilabel *label149 (m:marker2)
++  472 select .b*elem lessThan .b*ind 320 ".b*128" ".b*288"
++  473 return .b*ret
++  474 multilabel *label150 (m:marker2)
++  475 select .b*elem lessThan .b*ind 320 ".b*129" ".b*289"
++  476 return .b*ret
++  477 multilabel *label151 (m:marker2)
++  478 select .b*elem lessThan .b*ind 320 ".b*130" ".b*290"
++  479 return .b*ret
++  480 multilabel *label152 (m:marker2)
++  481 select .b*elem lessThan .b*ind 320 ".b*131" ".b*291"
++  482 return .b*ret
++  483 multilabel *label153 (m:marker2)
++  484 select .b*elem lessThan .b*ind 320 ".b*132" ".b*292"
++  485 return .b*ret
++  486 multilabel *label154 (m:marker2)
++  487 select .b*elem lessThan .b*ind 320 ".b*133" ".b*293"
++  488 return .b*ret
++  489 multilabel *label155 (m:marker2)
++  490 select .b*elem lessThan .b*ind 320 ".b*134" ".b*294"
++  491 return .b*ret
++  492 multilabel *label156 (m:marker2)
++  493 select .b*elem lessThan .b*ind 320 ".b*135" ".b*295"
++  494 return .b*ret
++  495 multilabel *label157 (m:marker2)
++  496 select .b*elem lessThan .b*ind 320 ".b*136" ".b*296"
++  497 return .b*ret
++  498 multilabel *label158 (m:marker2)
++  499 select .b*elem lessThan .b*ind 320 ".b*137" ".b*297"
++  500 return .b*ret
++  501 multilabel *label159 (m:marker2)
++  502 select .b*elem lessThan .b*ind 320 ".b*138" ".b*298"
++  503 return .b*ret
++  504 multilabel *label160 (m:marker2)
++  505 select .b*elem lessThan .b*ind 320 ".b*139" ".b*299"
++  506 return .b*ret
++  507 multilabel *label161 (m:marker2)
++  508 select .b*elem lessThan .b*ind 320 ".b*140" ".b*300"
++  509 return .b*ret
++  510 multilabel *label162 (m:marker2)
++  511 select .b*elem lessThan .b*ind 320 ".b*141" ".b*301"
++  512 return .b*ret
++  513 multilabel *label163 (m:marker2)
++  514 select .b*elem lessThan .b*ind 320 ".b*142" ".b*302"
++  515 return .b*ret
++  516 multilabel *label164 (m:marker2)
++  517 select .b*elem lessThan .b*ind 320 ".b*143" ".b*303"
++  518 return .b*ret
++  519 multilabel *label165 (m:marker2)
++  520 select .b*elem lessThan .b*ind 320 ".b*144" ".b*304"
++  521 return .b*ret
++  522 multilabel *label166 (m:marker2)
++  523 select .b*elem lessThan .b*ind 320 ".b*145" ".b*305"
++  524 return .b*ret
++  525 multilabel *label167 (m:marker2)
++  526 select .b*elem lessThan .b*ind 320 ".b*146" ".b*306"
++  527 return .b*ret
++  528 multilabel *label168 (m:marker2)
++  529 select .b*elem lessThan .b*ind 320 ".b*147" ".b*307"
++  530 return .b*ret
++  531 multilabel *label169 (m:marker2)
++  532 select .b*elem lessThan .b*ind 320 ".b*148" ".b*308"
++  533 return .b*ret
++  534 multilabel *label170 (m:marker2)
++  535 select .b*elem lessThan .b*ind 320 ".b*149" ".b*309"
++  536 return .b*ret
++  537 multilabel *label171 (m:marker2)
++  538 select .b*elem lessThan .b*ind 320 ".b*150" ".b*310"
++  539 return .b*ret
++  540 multilabel *label172 (m:marker2)
++  541 select .b*elem lessThan .b*ind 320 ".b*151" ".b*311"
++  542 return .b*ret
++  543 multilabel *label173 (m:marker2)
++  544 select .b*elem lessThan .b*ind 320 ".b*152" ".b*312"
++  545 return .b*ret
++  546 multilabel *label174 (m:marker2)
++  547 select .b*elem lessThan .b*ind 320 ".b*153" ".b*313"
++  548 return .b*ret
++  549 multilabel *label175 (m:marker2)
++  550 select .b*elem lessThan .b*ind 320 ".b*154" ".b*314"
++  551 return .b*ret
++  552 multilabel *label176 (m:marker2)
++  553 select .b*elem lessThan .b*ind 320 ".b*155" ".b*315"
++  554 return .b*ret
++  555 multilabel *label177 (m:marker2)
++  556 select .b*elem lessThan .b*ind 320 ".b*156" ".b*316"
++  557 return .b*ret
++  558 multilabel *label178 (m:marker2)
++  559 select .b*elem lessThan .b*ind 320 ".b*157" ".b*317"
++  560 return .b*ret
++  561 multilabel *label179 (m:marker2)
++  562 select .b*elem lessThan .b*ind 320 ".b*158" ".b*318"
++  563 return .b*ret
++  564 multilabel *label180 (m:marker2)
++  565 select .b*elem lessThan .b*ind 320 ".b*159" ".b*319"
++  566 return .b*ret
+
+Symbolic link resolution:
+    c1 -> cell1
+    c2 -> cell2
+    c3 -> cell3
+    c4 -> cell4
+    c5 -> cell5
+
+
+Final code before resolving virtual instructions:
+
+set .index 0
+set *tmp0 cell1
+set *tmp2 0
+op add *tmp3 @counter 1
+jump *label0 always
+multilabel *label3
+set *tmp0 cell2
+op add *tmp3 @counter 1
+jump *label0 always
+multilabel *label4
+set *tmp0 cell3
+op add *tmp3 @counter 1
+jump *label0 always
+multilabel *label5
+set *tmp0 cell4
+op add *tmp3 @counter 1
+jump *label0 always
+multilabel *label6
+set *tmp0 cell5
+set *tmp3 null
+label *label0
+set *tmp1 0
+label *label8
+set *tmp4 .index
+op add .index .index 1
+write *tmp4 *tmp0 *tmp1
+op shl .b*ind *tmp2 1
+call *label20 .b*ret *invalid
+write *tmp4 @this .b*elem
+op add *tmp1 *tmp1 1
+op add *tmp2 *tmp2 1
+jump *label8 lessThan *tmp1 64
+multijump *tmp3 0 0
+multilabel *label7
+set .sum 0
+set *tmp6 cell1
+set *tmp7 10
+set *tmp8 0
+set *tmp5 64
+op add *tmp9 @counter 1
+jump *label10 always
+multilabel *label13
+set *tmp6 cell2
+set *tmp7 0
+op add *tmp9 @counter 1
+jump *label10 always
+multilabel *label14
+set *tmp6 cell3
+set *tmp7 0
+op add *tmp9 @counter 1
+jump *label10 always
+multilabel *label15
+set *tmp6 cell4
+set *tmp7 0
+op add *tmp9 @counter 1
+jump *label10 always
+multilabel *label16
+set *tmp6 cell5
+set *tmp7 0
+set *tmp5 54
+set *tmp9 null
+label *label10
+label *label18
+read :x.1 *tmp6 *tmp7
+op add *tmp12 *tmp8 11
+op shl .b*ind *tmp12 1
+call *label20 .b*ret *invalid
+read :y.1 @this .b*elem
+op sub *tmp10 :y.1 :x.1
+op add .sum .sum *tmp10
+op add *tmp7 *tmp7 1
+op add *tmp8 *tmp8 1
+jump *label18 lessThan *tmp7 *tmp5
+multijump *tmp9 0 0
+multilabel *label17
+assertequals 300 .sum "long array sum"
+stop
+end
+label *label20
+op mod *tmp11 .b*ind 320
+multijump *label21 *tmp11 0
+multilabel *label21
+select .b*elem lessThan .b*ind 320 ".b*0" ".b*160"
+return .b*ret
+multilabel *label22
+select .b*elem lessThan .b*ind 320 ".b*1" ".b*161"
+return .b*ret
+multilabel *label23
+select .b*elem lessThan .b*ind 320 ".b*2" ".b*162"
+return .b*ret
+multilabel *label24
+select .b*elem lessThan .b*ind 320 ".b*3" ".b*163"
+return .b*ret
+multilabel *label25
+select .b*elem lessThan .b*ind 320 ".b*4" ".b*164"
+return .b*ret
+multilabel *label26
+select .b*elem lessThan .b*ind 320 ".b*5" ".b*165"
+return .b*ret
+multilabel *label27
+select .b*elem lessThan .b*ind 320 ".b*6" ".b*166"
+return .b*ret
+multilabel *label28
+select .b*elem lessThan .b*ind 320 ".b*7" ".b*167"
+return .b*ret
+multilabel *label29
+select .b*elem lessThan .b*ind 320 ".b*8" ".b*168"
+return .b*ret
+multilabel *label30
+select .b*elem lessThan .b*ind 320 ".b*9" ".b*169"
+return .b*ret
+multilabel *label31
+select .b*elem lessThan .b*ind 320 ".b*10" ".b*170"
+return .b*ret
+multilabel *label32
+select .b*elem lessThan .b*ind 320 ".b*11" ".b*171"
+return .b*ret
+multilabel *label33
+select .b*elem lessThan .b*ind 320 ".b*12" ".b*172"
+return .b*ret
+multilabel *label34
+select .b*elem lessThan .b*ind 320 ".b*13" ".b*173"
+return .b*ret
+multilabel *label35
+select .b*elem lessThan .b*ind 320 ".b*14" ".b*174"
+return .b*ret
+multilabel *label36
+select .b*elem lessThan .b*ind 320 ".b*15" ".b*175"
+return .b*ret
+multilabel *label37
+select .b*elem lessThan .b*ind 320 ".b*16" ".b*176"
+return .b*ret
+multilabel *label38
+select .b*elem lessThan .b*ind 320 ".b*17" ".b*177"
+return .b*ret
+multilabel *label39
+select .b*elem lessThan .b*ind 320 ".b*18" ".b*178"
+return .b*ret
+multilabel *label40
+select .b*elem lessThan .b*ind 320 ".b*19" ".b*179"
+return .b*ret
+multilabel *label41
+select .b*elem lessThan .b*ind 320 ".b*20" ".b*180"
+return .b*ret
+multilabel *label42
+select .b*elem lessThan .b*ind 320 ".b*21" ".b*181"
+return .b*ret
+multilabel *label43
+select .b*elem lessThan .b*ind 320 ".b*22" ".b*182"
+return .b*ret
+multilabel *label44
+select .b*elem lessThan .b*ind 320 ".b*23" ".b*183"
+return .b*ret
+multilabel *label45
+select .b*elem lessThan .b*ind 320 ".b*24" ".b*184"
+return .b*ret
+multilabel *label46
+select .b*elem lessThan .b*ind 320 ".b*25" ".b*185"
+return .b*ret
+multilabel *label47
+select .b*elem lessThan .b*ind 320 ".b*26" ".b*186"
+return .b*ret
+multilabel *label48
+select .b*elem lessThan .b*ind 320 ".b*27" ".b*187"
+return .b*ret
+multilabel *label49
+select .b*elem lessThan .b*ind 320 ".b*28" ".b*188"
+return .b*ret
+multilabel *label50
+select .b*elem lessThan .b*ind 320 ".b*29" ".b*189"
+return .b*ret
+multilabel *label51
+select .b*elem lessThan .b*ind 320 ".b*30" ".b*190"
+return .b*ret
+multilabel *label52
+select .b*elem lessThan .b*ind 320 ".b*31" ".b*191"
+return .b*ret
+multilabel *label53
+select .b*elem lessThan .b*ind 320 ".b*32" ".b*192"
+return .b*ret
+multilabel *label54
+select .b*elem lessThan .b*ind 320 ".b*33" ".b*193"
+return .b*ret
+multilabel *label55
+select .b*elem lessThan .b*ind 320 ".b*34" ".b*194"
+return .b*ret
+multilabel *label56
+select .b*elem lessThan .b*ind 320 ".b*35" ".b*195"
+return .b*ret
+multilabel *label57
+select .b*elem lessThan .b*ind 320 ".b*36" ".b*196"
+return .b*ret
+multilabel *label58
+select .b*elem lessThan .b*ind 320 ".b*37" ".b*197"
+return .b*ret
+multilabel *label59
+select .b*elem lessThan .b*ind 320 ".b*38" ".b*198"
+return .b*ret
+multilabel *label60
+select .b*elem lessThan .b*ind 320 ".b*39" ".b*199"
+return .b*ret
+multilabel *label61
+select .b*elem lessThan .b*ind 320 ".b*40" ".b*200"
+return .b*ret
+multilabel *label62
+select .b*elem lessThan .b*ind 320 ".b*41" ".b*201"
+return .b*ret
+multilabel *label63
+select .b*elem lessThan .b*ind 320 ".b*42" ".b*202"
+return .b*ret
+multilabel *label64
+select .b*elem lessThan .b*ind 320 ".b*43" ".b*203"
+return .b*ret
+multilabel *label65
+select .b*elem lessThan .b*ind 320 ".b*44" ".b*204"
+return .b*ret
+multilabel *label66
+select .b*elem lessThan .b*ind 320 ".b*45" ".b*205"
+return .b*ret
+multilabel *label67
+select .b*elem lessThan .b*ind 320 ".b*46" ".b*206"
+return .b*ret
+multilabel *label68
+select .b*elem lessThan .b*ind 320 ".b*47" ".b*207"
+return .b*ret
+multilabel *label69
+select .b*elem lessThan .b*ind 320 ".b*48" ".b*208"
+return .b*ret
+multilabel *label70
+select .b*elem lessThan .b*ind 320 ".b*49" ".b*209"
+return .b*ret
+multilabel *label71
+select .b*elem lessThan .b*ind 320 ".b*50" ".b*210"
+return .b*ret
+multilabel *label72
+select .b*elem lessThan .b*ind 320 ".b*51" ".b*211"
+return .b*ret
+multilabel *label73
+select .b*elem lessThan .b*ind 320 ".b*52" ".b*212"
+return .b*ret
+multilabel *label74
+select .b*elem lessThan .b*ind 320 ".b*53" ".b*213"
+return .b*ret
+multilabel *label75
+select .b*elem lessThan .b*ind 320 ".b*54" ".b*214"
+return .b*ret
+multilabel *label76
+select .b*elem lessThan .b*ind 320 ".b*55" ".b*215"
+return .b*ret
+multilabel *label77
+select .b*elem lessThan .b*ind 320 ".b*56" ".b*216"
+return .b*ret
+multilabel *label78
+select .b*elem lessThan .b*ind 320 ".b*57" ".b*217"
+return .b*ret
+multilabel *label79
+select .b*elem lessThan .b*ind 320 ".b*58" ".b*218"
+return .b*ret
+multilabel *label80
+select .b*elem lessThan .b*ind 320 ".b*59" ".b*219"
+return .b*ret
+multilabel *label81
+select .b*elem lessThan .b*ind 320 ".b*60" ".b*220"
+return .b*ret
+multilabel *label82
+select .b*elem lessThan .b*ind 320 ".b*61" ".b*221"
+return .b*ret
+multilabel *label83
+select .b*elem lessThan .b*ind 320 ".b*62" ".b*222"
+return .b*ret
+multilabel *label84
+select .b*elem lessThan .b*ind 320 ".b*63" ".b*223"
+return .b*ret
+multilabel *label85
+select .b*elem lessThan .b*ind 320 ".b*64" ".b*224"
+return .b*ret
+multilabel *label86
+select .b*elem lessThan .b*ind 320 ".b*65" ".b*225"
+return .b*ret
+multilabel *label87
+select .b*elem lessThan .b*ind 320 ".b*66" ".b*226"
+return .b*ret
+multilabel *label88
+select .b*elem lessThan .b*ind 320 ".b*67" ".b*227"
+return .b*ret
+multilabel *label89
+select .b*elem lessThan .b*ind 320 ".b*68" ".b*228"
+return .b*ret
+multilabel *label90
+select .b*elem lessThan .b*ind 320 ".b*69" ".b*229"
+return .b*ret
+multilabel *label91
+select .b*elem lessThan .b*ind 320 ".b*70" ".b*230"
+return .b*ret
+multilabel *label92
+select .b*elem lessThan .b*ind 320 ".b*71" ".b*231"
+return .b*ret
+multilabel *label93
+select .b*elem lessThan .b*ind 320 ".b*72" ".b*232"
+return .b*ret
+multilabel *label94
+select .b*elem lessThan .b*ind 320 ".b*73" ".b*233"
+return .b*ret
+multilabel *label95
+select .b*elem lessThan .b*ind 320 ".b*74" ".b*234"
+return .b*ret
+multilabel *label96
+select .b*elem lessThan .b*ind 320 ".b*75" ".b*235"
+return .b*ret
+multilabel *label97
+select .b*elem lessThan .b*ind 320 ".b*76" ".b*236"
+return .b*ret
+multilabel *label98
+select .b*elem lessThan .b*ind 320 ".b*77" ".b*237"
+return .b*ret
+multilabel *label99
+select .b*elem lessThan .b*ind 320 ".b*78" ".b*238"
+return .b*ret
+multilabel *label100
+select .b*elem lessThan .b*ind 320 ".b*79" ".b*239"
+return .b*ret
+multilabel *label101
+select .b*elem lessThan .b*ind 320 ".b*80" ".b*240"
+return .b*ret
+multilabel *label102
+select .b*elem lessThan .b*ind 320 ".b*81" ".b*241"
+return .b*ret
+multilabel *label103
+select .b*elem lessThan .b*ind 320 ".b*82" ".b*242"
+return .b*ret
+multilabel *label104
+select .b*elem lessThan .b*ind 320 ".b*83" ".b*243"
+return .b*ret
+multilabel *label105
+select .b*elem lessThan .b*ind 320 ".b*84" ".b*244"
+return .b*ret
+multilabel *label106
+select .b*elem lessThan .b*ind 320 ".b*85" ".b*245"
+return .b*ret
+multilabel *label107
+select .b*elem lessThan .b*ind 320 ".b*86" ".b*246"
+return .b*ret
+multilabel *label108
+select .b*elem lessThan .b*ind 320 ".b*87" ".b*247"
+return .b*ret
+multilabel *label109
+select .b*elem lessThan .b*ind 320 ".b*88" ".b*248"
+return .b*ret
+multilabel *label110
+select .b*elem lessThan .b*ind 320 ".b*89" ".b*249"
+return .b*ret
+multilabel *label111
+select .b*elem lessThan .b*ind 320 ".b*90" ".b*250"
+return .b*ret
+multilabel *label112
+select .b*elem lessThan .b*ind 320 ".b*91" ".b*251"
+return .b*ret
+multilabel *label113
+select .b*elem lessThan .b*ind 320 ".b*92" ".b*252"
+return .b*ret
+multilabel *label114
+select .b*elem lessThan .b*ind 320 ".b*93" ".b*253"
+return .b*ret
+multilabel *label115
+select .b*elem lessThan .b*ind 320 ".b*94" ".b*254"
+return .b*ret
+multilabel *label116
+select .b*elem lessThan .b*ind 320 ".b*95" ".b*255"
+return .b*ret
+multilabel *label117
+select .b*elem lessThan .b*ind 320 ".b*96" ".b*256"
+return .b*ret
+multilabel *label118
+select .b*elem lessThan .b*ind 320 ".b*97" ".b*257"
+return .b*ret
+multilabel *label119
+select .b*elem lessThan .b*ind 320 ".b*98" ".b*258"
+return .b*ret
+multilabel *label120
+select .b*elem lessThan .b*ind 320 ".b*99" ".b*259"
+return .b*ret
+multilabel *label121
+select .b*elem lessThan .b*ind 320 ".b*100" ".b*260"
+return .b*ret
+multilabel *label122
+select .b*elem lessThan .b*ind 320 ".b*101" ".b*261"
+return .b*ret
+multilabel *label123
+select .b*elem lessThan .b*ind 320 ".b*102" ".b*262"
+return .b*ret
+multilabel *label124
+select .b*elem lessThan .b*ind 320 ".b*103" ".b*263"
+return .b*ret
+multilabel *label125
+select .b*elem lessThan .b*ind 320 ".b*104" ".b*264"
+return .b*ret
+multilabel *label126
+select .b*elem lessThan .b*ind 320 ".b*105" ".b*265"
+return .b*ret
+multilabel *label127
+select .b*elem lessThan .b*ind 320 ".b*106" ".b*266"
+return .b*ret
+multilabel *label128
+select .b*elem lessThan .b*ind 320 ".b*107" ".b*267"
+return .b*ret
+multilabel *label129
+select .b*elem lessThan .b*ind 320 ".b*108" ".b*268"
+return .b*ret
+multilabel *label130
+select .b*elem lessThan .b*ind 320 ".b*109" ".b*269"
+return .b*ret
+multilabel *label131
+select .b*elem lessThan .b*ind 320 ".b*110" ".b*270"
+return .b*ret
+multilabel *label132
+select .b*elem lessThan .b*ind 320 ".b*111" ".b*271"
+return .b*ret
+multilabel *label133
+select .b*elem lessThan .b*ind 320 ".b*112" ".b*272"
+return .b*ret
+multilabel *label134
+select .b*elem lessThan .b*ind 320 ".b*113" ".b*273"
+return .b*ret
+multilabel *label135
+select .b*elem lessThan .b*ind 320 ".b*114" ".b*274"
+return .b*ret
+multilabel *label136
+select .b*elem lessThan .b*ind 320 ".b*115" ".b*275"
+return .b*ret
+multilabel *label137
+select .b*elem lessThan .b*ind 320 ".b*116" ".b*276"
+return .b*ret
+multilabel *label138
+select .b*elem lessThan .b*ind 320 ".b*117" ".b*277"
+return .b*ret
+multilabel *label139
+select .b*elem lessThan .b*ind 320 ".b*118" ".b*278"
+return .b*ret
+multilabel *label140
+select .b*elem lessThan .b*ind 320 ".b*119" ".b*279"
+return .b*ret
+multilabel *label141
+select .b*elem lessThan .b*ind 320 ".b*120" ".b*280"
+return .b*ret
+multilabel *label142
+select .b*elem lessThan .b*ind 320 ".b*121" ".b*281"
+return .b*ret
+multilabel *label143
+select .b*elem lessThan .b*ind 320 ".b*122" ".b*282"
+return .b*ret
+multilabel *label144
+select .b*elem lessThan .b*ind 320 ".b*123" ".b*283"
+return .b*ret
+multilabel *label145
+select .b*elem lessThan .b*ind 320 ".b*124" ".b*284"
+return .b*ret
+multilabel *label146
+select .b*elem lessThan .b*ind 320 ".b*125" ".b*285"
+return .b*ret
+multilabel *label147
+select .b*elem lessThan .b*ind 320 ".b*126" ".b*286"
+return .b*ret
+multilabel *label148
+select .b*elem lessThan .b*ind 320 ".b*127" ".b*287"
+return .b*ret
+multilabel *label149
+select .b*elem lessThan .b*ind 320 ".b*128" ".b*288"
+return .b*ret
+multilabel *label150
+select .b*elem lessThan .b*ind 320 ".b*129" ".b*289"
+return .b*ret
+multilabel *label151
+select .b*elem lessThan .b*ind 320 ".b*130" ".b*290"
+return .b*ret
+multilabel *label152
+select .b*elem lessThan .b*ind 320 ".b*131" ".b*291"
+return .b*ret
+multilabel *label153
+select .b*elem lessThan .b*ind 320 ".b*132" ".b*292"
+return .b*ret
+multilabel *label154
+select .b*elem lessThan .b*ind 320 ".b*133" ".b*293"
+return .b*ret
+multilabel *label155
+select .b*elem lessThan .b*ind 320 ".b*134" ".b*294"
+return .b*ret
+multilabel *label156
+select .b*elem lessThan .b*ind 320 ".b*135" ".b*295"
+return .b*ret
+multilabel *label157
+select .b*elem lessThan .b*ind 320 ".b*136" ".b*296"
+return .b*ret
+multilabel *label158
+select .b*elem lessThan .b*ind 320 ".b*137" ".b*297"
+return .b*ret
+multilabel *label159
+select .b*elem lessThan .b*ind 320 ".b*138" ".b*298"
+return .b*ret
+multilabel *label160
+select .b*elem lessThan .b*ind 320 ".b*139" ".b*299"
+return .b*ret
+multilabel *label161
+select .b*elem lessThan .b*ind 320 ".b*140" ".b*300"
+return .b*ret
+multilabel *label162
+select .b*elem lessThan .b*ind 320 ".b*141" ".b*301"
+return .b*ret
+multilabel *label163
+select .b*elem lessThan .b*ind 320 ".b*142" ".b*302"
+return .b*ret
+multilabel *label164
+select .b*elem lessThan .b*ind 320 ".b*143" ".b*303"
+return .b*ret
+multilabel *label165
+select .b*elem lessThan .b*ind 320 ".b*144" ".b*304"
+return .b*ret
+multilabel *label166
+select .b*elem lessThan .b*ind 320 ".b*145" ".b*305"
+return .b*ret
+multilabel *label167
+select .b*elem lessThan .b*ind 320 ".b*146" ".b*306"
+return .b*ret
+multilabel *label168
+select .b*elem lessThan .b*ind 320 ".b*147" ".b*307"
+return .b*ret
+multilabel *label169
+select .b*elem lessThan .b*ind 320 ".b*148" ".b*308"
+return .b*ret
+multilabel *label170
+select .b*elem lessThan .b*ind 320 ".b*149" ".b*309"
+return .b*ret
+multilabel *label171
+select .b*elem lessThan .b*ind 320 ".b*150" ".b*310"
+return .b*ret
+multilabel *label172
+select .b*elem lessThan .b*ind 320 ".b*151" ".b*311"
+return .b*ret
+multilabel *label173
+select .b*elem lessThan .b*ind 320 ".b*152" ".b*312"
+return .b*ret
+multilabel *label174
+select .b*elem lessThan .b*ind 320 ".b*153" ".b*313"
+return .b*ret
+multilabel *label175
+select .b*elem lessThan .b*ind 320 ".b*154" ".b*314"
+return .b*ret
+multilabel *label176
+select .b*elem lessThan .b*ind 320 ".b*155" ".b*315"
+return .b*ret
+multilabel *label177
+select .b*elem lessThan .b*ind 320 ".b*156" ".b*316"
+return .b*ret
+multilabel *label178
+select .b*elem lessThan .b*ind 320 ".b*157" ".b*317"
+return .b*ret
+multilabel *label179
+select .b*elem lessThan .b*ind 320 ".b*158" ".b*318"
+return .b*ret
+multilabel *label180
+select .b*elem lessThan .b*ind 320 ".b*159" ".b*319"
+return .b*ret

@@ -1,0 +1,200 @@
+    44 instructions before optimizations.
+     2 instructions eliminated by Temp Variables Elimination (7 iterations).
+     1 loop improved by Loop Hoisting.
+    62 instructions after optimizations.
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
+ 
+     2 set :sum 0
+     3 set *tmp0 0
+     4 label *label3
+-    * set *tmp1 *tmp0
+-    * readarr<internal:compact> *tmp2 .a[10...20] *tmp1
+-    * set :x *tmp2
++    5 readarr<internal:compact> :x .a[10...20] *tmp0
+     6 op add :sum :sum :x
+     7 label *label1
+     8 op add *tmp0 *tmp0 1
+
+Modifications by Virtual Instruction Expansion (+20 instructions):
+ 
+     2 set :sum 0
+     3 set *tmp0 0
+     4 label *label3
+-    * readarr<internal:compact> :x .a[10...20] *tmp0
++    5 setaddr .a*ret *label24 (h:marker1)
++    6 multicall *tmp0 0 (m:marker0) (h:marker1)
++    7 label *label24
++    8 read :x @this .a*elem
+     9 op add :sum :sum :x
+    10 label *label1
+    11 op add *tmp0 *tmp0 1
+    12 jump *label3 lessThan *tmp0 10
+    13 label *label2
+-    * readarr<internal:compact> *tmp3 .a[] p
++   14 setaddr .a*ret *label25 (h:marker2)
++   15 assertbounds multiple 1 0 lessThanEq p lessThanEq 19 "position 19:5: index out of bounds (0 to 19)"
++   16 multicall p 0 (m:marker0) (h:marker2)
++   17 label *label25
++   18 read *tmp3 @this .a*elem
+    19 op add :sum :sum *tmp3
+    20 assertequals 10 :sum "@counter table test"
+    21 stop
+    22 label *label0
+    23 end
++   24 multilabel *label4 (m:marker0)
++   25 set .a*elem ".a*0"
++   26 return .a*ret
++   27 multilabel *label5 (m:marker0)
++   28 set .a*elem ".a*1"
++   29 return .a*ret
++   30 multilabel *label6 (m:marker0)
++   31 set .a*elem ".a*2"
++   32 return .a*ret
++   33 multilabel *label7 (m:marker0)
++   34 set .a*elem ".a*3"
++   35 return .a*ret
++   36 multilabel *label8 (m:marker0)
++   37 set .a*elem ".a*4"
++   38 return .a*ret
++   39 multilabel *label9 (m:marker0)
++   40 set .a*elem ".a*5"
++   41 return .a*ret
++   42 multilabel *label10 (m:marker0)
++   43 set .a*elem ".a*6"
++   44 return .a*ret
++   45 multilabel *label11 (m:marker0)
++   46 set .a*elem ".a*7"
++   47 return .a*ret
++   48 multilabel *label12 (m:marker0)
++   49 set .a*elem ".a*8"
++   50 return .a*ret
++   51 multilabel *label13 (m:marker0)
++   52 set .a*elem ".a*9"
++   53 return .a*ret
++   54 multilabel *label14 (m:marker0)
++   55 set .a*elem ".a*10"
++   56 return .a*ret
++   57 multilabel *label15 (m:marker0)
++   58 set .a*elem ".a*11"
++   59 return .a*ret
++   60 multilabel *label16 (m:marker0)
++   61 set .a*elem ".a*12"
++   62 return .a*ret
++   63 multilabel *label17 (m:marker0)
++   64 set .a*elem ".a*13"
++   65 return .a*ret
++   66 multilabel *label18 (m:marker0)
++   67 set .a*elem ".a*14"
++   68 return .a*ret
++   69 multilabel *label19 (m:marker0)
++   70 set .a*elem ".a*15"
++   71 return .a*ret
++   72 multilabel *label20 (m:marker0)
++   73 set .a*elem ".a*16"
++   74 return .a*ret
++   75 multilabel *label21 (m:marker0)
++   76 set .a*elem ".a*17"
++   77 return .a*ret
++   78 multilabel *label22 (m:marker0)
++   79 set .a*elem ".a*18"
++   80 return .a*ret
++   81 multilabel *label23 (m:marker0)
++   82 set .a*elem ".a*19"
++   83 return .a*ret
+
+Modifications by Iterated phase, Loop Hoisting, pass 3, iteration 1:
+ 
+     1 set .a*1 10
+     2 set :sum 0
+     3 set *tmp0 0
++    4 setaddr .a*ret *label24 (h:marker1)
+     5 label *label3
+-    * setaddr .a*ret *label24 (h:marker1)
+     6 multicall *tmp0 0 (m:marker0) (h:marker1)
+     7 label *label24
+     8 read :x @this .a*elem
+
+Final code before resolving virtual instructions:
+
+set p 1
+set .a*1 10
+set :sum 0
+set *tmp0 0
+setaddr .a*ret *label24
+label *label3
+multicall *tmp0 0
+label *label24
+read :x @this .a*elem
+op add :sum :sum :x
+op add *tmp0 *tmp0 1
+jump *label3 lessThan *tmp0 10
+setaddr .a*ret *label25
+assertbounds multiple 1 0 lessThanEq p lessThanEq 19 "position 19:5: index out of bounds (0 to 19)"
+multicall p 0
+label *label25
+read *tmp1 @this .a*elem
+op add :sum :sum *tmp1
+assertequals 10 :sum "@counter table test"
+stop
+end
+multilabel *label4
+set .a*elem ".a*0"                      # Origin: 11, keys: 0
+return .a*ret
+multilabel *label5
+set .a*elem ".a*1"                      # Origin: 11, keys: 1
+return .a*ret
+multilabel *label6
+set .a*elem ".a*2"                      # Origin: 11, keys: 2
+return .a*ret
+multilabel *label7
+set .a*elem ".a*3"                      # Origin: 11, keys: 3
+return .a*ret
+multilabel *label8
+set .a*elem ".a*4"                      # Origin: 11, keys: 4
+return .a*ret
+multilabel *label9
+set .a*elem ".a*5"                      # Origin: 11, keys: 5
+return .a*ret
+multilabel *label10
+set .a*elem ".a*6"                      # Origin: 11, keys: 6
+return .a*ret
+multilabel *label11
+set .a*elem ".a*7"                      # Origin: 11, keys: 7
+return .a*ret
+multilabel *label12
+set .a*elem ".a*8"                      # Origin: 11, keys: 8
+return .a*ret
+multilabel *label13
+set .a*elem ".a*9"                      # Origin: 11, keys: 9
+return .a*ret
+multilabel *label14
+set .a*elem ".a*10"                     # Origin: 5, 11, keys: 0, 10
+return .a*ret
+multilabel *label15
+set .a*elem ".a*11"                     # Origin: 5, 11, keys: 1, 11
+return .a*ret
+multilabel *label16
+set .a*elem ".a*12"                     # Origin: 5, 11, keys: 2, 12
+return .a*ret
+multilabel *label17
+set .a*elem ".a*13"                     # Origin: 5, 11, keys: 3, 13
+return .a*ret
+multilabel *label18
+set .a*elem ".a*14"                     # Origin: 5, 11, keys: 4, 14
+return .a*ret
+multilabel *label19
+set .a*elem ".a*15"                     # Origin: 5, 11, keys: 5, 15
+return .a*ret
+multilabel *label20
+set .a*elem ".a*16"                     # Origin: 5, 11, keys: 6, 16
+return .a*ret
+multilabel *label21
+set .a*elem ".a*17"                     # Origin: 5, 11, keys: 7, 17
+return .a*ret
+multilabel *label22
+set .a*elem ".a*18"                     # Origin: 5, 11, keys: 8, 18
+return .a*ret
+multilabel *label23
+set .a*elem ".a*19"                     # Origin: 5, 11, keys: 9, 19
+return .a*ret

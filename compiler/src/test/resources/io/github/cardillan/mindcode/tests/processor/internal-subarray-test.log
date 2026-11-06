@@ -1,4 +1,4 @@
-   139 instructions before optimizations.
+    89 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 loop improved by Loop Hoisting.
    137 instructions after optimizations.
@@ -9,19 +9,19 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
      3 set *tmp0 0
      4 label *label3
 -    * set *tmp1 *tmp0
--    * readarr<internal:folded:compact> *tmp2 .a[] *tmp1
+-    * readarr<internal:folded:compact> *tmp2 .a[0...50] *tmp1
 -    * set :x *tmp2
-+    5 readarr<internal:folded:compact> :x .a[] *tmp0
++    5 readarr<internal:folded:compact> :x .a[0...50] *tmp0
      6 op add :sum :sum :x
      7 label *label1
      8 op add *tmp0 *tmp0 1
 
-Modifications by Virtual Instruction Expansion:
+Modifications by Virtual Instruction Expansion (+50 instructions):
  
      2 set :sum 0
      3 set *tmp0 0
      4 label *label3
--    * readarr<internal:folded:compact> :x .a[] *tmp0
+-    * readarr<internal:folded:compact> :x .a[0...50] *tmp0
 +    5 setaddr .a*ret *label54 (h:marker1)
 +    6 set .a*ind *tmp0
 +    7 multicall *tmp0 0 (m:marker0) (h:marker1)

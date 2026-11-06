@@ -1,0 +1,189 @@
+    48 instructions before optimizations.
+     2 instructions eliminated by Temp Variables Elimination (6 iterations).
+    66 instructions after optimizations.
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
+ 
+     2 set :sum 0
+     3 set *tmp0 0
+     4 label *label3
+-    * set *tmp1 *tmp0
+-    * readarr<internal:compact> *tmp2 .a[10...20] *tmp1
+-    * set :x *tmp2
++    5 readarr<internal:compact> :x .a[10...20] *tmp0
+     6 op add :sum :sum :x
+     7 label *label1
+     8 op add *tmp0 *tmp0 1
+
+Modifications by Virtual Instruction Expansion (+20 instructions):
+ 
+     2 set :sum 0
+     3 set *tmp0 0
+     4 label *label3
+-    * readarr<internal:compact> :x .a[10...20] *tmp0
++    5 op add *tmp4 *tmp0 10
++    6 op shl .a*ind *tmp4 1
++    7 call *label4 .a*ret *invalid
++    8 read :x @this .a*elem
+     9 op add :sum :sum :x
+    10 label *label1
+    11 op add *tmp0 *tmp0 1
+    12 jump *label3 lessThan *tmp0 10
+    13 label *label2
+-    * readarr<internal:compact> *tmp3 .a[] p
++   14 assertbounds multiple 1 0 lessThanEq p lessThanEq 19 "position 19:5: index out of bounds (0 to 19)"
++   15 op shl .a*ind p 1
++   16 call *label4 .a*ret *invalid
++   17 read *tmp3 @this .a*elem
+    18 op add :sum :sum *tmp3
+    19 assertequals 10 :sum "@counter table test"
+    20 stop
+    21 label *label0
+    22 end
++   23 label *label4 (m:*label4)
++   24 multijump *label5 .a*ind 0 (m:marker0)
++   25 multilabel *label5 (m:marker0)
++   26 set .a*elem ".a*0"
++   27 return .a*ret
++   28 multilabel *label6 (m:marker0)
++   29 set .a*elem ".a*1"
++   30 return .a*ret
++   31 multilabel *label7 (m:marker0)
++   32 set .a*elem ".a*2"
++   33 return .a*ret
++   34 multilabel *label8 (m:marker0)
++   35 set .a*elem ".a*3"
++   36 return .a*ret
++   37 multilabel *label9 (m:marker0)
++   38 set .a*elem ".a*4"
++   39 return .a*ret
++   40 multilabel *label10 (m:marker0)
++   41 set .a*elem ".a*5"
++   42 return .a*ret
++   43 multilabel *label11 (m:marker0)
++   44 set .a*elem ".a*6"
++   45 return .a*ret
++   46 multilabel *label12 (m:marker0)
++   47 set .a*elem ".a*7"
++   48 return .a*ret
++   49 multilabel *label13 (m:marker0)
++   50 set .a*elem ".a*8"
++   51 return .a*ret
++   52 multilabel *label14 (m:marker0)
++   53 set .a*elem ".a*9"
++   54 return .a*ret
++   55 multilabel *label15 (m:marker0)
++   56 set .a*elem ".a*10"
++   57 return .a*ret
++   58 multilabel *label16 (m:marker0)
++   59 set .a*elem ".a*11"
++   60 return .a*ret
++   61 multilabel *label17 (m:marker0)
++   62 set .a*elem ".a*12"
++   63 return .a*ret
++   64 multilabel *label18 (m:marker0)
++   65 set .a*elem ".a*13"
++   66 return .a*ret
++   67 multilabel *label19 (m:marker0)
++   68 set .a*elem ".a*14"
++   69 return .a*ret
++   70 multilabel *label20 (m:marker0)
++   71 set .a*elem ".a*15"
++   72 return .a*ret
++   73 multilabel *label21 (m:marker0)
++   74 set .a*elem ".a*16"
++   75 return .a*ret
++   76 multilabel *label22 (m:marker0)
++   77 set .a*elem ".a*17"
++   78 return .a*ret
++   79 multilabel *label23 (m:marker0)
++   80 set .a*elem ".a*18"
++   81 return .a*ret
++   82 multilabel *label24 (m:marker0)
++   83 set .a*elem ".a*19"
++   84 return .a*ret
+
+Final code before resolving virtual instructions:
+
+set p 1
+set .a*1 10
+set :sum 0
+set *tmp0 0
+label *label3
+op add *tmp2 *tmp0 10
+op shl .a*ind *tmp2 1
+call *label4 .a*ret *invalid
+read :x @this .a*elem
+op add :sum :sum :x
+op add *tmp0 *tmp0 1
+jump *label3 lessThan *tmp0 10
+assertbounds multiple 1 0 lessThanEq p lessThanEq 19 "position 19:5: index out of bounds (0 to 19)"
+op shl .a*ind p 1
+call *label4 .a*ret *invalid
+read *tmp1 @this .a*elem
+op add :sum :sum *tmp1
+assertequals 10 :sum "@counter table test"
+stop
+end
+label *label4
+multijump *label5 .a*ind 0
+multilabel *label5
+set .a*elem ".a*0"
+return .a*ret
+multilabel *label6
+set .a*elem ".a*1"
+return .a*ret
+multilabel *label7
+set .a*elem ".a*2"
+return .a*ret
+multilabel *label8
+set .a*elem ".a*3"
+return .a*ret
+multilabel *label9
+set .a*elem ".a*4"
+return .a*ret
+multilabel *label10
+set .a*elem ".a*5"
+return .a*ret
+multilabel *label11
+set .a*elem ".a*6"
+return .a*ret
+multilabel *label12
+set .a*elem ".a*7"
+return .a*ret
+multilabel *label13
+set .a*elem ".a*8"
+return .a*ret
+multilabel *label14
+set .a*elem ".a*9"
+return .a*ret
+multilabel *label15
+set .a*elem ".a*10"
+return .a*ret
+multilabel *label16
+set .a*elem ".a*11"
+return .a*ret
+multilabel *label17
+set .a*elem ".a*12"
+return .a*ret
+multilabel *label18
+set .a*elem ".a*13"
+return .a*ret
+multilabel *label19
+set .a*elem ".a*14"
+return .a*ret
+multilabel *label20
+set .a*elem ".a*15"
+return .a*ret
+multilabel *label21
+set .a*elem ".a*16"
+return .a*ret
+multilabel *label22
+set .a*elem ".a*17"
+return .a*ret
+multilabel *label23
+set .a*elem ".a*18"
+return .a*ret
+multilabel *label24
+set .a*elem ".a*19"
+return .a*ret

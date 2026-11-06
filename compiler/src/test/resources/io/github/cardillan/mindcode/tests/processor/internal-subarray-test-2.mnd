@@ -1,0 +1,22 @@
+#set target = 8.0m;
+
+#set goal = size;
+#set syntax = strict;
+#set loop-unrolling = none;
+#set array-iteration-threshold = 5;
+#set use-lookup-arrays = false;
+
+volatile var a[20];
+param p = 1;
+
+begin
+    a[1] = 10;
+    var sum = 0;
+    for var x in a[10 ... 20] do
+        sum += x;
+    end;
+
+    sum += a[p];
+    assertEquals(10, sum, "@counter table test");
+    stopProcessor();
+end;

@@ -1,0 +1,145 @@
+    30 instructions before optimizations.
+     1 instruction eliminated by Temp Variables Elimination (7 iterations).
+     1 instruction eliminated by Jump Normalization (6 iterations).
+     1 instruction eliminated by Data Flow Optimization (2 passes, 7 iterations).
+       1 loop condition was partially rotated.
+     1 instruction eliminated by Unreachable Code Elimination (2 iterations).
+    26 instructions after optimizations.
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
+ 
+    30 set :init:i 0
+    31 label *label10
+    32 jump *label12 greaterThanEq :init:i 64
+-    * set *tmp4 :init:i
+-    * write :init:i :init:cell *tmp4
++   33 write :init:i :init:cell :init:i
+    34 label *label11
+    35 op add :init:i :init:i 1
+    36 jump *label10 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    16 op add :sum :sum :x
+    17 label *label3
+    18 op add *tmp2 *tmp2 1
+-    * jump *label7 lessThan *tmp2 *tmp0
++   19 jump *label7 lessThan *tmp2 64
+    20 label *label8
+    21 multijump *tmp3 0 0 (m:marker0)
+    22 multilabel *label6 (m:marker0)
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+     3 call *label0 :init*retaddr :init*retval
+     4 set :sum 0
+     5 set *tmp1 cell1
+-    * set *tmp0 64
+     6 op add *tmp3 @counter 1
+     7 jump *label2 always
+     8 multilabel *label5 (m:marker0)
+
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+    29 set :init:i 0
+    30 label *label10
+    31 jump *label12 greaterThanEq :init:i 64
++   32 label *label13
+    33 write :init:i :init:cell :init:i
+    34 label *label11
+    35 op add :init:i :init:i 1
+-    * jump *label10 always
++   36 jump *label13 lessThan :init:i 64
+    37 label *label12
+    38 label *label9
+    39 return :init*retaddr
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+ 
+    28 # "Function: void init(in cell)"
+    29 set :init:i 0
+    30 label *label10
+-    * jump *label12 greaterThanEq :init:i 64
++   31 jump *label12 greaterThanEq 0 64
+    32 label *label13
+    33 write :init:i :init:cell :init:i
+    34 label *label11
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+ 
+    28 # "Function: void init(in cell)"
+    29 set :init:i 0
+    30 label *label10
+-    * jump *label12 greaterThanEq 0 64
+    31 label *label13
+    32 write :init:i :init:cell :init:i
+    33 label *label11
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-1 instructions):
+ 
+    13 label *label7
+    14 read :x *tmp1 *tmp2
+    15 op add :sum :sum :x
+-    * label *label3
+    16 op add *tmp2 *tmp2 1
+    17 jump *label7 lessThan *tmp2 64
+-    * label *label8
+    18 multijump *tmp3 0 0 (m:marker0)
+    19 multilabel *label6 (m:marker0)
+-    * label *label4
+    20 assertequals 4032 :sum "long array sum"
+    21 stop
+-    * label *label1
+    22 end
+    23 label *label0
+    24 # "Function: void init(in cell)"
+    25 set :init:i 0
+-    * label *label10
+    26 label *label13
+    27 write :init:i :init:cell :init:i
+-    * label *label11
+    28 op add :init:i :init:i 1
+    29 jump *label13 lessThan :init:i 64
+-    * label *label12
+-    * label *label9
+    30 return :init*retaddr
+-    * end
+
+Symbolic link resolution:
+    c1 -> cell1
+    c2 -> cell2
+
+
+Final code before resolving virtual instructions:
+
+set :init:cell cell1
+call *label0 :init*retaddr :init*retval
+set :init:cell cell2
+call *label0 :init*retaddr :init*retval
+set :sum 0
+set *tmp0 cell1
+op add *tmp2 @counter 1
+jump *label2 always
+multilabel *label5
+set *tmp0 cell2
+set *tmp2 null
+label *label2
+set *tmp1 0
+label *label7
+read :x *tmp0 *tmp1
+op add :sum :sum :x
+op add *tmp1 *tmp1 1
+jump *label7 lessThan *tmp1 64
+multijump *tmp2 0 0
+multilabel *label6
+assertequals 4032 :sum "long array sum"
+stop
+end
+label *label0
+# "Function: void init(in cell)"
+set :init:i 0
+label *label13
+write :init:i :init:cell :init:i
+op add :init:i :init:i 1
+jump *label13 lessThan :init:i 64
+return :init*retaddr

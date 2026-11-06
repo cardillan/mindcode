@@ -9,8 +9,11 @@ fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB6
 for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8BCD3905B56BCF   B8361B7FE38172DE
 for-each-loop-conversion.mnd:                      45       45     100.0%   715CB32A7488E404   E27C9D595B8BB1E8
 function-inlining.mnd:                            884      884     100.0%   B3AB880177C19FDA   F07818208DDAF9B7
+internal-subarray-test-2.mnd:                      65      124      64.6%   C446D7AB1C9B832D   0A96ACD245D11381
 internal-subarray-test.mnd:                       138      565      87.0%   1A62F7ECC18F5B9B   3F7560A2EA33D891
 iterated-for-loop-break-continue.mnd:              37      168      97.3%   80825B23266F8FF3   8EF0B704D09D56C5
+long-array-loop.mnd:                               26      918      96.2%   B8132CE45ECC0443   8F6BFC0276DC3D0B
+long-array-parallel-loop.mnd:                     442     9036      87.6%   B24250CA174876C1   B7B1E2E94BB622C8
 loops-in-conditions.mnd:                            4        4     100.0%   25F777AD40847D3B   AAF96C472A38F04C
 mutually-recursive-calls-ext.mnd:                 302     2008      97.4%   634889B0F87ABE31   4C503DE60803753D
 mutually-recursive-calls-int.mnd:                 306      647      53.3%   013C2A5C5C858AC9   99EC3F4DBE607656

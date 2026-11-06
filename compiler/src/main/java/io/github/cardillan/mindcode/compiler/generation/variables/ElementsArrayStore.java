@@ -16,7 +16,15 @@ public abstract class ElementsArrayStore extends AbstractArrayStore {
     public ElementsArrayStore(SourcePosition sourcePosition, String name, ArrayType arrayType, int startOffset, int size,
             @Nullable ArrayStore masterArray, List<ValueStore> elements, boolean subarray) {
         super(sourcePosition, name, arrayType, startOffset, size, LogicNumber.create(size), masterArray, subarray);
+        if (masterArray != null && !(masterArray instanceof ElementsArrayStore)) {
+            throw new IllegalArgumentException("Master array must be an ElementsArrayStore");
+        }
         this.elements = elements;
+    }
+
+    @Override
+    public ElementsArrayStore getMasterArray() {
+        return (ElementsArrayStore) super.getMasterArray();
     }
 
     public List<ValueStore> getElements() {

@@ -3,6 +3,7 @@ package io.github.cardillan.mindcode.logic.arguments.arrays;
 import io.github.cardillan.mindcode.compiler.astcontext.AstContext;
 import io.github.cardillan.mindcode.compiler.astcontext.AstContextType;
 import io.github.cardillan.mindcode.compiler.astcontext.AstSubcontextType;
+import io.github.cardillan.mindcode.compiler.generation.variables.ElementsArrayStore;
 import io.github.cardillan.mindcode.compiler.generation.variables.NameCreator;
 import io.github.cardillan.mindcode.compiler.postprocess.JumpTable;
 import io.github.cardillan.mindcode.logic.arguments.*;
@@ -34,6 +35,15 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         arrayElem = LogicVariable.arrayAccess(baseName, "*" + elementSuffix, nameCreator.arrayAccess(baseName, elementSuffix));
     }
 
+    private boolean embedOffset() {
+        return useTextTables && !folded() && !arrayStore.hasArrayOffset();
+    }
+
+    @Override
+    protected int getStartOffset() {
+        return embedOffset() ? 0 : super.getStartOffset();
+    }
+
     protected abstract SideEffects createCallSideEffects();
 
     @Override
@@ -53,6 +63,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
     }
 
     private JumpTable buildJumpTable(String tableId) {
+        ElementsArrayStore array = arrayStore.getMasterArray();
         boolean folded = folded();
         List<LogicInstruction> instructions = new ArrayList<>();
 
@@ -68,7 +79,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             creator.createLabel(startLabel).setMarker(startLabel);
             LogicVariable jumpValue = folded ? processor.nextTemp() : arrayInd;
             if (folded) {
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(array.fullSize()));
                 creator.createOp(Operation.MOD, jumpValue, arrayInd, modulo);
             }
             creator.createMultiJump(firstLabel, jumpValue, LogicNumber.ZERO, marker);
@@ -78,12 +89,12 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         List<LogicLabel> branchLabels = new ArrayList<>();
         if (folded) {
             LogicNumber limit = useTextTables
-                    ? LogicNumber.create((arrayStore.fullSize() + 1) / 2)
-                    : LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
-            generateFoldedJumpTable(creator, firstLabel, marker,
+                    ? LogicNumber.create((array.fullSize() + 1) / 2)
+                    : LogicNumber.create(roundUpToEven(array.fullSize()));
+            generateFoldedJumpTable(creator, array.getElements(), firstLabel, marker,
                     arrayInd, limit, arrayElem, createExit, false, branchLabels, _ -> {});
         } else {
-            generateJumpTable(creator, firstLabel, marker, createExit, false, branchLabels);
+            generateJumpTable(creator, array.getElements(), firstLabel, marker, createExit, false, branchLabels);
         }
         return new JumpTable(tableId, useTextTables, startLabel, marker, instructions, branchLabels);
     }
@@ -162,11 +173,13 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             if (folded) {
                 creator.createSet(arrayInd, index);
             }
+            int start = embedOffset() ? arrayStore.getStartOffset() : 0;
+            int end = embedOffset() ? start + arrayStore.size() : arrayStore.getMasterArray().fullSize();
             creator.createMultiCall(index, jumpTable.marker())
                     .setSideEffects(createCallSideEffects())
                     .setNonNegativeInt(instruction.getIndex())
                     .setHoistId(marker2)
-                    .setJumpTable(jumpTable.branchLabels());
+                    .setJumpTable(jumpTable.branchLabels().subList(start, end));
             creator.createLabel(returnLabel);
         }
 

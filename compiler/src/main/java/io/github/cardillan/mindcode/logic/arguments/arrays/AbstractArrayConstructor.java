@@ -95,8 +95,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     // ALL IMPLEMENTATIONS
     ////////////////////////////////////////////////////////////////
 
+    protected int getStartOffset() {
+        return arrayStore.getStartOffset();
+    }
+
     protected int offsetInstructions() {
-        return (arrayStore.hasArrayOffset() ? 1 : 0) + (arrayStore.getStartOffset() != 0 ? 1 : 0);
+        return (arrayStore.hasArrayOffset() ? 1 : 0) + (getStartOffset() != 0 ? 1 : 0);
     }
 
     protected int boundsCheckSize() {
@@ -108,11 +112,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     protected LogicValue computeIndex(LocalContextfulInstructionsCreator creator) {
-        if (arrayStore.hasArrayOffset() || arrayStore.getStartOffset() != 0) {
+        int startOffset = getStartOffset();
+        if (arrayStore.hasArrayOffset() || startOffset != 0) {
             LogicVariable tmp = creator.nextTemp();
             LogicValue index = instruction.getIndex();
-            if (arrayStore.getStartOffset() != 0) {
-                creator.createOp(Operation.ADD, tmp, index, LogicNumber.create(arrayStore.getStartOffset()));
+            if (startOffset != 0) {
+                creator.createOp(Operation.ADD, tmp, index, LogicNumber.create(startOffset));
                 index = tmp;
             }
             if (arrayStore.hasArrayOffset()) {
@@ -132,8 +137,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
 
         LogicInstruction instruction = processor.createAssertBounds(astContext, LogicKeyword.create("multiple"), LogicNumber.create(1),
-                LogicNumber.create(arrayStore.getStartOffset()), Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ,
-                LogicNumber.create(arrayStore.getStartOffset() + maxIndex), LogicString.createRaw(errorMessage));
+                LogicNumber.create(getStartOffset()), Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ,
+                LogicNumber.create(getStartOffset() + maxIndex), LogicString.createRaw(errorMessage));
         instruction.setNonNegativeInt(index);
         consumer.accept(instruction);
     }
@@ -185,13 +190,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     /// Provides an instance which creates a value store representation of the element to be used by the branch creator.
     abstract protected Function<ValueStore, ValueStore> elementValueStoreExtractor();
 
-    protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
+    protected void generateJumpTable(LocalContextfulInstructionsCreator creator, List<ValueStore> elements,
+            LogicLabel firstLabel, LogicLabel marker, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
         BranchCreator branchCreator = branchCreator();
         Function<ValueStore, ValueStore> elementProcessor = elementValueStoreExtractor();
         LogicLabel nextLabel = firstLabel;
 
-        List<ValueStore> elements = arrayStore.getElements();
         int count = elements.size();
         boolean reversed = useTextTables && inlined;
 
@@ -229,13 +233,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return (creator, element) -> element.getValue(creator);
     }
 
-    protected void generateFoldedJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            LogicValue index, LogicValue limit, LogicVariable target, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels,
-            Consumer<LogicInstruction> decorator) {
+    protected void generateFoldedJumpTable(LocalContextfulInstructionsCreator creator, List<ValueStore> elements,
+            LogicLabel firstLabel, LogicLabel marker, LogicValue index, LogicValue limit, LogicVariable target,
+            Runnable createExit, boolean inlined, List<LogicLabel> branchLabels, Consumer<LogicInstruction> decorator) {
         BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> valueExtractor = elementValueExtractor();
         LogicLabel nextLabel = firstLabel;
 
-        List<ValueStore> elements = arrayStore.getElements();
         int count = (elements.size() + 1) / 2;
         boolean reversed = useTextTables && inlined;
 

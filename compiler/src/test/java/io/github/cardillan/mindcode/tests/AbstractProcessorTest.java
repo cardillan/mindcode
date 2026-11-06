@@ -189,6 +189,7 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
         logicBlock.addBlock("cell2", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
         logicBlock.addBlock("cell3", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
         logicBlock.addBlock("cell4", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
+        logicBlock.addBlock("cell5", MemoryBlock.createMemoryCell(ip.getMetadata(), BlockPosition.ZERO_POSITION));
         blocks.forEach(logicBlock::addBlock);
     }
 

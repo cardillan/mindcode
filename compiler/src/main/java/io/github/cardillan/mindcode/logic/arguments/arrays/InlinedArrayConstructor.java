@@ -4,6 +4,7 @@ import io.github.cardillan.mindcode.compiler.astcontext.AstContext;
 import io.github.cardillan.mindcode.compiler.astcontext.AstContextType;
 import io.github.cardillan.mindcode.compiler.astcontext.AstSubcontextType;
 import io.github.cardillan.mindcode.compiler.generation.variables.NameCreator;
+import io.github.cardillan.mindcode.compiler.generation.variables.ValueStore;
 import io.github.cardillan.mindcode.compiler.postprocess.JumpTable;
 import io.github.cardillan.mindcode.logic.arguments.*;
 import io.github.cardillan.mindcode.logic.instructions.ArrayAccessInstruction;
@@ -32,6 +33,12 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
         arrayElem = LogicVariable.arrayAccess(baseName, "*" + elementSuffix, nameCreator.arrayAccess(baseName, elementSuffix));
     }
 
+    @Override
+    protected int getStartOffset() {
+        // Inlined jump table is built for the subarray, start offset is 0
+        return 0;
+    }
+
     protected abstract void finishTableCall(LocalContextfulInstructionsCreator creator);
 
     @Override
@@ -46,6 +53,8 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
             LogicLabel firstLabel = processor.nextLabel();
             LogicLabel marker = processor.nextMarker();
             LogicValue index = computeIndex(creator);
+            List<ValueStore> elements = arrayStore.getElements();
+
             LogicVariable tmp;
             if (useTextTables) {
                 tmp = LogicVariable.INVALID;  // Won't be used
@@ -53,7 +62,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 LogicVariable tmp1 = creator.nextTemp();
                 creator.createOp(Operation.SHL, tmp1, index, LogicNumber.ONE).setNonNegativeInt(index);
                 LogicVariable tmp2 = creator.nextTemp();
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.fullSize()));
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(elements.size()));
                 creator.createOp(Operation.MOD, tmp2, tmp1, modulo);
                 tmp = tmp2;
             } else {
@@ -74,11 +83,11 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
             Runnable createExit = () -> creator.createJumpUnconditional(finalLabel);
             if (folded()) {
-                LogicNumber limit = LogicNumber.create((arrayStore.fullSize() + 1) / 2);
-                generateFoldedJumpTable(creator, firstLabel, marker, index, limit, arrayElem,
+                LogicNumber limit = LogicNumber.create((elements.size() + 1) / 2);
+                generateFoldedJumpTable(creator, elements, firstLabel, marker, index, limit, arrayElem,
                         createExit, true, branchLabels, ix -> ix.setNonNegativeIntTable(index));
             } else {
-                generateJumpTable(creator, firstLabel, marker, createExit, true, branchLabels);
+                generateJumpTable(creator, elements, firstLabel, marker, createExit, true, branchLabels);
             }
             creator.createLabel(finalLabel);
             creator.popContext();

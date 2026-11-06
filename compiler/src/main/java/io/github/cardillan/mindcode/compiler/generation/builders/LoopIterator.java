@@ -2,6 +2,7 @@ package io.github.cardillan.mindcode.compiler.generation.builders;
 
 import io.github.cardillan.mindcode.compiler.generation.CodeAssembler;
 import io.github.cardillan.mindcode.compiler.generation.variables.ArrayStore;
+import io.github.cardillan.mindcode.compiler.generation.variables.InternalArray;
 import io.github.cardillan.mindcode.compiler.generation.variables.LargeArray;
 import io.github.cardillan.mindcode.compiler.generation.variables.ValueStore;
 import io.github.cardillan.mindcode.logic.arguments.LogicNumber;
@@ -32,6 +33,7 @@ final class LoopIterator {
     public boolean updateIndex = true;
     public int bodyIteratorValue = Integer.MIN_VALUE;
 
+    int startOffset;
     Consumer<CodeAssembler> indexDerivation = _ -> {};
 
     // For determining whether memory variables of different iterators can be merged
@@ -55,6 +57,7 @@ final class LoopIterator {
         } else {
             blockSize = array.size();
         }
+        startOffset = array instanceof InternalArray ? 0 : array.getStartOffset();
     }
 
     public ArrayStore array() {
@@ -79,26 +82,26 @@ final class LoopIterator {
 
     public LogicVariable memoryValue() {
         LargeArray array = largeArray();
-        return array.getMemoryBlock(index - array.getStartOffset());
+        return array.getMemoryBlock(index - startOffset);
     }
 
     public int indexValue() {
         return switch (array) {
-            case LargeArray a -> a.getMemoryIndex(index - a.getStartOffset());
+            case LargeArray a -> a.getMemoryIndex(index - startOffset);
             case ArrayStore _ -> index;
             case null -> throw new IllegalStateException();
         };
     }
 
     public boolean isCompatible(LoopIterator other) {
-        return descending == other.descending && blockSize == other.blockSize && array().getStartOffset() == other.array().getStartOffset()
+        return descending == other.descending && blockSize == other.blockSize && startOffset == other.startOffset
                 && iteratorCount == other.iteratorCount && iteratorIndex == other.iteratorIndex;
     }
 
     public void setIteration(int iteration) {
         ArrayStore array = array();
         int ascIteration = descending ? array.size() / iteratorCount - iteration - 1 : iteration;
-        index = array.getStartOffset() + ascIteration * iteratorCount + iteratorIndex;
+        index = startOffset + ascIteration * iteratorCount + iteratorIndex;
     }
 
     public int nextIteration() {
@@ -114,8 +117,8 @@ final class LoopIterator {
 
         // Convert to a raw index and then to iteration
         return descending
-                ? (array().getStartOffset() + array().size() - nextIndex - 1) / iteratorCount
-                : (nextIndex - array().getStartOffset()) / iteratorCount;
+                ? (startOffset + array().size() - nextIndex - 1) / iteratorCount
+                : (nextIndex - startOffset) / iteratorCount;
     }
 
     public void setValue(CodeAssembler assembler, LogicValue value) {
@@ -138,13 +141,13 @@ final class LoopIterator {
             // Both are ascending or descending. Are they the same?
             if (iteratorCount == from.iteratorCount) {
                 // Same iterator count. Possible offset?
-                int originalOffset = from.array().getStartOffset() + from.iteratorIndex;
-                int derivedOffset = array().getStartOffset() + iteratorIndex;
+                int originalOffset = from.startOffset + from.iteratorIndex;
+                int derivedOffset = startOffset + iteratorIndex;
 
                 indexDerivation = assembler -> assembler.createOp(Operation.ADD,
                         indexVariable(), from.indexVariable(), LogicNumber.create(derivedOffset - originalOffset));
                 return true;
-            } else if (array().getStartOffset() + iteratorIndex == 0 && from.array().getStartOffset() + from.iteratorIndex == 0) {
+            } else if (startOffset + iteratorIndex == 0 && from.startOffset + from.iteratorIndex == 0) {
                 // Different iterator count, but same base: multiplication!
                 if (iteratorCount % from.iteratorCount == 0) {
                     indexDerivation = assembler -> assembler.createOp(Operation.MUL,
@@ -154,9 +157,9 @@ final class LoopIterator {
             }
         } else if (iteratorCount == from.iteratorCount) {
             // One of them is descending
-            int originalMin = from.array().getStartOffset();
+            int originalMin = from.startOffset;
             int originalMax = originalMin + from.array().size() - iteratorCount;
-            int derivedMin = array().getStartOffset();
+            int derivedMin = startOffset;
             int derivedMax = derivedMin + array().size() - iteratorCount;
             int offset = descending ? originalMax + derivedMin : derivedMax + originalMin;
 

@@ -1,0 +1,20 @@
+#set goal = size;
+
+linked(@memory-cell) memory[] = (c1 .. c2);
+external(memory) array[128];
+
+void init(cell)
+    for var i in 0 ... 64 do cell[i] = i; end;
+end;
+
+begin
+    init(c1);
+    init(c2);
+
+    var sum = 0;
+
+    for var x in array do sum += x; end;
+
+    assertEquals(64 * 63, sum, "long array sum");
+    stopProcessor();
+end;

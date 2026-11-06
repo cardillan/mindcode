@@ -1,0 +1,18 @@
+#set goal = size;
+
+linked(@memory-cell) memory[] = (c1 .. c5);
+external(memory) a[320];
+volatile var b[320];
+
+var index = 0;
+for var out x in a; var out y in b do
+    x = y = index++;
+end;
+
+var sum = 0;
+for var x in a[10 ... 310]; var y in b[11 ... 311] do
+    sum += y - x;
+end;
+
+assertEquals(300, sum, "long array sum");
+stopProcessor();
