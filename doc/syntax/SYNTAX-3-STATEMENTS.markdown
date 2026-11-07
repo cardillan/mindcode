@@ -12,8 +12,12 @@ There are several types of loops:
 * [C-style loops](#c-style-loops)
 * [Infinite loops](#infinite-loops)
 
-> [!NOTE]
-> In loops using loop control variables (i.e., range iteration loops and list iteration loops), the loop control variable must not be reused in another such loop. Furthermore, in strict syntax mode, the loop control variable needs to be declared in the loop itself; it is not possible to use a variable declared earlier as a loop control variable.
+## Restrictions on loop control variables
+
+Loops using loop control variables (i.e., range iteration loops and list iteration loops) place the following restrictions on their control variables:
+
+* In strict syntax mode, the loop control variable needs to be declared in the loop itself; it is not possible to use a variable declared earlier as a loop control variable.
+* In relaxed syntax mode, the loop control variable must not be reused in a nested loop.
 
 ## While loops
 
@@ -76,7 +80,7 @@ end;
 >
 > The suggested way to loop over all linked blocks is
 >
-> ```
+> ```mindcode
 > for n = 0 ... @links do
 >     block = getlink(n);
 >     /* do something with block */
@@ -114,7 +118,7 @@ print(u);
 printflush(message1);
 ```
 
-Tries to bind a mono, poly, or mega, in this order, ending the loop when successfully binding one.
+Attempts to bind a mono, poly, or mega, in this order, ending the loop when successfully binding one.
 
 The list of values is fixed—it cannot be stored in a variable, for example, as Mindustry Logic itself doesn't support dynamic arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated at the beginning of the iteration that uses it. This loop
 
@@ -139,7 +143,7 @@ for var unit, count in
     @poly, 4,
     @mega, 2
 do
-    print($"$unit: $count\n");
+    println($"$unit: $count");
 end;
 printflush(message1);
 ```
@@ -187,7 +191,7 @@ end;
 ```
 
 > [!TIP]
-> List iteration loops can be converted to index-based loops for internal arrays exceeding a [configurable size](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) and for external/large arrays. Compared to a range iteration loop or a C-style loop, the list iteration loop provides may remove some overhead of non-zero-based external arrays, and provides very significant performance improvements for large arrays. Currently, it is recommended to use list iteration loops whenever possible. Parallel iteration makes list iteration loops usable in a wide variety of scenarios.
+> List iteration loops can be converted to index-based loops for internal arrays exceeding a [configurable size](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) and for external/large arrays. Compared to a range iteration loop or a C-style loop, a list iteration loop can avoid some of the overhead associated with non-zero-based external arrays and can provide significant performance improvements when processing large arrays. Currently, it is recommended to use list iteration loops whenever possible. Parallel iteration makes list iteration loops usable in a wide variety of scenarios.
 
 ### Modifications of variables in the list
 
@@ -236,7 +240,7 @@ This code initializes values `a`, `b`, `c` and `d` to `1`, `2`, `3` and `4` resp
 
 If some elements in the list cannot be modified, it is an error if it is assigned to an `out` loop control variable:
 
-```
+```mindcode-invalid
 // Error - 'c + 1' is not a variable
 for var out i in a, b, c + 1, d do
     i = rand(10);
@@ -245,16 +249,23 @@ end;
 
 ### Parallel iteration
 
-It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. The only requirement is that all iterator groups must be provided with data for the same number of iterations.
+It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators:
 
 ```mindcode
-var a[20], b[10];
+var a[10], b[10], c[10];
 
 // Ten iterations in total: a has 20 elements, but feeds 2 iterators
-for var i, j in a; var out k in b do
+for var i, j in a, b; var out k in c do
     k = i + j;
 end;
 ```
+
+* Each semicolon separates an independent iterator group. 
+* Each group advances once per iteration:
+  * `i` and `j` take two elements per iteration from the combined list containing the elements of `a` and `b`.
+  * The elements from `a` are consumed first, followed by the elements from `b`.
+* The number of values in a group must be divisible by its number of iterators.
+* All groups must produce the same number of iterations.
 
 By combining subarrays and parallel iteration, arrays can be processed by list iteration loops in many ways. For example, it is possible to iterate over all adjacent pairs of elements in the array:
 
@@ -375,7 +386,7 @@ end;
 
 ### Dynamic arrays
 
-List iteration loop over a [dynamic array](SYNTAX-1-VARIABLES.markdown#built-in-variables) (such as `links` or `blocks`) is supported, but only one iterator can be used in the loop statement. For example, to iterate over all linked blocks, use:
+List iteration loop over a [dynamic array](SYNTAX-1-VARIABLES.markdown#built-in-variables) (such as `links` or `blocks`) is supported. Only one iterator group containing one iterator can be declared in the loop statement. For example, to iterate over all linked blocks, use:
 
 ```mindcode
 println("Linked blocks:");
@@ -445,13 +456,13 @@ print :sum
 The syntax is similar to C's, except for the absence of parenthesis and the `do` keyword:
 
 ```mindcode
-// Visit every block in a given region, one at a time, starting from the bottom
+// Visit every tile in a given region, one at a time, starting from the bottom
 // left and ending at the upper right
-var dx = 1;
-for var x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx do
-    // do something with this block
+var dx = 1, dy = 1;
+for var x = SW_X, y = SW_Y; x <= NE_X && y <= NE_Y; x += dx do
+    // do something with this tile
     if x == NE_X then
-        dx *= -1;
+        dx = -dx;
         y += dy;
     end;
 end;
@@ -533,7 +544,7 @@ else
 end;
 ```
 
-Depending on the value of `n`, `result` will contain the one of `ready` or `pending`.
+Depending on the value of `n`, `result` contains one of `ready` or `pending`.
 
 To handle more than two alternatives, you can use `elsif` as an alternative to nested `if` statements:
 
@@ -563,7 +574,7 @@ end;
 
 ## Case expressions
 
-Case expression is another way of writing conditionals. Use case expression when you need to test a value against multiple different alternatives:
+A case expression is another way of writing conditionals. Use case expression when you need to test a value against multiple different alternatives:
 
 ```mindcode
 var status = case num_enemies
@@ -615,16 +626,14 @@ If the `when null` clause is not used, or the `when` clause contains an expressi
 
 While the [Case Switching optimization](optimizations/CASE-SWITCHING.markdown) can alter case expressions heavily, the original behavior described here is preserved.
 
-### Additional considerations
-
-* Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case expression. Do not use expressions with side effects (such as a function call that would modify some global variable).
-* Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, but the behavior might change in the future.
+> [!NOTE] 
+> Do not rely on expressions in when clauses being evaluated in any particular order or on every expression being evaluated. In particular, avoid expressions with side effects, such as function calls that modify variables.
 
 # Code blocks
 
 Code blocks are used to group a set of statements together:
 
-```
+```mindcode
 begin
     var enabled = floor(rand(2));
     print("Current value is ", enabled);
@@ -666,7 +675,7 @@ for var i in 1 .. 10 do
 end;
 ```
 
-Similarly, `continue MainLoop;` skips the rest of the current iteration in both the inner loop and the main loop. Every loop in Mindcode can be marked with a label, and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
+A labeled `continue` targeting an outer loop exits any nested loops and skips the remainder of the target loop's current iteration, proceeding with its next iteration.
 
 When an explicit label is not specified for a `loop` statement, it is possible to use an implicit label `loop`:
 
@@ -720,7 +729,7 @@ printflush(message1);
 
 The implicit labels become ambiguous when the same types of loops or blocks are nested:
 
-```
+```mindcode-invalid
 for i in 0 ... 10 do
     for j in 0 ... 10 do
         println(i, ", ", j);

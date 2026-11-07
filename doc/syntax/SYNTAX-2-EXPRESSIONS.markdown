@@ -36,14 +36,23 @@ If an instruction generates value to be written to a variable, and there's an er
 
 Mindustry Logic provides two equality operations: `equal` and `notEqual`.
 
-When both operands to an equality operation are non-numeric, they are compared as objects. Two objects are equal when they point to the same object (e.g., the same building or the same unit), or if their contents are equal (e.g., two string values containing the same text, or two identical item, such as `@coal`).
+When both operands to an equality operation are non-numeric, they are compared as objects. Two objects are equal when they point to the same object (e.g., the same building or the same unit), or if their contents are equal (e.g., two string values containing the same text, or two identical items, such as `@coal`).
+
+This table contains a few examples of Mindustry Logic equality comparisons:
+
+| Values                              | Comparison |
+|-------------------------------------|:----------:|
+| Two references to the same building |   Equal    |
+| References to different buildings   | Not equal  |
+| Two strings with identical contents |   Equal    |
+| Two different item types            | Not equal  |
 
 When at least one of the values is numeric, the numeric values of both operands are compared:
 
 1. The non-numeric operand, if any, is converted to a number first (see [numeric conversion](SYNTAX-1-VARIABLES.markdown#numeric-conversion)).
-2. The two numbers are considered equal if their absolute values differ by less than `0.000001` (10<sup>-6</sup>).
+2. The two numbers are considered equal if their absolute difference is less than `0.000001` (10<sup>-6</sup>).
 
-The non-zero precision used to compare two variables is harmless for integer operations and is actually handy for code that mixes integer and floating point arithmetics: floating-point numbers have limited precision, and during mathematical operations might accumulate numerical errors. Mindustry Logic compensates for these errors by ignoring small differences between operands.
+The non-zero tolerance used to compare two variables is harmless for integer operations and is actually handy for code that mixes integer and floating-point arithmetics: floating-point numbers have limited precision, and during mathematical operations might accumulate numerical errors. Mindustry Logic compensates for these errors by ignoring small differences between operands.
 
 Furthermore, due to [numeric conversion](SYNTAX-1-VARIABLES.markdown#numeric-conversion), `null` values are equal to zero, and any object (a block, unit, item type or a string) is equal to one.
 
@@ -70,7 +79,7 @@ Bitwise operations, including `or`, operate on integer values, and thus are affe
 
 Therefore, even values that wouldn't compare to zero using equality operations may be regarded as `false` when used in `or` operation:
 
-```
+```mlog
 set a 0.5
 set b 0.5
 op notEqual x a 0         # set x to 1 if a is nonzero (i.e., true)
@@ -85,7 +94,7 @@ Logical `and` (`op land` instructions) suffers from a different problem: the ope
 
 Therefore, values that would compare to zero using equality operations may be regarded as `true` when used in `land` operation:
 
-```
+```mlog
 set a 0.00000001
 set b 0.00000001
 op notEqual x a 0         # set x to 1 if a is nonzero (i.e., true)
@@ -96,7 +105,7 @@ print y                   # prints 1
 
 ## Output precision
 
-When a value is close to an integer value (i.e., the difference between the value and the closes integer is smaller than `0.000001` - 10<sup>-6</sup>), the integer value is displayed instead of the precise value. This is applied when displaying values of variables using the `print` and `format` instruction and also on the `Vars` screen.
+When a value is close to an integer value (i.e., the difference between the value and the closest integer is smaller than `0.000001` - 10<sup>-6</sup>), the integer value is displayed instead of the precise value. This is applied when displaying values of variables using the `print` and `format` instruction and also on the `Vars` screen.
 
 Therefore, when a variable value is displayed as an integer by Mindustry, it is necessary to keep in mind that the actual value of the variable might be different, and that the relational operators (`<`, `<=`, `>`, `>=`) operate over the actual value, not the displayed value of the variable.
 
@@ -107,16 +116,16 @@ To display a value of a variable without rounding, it is possible to use the [`p
 
 # Mindcode
 
-## Error handing
+## Error handling
 
 Mindcode completely adopts Mindustry Logic error handling system.
 
 ## Null values in expression
 
-A code produced by Mindcode may handle operators differently from Mindustry Logic when one of the operands is `null`. In this case, the result may also be `null`, if the corresponding operation in Mindustry Logic produces a zero value. The only exceptions are operators producing boolean values, which are guaranteed to evaluate to `true` or `false` and never produce any other value.
+A code produced by Mindcode may handle operators differently from Mindustry Logic when one of the operands is `null`. In this case, the result may also be `null`, if the corresponding operation in Mindustry Logic produces a zero value. The only exceptions are boolean operators (`&&` and `||`), which are guaranteed to evaluate to `true` or `false` and never produce any other value.
 
 > [!TIP]
-> This difference in handling `null` values allows Mindcode to optimize code when one of the operands has a known value which is idempotent with respect to the operator. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b` (such expressions typically aren't present directly in the user code, but may arise as a result of optimizations Mindcode performs). Of course, when `a` or `b` happens to be `null`, not executing the operation prevents the conversion from `null` to `0` which would otherwise happen.
+> This is not an arbitrary difference in the language's semantics, but a consequence of Mindcode optimizations that eliminate operations whose result is known to be equivalent for ordinary numeric values. When Mindcode encounters `a + 0`, for example, it can replace the operation with `a` directly. Similarly, `b * 1` can be replaced with `b` (such expressions typically aren't present directly in the user code, but may arise as a result of optimizations Mindcode performs). Of course, when `a` or `b` happens to be `null`, not executing the operation prevents the conversion from `null` to `0` which would otherwise happen.
 
 The impact of the difference in `null` handling by Mindcode is minimal - as has been mentioned above, the `null` value is handled the same as `0` in most cases. The difference between `null` and `0` is meaningful only in these operations:
 
@@ -155,6 +164,9 @@ cell1[index] = ++a;
 b = a++;
 print(b, a);
 ```
+
+> [!IMPORTANT]
+> Avoid modifying a variable more than once in a single expression, or modifying a variable in one part of an expression while reading it in another part.
 
 # Operators
 
@@ -267,7 +279,7 @@ Compile-time string concatenation isn't supported for [formattable string litera
 > [!IMPORTANT]
 > Shift operators are bitwise operators, i.e., manipulate individual bits in an integer value. Their operands are subject to [integer conversion](SYNTAX-1-VARIABLES.markdown#integerdouble-conversion).
 
-These operators shift the numeric value of the first operand left or right by the number of bits specified by the second operand. If the second operand is outside the `0 .. 63` range, it's value is taken modulo 64.
+These operators shift the numeric value of the first operand left or right by the number of bits specified by the second operand. If the second operand is outside the `0 .. 63` range, its value is taken modulo 64.
 
 Shifting left is equivalent to an integer multiplication by a given power of two, shifting right is an equivalent of an integer division by a power of two. The results of the operation are most easily inspected in binary form:
 
@@ -287,7 +299,7 @@ prints `-1` and `15`.
 Notes on the unsigned right-shift operator (`>>>`):
 
 * The operator is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into a sequence of up to seven instructions.
-* Right-shifting a negative number using the unsinged operator will produce a positive number. It is possible that the positive number will be outside the safe integer range, even though the original number was initially within the safe integer range. Example:
+* Right-shifting a negative number using the unsigned operator will produce a positive number. It is possible that the positive number will be outside the safe integer range, even though the original number was initially within the safe integer range. Example:
 
 ```mindcode
 require printing;
@@ -301,7 +313,7 @@ printExactHex(-1 >>> 2);
 
 produces:
 
-```
+```text
 FFFFFFFFFFFFFFFF
 7FFFFFFFFFFFFFFF
 4000000000000000
@@ -324,17 +336,17 @@ Bitwise operations manipulate individual bits of their arguments' integer repres
 
 The `in` operator can be used to test whether a value is present in a range or a list of values.
 
-* `<value> in <range>` tests whether a value lies within a given inclusive or exclusive range, e.g., `a in (0 ... 10)`,
+* `<value> in <range>` tests whether a value lies within a given inclusive or exclusive range, e.g., `a in 0 ... 10`,
 * `<value> in <list>` tests whether a value is present in a given list of values, e.g., `a in (1, 2, 3)`.
 
 The `in` operator can be negated by prefixing it with a boolean negation operator (`not in` or `! in`, `!in` is also allowed), for example:
 
-* `a not in (0 ... 10)`
+* `a not in 0 ... 10`
 * `a !in (1, 2, 3)`
 
 ### Range membership operator
 
-When used with a range specification, the `in` operator produces two comparisons of the value to the range boundaries: `a in (min ... max)` is compiled as `(a >= min and a < max)` and `a not in (min ... max)` as `(a < min or a >= max)`. Note that the operator is short-circuiting and mends well with other short-circuiting operators. Proper comparison is used for the inclusive (`..`) and exclusive (`...`) ranges.
+When used with a range specification, the `in` operator produces two comparisons of the value to the range boundaries: `a in min ... max` is compiled as `a >= min and a < max` and `a not in min ... max` as `a < min or a >= max`. Note that the operator is short-circuiting and works well with other short-circuiting operators. Proper comparison is used for the inclusive (`..`) and exclusive (`...`) ranges.
 
 ### List membership operator
 
@@ -360,7 +372,7 @@ These are boolean operators and as such are guaranteed to always return `0` or `
 
 ## Equality operators
 
-Relational operators compare values of their operands using Mindustry Logic [equality operations](#equality-operations) and [strict equality operation](#strict-equality-operation):
+Equality operators compare values of their operands using Mindustry Logic [equality operations](#equality-operations) and [strict equality operation](#strict-equality-operation):
 
 * `==` corresponds to `op equal`
 * `!=` corresponds to `op notEqual`
@@ -436,16 +448,18 @@ Logical operators may return any numeric value or `null`. `null` and zero repres
 * when evaluating `and`: the value of the first operand is false.
 
 > [!NOTE]
-> The [Select Optimization](optimizations/BOOLEAN-OPTIMIZATION.markdown) may turn a short-circuit operation into a full evaluation, if it doesn't change the semantics of the operation and the result is compatible with the optimization goal.
+> The [Select Optimization](optimizations/BOOLEAN-OPTIMIZATION.markdown) may turn a short-circuit operation into a full evaluation if it doesn't change the semantics of the operation and the result is compatible with the optimization goal.
 
 Boolean operators are guaranteed to always return `0` or `1`. They're always evaluated fully. Boolean operators may be a little bit less effective, as additional operations might need to be performed to ensure the resulting value is always `0` or `1`.
 
-> [!TIP]
-> For evaluating conditions, using the logical operators (`and`/`or`) is preferred. Only use the boolean operators when you need to limit the output values to `0` or `1`, e.g., `count += active || reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in less optimal compiled code.
+> [!NOTE]
+> Although the operators have similar names and purposes, boolean and logical operators are not interchangeable. Boolean operators always return 0 or 1, whereas logical operators return one of their operand values and may return `null`.
+>
+> For evaluating conditions, using the logical operators (`and`/`or`) is preferred. Only use the boolean operators when you need to limit the output values to `0` or `1`, e.g., `count += active || reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in a less optimal code.
 
 ## Ternary operator
 
-Ternary operator is a conditional operator and is equivalent to an `if` expression having exactly one expression in both true and false branches:
+The ternary operator is a conditional operator and is equivalent to an `if` expression having exactly one expression in both true and false branches:
 
 ```mindcode
 var message = value <= limit ? "ok" : "too high";
@@ -486,7 +500,7 @@ var c[20];
 
 b = a;                      // Copies the entire array
 a[0 ... 5] = b[5 ... 10];   // Copies subarrays
-v[0 ... 10] = b;            // Possible, since the subarray has the same size as the array
+c[0 ... 10] = b;            // Possible, since the subarray has the same size as the array
 ```
 
 To use a memory cell/bank in array assignments, it is necessary to use subarrays even when accessing the entire memory cell/bank:
@@ -570,7 +584,7 @@ for i in 1 .. 10 do
     b -= a;
 end;
 
-println(b > 0 ? "Greater than zero" : "Not greater then zero");
+println(b > 0 ? "Greater than zero" : "Not greater than zero");
 println(b == 0 ? "Equal to zero" : "Not equal to zero");
 println(b === 0 ? "Strictly equal to zero" : "Not strictly equal to zero");
 printflush(message1);
@@ -579,7 +593,7 @@ stopProcessor();
 
 After ten iterations, we'd expect the value to be equal to `0` precisely, but due to the numerical imprecision this is not the case. As the equality comparison compensates for small differences, but relational operators do not, the code produces this result:
 
-```
+```text
 Greater than zero
 Equal to zero
 Not strictly equal to zero

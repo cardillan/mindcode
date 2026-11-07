@@ -12,29 +12,17 @@ Changes intended for the next regular release.
 
 ### Done
 
-* Add `update.json` to the repo, lists new versions and their level:
-  * Optional: no bug fixes
-  * Recommended: no critical bug fixes
-  * Required: critical bug fixes, critical updates to match the latest Mindustry version.
-* Add checking for new versions:
-  * Downloads the `update.json` locally once per hour or day.
-  * Reports the most serious update level available since the current version.
-* Convert chained if/elsif to case expression when possible
-* `select` transformation for case expressions: support noninteger assignments.
-* Internal subarrays optimization: for shared tables, the master array is used; when inlining, the subarray is used.
-* Compressing jump tables of constant arrays (identical values get handled by the same branch)
-
 ### Doing
 
-* Converting arrays to const arrays when possible
+* Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
+* If expression telescoping optimization
 
 ### Considering
 
 * Large heap
   * Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays.
-* If expression telescoping optimization
+  * Converting arrays to const arrays when possible
 * ? Remove lookup/sensor id in front of case statements
-* Unit test refactoring: use JUnit's annotations for init and cleanup, support changing compiler profile in nested classes using `@Before` and `@After` annotations.
 * Recursive functions: reuse array offset variable for identically sized arrays.
 
 * Automatically make global variables accessed by a background process volatile.
