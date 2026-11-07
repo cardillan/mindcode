@@ -92,7 +92,7 @@ The [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools), available f
 
 To learn more about Mindustry Logic, you can find more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated October 2026)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated November 2026)
 * [mlog.guide](https://mlog-guide.pages.dev/en/) (last updated September 2026)
 
 You can also get help on these Discord servers:

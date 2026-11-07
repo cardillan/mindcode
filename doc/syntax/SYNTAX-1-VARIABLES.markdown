@@ -560,14 +560,14 @@ The basic types of Mindcode variables are summarized in the following table:
 
 | Type              | Storage               | Typical purpose                                  |
 |-------------------|-----------------------|--------------------------------------------------|
-| Regular           | Current processor     | Ordinary program variables                       |
 | Constant          | Compile time only     | Values substituted directly into code            |
-| Debug             | Current processor     | Inspecting values while debugging                |
+| Regular           | Current processor     | Ordinary program variables                       |
 | Linked            | Existing linked block | Accessing a block connected to the processor     |
+| Program parameter | Current processor     | Allowing users to modify values in compiled mlog |
 | External          | Memory cell or bank   | Persistent or shared storage                     |
 | Exported          | Current processor     | Making variables available to importing modules  |
 | Remote            | Another processor     | Accessing variables stored by another processor  |
-| Program parameter | Current processor     | Allowing users to modify values in compiled mlog |
+| Debug             | Current processor     | Inspecting values while debugging                |
 
 ## Regular variables
 
