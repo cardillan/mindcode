@@ -94,7 +94,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             generateFoldedJumpTable(creator, array.getElements(), firstLabel, marker,
                     arrayInd, limit, arrayElem, createExit, false, branchLabels, _ -> {});
         } else {
-            generateJumpTable(creator, array.getElements(), firstLabel, marker, createExit, false, branchLabels);
+            generateJumpTable(creator, array, firstLabel, marker, createExit, false, branchLabels);
         }
         return new JumpTable(tableId, useTextTables, startLabel, marker, instructions, branchLabels);
     }

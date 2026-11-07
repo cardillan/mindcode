@@ -33,7 +33,7 @@ All regular tables take up twice as many instructions as there are elements in t
 
 When the program needs to read or write an array element at a given index, a call into the table is made. For this, the address of the branch is computed, and the value of the element variable is either read into a transfer variable or updated from a transfer variable. The call sets up several arguments: the index to be accessed, the transfer variable (either as input or as output), the return address as an implicit argument, and, in case of multiplexed arrays, the actual processor being accessed. Several instructions are therefore executed to access an array element.
 
-Constant arrays are also implemented using regular tables. Here, the table provides the (constant) element value directly, and since the array cannot be modified, no table for writes is required or generated.
+Constant arrays are also implemented using regular tables. Here, the table provides the (constant) element value directly, and since the array cannot be modified, no table for writes is required or generated. Additionally, only a single branch is generated for each distinct element: duplicate elements in the array share the same branch. A regular table serving a constant array may therefore be smaller than a regular table serving a non-constant array of the same size.   
 
 ## Compact tables
 
@@ -56,6 +56,8 @@ Available for targets `8.1` and higher. Individual branches of the table serve t
 Folded tables can only support literals or mlog variables. Therefore, they can be used for compact tables or for reading regular tables of local arrays, including constant arrays. For remote arrays and writing tables, folding is not possible.
 
 Folding requires an additional step to choose the correct branch of the table and is therefore always slower than an unfolded table (only when [text-based table dispatch](#text-based-table-dispatch) is supported, this additional step can be removed for inlined tables). However, folding reduces the table size in half. Since a folded compact table serves both reads and writes, it takes only one instruction per array element (plus one-sixth of instruction for `draw triangle` element variable creation). This means arrays of 600 or 700 elements are possible while still providing some space for actual logic.
+
+With constant arrays, the regular jump table contains only as many branches as there are distinct elements in the array. Consequently, the regular table might be even smaller than the folded table. In these cases, the table is never folded.
 
 ## Short arrays
 
@@ -224,11 +226,13 @@ In Mindustry 8, it is possible to [read character values from a string](../MINDU
 
 When text-based table dispatch is possible, it is always used by the compiler, as it always performs better in terms of both code size and execution time, compared to alternatives. When used with inlined tables, text-based table dispatch even compensates for the disadvantage of folded tables, making them perform identically to unfolded tables while halving the table size.
 
-**Reversing branch order**
+### Optimizing branch order
 
 There's no jump in the last branch of an inlined table, saving one instruction execution when accessing elements served by the last branch. When arranged in natural order, the last branch contains the last element for unfolded tables, and the last element plus the middle one for folded tables. However, if the array has an odd number of elements, the last branch of a folded table serves only one element of the array.
 
 When text-based table dispatch is used, the branches can be arranged in any order. Therefore, branches in inlined tables are reversed with text-based table dispatch. This way, it is guaranteed that the last branch of a folded table will serve two elements (the first one and the middle one), and in the case of unfolded tables, it will serve the first element. This brings a small improvement to odd-sized arrays implemented by folded tables, and a possible improvement from putting the first array element on the best path; as the first element is accessed the most often by most algorithms, certainly more often than the last element.
+
+With constant arrays and text-based table dispatch, the branches are arranged by the number of array elements they serve (elements with the same value are served by a common branch), in ascending order. Therefore, the branch serving the most elements is placed last, providing the performance benefit to the most elements of the array.
 
 ## Code size and performance
 

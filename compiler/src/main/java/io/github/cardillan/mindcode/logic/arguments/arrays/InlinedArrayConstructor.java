@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static io.github.cardillan.mindcode.logic.instructions.ArrayAccessInstruction.AccessType.READ;
+
 @NullMarked
 public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
     protected final LogicVariable arrayElem;
@@ -87,7 +89,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 generateFoldedJumpTable(creator, elements, firstLabel, marker, index, limit, arrayElem,
                         createExit, true, branchLabels, ix -> ix.setNonNegativeIntTable(index));
             } else {
-                generateJumpTable(creator, elements, firstLabel, marker, createExit, true, branchLabels);
+                generateJumpTable(creator, arrayStore, firstLabel, marker, createExit, true, branchLabels);
             }
             creator.createLabel(finalLabel);
             creator.popContext();
@@ -98,13 +100,19 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     protected final int inlinedTableSize() {
-        return (folded() ? roundUpToEven(arrayStore.fullSize()) : 2 * arrayStore.fullSize()) - 1;
+        int size = folded() ? roundUpToEven(arrayStore.fullSize())
+                : useTextTables && accessType == READ ? 2 * arrayStore.distinctValues()
+                : 2 * arrayStore.fullSize();
+        return size - 1;
     }
 
     protected final double inlinedTableStepsSavings() {
         // The last jump in an inlined jump table is eliminated
         // Hit twice as often for even-sized folded arrays, or with text tables
         boolean even = arrayStore.fullSize() % 2 == 0;
-        return (folded() && (even || useTextTables) ? 2.0 : 1.0) / arrayStore.fullSize();
+        double lastBranchCardinality = folded()
+                ? useTextTables || even ? 2d : 1d
+                : useTextTables && accessType == READ ? arrayStore.getMaxCardinality() : 1d;
+        return lastBranchCardinality / arrayStore.fullSize();
     }
 }

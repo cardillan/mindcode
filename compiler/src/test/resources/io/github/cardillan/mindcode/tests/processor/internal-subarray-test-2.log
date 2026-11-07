@@ -22,9 +22,9 @@ Modifications by Virtual Instruction Expansion (+20 instructions):
      3 set *tmp0 0
      4 label *label3
 -    * readarr<internal:compact> :x .a[10...20] *tmp0
-+    5 setaddr .a*ret *label24 (h:marker1)
++    5 setaddr .a*ret *label25 (h:marker1)
 +    6 multicall *tmp0 0 (m:marker0) (h:marker1)
-+    7 label *label24
++    7 label *label25
 +    8 read :x @this .a*elem
      9 op add :sum :sum :x
     10 label *label1
@@ -32,10 +32,10 @@ Modifications by Virtual Instruction Expansion (+20 instructions):
     12 jump *label3 lessThan *tmp0 10
     13 label *label2
 -    * readarr<internal:compact> *tmp3 .a[] p
-+   14 setaddr .a*ret *label25 (h:marker2)
++   14 setaddr .a*ret *label26 (h:marker2)
 +   15 assertbounds multiple 1 0 lessThanEq p lessThanEq 19 "position 19:5: index out of bounds (0 to 19)"
 +   16 multicall p 0 (m:marker0) (h:marker2)
-+   17 label *label25
++   17 label *label26
 +   18 read *tmp3 @this .a*elem
     19 op add :sum :sum *tmp3
     20 assertequals 10 :sum "@counter table test"
@@ -108,11 +108,11 @@ Modifications by Iterated phase, Loop Hoisting, pass 3, iteration 1:
      1 set .a*1 10
      2 set :sum 0
      3 set *tmp0 0
-+    4 setaddr .a*ret *label24 (h:marker1)
++    4 setaddr .a*ret *label25 (h:marker1)
      5 label *label3
--    * setaddr .a*ret *label24 (h:marker1)
+-    * setaddr .a*ret *label25 (h:marker1)
      6 multicall *tmp0 0 (m:marker0) (h:marker1)
-     7 label *label24
+     7 label *label25
      8 read :x @this .a*elem
 
 Final code before resolving virtual instructions:
@@ -121,18 +121,18 @@ set p 1
 set .a*1 10
 set :sum 0
 set *tmp0 0
-setaddr .a*ret *label24
+setaddr .a*ret *label25
 label *label3
 multicall *tmp0 0
-label *label24
+label *label25
 read :x @this .a*elem
 op add :sum :sum :x
 op add *tmp0 *tmp0 1
 jump *label3 lessThan *tmp0 10
-setaddr .a*ret *label25
+setaddr .a*ret *label26
 assertbounds multiple 1 0 lessThanEq p lessThanEq 19 "position 19:5: index out of bounds (0 to 19)"
 multicall p 0
-label *label25
+label *label26
 read *tmp1 @this .a*elem
 op add :sum :sum *tmp1
 assertequals 10 :sum "@counter table test"

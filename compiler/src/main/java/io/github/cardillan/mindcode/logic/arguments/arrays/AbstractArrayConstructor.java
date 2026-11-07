@@ -11,15 +11,15 @@ import io.github.cardillan.mindcode.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static io.github.cardillan.mindcode.logic.instructions.ArrayAccessInstruction.AccessType.READ;
 
 @NullMarked
 public abstract class AbstractArrayConstructor implements ArrayConstructor {
@@ -79,8 +79,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     protected final int getSharedTableSize() {
-        return folded()
-                ? roundUpToEven(arrayStore.fullSize()) + 2 * flag(profile.isSymbolicLabels())
+        return folded() ? roundUpToEven(arrayStore.fullSize()) + 2 * flag(profile.isSymbolicLabels())
+                : useTextTables && accessType == READ ? 2 * arrayStore.distinctValues() + flag(profile.isSymbolicLabels())
                 : 2 * arrayStore.fullSize() + flag(profile.isSymbolicLabels());
     }
 
@@ -190,29 +190,63 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     /// Provides an instance which creates a value store representation of the element to be used by the branch creator.
     abstract protected Function<ValueStore, ValueStore> elementValueStoreExtractor();
 
-    protected void generateJumpTable(LocalContextfulInstructionsCreator creator, List<ValueStore> elements,
-            LogicLabel firstLabel, LogicLabel marker, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
+    @Nullable LogicLabel nextLabel;
+
+    protected void generateJumpTable(LocalContextfulInstructionsCreator creator, ElementsArrayStore array, LogicLabel firstLabel,
+            LogicLabel marker, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
+        boolean compress = useTextTables && accessType == READ;
+        List<ValueStore> elements = array.getElements();
         BranchCreator branchCreator = branchCreator();
         Function<ValueStore, ValueStore> elementProcessor = elementValueStoreExtractor();
-        LogicLabel nextLabel = firstLabel;
+        nextLabel = firstLabel;
 
         int count = elements.size();
-        boolean reversed = useTextTables && inlined;
+        int[] indexes = computeOrder(array, inlined, compress);
+
+        int remaining = array.distinctValues();
+        Map<String, LogicLabel> labelMap = new HashMap<>();
 
         branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
         for (int i = 0; i < count; i++) {
-            int index = reversed ? count - i - 1 : i;
+            int index = indexes[i];
             ValueStore arrayElement = elements.get(index);
+            LogicLabel branchLabel = compress
+                    ? labelMap.computeIfAbsent(((LogicArgument)arrayElement.unwrap()).toMlog(), _ -> nextLabel)
+                    : nextLabel;
+
             ValueStore element = elementProcessor.apply(arrayElement);
-            creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
-            branchLabels.set(index, nextLabel);
-            branchCreator.createBranch(creator, element, index);
-            if (i < count - 1) {
-                createExit.run();
-                nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
-            } else if (!inlined) {
-                createExit.run();
+            branchLabels.set(index, branchLabel);
+            if (branchLabel == nextLabel) {
+                creator.createMultiLabel(branchLabel, marker).setJumpTarget(useTextTables);
+                branchCreator.createBranch(creator, element, index);
+                if (--remaining > 0) {
+                    createExit.run();
+                } else if (!inlined) {
+                    createExit.run();
+                }
+                nextLabel = processor.nextLabel();
             }
+        }
+    }
+
+    private int[] computeOrder(ElementsArrayStore array, boolean inlined, boolean compress) {
+        if (compress && array.distinctValues() < array.getElements().size()) {
+            List<String> mlog = array.getElements().stream().map(e -> ((LogicArgument) e.unwrap()).toMlog()).toList();
+            Map<String, Long> frequencies = mlog.stream()
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+            return IntStream.range(0, array.getElements().size())
+                    .boxed()
+                    .sorted(Comparator.comparingLong(i -> frequencies.get(mlog.get(i))))
+                    .mapToInt(Integer::intValue)
+                    .toArray();
+        } else {
+            int[] indexes = new int[array.getElements().size()];
+            boolean revert = useTextTables && inlined;
+            for (int i = 0; i < indexes.length; i++) {
+                indexes[i] = revert ? indexes.length - i - 1 : i;
+            }
+            return indexes;
         }
     }
 

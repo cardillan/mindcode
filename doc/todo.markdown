@@ -22,11 +22,11 @@ Changes intended for the next regular release.
 * Convert chained if/elsif to case expression when possible
 * `select` transformation for case expressions: support noninteger assignments.
 * Internal subarrays optimization: for shared tables, the master array is used; when inlining, the subarray is used.
+* Compressing jump tables of constant arrays (identical values get handled by the same branch)
 
 ### Doing
 
 * Converting arrays to const arrays when possible
-* Compressing jump tables of constant arrays (identical values get handled by the same branch)
 
 ### Considering
 

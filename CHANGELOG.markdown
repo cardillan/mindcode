@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking:** Formattable string literals are evaluated in the declaration context instead of the use context. Creating constants from formattable string literals is no longer supported ([#512](https://github.com/cardillan/mindcode/issues/512)).
 * When building inlined `@counter` tables for internal subarrays, only the elements of the subarray are included in the `@counter` table.
 * Changed list iteration loop generation: the loop builder no longer handles the start offsets of internal arrays. This may produce less optimal code in some cases but allows building only partial jump tables for internal subarrays.
+* Changed jump table generation for constant arrays: when text jump tables are used, branches are noly generated for distinct values and the text jump table targets the porper branch for each constant array element.  
 
 ### Miscellaneous
 

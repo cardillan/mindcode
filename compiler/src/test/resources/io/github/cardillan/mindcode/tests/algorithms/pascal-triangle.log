@@ -341,68 +341,68 @@ Modifications by Virtual Instruction Expansion (-3 instructions):
 -    * > writearr<lookup:item> *tmp18 .previousLine[] :c
 +   64 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 24:13: index out of bounds (0 to 9)"
 +   65 multijump :c 0 0 (m:marker1)
-+   66 multilabel *label25 (m:marker1)
++   66 multilabel *label26 (m:marker1)
 +   67 op add :total :total nitrogen
-+   68 jump *label24 always
-+   69 multilabel *label26 (m:marker1)
++   68 jump *label25 always
++   69 multilabel *label27 (m:marker1)
 +   70 op add :total :total gallium
-+   71 jump *label24 always
-+   72 multilabel *label27 (m:marker1)
++   71 jump *label25 always
++   72 multilabel *label28 (m:marker1)
 +   73 op add :total :total cyanogen
-+   74 jump *label24 always
-+   75 multilabel *label28 (m:marker1)
++   74 jump *label25 always
++   75 multilabel *label29 (m:marker1)
 +   76 op add :total :total ozone
-+   77 jump *label24 always
-+   78 multilabel *label29 (m:marker1)
++   77 jump *label25 always
++   78 multilabel *label30 (m:marker1)
 +   79 op add :total :total hydrogen
-+   80 jump *label24 always
-+   81 multilabel *label30 (m:marker1)
++   80 jump *label25 always
++   81 multilabel *label31 (m:marker1)
 +   82 op add :total :total neoplasm
-+   83 jump *label24 always
-+   84 multilabel *label31 (m:marker1)
++   83 jump *label25 always
++   84 multilabel *label32 (m:marker1)
 +   85 op add :total :total cryofluid
-+   86 jump *label24 always
-+   87 multilabel *label32 (m:marker1)
++   86 jump *label25 always
++   87 multilabel *label33 (m:marker1)
 +   88 op add :total :total oil
-+   89 jump *label24 always
-+   90 multilabel *label33 (m:marker1)
++   89 jump *label25 always
++   90 multilabel *label34 (m:marker1)
 +   91 op add :total :total slag
-+   92 jump *label24 always
-+   93 multilabel *label34 (m:marker1)
++   92 jump *label25 always
++   93 multilabel *label35 (m:marker1)
 +   94 op add :total :total water
-+   95 label *label24
++   95 label *label25
 +   96 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
 +   97 multijump :c 0 0 (m:marker2)
-+   98 multilabel *label36 (m:marker2)
++   98 multilabel *label38 (m:marker2)
 +   99 set silicon nitrogen
-+  100 jump *label35 always
-+  101 multilabel *label37 (m:marker2)
++  100 jump *label37 always
++  101 multilabel *label39 (m:marker2)
 +  102 set scrap gallium
-+  103 jump *label35 always
-+  104 multilabel *label38 (m:marker2)
++  103 jump *label37 always
++  104 multilabel *label40 (m:marker2)
 +  105 set thorium cyanogen
-+  106 jump *label35 always
-+  107 multilabel *label39 (m:marker2)
++  106 jump *label37 always
++  107 multilabel *label41 (m:marker2)
 +  108 set titanium ozone
-+  109 jump *label35 always
-+  110 multilabel *label40 (m:marker2)
++  109 jump *label37 always
++  110 multilabel *label42 (m:marker2)
 +  111 set coal hydrogen
-+  112 jump *label35 always
-+  113 multilabel *label41 (m:marker2)
++  112 jump *label37 always
++  113 multilabel *label43 (m:marker2)
 +  114 set sand neoplasm
-+  115 jump *label35 always
-+  116 multilabel *label42 (m:marker2)
++  115 jump *label37 always
++  116 multilabel *label44 (m:marker2)
 +  117 set graphite cryofluid
-+  118 jump *label35 always
-+  119 multilabel *label43 (m:marker2)
++  118 jump *label37 always
++  119 multilabel *label45 (m:marker2)
 +  120 set metaglass oil
-+  121 jump *label35 always
-+  122 multilabel *label44 (m:marker2)
++  121 jump *label37 always
++  122 multilabel *label46 (m:marker2)
 +  123 set lead slag
-+  124 jump *label35 always
-+  125 multilabel *label45 (m:marker2)
++  124 jump *label37 always
++  125 multilabel *label47 (m:marker2)
 +  126 set copper water
-+  127 label *label35
++  127 label *label37
    128 label *label8
    129 op add :c :c 1
    130 jump *label12 lessThan :c :lineLength
@@ -478,68 +478,68 @@ jump *label9 greaterThanEq 0 :lineLength
 label *label12
 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 24:13: index out of bounds (0 to 9)"
 multijump :c 0 0
-multilabel *label25
-op add :total :total nitrogen           # Origin: 42, keys: 9
-jump *label24 always
 multilabel *label26
-op add :total :total gallium            # Origin: 42, keys: 8
-jump *label24 always
+op add :total :total nitrogen           # Origin: 42, keys: 9
+jump *label25 always
 multilabel *label27
-op add :total :total cyanogen           # Origin: 42, keys: 7
-jump *label24 always
+op add :total :total gallium            # Origin: 42, keys: 8
+jump *label25 always
 multilabel *label28
-op add :total :total ozone              # Origin: 42, keys: 6
-jump *label24 always
+op add :total :total cyanogen           # Origin: 42, keys: 7
+jump *label25 always
 multilabel *label29
-op add :total :total hydrogen           # Origin: 42, keys: 5
-jump *label24 always
+op add :total :total ozone              # Origin: 42, keys: 6
+jump *label25 always
 multilabel *label30
-op add :total :total neoplasm           # Origin: 42, keys: 4
-jump *label24 always
+op add :total :total hydrogen           # Origin: 42, keys: 5
+jump *label25 always
 multilabel *label31
-op add :total :total cryofluid          # Origin: 42, keys: 3
-jump *label24 always
+op add :total :total neoplasm           # Origin: 42, keys: 4
+jump *label25 always
 multilabel *label32
-op add :total :total oil                # Origin: 42, keys: 2
-jump *label24 always
+op add :total :total cryofluid          # Origin: 42, keys: 3
+jump *label25 always
 multilabel *label33
-op add :total :total slag               # Origin: 42, keys: 1
-jump *label24 always
+op add :total :total oil                # Origin: 42, keys: 2
+jump *label25 always
 multilabel *label34
+op add :total :total slag               # Origin: 42, keys: 1
+jump *label25 always
+multilabel *label35
 op add :total :total water              # Origin: 42, keys: 0
-label *label24
+label *label25
 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
 multijump :c 0 0
-multilabel *label36
-set silicon nitrogen                    # Origin: 62, keys: 9
-jump *label35 always
-multilabel *label37
-set scrap gallium                       # Origin: 62, keys: 8
-jump *label35 always
 multilabel *label38
-set thorium cyanogen                    # Origin: 62, keys: 7
-jump *label35 always
+set silicon nitrogen                    # Origin: 62, keys: 9
+jump *label37 always
 multilabel *label39
-set titanium ozone                      # Origin: 62, keys: 6
-jump *label35 always
+set scrap gallium                       # Origin: 62, keys: 8
+jump *label37 always
 multilabel *label40
-set coal hydrogen                       # Origin: 62, keys: 5
-jump *label35 always
+set thorium cyanogen                    # Origin: 62, keys: 7
+jump *label37 always
 multilabel *label41
-set sand neoplasm                       # Origin: 62, keys: 4
-jump *label35 always
+set titanium ozone                      # Origin: 62, keys: 6
+jump *label37 always
 multilabel *label42
-set graphite cryofluid                  # Origin: 62, keys: 3
-jump *label35 always
+set coal hydrogen                       # Origin: 62, keys: 5
+jump *label37 always
 multilabel *label43
-set metaglass oil                       # Origin: 62, keys: 2
-jump *label35 always
+set sand neoplasm                       # Origin: 62, keys: 4
+jump *label37 always
 multilabel *label44
-set lead slag                           # Origin: 62, keys: 1
-jump *label35 always
+set graphite cryofluid                  # Origin: 62, keys: 3
+jump *label37 always
 multilabel *label45
+set metaglass oil                       # Origin: 62, keys: 2
+jump *label37 always
+multilabel *label46
+set lead slag                           # Origin: 62, keys: 1
+jump *label37 always
+multilabel *label47
 set copper water                        # Origin: 62, keys: 0
-label *label35
+label *label37
 op add :c :c 1
 jump *label12 lessThan :c :lineLength
 label *label9
