@@ -12,10 +12,6 @@ public interface LogicLiteral extends LogicValue {
         return false;
     }
 
-    default boolean isNull() {
-        return this == LogicNull.NULL;
-    }
-
     @Override
     default LogicLiteral withSourcePosition(SourcePosition sourcePosition) {
         return this;

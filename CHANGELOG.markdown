@@ -4,16 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.21.0 – Unreleased
+## 3.21.0 – 2026-11-07
 
 ### Fixed
 
+* Fixed incorrect code generated for some boolean expressions ([#522](https://github.com/cardillan/mindcode/issues/522)).
 * Fixed the [Value translation optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#value-translation) including an unneeded `null` correction in some cases.
 
 ### Added
 
 * Added the [`debug` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#debug-variables) to variable declarations ([#513](https://github.com/cardillan/mindcode/issues/513)).
-* Added conversion of chained if-else statements into a case expression, allowing case-expression optimizations for them.
+* Added conversion of compatible chained if-else statements into a case expression, allowing case-expression optimizations for them.
 * Added a select transformation optimization to the [Case Switching optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown).
 
 ### Changed
@@ -24,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Miscellaneous
 
-* The root package of the project was renamed from `info.teksol` to `io.github.cardillan`.
+* The root package of the project was renamed from `info.teksol` to `io.github.cardillan`. Some other packages were renamed or moved.
 
 ## 3.20.5 – 2026-11-01
 

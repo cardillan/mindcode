@@ -2,6 +2,7 @@ package io.github.cardillan.mindcode.evaluator;
 
 import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
 import io.github.cardillan.mindcode.emulator.MlogReadable;
+import io.github.cardillan.mindcode.logic.arguments.LogicNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -16,6 +17,10 @@ public interface LogicReadable extends MlogReadable {
 
     default boolean isNumericConstant() {
         return isConstant() && !isObject();
+    }
+
+    default boolean isNull() {
+        return this == LogicNull.NULL;
     }
 
     default boolean isZero() {

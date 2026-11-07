@@ -2,7 +2,6 @@ package io.github.cardillan.mindcode.logic.instructions;
 
 import io.github.cardillan.mindcode.compiler.MindcodeInternalError;
 import io.github.cardillan.mindcode.logic.arguments.Condition;
-import io.github.cardillan.mindcode.logic.arguments.LogicBoolean;
 import io.github.cardillan.mindcode.logic.arguments.LogicNumber;
 import io.github.cardillan.mindcode.logic.arguments.LogicValue;
 import io.github.cardillan.mindcode.profile.GlobalCompilerProfile;
@@ -30,7 +29,7 @@ public interface ConditionalInstruction extends BinaryInstruction {
 
     default boolean isPlainComparison() {
         Condition c = getCondition();
-        return (c == Condition.EQUAL || c == Condition.NOT_EQUAL) && (getX() == LogicBoolean.FALSE || getY() == LogicBoolean.FALSE);
+        return (c == Condition.EQUAL || c == Condition.NOT_EQUAL) && (getX().isZero() || getX().isNull() || getY().isZero() || getY().isNull());
     }
 
     default boolean isInvertible(GlobalCompilerProfile profile) {

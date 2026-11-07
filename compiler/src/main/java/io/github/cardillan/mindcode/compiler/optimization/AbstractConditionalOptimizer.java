@@ -146,7 +146,7 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
             if (conditionSet.size() != 1 || lastCondition != Condition.EQUAL) {
                 onlyEquals = false;
             } else {
-                onlyEquals = conditionSet.getFirst().equals(operation == Operation.LOGICAL_AND ? Condition.EQUAL : Condition.NOT_EQUAL);
+                onlyEquals = plainOperands && conditionSet.getFirst().equals(operation == Operation.LOGICAL_AND ? Condition.EQUAL : Condition.NOT_EQUAL);
             }
 
             jumps = analyzeJumps ? analyzeJumps(controls, trueLabel, falseLabel) : List.of();
@@ -244,7 +244,7 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
             JumpInstruction lastJump,           // Last jump in the condition
             boolean sideEffects,                // Short-circuited code has side effects
             Operation operation,                // Expression type of the condition
-            boolean onlyEquals,                 // All conditional relations are equal or notEqual
+            boolean onlyEquals,                 // All conditional relations are equal or notEqual to true or false
             boolean plainOperands,              // All operands are plain variables or constants
             int jumpCount,                      // Number of jumps in total
             int shortedOpCount,                 // Number of short-circuited operations

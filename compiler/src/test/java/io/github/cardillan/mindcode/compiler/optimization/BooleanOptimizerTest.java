@@ -404,11 +404,26 @@ class BooleanOptimizerTest extends AbstractOptimizerTest<BooleanOptimizer> {
     @Nested
     class SingleVariableAssignment {
         @Test
+        void compilesPlainComparisons() {
+            assertCompilesTo(
+                    expectedMessages().addRegex("Variable '[xy]' is not used\\.").repeat(2),
+                    """
+                            noinit a, b, c;
+                            volatile x = a != b and a != c;
+                            volatile y = a != b or a != c;
+                            """,
+                    createInstruction(SELECT, tmp(6), "notEqual", ".a", ".b", "true", "false"),
+                    createInstruction(SELECT, ".x", "notEqual", ".a", ".c", tmp(6), "false"),
+                    createInstruction(SELECT, tmp(7), "notEqual", ".a", ".b", "true", "false"),
+                    createInstruction(SELECT, ".y", "notEqual", ".a", ".c", "true", tmp(7))
+            );
+        }
+
+        @Test
         void optimizesForSpeed() {
             assertCompilesTo(
                     expectedMessages().add("Variable 'x' is not used."),
                     """
-                            #set optimization = experimental;
                             noinit a, b, c;
                             volatile x = a > 0 or b > 0 ? "yes" : "no";
                             """,
