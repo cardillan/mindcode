@@ -86,12 +86,12 @@ end;
 It is possible to iterate the range in descending order by specifying `descending`:
 
 ```mindcode
+// prints 17, 16, 15 and 14 on separate lines
+
 for var n in 14 ... 18 descending do
     println(n);
 end;
 printflush(message1);
-
-// prints 17, 16, 15 and 14 on separate lines
 ```
 
 The `descending` keyword just reverses the order of loop iterations. The range still needs to specify the lower bound first and the upper bound second. If the range is exclusive (as in the example above), the iteration starts at the upper bound value decreased by one.
@@ -590,6 +590,9 @@ var text = case number
         "An ugly number";
 end;
 ```
+
+> [!WARNING]
+> If all the values in the `when` clause are integers, Mindcode assumes that the input value is always an integer too. This makes some powerful optimizations possible but may produce unexpected output when the input value is not an integer.  
 
 ### `null` values
 

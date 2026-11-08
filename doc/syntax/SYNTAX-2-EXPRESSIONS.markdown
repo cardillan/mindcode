@@ -8,7 +8,7 @@ Most Mindcode expressions use operators described below. Other important kinds o
 
 Those will be discussed later on.
 
-Expression evaluation in Mindcode is largely based on functionalities provided by Mindustry Logic, with a few small differences. To help understand the way Mindcode evaluates expressions, the important aspects of Mindustry Logic processing are described first.
+Expression evaluation in Mindcode is largely based on functionality provided by Mindustry Logic, with a few small differences. To help understand the way Mindcode evaluates expressions, the important aspects of Mindustry Logic processing are described first.
 
 # Mindustry Logic
 
@@ -346,11 +346,11 @@ The list membership operator is compiled as a [case expression](SYNTAX-3-STATEME
 This has the following consequences:
 
 * The list membership operator benefits from the same optimizations as case expressions (especially [case switching](optimizations/CASE-SWITCHING.markdown)).
-* When all values in the list are integers, Mindcode assumes the input value is integer as well.
-* It is possible to use ranges in the list of values as well, for example `a in (1 .. 3, 7 .. 9)`.
+* When all values in the list are integers, Mindcode assumes the input value is an integer as well.
+* It is possible to use ranges in the list of values as well, for example `a in (1 .. 3, 7 .. 9)`. However, when the list consists of a single range (e.g., `a in (5 ... 15)`), the list membership operator is compiled as a range membership operator.
 
-> [!NOTE]
-> The difference between `a in 1 ... 10` and `a in (1 ... 10)` is that the former is a range membership operator, while the latter is a list membership operator, resulting in different behavior when the input value is not an integer.
+> [!TIP]
+> A single list membership operator is preferable to several range membership operators: `a in (1 ... 5, 8 ... 10)` will usually produce slightly better code than `a in (1 ... 5) or a in (8 ... 10)`.
 
 ## Relational operators
 
@@ -471,6 +471,9 @@ is the same as
 y = y * 2;
 x = x + y;
 ```
+
+> [!NOTE]
+> Avoid modiifying the same variable twice in chained assignments, e.g., `x += x *= 2`. Such expressions may still lead to undefined behavior. 
 
 ### Array assignments
 

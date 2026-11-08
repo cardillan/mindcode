@@ -66,7 +66,7 @@ println("global2: ", global2);
 
 outputs
 
-```
+```text
 x: 10
 y: 10
 global1 in foo: 1
@@ -142,7 +142,7 @@ Since version 8, Mindustry Logic supports run-time text formatting. This is done
 
 Run-time formatting can be done by the `printf()` function. This function takes several arguments (typically at least two). The first argument is the format string, which may be a text constant, or a string variable, and is passed into a `print` instruction. All the remaining arguments are passed into `format` instructions. Therefore, `printf(fmt, a, b, c)` gets translated to
 
-```
+```mlog
 print fmt
 format a
 format b
@@ -315,7 +315,7 @@ print *tmp0
 > [!NOTE]
 > Enhanced comments can only be used at places where a statement can start, it is not possible to insert them in the middle of a statement. The following example demonstrates it:
 >
-> ```
+> ```mindcode-invalid
 > for i = 0;            /// Cannot put an enhanced commment here
 >     i < 10;           /// Neither here
 >     i++               /// Nope
