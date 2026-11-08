@@ -1,10 +1,13 @@
 {
   "releases": [
     {
-      "version": "3.20.4",
-      "importance": "optional",
+      "version": "3.21.0",
+      "importance": "recommended",
       "features": [
-        "Improved possible suboptimal code generation in do-while loops"
+        "Fix: incorrect code generated for some boolean expressions",
+        "Breaking: change in formattable literals evaluation",
+        "Debug variables",
+        "Compiler and optimizer improvements"
       ]
     },
     {
@@ -12,6 +15,13 @@
       "importance": "recommended",
       "features": [
         "Fix: internal error calling an exported function from a locally imported module"
+      ]
+    },
+    {
+      "version": "3.20.4",
+      "importance": "optional",
+      "features": [
+        "Improved possible suboptimal code generation in do-while loops"
       ]
     },
     {

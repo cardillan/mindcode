@@ -327,7 +327,7 @@ In the web app, setting this option to `true` has no effect. When an mlog code c
 
 This option specifies the function prefix to use to generate mlog names of local variables. Possible values are:
 
-* `long` (the default value): the prefix is composed of a function name and a number, starting at 0. Variable names may become long and often will be incompletely displayed in Mindustry interface, but the function name is part of variable name, making it easier to recognize each variable.
+* `long` (the default value): the prefix is composed of a function name and a number, starting at 0. Variable names may become long and often will be incompletely displayed in Mindustry interface, but the function name is part of a variable name, making it easier to recognize each variable.
 * `short`: the prefix is `:fn` followed by a number, starting at 0. Leads to short variable names, which are more easily readable when displayed in Mindustry interface, but it is not immediately noticeable which function each variable belongs to.
 
 Note: the function prefix of remote functions is always `:` followed by the function name, with no additional number, regardless of this setting.
@@ -611,7 +611,7 @@ Select the class of characters to be encoded using Unicode escapes in compiler-g
 * `minimal`: surrogate characters, `CR` and `NUL` will be encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. All others are used directly.
 * `non-printable` (the default value): surrogate characters, characters below `\u0020` except `LF`, and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
 * `non-ascii`: characters below `\u0020` and above `\u00FF` except `LF` and `DEL` are encoded using Unicode escapes. `LF`, `\` and `"` are encoded using simple escapes. The remaining are used directly.
-* `all`: all characters are encoded using Unicode escapes. No simple escapes are used even when available. This makes numerical values encoded into strings and text-encoded jump tables much more readable.
+* `all`: all characters are encoded using Unicode escapes. No simple escapes are used even when available. This makes numerical values encoded into strings and text-encoded jump tables more readable.
 
 Using Unicode escapes makes the code more readable and precludes possible problems when processing the code in various text editors or sharing it on the web. The generated mlog size gets larger.
 
