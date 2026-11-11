@@ -1,4 +1,4 @@
-POST http://localhost:8080/api/releases/check
+POST https://mindcode.herokuapp.com/api/releases/check
 Content-Type: application/json
 
 {

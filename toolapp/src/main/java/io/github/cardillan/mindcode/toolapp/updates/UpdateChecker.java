@@ -18,7 +18,7 @@ import java.util.prefs.Preferences;
 
 @NullMarked
 public class UpdateChecker {
-    private static final String URL = "http://localhost:8080/api/releases/check";
+    private static final String URL = "https://mindcode.herokuapp.com/api/releases/check";
 
     private static final Preferences PREFS = Preferences.userNodeForPackage(UpdateChecker.class);
     private static final String KEY_NEXT_UPDATE = "next_update";
