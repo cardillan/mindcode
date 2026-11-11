@@ -51,5 +51,12 @@ public class DbMigrator {
         template.execute("DROP TABLE IF EXISTS public.script_versions CASCADE");
         template.execute("DROP TABLE IF EXISTS public.collections CASCADE");
         template.execute("DROP TABLE IF EXISTS public.collection_scripts CASCADE");
+
+
+        template.execute("""
+                CREATE TABLE IF NOT EXISTS public.release_usage (
+                  registered timestamp with time zone not null default current_timestamp,
+                  version    varchar(32)              not null
+                )""");
     }
 }

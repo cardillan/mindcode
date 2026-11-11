@@ -1,0 +1,6 @@
+POST http://localhost:8080/api/releases/check
+Content-Type: application/json
+
+{
+  "version": "3.20.4"
+}

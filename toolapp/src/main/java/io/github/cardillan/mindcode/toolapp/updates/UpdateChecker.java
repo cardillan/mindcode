@@ -6,8 +6,10 @@ import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -16,7 +18,7 @@ import java.util.prefs.Preferences;
 
 @NullMarked
 public class UpdateChecker {
-    private static final String URL = "https://raw.githubusercontent.com/cardillan/mindcode/refs/heads/main/toolapp/releases.json";
+    private static final String URL = "http://localhost:8080/api/releases/check";
 
     private static final Preferences PREFS = Preferences.userNodeForPackage(UpdateChecker.class);
     private static final String KEY_NEXT_UPDATE = "next_update";
@@ -40,9 +42,20 @@ public class UpdateChecker {
 
                 try {
                     connection = (HttpURLConnection) URI.create(URL).toURL().openConnection();
-                    connection.setRequestMethod("GET");
+                    connection.setRequestMethod("POST");
                     connection.setConnectTimeout(3_000);
                     connection.setReadTimeout(5_000);
+                    connection.setDoOutput(true);
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("Accept", "application/json");
+
+                    String requestBody = """
+                            {"version":"%s"}
+                            """.formatted(Version.getVersion());
+
+                    try (OutputStream out = connection.getOutputStream()) {
+                        out.write(requestBody.getBytes(StandardCharsets.UTF_8));
+                    }
 
                     int status = connection.getResponseCode();
 
