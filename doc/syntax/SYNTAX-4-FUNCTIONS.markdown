@@ -444,7 +444,7 @@ The `error()` function, which can be used to report errors detected at runtime, 
 
 ## The `emitLog()` function
 
-The `emitLog()` function, which can be used to write information into the Mindustry log file using the Mlog Dev Tools mod, is described [here](TROUBLESHOOTING.markdown#the-emitlog-function).
+The `emitLog()` function, which can be used to generate per-processor log messages using the Mlog Dev Tools mod, is described [here](TROUBLESHOOTING.markdown#the-emitlog-function).
 
 ## The `length()` function
 
@@ -481,6 +481,10 @@ print *tmp0
 print "\n"
 printflush message1
 ```
+
+## The `systemLog()` function
+
+The `systemLog()` function, which can be used to write information into the Mindustry log file using the Mlog Dev Tools mod, is described [here](TROUBLESHOOTING.markdown#the-systemlog-function).
 
 ## Remote calls
 

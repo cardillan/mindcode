@@ -96,7 +96,10 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
         void refusesMissingCategoryFewValues() {
             assertGeneratesMessage(
                     "A formattable string literal can only be used as a first argument to the print(), println(), remark() or error() functions.",
-                    "emitLog(:info, $\"First: $, second: $.\", first, second);");
+                    """
+                            #set error-reporting = assert;\
+                            emitLog(:info, $"First: $, second: $.", first, second);
+                            """);
         }
 
 

@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* **Breaking:** changes to the logging functions.
+  * The [`emitLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-emitlog-function) now generates log messages into the per-processor in-game log maintained by the Mlog Dev Tools mod. Messages generated this way may be inspected by the processor's log viewer. 
+  *The [`systemLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-systemlog-function) emits messages into the Mindustry log, which was previously done by the `emitLog()` function.
 * Changed the interpretation of the `value in (min ... max)` expressions: the expression is now compiled as a range membership check instead of a list membership check, producing better code. Previously, only `value in min ... max` (without the parentheses) was compiled as a range membership check. The semantic of both expressions is the same.
 * Changed the update detection for the command-line tool: the list of updates is read from a webapp endpoint.
 * A custom Base64 encoder/decoder is used instead of the supplied by the JDK, to avoid the Java4Shell vulnerability regardless of the JRE used to run the command-line tool.

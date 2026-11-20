@@ -15,6 +15,7 @@ import io.github.cardillan.mindcode.logic.opcodes.Opcode;
 import io.github.cardillan.mindcode.logic.opcodes.OpcodeVariant;
 import io.github.cardillan.mindcode.logic.opcodes.ProcessorVersion;
 import io.github.cardillan.mindcode.messages.WARN;
+import io.github.cardillan.mindcode.profile.RuntimeErrorReporting;
 import io.github.cardillan.mindcode.util.EscapeClass;
 import io.github.cardillan.mindcode.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
@@ -129,15 +130,17 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
                     ? createFormattableErrorOutput(formattable.getParts(), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
 
-            List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
-            for (int index = 0; index < 10; index++) {
-                if (index >= finalArgs.size()) break;
-                list.set(index, finalArgs.get(index));
-            }
+            if (call.getProfile().getErrorReporting() == RuntimeErrorReporting.ASSERT) {
+                List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
+                for (int index = 0; index < 10; index++) {
+                    if (index >= finalArgs.size()) break;
+                    list.set(index, finalArgs.get(index));
+                }
 
-            if (!system) list.addFirst(category.getValue(assembler));
-            list.addFirst(level);
-            assembler.createInstruction(system ? Opcode.SYSTEMLOG : Opcode.LOG, list);
+                if (!system) list.addFirst(category.getValue(assembler));
+                list.addFirst(level);
+                assembler.createInstruction(system ? Opcode.SYSTEMLOG : Opcode.LOG, list);
+            }
         }
 
         assembler.clearSubcontextType();
