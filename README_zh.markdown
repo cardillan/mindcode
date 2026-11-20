@@ -90,7 +90,7 @@ Mindcode 可以与 [Mlog Watcher 模组](/doc/syntax/TOOLS-MLOG-WATCHER.markdown
 
 要了解有关 Mindustry 逻辑的更多信息，可以在此处找到更多相关信息：
 
-* Yruei 的 [Mlog 文档](https://yrueii.github.io/MlogDocs/)（最后更新于 2026 年 9 月）
+* Yruei 的 [Mlog 文档](https://yrueii.github.io/MlogDocs/)（最后更新于 2026 年 10 月）
 
 你也可以在这些 Discord 服务器上获得帮助：
 
