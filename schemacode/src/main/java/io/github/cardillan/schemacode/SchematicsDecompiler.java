@@ -3,13 +3,13 @@ package io.github.cardillan.schemacode;
 import io.github.cardillan.mindcode.common.CompilerOutput;
 import io.github.cardillan.mindcode.messages.MessageConsumer;
 import io.github.cardillan.mindcode.messages.ToolMessage;
+import io.github.cardillan.mindcode.util.Base64Coder;
 import io.github.cardillan.schemacode.mindustry.SchematicsIO;
 import io.github.cardillan.schemacode.schematics.Decompiler;
 import io.github.cardillan.schemacode.schematics.Schematic;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Base64;
 
 public class SchematicsDecompiler {
 
@@ -20,7 +20,7 @@ public class SchematicsDecompiler {
 
         final byte[] binary;
         try {
-            binary = Base64.getDecoder().decode(encodedSchematics.trim());
+            binary = Base64Coder.decode(encodedSchematics.trim());
         } catch (IllegalArgumentException e) {
             messageConsumer.addMessage(ToolMessage.error("Error decoding schematics string: " + e.getMessage()));
             return CompilerOutput.empty();

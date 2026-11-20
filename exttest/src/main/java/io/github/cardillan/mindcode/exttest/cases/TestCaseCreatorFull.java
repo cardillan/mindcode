@@ -1,8 +1,8 @@
 package io.github.cardillan.mindcode.exttest.cases;
 
 import io.github.cardillan.mindcode.common.InputFiles;
-import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.exttest.TestConfiguration;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked

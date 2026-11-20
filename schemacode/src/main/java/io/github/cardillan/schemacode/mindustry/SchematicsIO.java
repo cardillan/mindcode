@@ -1,6 +1,7 @@
 package io.github.cardillan.schemacode.mindustry;
 
 import io.github.cardillan.mindcode.logic.mimex.*;
+import io.github.cardillan.mindcode.util.Base64Coder;
 import io.github.cardillan.mindcode.util.Tuple2;
 import io.github.cardillan.schemacode.SchematicsInternalError;
 import io.github.cardillan.schemacode.SchematicsMetadata;
@@ -186,12 +187,12 @@ public class SchematicsIO {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             write(build, output);
             output.flush();
-            return Base64.getEncoder().encodeToString(output.toByteArray());
+            return new String(Base64Coder.encode(output.toByteArray()));
         }
     }
 
     public static Schematic decode(String encoded) throws IOException {
-        byte[] binary = Base64.getDecoder().decode(encoded);
+        byte[] binary = Base64Coder.decode(encoded);
         try (InputStream is = new ByteArrayInputStream(binary)) {
             return SchematicsIO.read("", is);
         }
@@ -582,7 +583,7 @@ public class SchematicsIO {
             rootBuilder.add(String.valueOf(outer.getKey()), innerBuilder.build());
         }
 
-        return rootBuilder.build().toString().replaceAll("\"", "");
+        return rootBuilder.build().toString().replace("\"", "");
     }
 
     public static void main(String[] argv) {
