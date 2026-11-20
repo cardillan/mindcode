@@ -382,11 +382,13 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.BREAKPOINT,    cond("equal"), in("x"), in("y"));
         add(list, V6, MAX,  S, NONE, Opcode.ERROR,
                 in("e0"), in("e1"), in("e2"), in("e3"), in("e4"), in("e5"), in("e6"), in("e7"), in("e8"), in("e9"));
-        add(list, V8A,MAX,  S, NONE, Opcode.LOG, loglevel("level"),
+        add(list, V8A,MAX,  S, NONE, Opcode.LOG, loglevel("level"), in("category"),
                 in("e0"), in("e1"), in("e2"), in("e3"), in("e4"), in("e5"), in("e6"), in("e7"), in("e8"), in("e9"));
         add(list, V6,  MAX, S, NONE, Opcode.PROFILE,       profile("command"), block("block"));
         add(list, V6,  MAX, S, NONE, Opcode.RESTART,       block("block"));
         add(list, V6,  MAX, S, NONE, Opcode.SNAPSHOT,      snapshot("type"), block("block"), in("steps"), in("name"));
+        add(list, V8A,MAX,  S, NONE, Opcode.SYSTEMLOG,     loglevel("level"),
+                in("e0"), in("e1"), in("e2"), in("e3"), in("e4"), in("e5"), in("e6"), in("e7"), in("e8"), in("e9"));
 
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.EMPTY);

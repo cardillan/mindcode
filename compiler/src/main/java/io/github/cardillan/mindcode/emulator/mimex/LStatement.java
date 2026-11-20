@@ -170,6 +170,10 @@ public class LStatement {
             s("log",
                     "null,null,null,null,null,null,null,null,null,null,null",
                     "@custom,var,var,var,var,var,var,var,var,var,var"
+            ),
+            s("systemlog",
+                    "null,null,null,null,null,null,null,null,null,null,null,null",
+                    "@custom,var,var,var,var,var,var,var,var,var,var,var"
             )
     );
 

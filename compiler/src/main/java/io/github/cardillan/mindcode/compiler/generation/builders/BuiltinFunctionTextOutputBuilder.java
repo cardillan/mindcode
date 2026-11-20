@@ -15,7 +15,6 @@ import io.github.cardillan.mindcode.logic.opcodes.Opcode;
 import io.github.cardillan.mindcode.logic.opcodes.OpcodeVariant;
 import io.github.cardillan.mindcode.logic.opcodes.ProcessorVersion;
 import io.github.cardillan.mindcode.messages.WARN;
-import io.github.cardillan.mindcode.profile.RuntimeErrorReporting;
 import io.github.cardillan.mindcode.util.EscapeClass;
 import io.github.cardillan.mindcode.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
@@ -111,7 +110,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return result;
     }
 
-    public ValueStore handleEmitLog(AstFunctionCall call) {
+    public ValueStore handleEmitLog(AstFunctionCall call, boolean system) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         List<FunctionArgument> arguments = new ArrayList<>(processArguments(call));
         FunctionArgument.validateAsInput(messageConsumer(), arguments);
@@ -124,20 +123,21 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             FunctionArgument levelArg = arguments.removeFirst();
             LogicKeyword level = assembler.validateKeyword(opcodeVariant.namedParameters().getFirst(), levelArg, true);
 
+            FunctionArgument category = system ? null : arguments.removeFirst();
+
             List<LogicArgument> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
                     ? createFormattableErrorOutput(formattable.getParts(), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
 
-            if (call.getProfile().getErrorReporting() == RuntimeErrorReporting.ASSERT) {
-                List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
-                for (int index = 0; index < 10; index++) {
-                    if (index >= finalArgs.size()) break;
-                    list.set(index, finalArgs.get(index));
-                }
-
-                list.addFirst(level);
-                assembler.createInstruction(Opcode.LOG, list);
+            List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
+            for (int index = 0; index < 10; index++) {
+                if (index >= finalArgs.size()) break;
+                list.set(index, finalArgs.get(index));
             }
+
+            if (!system) list.addFirst(category.getValue(assembler));
+            list.addFirst(level);
+            assembler.createInstruction(system ? Opcode.SYSTEMLOG : Opcode.LOG, list);
         }
 
         assembler.clearSubcontextType();
