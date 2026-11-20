@@ -4,11 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.22.0 – Unreleased
+## 3.21.1 – 2026-11-20
+
+### Fixed
+
+* Fixed internal error unrolling a loop  ([#546](https://github.com/cardillan/mindcode/issues/546)).
 
 ### Changed
 
-* Changed the interpretation of the `value in (min ... max)` expressions: the expression is now compiled as a range memebership check instead of a list membership check, producing better code. Previously, only `value in min ... max` (without the parentheses) was compiled as a range membership check. The semantic of both expressions is the same.  
+* Changed the interpretation of the `value in (min ... max)` expressions: the expression is now compiled as a range membership check instead of a list membership check, producing better code. Previously, only `value in min ... max` (without the parentheses) was compiled as a range membership check. The semantic of both expressions is the same.
+* Changed the update detection for the command-line tool: the list of updates is read from a webapp endpoint.
 
 ## 3.21.0 – 2026-11-07
 

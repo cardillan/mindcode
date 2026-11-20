@@ -575,14 +575,15 @@ class DataFlowVariableStates {
                 throw new MindcodeInternalError("Trying to merge variable states having different variables on stack.");
             }
 
-            if (other.dead || !other.reachable) {
-                print("Result");
+            boolean thisReachable = !dead && reachable;
+            boolean otherReachable = !other.dead && other.reachable;
+
+            if (thisReachable != otherReachable) {
+                // If just one is unreachable, return the other
+                VariableStates result = thisReachable ? this : other;
+                result.print("Result");
                 optimizationContext.indentDec();
-                return this;        // Merging two dead ends produces dead end again
-            } else if (dead || !reachable) {
-                other.print("Result");
-                optimizationContext.indentDec();
-                return other;
+                return result;
             }
 
             modifications++;
