@@ -3,13 +3,13 @@ package io.github.cardillan.schemacode.schematics;
 import io.github.cardillan.mindcode.common.InputFiles;
 import io.github.cardillan.mindcode.common.SourceElement;
 import io.github.cardillan.mindcode.common.Statistics;
-import io.github.cardillan.mindcode.messages.MessageConsumer;
-import io.github.cardillan.mindcode.messages.MindcodeMessage;
-import io.github.cardillan.mindcode.messages.ToolMessage;
 import io.github.cardillan.mindcode.compiler.CompilerMessageEmitter;
 import io.github.cardillan.mindcode.logic.mimex.BlockType;
 import io.github.cardillan.mindcode.logic.mimex.Icons;
 import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;
+import io.github.cardillan.mindcode.messages.MessageConsumer;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.messages.ToolMessage;
 import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.profile.options.Target;
 import io.github.cardillan.mindcode.util.CollectionUtils;
@@ -354,7 +354,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
             error(rgb, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
                     element.name(), element.position().toStringAbsolute(), value, component);
         }
-        return Math.max(Math.min(value, 255), 0);
+        return Math.clamp(value, 0, 255);
     }
 
     private Configuration decodeUnitConfiguration(AstUnitReference reference, SchematicElement element) {

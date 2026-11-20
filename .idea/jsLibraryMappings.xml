@@ -2,5 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$/webapp" libraries="{@tailwindcss}" />
+    <excludedPredefinedLibrary name="mindcode/webapp/frontend/node/tmp/node-v24.22.3-win-x64/node_modules" />
   </component>
 </project>

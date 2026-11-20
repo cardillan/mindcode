@@ -3,13 +3,14 @@ package io.github.cardillan.mindcode.toolapp;
 import io.github.cardillan.mindcode.common.CompilerOutput;
 import io.github.cardillan.mindcode.common.InputFiles;
 import io.github.cardillan.mindcode.common.PositionFormatter;
-import io.github.cardillan.mindcode.emulator.EmulatorMessageEmitter;
 import io.github.cardillan.mindcode.compiler.ToolMessageEmitter;
+import io.github.cardillan.mindcode.emulator.EmulatorMessageEmitter;
 import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.profile.options.CompilerOptionValue;
 import io.github.cardillan.mindcode.profile.options.OptionCategory;
 import io.github.cardillan.mindcode.toolapp.mlogwatcher.MlogWatcherClient;
 import io.github.cardillan.mindcode.toolapp.mlogwatcher.MlogWatcherCommand;
+import io.github.cardillan.mindcode.util.Base64Coder;
 import io.github.cardillan.schemacode.SchemacodeCompiler;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -23,7 +24,6 @@ import org.jspecify.annotations.Nullable;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -115,7 +115,7 @@ public class CompileSchemacodeAction extends ActionHandler {
 
             writeOutput(output, result.existingOutput());
 
-            String encoded = Base64.getEncoder().encodeToString(result.output());
+            String encoded = new String(Base64Coder.encode(result.output()));
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(encoded);

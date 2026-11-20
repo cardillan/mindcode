@@ -66,13 +66,15 @@ Compiler options, such as target Mindustry Logic version and compiler optimizati
 
 ## Update detection
 
-The tool app checks for updates at startup. The updates are detected by downloading the [`releases.json` file](https://raw.githubusercontent.com/cardillan/mindcode/refs/heads/devel/toolapp/releases.json) from the GitHub repository, with a cooldown period of 12 hours. This file is cached locally, and new updates are detecte by comparing the current version against the version in the releases file. Three levels of importance are assigned to the updates:
+The tool app checks for updates at startup. The updates are detected by downloading the [`releases.json` file](https://raw.githubusercontent.com/cardillan/mindcode/refs/heads/devel/toolapp/releases.json) from the webapp endpoint, with a cooldown period of 12 hours. This file is cached locally, and new updates are detected by comparing the current version against the version in the releases file. Three levels of importance are assigned to the updates:
 
 * Optional: the new version only contains new features – no new bug fixes. 
 * Recommended: the new version contains bug fixes for bugs with limited impact.
 * Critical: the new version contains bug fixes for critical bugs or updates to match changes in Mindustry that are not backward compatible.
 
 Update check may be disabled by using the `--no-update-check` command line option.
+
+The endpoint collects information about the version of the client app. No other data are collected. 
 
 # Command line help
 
@@ -231,7 +233,7 @@ Mlog formatting options:
   --author author [author ...]
                          adds an author to  the  list  of  authors  which  is  then  output  similarly to the compiler's
                          signature
-  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.21.0 - github.com/cardillan/mindcode'
+  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.21.1 - github.com/cardillan/mindcode'
                          at the end of the final code
   --processor-id processor_ID
                          sets the processor ID to be stored in the compiled code
@@ -738,7 +740,7 @@ Mlog formatting options:
   --author author [author ...]
                          adds an author to  the  list  of  authors  which  is  then  output  similarly to the compiler's
                          signature
-  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.21.0 - github.com/cardillan/mindcode'
+  --no-signature         prevents appending a signature  'Compiled  by  Mindcode 3.21.1 - github.com/cardillan/mindcode'
                          at the end of the final code
   --processor-id processor_ID
                          sets the processor ID to be stored in the compiled code

@@ -4,22 +4,22 @@
     38 instructions eliminated by Dead Code Elimination (6 iterations).
    102 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
     22 instructions eliminated by Condition Optimization (7 iterations).
-   110 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
+   109 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
     20 instructions modified by Expression Optimization (3 passes, 4 iterations).
-    10 instructions eliminated by Boolean Optimization (3 passes, 8 iterations).
+     9 instructions eliminated by Boolean Optimization (3 passes, 8 iterations).
        2 fully-evaluated expressions optimized using 'select's.
-  1027 instructions eliminated by Data Flow Optimization (27 passes, 91 iterations).
+  1027 instructions eliminated by Data Flow Optimization (29 passes, 95 iterations).
      2 loops improved by Loop Hoisting.
        7 loop conditions were partially rotated.
-   896 instructions added by Loop Unrolling (33 iterations).
+   896 instructions added by Loop Unrolling (35 iterations).
     18 loops unrolled by Loop Unrolling.
-   789 instructions added by Function Inlining (33 iterations).
+   789 instructions added by Function Inlining (35 iterations).
     34 function calls inlined by Function Inlining.
-    24 instructions eliminated by Case Switching (33 iterations).
+    24 instructions eliminated by Case Switching (35 iterations).
      4 case expressions converted to fast dispatches by Case Switching.
      7 instructions eliminated by Jump Straightening (7 iterations).
     30 instructions updated by Jump Threading.
-   245 instructions eliminated by Unreachable Code Elimination (2 iterations).
+   247 instructions eliminated by Unreachable Code Elimination (2 iterations).
    250 instructions eliminated by Print Merging.
    298 instructions after optimizations.
 
@@ -238,7 +238,7 @@ Pass 1: speed optimization selection (cost limit 610):
 Pass 1: speed optimization selection (cost limit 556):
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
     Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-  * Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156 (+132 instructions)
+  * Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156 (+139 instructions)
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -265,7 +265,7 @@ Pass 1: speed optimization selection (cost limit 556):
     Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 424):
+Pass 1: speed optimization selection (cost limit 417):
   * Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142 (+91 instructions)
     Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
@@ -284,9 +284,9 @@ Pass 1: speed optimization selection (cost limit 424):
     Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 333):
+Pass 1: speed optimization selection (cost limit 326):
   ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-  * Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081 (+32 instructions)
+  * Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081 (+42 instructions)
     Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
@@ -301,7 +301,7 @@ Pass 1: speed optimization selection (cost limit 333):
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 301):
+Pass 1: speed optimization selection (cost limit 284):
   ! Inline function 'printExactFast' defined at *printing:242:1  size  +343, benefit       31.5, efficiency      0.092
   * Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081 (+31 instructions)
     Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
@@ -317,9 +317,9 @@ Pass 1: speed optimization selection (cost limit 301):
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 270):
-  * Inline function 'printExactFast' defined at *printing:242:1  size  +300, benefit       28.0, efficiency      0.093 (+201 instructions)
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+Pass 1: speed optimization selection (cost limit 253):
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +300, benefit       28.0, efficiency      0.093
+  * Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081 (+38 instructions)
     Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
@@ -332,25 +332,52 @@ Pass 1: speed optimization selection (cost limit 270):
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 69):
+Pass 1: speed optimization selection (cost limit 215):
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +257, benefit       24.5, efficiency      0.095
+  * Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081 (+32 instructions)
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 183):
+  * Inline function 'printExactFast' defined at *printing:242:1  size  +214, benefit       21.0, efficiency      0.098 (+131 instructions)
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 52):
   * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 75):
+Pass 1: speed optimization selection (cost limit 58):
   * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 81):
+Pass 1: speed optimization selection (cost limit 64):
   * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 87):
+Pass 1: speed optimization selection (cost limit 70):
   * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
 
-Pass 2: speed optimization selection (cost limit 223):
+Pass 2: speed optimization selection (cost limit 222):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -367,7 +394,7 @@ Pass 2: speed optimization selection (cost limit 223):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:367:9                               size   +17, benefit      400.0, efficiency     23.529
 
-Pass 2: speed optimization selection (cost limit 198):
+Pass 2: speed optimization selection (cost limit 197):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -383,7 +410,7 @@ Pass 2: speed optimization selection (cost limit 198):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
   * Unroll loop at *printing:367:9                               size   +11, benefit      400.0, efficiency     36.364 (+11 instructions)
 
-Pass 2: speed optimization selection (cost limit 187):
+Pass 2: speed optimization selection (cost limit 186):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -398,7 +425,7 @@ Pass 2: speed optimization selection (cost limit 187):
   * Unroll loop at *printing:341:9                               size   +90, benefit     1600.0, efficiency     17.778 (+26 instructions)
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
 
-Pass 2: speed optimization selection (cost limit 161):
+Pass 2: speed optimization selection (cost limit 160):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -412,7 +439,7 @@ Pass 2: speed optimization selection (cost limit 161):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   * Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500 (+8 instructions)
 
-Pass 2: speed optimization selection (cost limit 153):
+Pass 2: speed optimization selection (cost limit 152):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -425,7 +452,7 @@ Pass 2: speed optimization selection (cost limit 153):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
 
-Pass 2: speed optimization selection (cost limit 146):
+Pass 2: speed optimization selection (cost limit 145):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -437,7 +464,7 @@ Pass 2: speed optimization selection (cost limit 146):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
 
-Pass 2: speed optimization selection (cost limit 139):
+Pass 2: speed optimization selection (cost limit 138):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -448,7 +475,7 @@ Pass 2: speed optimization selection (cost limit 139):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
 
-Pass 2: speed optimization selection (cost limit 132):
+Pass 2: speed optimization selection (cost limit 131):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -458,7 +485,7 @@ Pass 2: speed optimization selection (cost limit 132):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
 
-Pass 2: speed optimization selection (cost limit 125):
+Pass 2: speed optimization selection (cost limit 124):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -467,7 +494,7 @@ Pass 2: speed optimization selection (cost limit 125):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
 
-Pass 2: speed optimization selection (cost limit 118):
+Pass 2: speed optimization selection (cost limit 117):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -475,29 +502,29 @@ Pass 2: speed optimization selection (cost limit 118):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
 
-Pass 2: speed optimization selection (cost limit 111):
+Pass 2: speed optimization selection (cost limit 110):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
 
-Pass 2: speed optimization selection (cost limit 104):
+Pass 2: speed optimization selection (cost limit 103):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
 
-Pass 2: speed optimization selection (cost limit 97):
+Pass 2: speed optimization selection (cost limit 96):
   * Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389 (+17 instructions)
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
 
-Pass 2: speed optimization selection (cost limit 80):
+Pass 2: speed optimization selection (cost limit 79):
   * Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389 (+17 instructions)
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
 
-Pass 2: speed optimization selection (cost limit 63):
+Pass 2: speed optimization selection (cost limit 62):
   * Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389 (+17 instructions)
 
 Final code before resolving virtual instructions:

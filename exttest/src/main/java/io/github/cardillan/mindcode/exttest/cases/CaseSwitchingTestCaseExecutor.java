@@ -1,18 +1,18 @@
 package io.github.cardillan.mindcode.exttest.cases;
 
 import io.github.cardillan.mindcode.common.InputFile;
-import io.github.cardillan.mindcode.emulator.Assertion;
-import io.github.cardillan.mindcode.emulator.Emulator;
-import io.github.cardillan.mindcode.messages.MindcodeMessage;
 import io.github.cardillan.mindcode.compiler.MindcodeCompiler;
 import io.github.cardillan.mindcode.compiler.optimization.Optimization;
 import io.github.cardillan.mindcode.compiler.optimization.OptimizationLevel;
 import io.github.cardillan.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
 import io.github.cardillan.mindcode.compiler.optimization.cases.ConvertCaseOptimizationAction;
-import io.github.cardillan.mindcode.logic.opcodes.Opcode;
-import io.github.cardillan.mindcode.profile.GenerationGoal;
+import io.github.cardillan.mindcode.emulator.Assertion;
+import io.github.cardillan.mindcode.emulator.Emulator;
 import io.github.cardillan.mindcode.exttest.ErrorResult;
 import io.github.cardillan.mindcode.exttest.TestProgress;
+import io.github.cardillan.mindcode.logic.opcodes.Opcode;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
+import io.github.cardillan.mindcode.profile.GenerationGoal;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;

@@ -1,15 +1,15 @@
 package io.github.cardillan.mindcode.toolapp;
 
 import io.github.cardillan.mindcode.common.PositionFormatter;
+import io.github.cardillan.mindcode.compiler.ToolMessageEmitter;
+import io.github.cardillan.mindcode.compiler.generation.variables.StandardNameCreator;
+import io.github.cardillan.mindcode.decompiler.MlogDecompiler;
 import io.github.cardillan.mindcode.emulator.Emulator;
 import io.github.cardillan.mindcode.emulator.EmulatorMessageEmitter;
 import io.github.cardillan.mindcode.emulator.EmulatorSchematic;
 import io.github.cardillan.mindcode.emulator.blocks.BlockPosition;
 import io.github.cardillan.mindcode.emulator.blocks.LogicBlock;
 import io.github.cardillan.mindcode.emulator.mimex.BasicEmulator;
-import io.github.cardillan.mindcode.compiler.ToolMessageEmitter;
-import io.github.cardillan.mindcode.compiler.generation.variables.StandardNameCreator;
-import io.github.cardillan.mindcode.decompiler.MlogDecompiler;
 import io.github.cardillan.mindcode.logic.instructions.InstructionProcessor;
 import io.github.cardillan.mindcode.logic.instructions.InstructionProcessorFactory;
 import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;

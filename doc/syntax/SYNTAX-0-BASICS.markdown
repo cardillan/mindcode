@@ -598,7 +598,9 @@ Depending on the selected target, the string literal may contain certain escape 
 
 #### Target `8.1` or lower
 
-The only escape sequence supported by Mindustry Logic in this target is `\n` (newline). No other escape characters are supported. It might be possible to use nonprintable characters in string literals, but this is not recommended. These characters cannot be used in string literals at all:
+The only escape sequence supported by Mindustry Logic in this target is `\n` (newline). No other escape characters are supported. It might be possible to use nonprintable characters in string literals, but this is not recommended.
+
+These characters cannot be used in string literals at all:
 
 * newline (ASCII value 10)
 * carriage return (ASCII value 13)

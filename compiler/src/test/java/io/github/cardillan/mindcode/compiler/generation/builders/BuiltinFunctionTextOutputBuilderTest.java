@@ -69,11 +69,11 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             const min = 0;
                             param max = 8;
                             param i = 10;
-                            emitLog(:info, $"Index $i out of bounds ($min, $max)!");
+                            emitLog(:info, "category", $"Index $i out of bounds ($min, $max)!");
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(LOG, "info", q("Index {1} out of bounds (0, {2})!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
+                    createInstruction(LOG, "info", q("category"), q("Index {1} out of bounds (0, {2})!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
             );
         }
 
@@ -84,40 +84,51 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             const min = 0;
                             param max = 8;
                             param i = 10;
-                            emitLog(:warn, "Index out of bounds: ", i, min, max);
+                            emitLog(:warn, "category", "Index out of bounds: ", i, min, max);
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(LOG, "warn", q("Index out of bounds: "), "i", "0", "max", "null", "null", "null", "null", "null", "null")
+                    createInstruction(LOG, "warn", q("category"), q("Index out of bounds: "), "i", "0", "max", "null", "null", "null", "null", "null", "null")
             );
         }
+
+        @Test
+        void refusesMissingCategoryFewValues() {
+            assertGeneratesMessage(
+                    "A formattable string literal can only be used as a first argument to the print(), println(), remark() or error() functions.",
+                    """
+                            #set error-reporting = assert;\
+                            emitLog(:info, $"First: $, second: $.", first, second);
+                            """);
+        }
+
 
         @Test
         void refusesTooFewValues() {
             assertGeneratesMessage(
                     "Not enough arguments for formattable placeholders.",
-                    "emitLog(:info, $\"First: $, second: $.\", first);");
+                    "emitLog(:info, \"category\", $\"First: $, second: $.\", first);");
         }
 
         @Test
         void refusesTooManyValues() {
             assertGeneratesMessage(
                     "Too many arguments for formattable placeholders.",
-                    "emitLog(:info, $\"First: $, second: $.\", first, second, third);");
+                    "emitLog(:info, \"category\", $\"First: $, second: $.\", first, second, third);");
         }
 
         @Test
         void refusesSecondFormattable() {
             assertGeneratesMessageRegex(
                     "A formattable string literal can only be used as a first argument to the .* functions\\.",
-                    "emitLog(:info, $\"Hello, $\", $\"Hello $name\");");
+                    "emitLog(:info, \"category\", $\"Hello, $\", $\"Hello $name\");");
         }
 
         @Test
         void refusesWrongLevel() {
             assertGeneratesMessage(
                     "Invalid value ':cocoa' for keyword parameter: allowed values are ':err', ':warn', ':info', ':debug'.",
-                    "emitLog(:cocoa, @counter);");
+                    "emitLog(:cocoa, \"category\", @counter);");
         }
     }
 
@@ -395,4 +406,65 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
         }
     }
 
+
+    @Nested
+    class SystemLogFunction {
+        @Test
+        void compilesFormattableSystemLogFunctionAssert() {
+            assertCompilesTo("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            systemLog(:info, $"Index $i out of bounds ($min, $max)!");
+                            """,
+                    createInstruction(SET, "max", "8"),
+                    createInstruction(SET, "i", "10"),
+                    createInstruction(SYSTEMLOG, "info", q("Index {1} out of bounds (0, {2})!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
+            );
+        }
+
+        @Test
+        void compilesNormalSystemLogFunctionAssert() {
+            assertCompilesTo("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            systemLog(:warn, "Index out of bounds: ", i, min, max);
+                            """,
+                    createInstruction(SET, "max", "8"),
+                    createInstruction(SET, "i", "10"),
+                    createInstruction(SYSTEMLOG, "warn", q("Index out of bounds: "), "i", "0", "max", "null", "null", "null", "null", "null", "null")
+            );
+        }
+
+        @Test
+        void refusesTooFewValues() {
+            assertGeneratesMessage(
+                    "Not enough arguments for formattable placeholders.",
+                    "systemLog(:info, $\"First: $, second: $.\", first);");
+        }
+
+        @Test
+        void refusesTooManyValues() {
+            assertGeneratesMessage(
+                    "Too many arguments for formattable placeholders.",
+                    "systemLog(:info, $\"First: $, second: $.\", first, second, third);");
+        }
+
+        @Test
+        void refusesSecondFormattable() {
+            assertGeneratesMessageRegex(
+                    "A formattable string literal can only be used as a first argument to the .* functions\\.",
+                    "systemLog(:info, $\"Hello, $\", $\"Hello $name\");");
+        }
+
+        @Test
+        void refusesWrongLevel() {
+            assertGeneratesMessage(
+                    "Invalid value ':cocoa' for keyword parameter: allowed values are ':err', ':warn', ':info', ':debug'.",
+                    "systemLog(:cocoa, @counter);");
+        }
+    }
 }

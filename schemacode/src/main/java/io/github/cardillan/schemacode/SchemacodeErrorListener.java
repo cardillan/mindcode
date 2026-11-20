@@ -2,9 +2,9 @@ package io.github.cardillan.schemacode;
 
 import io.github.cardillan.mindcode.common.InputFile;
 import io.github.cardillan.mindcode.common.SourcePosition;
-import io.github.cardillan.mindcode.messages.MessageConsumer;
 import io.github.cardillan.mindcode.compiler.PositionalMessage;
 import io.github.cardillan.mindcode.compiler.antlr.MissingSemicolonException;
+import io.github.cardillan.mindcode.messages.MessageConsumer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;

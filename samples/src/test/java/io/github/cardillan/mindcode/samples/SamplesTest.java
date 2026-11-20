@@ -1,9 +1,9 @@
 package io.github.cardillan.mindcode.samples;
 
 import io.github.cardillan.mindcode.common.InputFiles;
-import io.github.cardillan.mindcode.messages.MindcodeMessage;
 import io.github.cardillan.mindcode.compiler.MindcodeCompiler;
 import io.github.cardillan.mindcode.compiler.optimization.OptimizationLevel;
+import io.github.cardillan.mindcode.messages.MindcodeMessage;
 import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.profile.SyntacticMode;
 import io.github.cardillan.schemacode.SchemacodeCompiler;

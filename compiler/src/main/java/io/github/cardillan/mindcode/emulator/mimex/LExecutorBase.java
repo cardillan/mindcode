@@ -128,6 +128,7 @@ public abstract class LExecutorBase implements LExecutor {
         builders.put("breakpoint", BreakpointI::new);
         builders.put("error", ErrorI::new);
         builders.put("log", LogI::new);
+        builders.put("systemlog", SystemLogI::new);
     }
 
     //<editor-fold desc="Initialization">
@@ -695,9 +696,27 @@ public abstract class LExecutorBase implements LExecutor {
 
     protected class LogI extends AbstractInstruction {
         protected final String level;
+        protected final LVar category;
         protected final List<LVar> args;
 
         public LogI(LStatement statement) {
+            super(statement);
+            level = statement.arg0();
+            category = assembler.var(statement.arg1());
+            args = statement.arguments().stream().skip(2).filter(s -> !"null".equals(s)).map(assembler::var).toList();
+        }
+
+        @Override
+        public void run() {
+            System.out.println(buildMessage("[" + Character.toUpperCase(level.charAt(0)) + "] " + print(category) + ": ", true, args.toArray()));
+        }
+    }
+
+    protected class SystemLogI extends AbstractInstruction {
+        protected final String level;
+        protected final List<LVar> args;
+
+        public SystemLogI(LStatement statement) {
             super(statement);
             level = statement.arg0();
             args = statement.arguments().stream().skip(1).filter(s -> !"null".equals(s)).map(assembler::var).toList();

@@ -3,6 +3,9 @@ package io.github.cardillan.mindcode.webapp;
 import io.github.cardillan.mindcode.common.CompilerOutput;
 import io.github.cardillan.mindcode.common.InputFiles;
 import io.github.cardillan.mindcode.common.Statistics;
+import io.github.cardillan.mindcode.compiler.MindcodeCompiler;
+import io.github.cardillan.mindcode.compiler.generation.variables.StandardNameCreator;
+import io.github.cardillan.mindcode.decompiler.MlogDecompiler;
 import io.github.cardillan.mindcode.emulator.Emulator;
 import io.github.cardillan.mindcode.emulator.EmulatorMessage;
 import io.github.cardillan.mindcode.emulator.EmulatorSchematic;
@@ -10,19 +13,17 @@ import io.github.cardillan.mindcode.emulator.ExecutorResults;
 import io.github.cardillan.mindcode.emulator.blocks.BlockPosition;
 import io.github.cardillan.mindcode.emulator.blocks.LogicBlock;
 import io.github.cardillan.mindcode.emulator.mimex.BasicEmulator;
-import io.github.cardillan.mindcode.messages.*;
-import io.github.cardillan.mindcode.compiler.MindcodeCompiler;
-import io.github.cardillan.mindcode.compiler.generation.variables.StandardNameCreator;
-import io.github.cardillan.mindcode.decompiler.MlogDecompiler;
 import io.github.cardillan.mindcode.logic.instructions.InstructionProcessor;
 import io.github.cardillan.mindcode.logic.instructions.InstructionProcessorFactory;
 import io.github.cardillan.mindcode.logic.instructions.LogicInstruction;
 import io.github.cardillan.mindcode.logic.mimex.MindustryMetadata;
 import io.github.cardillan.mindcode.logic.opcodes.Opcode;
+import io.github.cardillan.mindcode.messages.*;
 import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.profile.options.Target;
 import io.github.cardillan.mindcode.samples.Sample;
 import io.github.cardillan.mindcode.samples.Samples;
+import io.github.cardillan.mindcode.util.Base64Coder;
 import io.github.cardillan.schemacode.SchemacodeCompiler;
 import io.github.cardillan.schemacode.SchematicsDecompiler;
 import io.github.cardillan.schemacode.SchematicsMetadata;
@@ -398,7 +399,7 @@ public class ApiController {
 
         final byte[] binary;
         try {
-            binary = Base64.getDecoder().decode(encodedSchematic.trim());
+            binary = Base64Coder.decode(encodedSchematic.trim());
         } catch (IllegalArgumentException e) {
             messageConsumer.addMessage(ToolMessage.error("Error decoding schematics string: " + e.getMessage()));
             return null;

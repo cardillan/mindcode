@@ -200,7 +200,7 @@
                 <version>2.0.2</version>
                 <configuration>
                     <workingDirectory>frontend</workingDirectory>
-                    <nodeVersion>v22.22.0</nodeVersion>
+                    <nodeVersion>v24.22.3</nodeVersion>
                     <skip>${skipFrontend}</skip>
                 </configuration>
                 <executions>

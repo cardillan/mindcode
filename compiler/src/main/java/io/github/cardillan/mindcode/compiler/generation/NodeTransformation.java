@@ -72,6 +72,12 @@ public class NodeTransformation {
     }
 
     private static AstExpression transformInList(AstOperatorInList node) {
+        if (node.getValues().size() == 1 && node.getValues().getFirst() instanceof AstRange range) {
+            AstOperatorInRange rangeNode = new AstOperatorInRange(node.sourcePosition(), node.isNegated(), node.getValue(), range);
+            rangeNode.setProfile(node.getProfile());
+            return transformInRange(rangeNode);
+        }
+
         AstLiteralBoolean trueBranch = new AstLiteralBoolean(SourcePosition.EMPTY, true);
         AstLiteralBoolean falseBranch = new AstLiteralBoolean(SourcePosition.EMPTY, false);
         trueBranch.setProfile(node.getProfile());

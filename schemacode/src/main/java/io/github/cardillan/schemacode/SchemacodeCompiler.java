@@ -12,6 +12,7 @@ import io.github.cardillan.mindcode.messages.MessageConsumer;
 import io.github.cardillan.mindcode.messages.MessageLogger;
 import io.github.cardillan.mindcode.messages.ToolMessage;
 import io.github.cardillan.mindcode.profile.CompilerProfile;
+import io.github.cardillan.mindcode.util.Base64Coder;
 import io.github.cardillan.schemacode.ast.AstDefinitions;
 import io.github.cardillan.schemacode.ast.AstSchematicsBuilder;
 import io.github.cardillan.schemacode.grammar.SchemacodeLexer;
@@ -25,7 +26,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 
 public class SchemacodeCompiler {
     private final MessageLogger messageConsumer;
@@ -107,7 +107,7 @@ public class SchemacodeCompiler {
             CompilerOutput<byte[]> binaryOutput = compile(inputFiles, compilerProfile);
 
             String encoded = binaryOutput.output() != null
-                    ? Base64.getEncoder().encodeToString(binaryOutput.output()) : "";
+                    ? new String(Base64Coder.encode(binaryOutput.output())) : "";
             return binaryOutput.withOutput(encoded);
         } catch (Exception e) {
             messageConsumer.addMessage(ToolMessage.error(ERR.INTERNAL_ERROR));

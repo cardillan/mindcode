@@ -93,6 +93,7 @@ public enum Opcode {
     PROFILE         (NONE,   "profile",         1),
     RESTART         (NONE,   "restart",         1),
     SNAPSHOT        (NONE,   "snapshot",        1),
+    SYSTEMLOG       (NONE,   "systemlog",       1),
 
     // Virtual instructions - resolved when the final code is generated
 

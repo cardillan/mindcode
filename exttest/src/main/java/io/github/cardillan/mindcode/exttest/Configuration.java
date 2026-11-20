@@ -1,10 +1,10 @@
 package io.github.cardillan.mindcode.exttest;
 
 import io.github.cardillan.mindcode.common.InputFiles;
-import io.github.cardillan.mindcode.profile.CompilerProfile;
 import io.github.cardillan.mindcode.exttest.cases.TestCaseCreator;
 import io.github.cardillan.mindcode.exttest.cases.TestCaseCreatorFull;
 import io.github.cardillan.mindcode.exttest.cases.TestCaseCreatorSampled;
+import io.github.cardillan.mindcode.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
 import java.nio.file.Path;

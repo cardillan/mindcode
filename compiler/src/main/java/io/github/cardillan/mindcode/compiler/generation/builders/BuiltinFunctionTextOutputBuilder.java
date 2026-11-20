@@ -111,7 +111,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return result;
     }
 
-    public ValueStore handleEmitLog(AstFunctionCall call) {
+    public ValueStore handleEmitLog(AstFunctionCall call, boolean system) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         List<FunctionArgument> arguments = new ArrayList<>(processArguments(call));
         FunctionArgument.validateAsInput(messageConsumer(), arguments);
@@ -124,6 +124,8 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             FunctionArgument levelArg = arguments.removeFirst();
             LogicKeyword level = assembler.validateKeyword(opcodeVariant.namedParameters().getFirst(), levelArg, true);
 
+            FunctionArgument category = system ? null : arguments.removeFirst();
+
             List<LogicArgument> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
                     ? createFormattableErrorOutput(formattable.getParts(), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
@@ -135,8 +137,9 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
                     list.set(index, finalArgs.get(index));
                 }
 
+                if (!system) list.addFirst(category.getValue(assembler));
                 list.addFirst(level);
-                assembler.createInstruction(Opcode.LOG, list);
+                assembler.createInstruction(system ? Opcode.SYSTEMLOG : Opcode.LOG, list);
             }
         }
 
