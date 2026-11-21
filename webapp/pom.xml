@@ -201,6 +201,7 @@
                 <configuration>
                     <workingDirectory>frontend</workingDirectory>
                     <nodeVersion>v24.22.3</nodeVersion>
+                    <npmVersion>12.0.0</npmVersion>
                     <skip>${skipFrontend}</skip>
                 </configuration>
                 <executions>
