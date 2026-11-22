@@ -16,9 +16,8 @@ Mindcode syntax is covered in the following topics:
 * [Control Flow Statements](SYNTAX-3-STATEMENTS.markdown)
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
 
-Mindcode provides access to most mlog instructions via Logic functions:
+Mindcode provides access to most mlog instructions via Logic functions. The exact set of available functions depends on the current target. Target `8.2` corrsponds to the latest Mindustry 8 release (build 160.5 or later). 
 
-* [Function reference for target `7.1`](FUNCTIONS-71.markdown) (for the latest Mindustry 7 release)
 * [Function reference for target `8.2`](FUNCTIONS-82.markdown) (for the latest Mindustry 8 release)
 * See [Logic functions](FUNCTIONS.markdown) for all existing targets.
 

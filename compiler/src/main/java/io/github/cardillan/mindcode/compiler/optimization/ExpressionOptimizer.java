@@ -16,6 +16,7 @@ import io.github.cardillan.mindcode.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,9 +36,12 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+        BitSet unreachable = optimizationContext.getUnreachableInstructions();
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
                 LogicInstruction next = it.next();
+                if (unreachable.get(it.currentIndex())) continue;
+
                 if (next.getNonNegativeInt() instanceof LogicVariable variable && variable != LogicVariable.INVALID
                         && optimizationContext.findDefiningInstruction(next, variable) instanceof OpInstruction op
                         && op.getOperation() == Operation.FLOOR

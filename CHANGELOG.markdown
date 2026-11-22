@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.21.2 – 2026-11-22
+
+### Fixed
+
+* Fixed incorrect array access evaluation in unreachable code ([#552](https://github.com/cardillan/mindcode/issues/552)).
+
 ## 3.21.1 – 2026-11-21
 
 ### Fixed
@@ -13,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking:** changes to the logging functions.
-  * The [`emitLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-emitlog-function) now generates log messages into the per-processor in-game log maintained by the Mlog Dev Tools mod. Messages generated this way may be inspected by the processor's log viewer. 
+  * The [`emitLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-emitlog-function) now generates log messages into the per-processor in-game log maintained by the Mlog Dev Tools mod. Messages generated this way may be inspected by the processor's log viewer.
   * The [`systemLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-systemlog-function) emits messages into the Mindustry log, which was previously done by the `emitLog()` function.
   * These instructions target Mlog Dev Tools mod version 0.12.0 and higher.
 * Changed the interpretation of the `value in (min ... max)` expressions: the expression is now compiled as a range membership check instead of a list membership check, producing better code. Previously, only `value in min ... max` (without the parentheses) was compiled as a range membership check. The semantic of both expressions is the same.
@@ -31,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added the [`debug` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#debug-variables) to variable declarations ([#513](https://github.com/cardillan/mindcode/issues/513)).
 * Added conversion of compatible chained if-else statements into a case expression, allowing case-expression optimizations for them.
-* Added a select transformation optimization to the [Case Switching optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#select-transformation). 
+* Added a select transformation optimization to the [Case Switching optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#select-transformation).
 * Added [update detection](doc/syntax/TOOLS-CMDLINE.markdown#update-detection) to the tool app.
 
 ### Changed
@@ -39,7 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking:** Formattable string literals are evaluated in the declaration context instead of the use context. Creating constants from formattable string literals is no longer supported ([#512](https://github.com/cardillan/mindcode/issues/512)).
 * When building inlined `@counter` tables for internal subarrays, only the elements of the subarray are included in the `@counter` table.
 * Changed list iteration loop generation: the loop builder no longer handles the start offsets of internal arrays. This may produce less optimal code in some cases but allows building only partial jump tables for internal subarrays.
-* Changed jump table generation for constant arrays: when text jump tables are used, branches are only generated for distinct values, and the text jump table targets the proper branch for each constant array element.  
+* Changed jump table generation for constant arrays: when text jump tables are used, branches are only generated for distinct values, and the text jump table targets the proper branch for each constant array element.
 
 ### Miscellaneous
 
@@ -79,16 +85,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed wrong boundary runtime checks generation for subarrays and external arrays with non-zero start index position.    
+* Fixed wrong boundary runtime checks generation for subarrays and external arrays with non-zero start index position.
 * Fixed an internal compiler error when using out iterator with a constant array ([#482](https://github.com/cardillan/mindcode/issues/482)).
 
 ### Added
 
 * **Breaking:** a new `internal` keyword has been added to the language and is reserved for future use. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
-* **Breaking:** added [built-in arrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-variables) named `links`, `blocks`, `liquids`,  `unitTypes`, `items`, `allItems` and `teams`. List iteration loops and index-based access are supported on these arrays. Declaring another variable (global or local) with the same name shadows the built-in one. Code using these names for variables without declaration in relaxed syntax mode will fail to compile. 
+* **Breaking:** added [built-in arrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-variables) named `links`, `blocks`, `liquids`,  `unitTypes`, `items`, `allItems` and `teams`. List iteration loops and index-based access are supported on these arrays. Declaring another variable (global or local) with the same name shadows the built-in one. Code using these names for variables without declaration in relaxed syntax mode will fail to compile.
 * Added support for a [large stack](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#large-stack), for using more than one memory block for the stack ([#356](https://github.com/cardillan/mindcode/issues/356)).
 * Added support for [large arrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#large-arrays), external arrays stored in multiple memory blocks, including related optimizations ([#357](https://github.com/cardillan/mindcode/issues/357)).
-* Added [instruction injection](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#instruction-injection) to Array Optimization. This optimization allows injecting a single instruction or the entire element update operation into the `@counter` table of internal arrays   
+* Added [instruction injection](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#instruction-injection) to Array Optimization. This optimization allows injecting a single instruction or the entire element update operation into the `@counter` table of internal arrays
 * Added constant folding for the integer division (`\`) to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown).
 * Added the `multijump` instruction evaluation to [Jump Normalization](doc/syntax/optimizations/JUMP-NORMALIZATION.markdown). Multijumps using a constant jump target get converted to regular unconditional jumps, allowing compile-time resolution of `case` expressions.
 * Added the `assertbounds` instruction evaluation to [Jump Normalization](doc/syntax/optimizations/JUMP-NORMALIZATION.markdown). Instructions that always produce a success are removed, while instructions that always produce a failure are reported as errors.
@@ -99,13 +105,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking:** loop control variables in list iteration loops and range iteration loops must be declared within the loop in strict syntax and must not be reused in relaxed syntax ([#464](https://github.com/cardillan/mindcode/issues/464)).
-* Loop control variables declared within the loop are never reported as unused. 
-* Changed the loop unrolling optimization to create a separate temporary variable in each iteration for temporary variables that are only found within the loop. This change makes some additional optimization possible in unrolled loops. 
+* Loop control variables declared within the loop are never reported as unused.
+* Changed the loop unrolling optimization to create a separate temporary variable in each iteration for temporary variables that are only found within the loop. This change makes some additional optimization possible in unrolled loops.
 * Changed the remote call protocol to use effectively infinite `wait` ended by the remote processor for synchronous calls. Synchronous calls produce slightly smaller code while preserving execution quota during waits, asynchronous calls produce slightly larger code ([#483](https://github.com/cardillan/mindcode/issues/483)).
-* The remote call protocol version was increased to 2. Both main and remote processors' code must be recompiled to use the new version. 
+* The remote call protocol version was increased to 2. Both main and remote processors' code must be recompiled to use the new version.
 * Changed the target guard generation to use `@blockCount` to identify most processor versions.
 * Changed the Mindcode compiler to target the `0.9.0` version of the Mlog Dev Tools mod. This mod is available for Mindustry builds 154.2 to 159.7 and a separate release for build 160.
-* **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary. 
+* **Breaking:** the placeholders in the `error()` and `emitLog()` functions have been changed from `[[1]` - `[[9]]` to `{1}` - `{9}`. When using formattable string literals with these functions, no change to the code is necessary.
 * **Breaking:** the `err-runtime-check-failed` execution flag has been split into five separate flags: `err-stop-on-assert-bounds`, `err-stop-on-assert-equals`, `err-stop-on-assert-prints`, `err-stop-on-assert-type` and `err-stop-on-error`.
 
 ## 3.19.3 – 2026-09-19
@@ -113,7 +119,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 > [!NOTE]
 > Mindustry builds 160 to 160.4 contain a bug which precludes parsing of some valid numeric literals in hexadecimal or binary notation (specifically, unsigned literals which produce a negative value). These problematic numbers may be produced either by using these numeric constants directly or by compile-time evaluations performed by the compiler. There's no general workaround for this issue, although using or producing such numbers seems quite rare.
 > The number-parsing issues are fixed in the Bleeding Edge version of Mindustry (Build 27876 or later).
- 
+
 > [!NOTE]
 > The documentation still hasn't been fully updated to reflect the significant changes in Mindustry Build 160 and later: the ability to store any data in memory blocks, and the changes to the number-parsing routines. The documentation will be gradually updated to match the actual state.
 
@@ -131,11 +137,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added a validation rule for program parameters and variable names specified via the `mlog` to prevent using `configure` as an mlog variable name (`configure` is silently changed to `config` in Mindustry 7 and higher). 
+* Added a validation rule for program parameters and variable names specified via the `mlog` to prevent using `configure` as an mlog variable name (`configure` is silently changed to `config` in Mindustry 7 and higher).
 
 ### Changed
 
-* Changed the numeric literal formatting for mlog to accommodate changes in mlog numeric literal parsing in Mindustry build v160. The compiler doesn't generate the more readable mlog numeric literals (such as `1.5e10`) yet.   
+* Changed the numeric literal formatting for mlog to accommodate changes in mlog numeric literal parsing in Mindustry build v160. The compiler doesn't generate the more readable mlog numeric literals (such as `1.5e10`) yet.
 * Changed the processor emulator in target `8.2` to match mlog numeric literal parsing in Mindustry build v160.
 * Changed compile-time expression evaluation in target `8.2`: intermediate values are now kept instead of being encoded into an mlog literal and parsed back. This preserves the original accuracy of the final result as the Mindustry build v160 provides slightly different accuracy when parsing numeric literals.
 
@@ -143,7 +149,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for and syntax highlighting of the new escapes (`\"`, `\\` and `\uXXXX`) in the web application. 
+* Added support for and syntax highlighting of the new escapes (`\"`, `\\` and `\uXXXX`) in the web application.
 
 ## 3.19.0 – 2026-09-12
 
@@ -152,7 +158,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed possible wrong compile-time evaluation of the `ascii()` and `char()` functions on string literals containing a newline character (e.g., `char("\n", 0)`).   
+* Fixed possible wrong compile-time evaluation of the `ascii()` and `char()` functions on string literals containing a newline character (e.g., `char("\n", 0)`).
 
 ### Added
 
@@ -163,14 +169,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * The default target has been changed from `8.1` to `8.2`, corresponding to the **v8 Build 160** Mindustry release.
 * **Breaking:** a backslash character (`\`) in a string literal is now always treated as an escape character, in all targets. When updating to version 3.19.0, string literals containing backslashes need to be reviewed and updated.
-* **Breaking:** The [`encode()` function](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-encode-function) in target `8.1` or lower has been restricted and no longer supports encoding value `92` (backslash) at all. In target `8.2` or higher, the `encode()` function supports all values in range `0 ... 65536`.  
+* **Breaking:** The [`encode()` function](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-encode-function) in target `8.1` or lower has been restricted and no longer supports encoding value `92` (backslash) at all. In target `8.2` or higher, the `encode()` function supports all values in range `0 ... 65536`.
 * Compiler-generated strings (text jump tables, value translations, and strings generated by the `encode()` function) support all existing characters in target `8.2`.
 
 ## 3.18.0 – 2026-09-02
 
 > [!NOTE]
 > The bleeding edge version of Mindustry now supports storing objects in memory blocks. No change is required in the compiler to use the feature. The emulator has been updated to support storing objects in memory blocks as well.
-> Currently, the documentation still states that memory blocks cannot store objects, which is true for the last official Mindustry release. The documentation will be properly updated when an official Mindustry release containing this change is made public.    
+> Currently, the documentation still states that memory blocks cannot store objects, which is true for the last official Mindustry release. The documentation will be properly updated when an official Mindustry release containing this change is made public.
 
 > [!NOTE]
 > The command-line compiler now requires Java 25 or later. See [Setting up the command-line compiler](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler).
@@ -200,11 +206,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking:** the `return-optimization` compiler directive and command-line parameter have been renamed to `recursive-optimization`, as part of renaming _Return Optimization_ to [_Recursive Optimization_](/doc/syntax/optimizations/RECURSIVE-OPTIMIZATION.markdown).
 * Improved the implementation of a return from a recursive function call using an external stack.
-* List iteration loops may be [converted to range iteration loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#conversion-to-range-iteration-loops) to save instruction space or generate faster code. 
-* Identical constant arrays declared multiple times (either in the local or global scope) are now compiled into a common data structure. 
+* List iteration loops may be [converted to range iteration loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#conversion-to-range-iteration-loops) to save instruction space or generate faster code.
+* Identical constant arrays declared multiple times (either in the local or global scope) are now compiled into a common data structure.
 * Improved code folding in the web app's source code editor.
 * The target `8.2` has been updated to be compatible with build 27727. This includes the `setrate` instruction being available to non-privileged processors as well.
-* The processor emulator now supports storing objects in memory blocks in emulator target `8.2` or higher. 
+* The processor emulator now supports storing objects in memory blocks in emulator target `8.2` or higher.
 
 ### Removed
 

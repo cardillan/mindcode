@@ -4,13 +4,12 @@ import io.github.cardillan.mindcode.compiler.optimization.DataFlowVariableStates
 import io.github.cardillan.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import io.github.cardillan.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import io.github.cardillan.mindcode.logic.arguments.*;
-import io.github.cardillan.mindcode.logic.instructions.AssertBoundsInstruction;
-import io.github.cardillan.mindcode.logic.instructions.JumpInstruction;
-import io.github.cardillan.mindcode.logic.instructions.MultiJumpInstruction;
-import io.github.cardillan.mindcode.logic.instructions.MultiLabelInstruction;
+import io.github.cardillan.mindcode.logic.instructions.*;
 import io.github.cardillan.mindcode.messages.ERR;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.BitSet;
 
 import static io.github.cardillan.mindcode.logic.arguments.LogicBoolean.FALSE;
 import static io.github.cardillan.mindcode.logic.arguments.LogicBoolean.TRUE;
@@ -29,9 +28,13 @@ class JumpNormalizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+        BitSet unreachable = optimizationContext.getUnreachableInstructions();
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
-                switch (iterator.next()) {
+                LogicInstruction next = iterator.next();
+                if (unreachable.get(iterator.currentIndex())) continue;
+
+                switch (next) {
                     case AssertBoundsInstruction ix when !ix.isRuntimeError() && ix.getLowerBound().isConstant()
                             && ix.getValue().isConstant() && ix.getUpperBound().isConstant() -> {
                         LogicLiteral low = expressionEvaluator.evaluate(ix.sourcePosition(), ix.getLowerCondition().toOperation(), ix.getLowerBound(), ix.getValue());

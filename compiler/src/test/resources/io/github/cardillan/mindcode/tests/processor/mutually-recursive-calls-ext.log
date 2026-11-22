@@ -4,7 +4,7 @@
      4 instructions eliminated by Jump Normalization (5 iterations).
      2 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
     34 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
-     6 instructions modified by Expression Optimization (3 iterations).
+     4 instructions modified by Expression Optimization (3 iterations).
     51 instructions eliminated by Data Flow Optimization (14 passes, 49 iterations).
        1 loop condition was partially rotated.
    298 instructions added by Function Inlining (17 iterations).
@@ -2246,16 +2246,6 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
      4 jump *label68 always
      5 label *label62
      6 label *label63
-     7 push :f:a
-     8 push :f:b
-     9 initrec true
--    * op add :g:x 0 2
--    * op add :g:y 0 3
-+   10 set :g:x 2
-+   11 set :g:y 3
-    12 jump *label64 always
-    13 op mul :g*retval :f:b 3
-    14 jump *label67 always
  
     27 label *label68
     28 assertequals 2 2 "f(0)"
@@ -2294,8 +2284,8 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * push :f:a
 -    * push :f:b
 -    * initrec true
--    * set :g:x 2
--    * set :g:y 3
+-    * op add :g:x 0 2
+-    * op add :g:y 0 3
 -    * jump *label64 always
 -    * op mul :g*retval :f:b 3
 -    * jump *label67 always

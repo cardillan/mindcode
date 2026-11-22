@@ -2,17 +2,17 @@
 
 [Mindustry 8 release](https://github.com/Anuken/Mindustry/releases) is now available. The new functionality of Mindustry Logic is already supported by default.
 
-The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.1](FUNCTIONS-81.markdown).
+The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.2](FUNCTIONS-82.markdown).
 
 # New functionality in Mindustry 8
 
-The changes that affect Mindcode the most are described here. For a comprehensive list of changes to Mindustry Logic, see [Changes to Mindustry Logic](https://github.com/cardillan/mindcode/wiki/Changes-to-Mindustry-Logic).
+The changes that affect Mindcode the most are described here. For a comprehensive list of Mindustry Logic changes, see [Changes to Mindustry Logic](https://github.com/cardillan/mindcode/wiki/Changes-to-Mindustry-Logic).
 
 ## Literals and properties
 
 ### Numeric literals
 
-Mindustry now handles the numeric literals with double precision. Loss of precision, and the inability to encode some numeric constants into mlog, no longer happen.
+Mindustry now handles the numeric literals with double precision. Loss of precision, and the inability to encode some numeric constants into mlog, no longer happen. Since build 160.5 (corrsponding to target 8.2) literals in scientific notation (e.g., `-1.5e+03`) are fully supported.
 
 ### Named color literals
 
