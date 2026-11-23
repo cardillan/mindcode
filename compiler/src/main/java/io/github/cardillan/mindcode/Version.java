@@ -20,7 +20,8 @@ public record Version(int major, int minor, int release) implements Comparable<V
     }
 
     public static Version parse(String version) {
-        String[] parts = version.split("\\.");
+        String core = version.split("[-+]", 2)[0];
+        String[] parts = core.split("\\.");
         if (parts.length == 3) {
             try {
                 return new Version(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));

@@ -38,7 +38,7 @@ public enum ToolAppAction {
     void handle(Namespace arguments) {
         long runStart = System.nanoTime();
         try {
-            if (arguments.getBoolean("no-update-check") != Boolean.TRUE) {
+            if (arguments.getBoolean("no_update_check") != Boolean.TRUE) {
                 String message = UpdateChecker.checkForUpdates();
                 if (message != null && !message.isEmpty()) {
                     System.err.println(message);

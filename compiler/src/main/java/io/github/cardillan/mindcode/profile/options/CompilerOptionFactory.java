@@ -461,7 +461,7 @@ public class CompilerOptionFactory {
 
         list.add(new BooleanCompilerOptionValue(DebuggingOptions.DEBUG, "",
                 "activates or deactivates generation of debug code",
-                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.UNSTABLE, OptionScope.LOCAL,
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
                 false).setConstValue(true));
 

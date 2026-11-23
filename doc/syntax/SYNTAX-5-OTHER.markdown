@@ -1027,7 +1027,7 @@ Note that [declaring an array explicitly to use the lookup mechanism](SYNTAX-1-V
 This option specifies whether the case switching optimizer may use a sequence of `select` instructions to implement a case expression. Possible values are:
 
 * `false`: the `select` optimization won't be used.
-* `true` (the default value): the optimizer may apply the `select` optimization. 
+* `true` (the default value): the optimizer may apply the `select` optimization.
 
 ### Option `use-short-arrays`
 
@@ -1129,7 +1129,7 @@ Options to activate debugging features or additional output from the compiler.
 
 | Option                                       | Scope  | Semantic stability |
 |----------------------------------------------|--------|--------------------|
-| [debug](#option-debug)                       | local  | unstable           |
+| [debug](#option-debug)                       | local  | stable             |
 | [debug-messages](#option-debug-messages)     | global | stable             |
 | [parse-tree](#option-parse-tree)             | global | stable             |
 | [print-code-size](#option-print-code-size)   | global | stable             |
@@ -1141,7 +1141,7 @@ Options to activate debugging features or additional output from the compiler.
 **Option scope: [local](#local-scope)**
 
 This option controls whether the code is compiled with debug support. Possible values are:
-*
+
 * `false` (the default value): no debug support.
 * `true` or omitted: the code is compiled with debug support.
 
