@@ -46,7 +46,7 @@
 		"@lezer/common": "^1.5.5",
 		"@lezer/generator": "^1.8.1",
 		"@lezer/lr": "^1.4.12",
-		"@lucide/svelte": "^1.75.0",
+		"@lucide/svelte": "^1.77.0",
 		"@sveltejs/adapter-static": "^4.0.1",
 		"@sveltejs/kit": "^3.3.1",
 		"@sveltejs/load-config": "^0.2.3",
