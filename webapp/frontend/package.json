@@ -60,7 +60,7 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.24.1",
 		"globals": "^17.14.0",
-		"mdsvex": "^0.12.8",
+		"mdsvex": "^1.0.1",
 		"prettier": "^3.10.1",
 		"prettier-plugin-svelte": "^4.2.0",
 		"prettier-plugin-tailwindcss": "^0.8.1",
