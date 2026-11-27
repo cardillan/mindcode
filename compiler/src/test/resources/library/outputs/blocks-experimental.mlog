@@ -3,36 +3,56 @@ set :display null
 set :message null
 set :switch null
 set :memory null
-print "Example program.\nTrying to locate linked blocks"
-set :findLinkedBlocks:n @links
-jump 26 lessThanEq :findLinkedBlocks:n 0
-op sub :findLinkedBlocks:n :findLinkedBlocks:n 1
-getlink :findLinkedBlocks:block :findLinkedBlocks:n
-print "\nFound: "
-print :findLinkedBlocks:block
+print "Example program.\nTrying to locate linked blocks\n"
+set *tmp0 0
+jump 46 greaterThanEq 0 @links
+getlink :findLinkedBlocks:block *tmp0
+jump 44 equal :findLinkedBlocks:message :findLinkedBlocks:block
 sensor :findLinkedBlocks:type :findLinkedBlocks:block @type
-select :findLinkedBlocks:variable.1 equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
+set :findLinkedBlocks:found false
+set :findLinkedBlocks:variable.1 :display
+jump 17 notEqual @large-logic-display :findLinkedBlocks:type
+jump 17 notEqual :display null
+set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
+set :findLinkedBlocks:found true
 set :display :findLinkedBlocks:variable.1
 set :findLinkedBlocks:variable.1 :message
-jump 19 notEqual @message :findLinkedBlocks:type
+jump 44 notEqual :findLinkedBlocks:found false
+jump 24 notEqual @message :findLinkedBlocks:type
+jump 24 notEqual :message null
 set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
-set :findLinkedBlocks:message :findLinkedBlocks:block
+set :findLinkedBlocks:found true
 set :message :findLinkedBlocks:variable.1
-select :findLinkedBlocks:variable.1 equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
+set :findLinkedBlocks:variable.1 :switch
+jump 44 notEqual :findLinkedBlocks:found false
+jump 31 notEqual @switch :findLinkedBlocks:type
+jump 31 notEqual :switch null
+set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
+set :findLinkedBlocks:found true
 set :switch :findLinkedBlocks:variable.1
-select :findLinkedBlocks:variable.1 equal @memory-bank :findLinkedBlocks:type :findLinkedBlocks:block :memory
-select :findLinkedBlocks:variable.1 equal @memory-cell :findLinkedBlocks:type :findLinkedBlocks:block :findLinkedBlocks:variable.1
+set :findLinkedBlocks:variable.1 :memory
+jump 44 notEqual :findLinkedBlocks:found false
+jump 38 notEqual @memory-bank :findLinkedBlocks:type
+jump 38 notEqual :memory null
+set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
+set :findLinkedBlocks:found true
 set :memory :findLinkedBlocks:variable.1
-jump 8 greaterThan :findLinkedBlocks:n 0
-print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
+jump 44 notEqual :findLinkedBlocks:found false
+jump 43 notEqual @memory-cell :findLinkedBlocks:type
+jump 43 notEqual :findLinkedBlocks:variable.1 null
+set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
+set :memory :findLinkedBlocks:variable.1
+op add *tmp0 *tmp0 1
+jump 8 lessThan *tmp0 @links
+print "Display: {0} (req)\nMessage: {0}\nSwitch: {0}\nMemory: {0} (req)\nMemory: {0} (req)\n"
 format :display
-op and :findLinkedBlocks:foundAll 1 :display
+op and :findLinkedBlocks:foundAll true :display
 format :message
 format :switch
 format :memory
 op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :memory
-print :memory
+format :memory
 op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :memory
-printflush :findLinkedBlocks:message
+printflush message1
 jump 1 equal :findLinkedBlocks:foundAll false
 assertequals :message message1 "Located message1 block"

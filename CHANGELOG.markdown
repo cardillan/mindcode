@@ -12,10 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed a possible internal error when a variable whose value was determined to be `null` was used to access an array element.
 * Fixed the `--no-update-check` command-line option having no effect.
 
+### Added
+
+* Added the [`findLinkedBlocksMessage` function](/doc/syntax/SYSTEM-LIBRARY-BLOCKS.markdown#findlinkedblocksmessage) to the `blocks` system library: the status output is sent to a message block found during dynamic block linking.
+
+
 ### Changed
 
 * Changed the `debug` option semantic stability to stable: the global value of the option is inherited by modules and libraries.
 * Changed the `emitLog()` and `systemLog()` functions emitting messages at the `:debug` level to only be active when the `debug` option is set to `true`.
+* Changed the implementation of the [`findLinkedBlocks` function](/doc/syntax/SYSTEM-LIBRARY-BLOCKS.markdown#findlinkedblocks) in the `blocks` system library: multiple blocks of the same type may be dynamically linked; the status output is sent to a message block specified by the caller.
 
 ## 3.21.1 – 2026-11-21
 

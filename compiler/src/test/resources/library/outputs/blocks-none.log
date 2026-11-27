@@ -48,141 +48,167 @@ Final code before resolving virtual instructions:
         multilabel *label12
    37:  set :memory :findLinkedBlocks:variable
         label *label7
-   38:  print :findLinkedBlocks:title
-   39:  set :findLinkedBlocks:n @links
+   38:  jump *label13 equal :findLinkedBlocks:title false
+   39:  print :findLinkedBlocks:title
+   40:  print "\n"
+   41:  set *tmp1 :findLinkedBlocks:title
+   42:  jump *label14 always 0 0
         label *label13
-   40:  op greaterThan *tmp1 :findLinkedBlocks:n 0
-   41:  jump *label15 equal *tmp1 false
-   42:  op sub :findLinkedBlocks:n :findLinkedBlocks:n 1
-   43:  getlink *tmp2 :findLinkedBlocks:n
-   44:  set :findLinkedBlocks:block *tmp2
-   45:  print "\nFound: "
-   46:  print :findLinkedBlocks:block
-   47:  sensor *tmp3 :findLinkedBlocks:block @type
-   48:  set :findLinkedBlocks:type *tmp3
-   49:  set :findLinkedBlocks:requested.1 @large-logic-display
-   50:  set :findLinkedBlocks:name.1 "Display"
-   51:  set :findLinkedBlocks:variable.1 :display
-   52:  set :findLinkedBlocks:required.1 true
-   53:  setaddr *tmp4 *label19
-   54:  jump *label16 always 0 0
-        multilabel *label19
-   55:  set :display :findLinkedBlocks:variable.1
-   56:  set :findLinkedBlocks:requested.1 @message
-   57:  set :findLinkedBlocks:name.1 "Message"
-   58:  set :findLinkedBlocks:variable.1 :message
-   59:  set :findLinkedBlocks:required.1 false
-   60:  setaddr *tmp4 *label20
-   61:  jump *label16 always 0 0
-        multilabel *label20
-   62:  set :message :findLinkedBlocks:variable.1
-   63:  set :findLinkedBlocks:requested.1 @switch
-   64:  set :findLinkedBlocks:name.1 "Switch"
-   65:  set :findLinkedBlocks:variable.1 :switch
-   66:  set :findLinkedBlocks:required.1 false
-   67:  setaddr *tmp4 *label21
-   68:  jump *label16 always 0 0
-        multilabel *label21
-   69:  set :switch :findLinkedBlocks:variable.1
-   70:  set :findLinkedBlocks:requested.1 @memory-bank
-   71:  set :findLinkedBlocks:name.1 "Memory"
-   72:  set :findLinkedBlocks:variable.1 :memory
-   73:  set :findLinkedBlocks:required.1 true
-   74:  setaddr *tmp4 *label22
-   75:  jump *label16 always 0 0
-        multilabel *label22
-   76:  set :memory :findLinkedBlocks:variable.1
-   77:  set :findLinkedBlocks:requested.1 @memory-cell
-   78:  set :findLinkedBlocks:name.1 "Memory"
-   79:  set :findLinkedBlocks:variable.1 :memory
-   80:  set :findLinkedBlocks:required.1 true
-   81:  setaddr *tmp4 *label23
-        label *label16
-   82:  op equal *tmp5 :findLinkedBlocks:requested.1 :findLinkedBlocks:type
-   83:  jump *label24 equal *tmp5 false
-   84:  set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
-   85:  op equal *tmp7 :findLinkedBlocks:requested.1 @message
-   86:  jump *label26 equal *tmp7 false
-   87:  set :findLinkedBlocks:message :findLinkedBlocks:block
-   88:  set *tmp8 :findLinkedBlocks:message
-   89:  jump *label27 always 0 0
-        label *label26
-   90:  set *tmp8 null
-        label *label27
-   91:  set *tmp6 *tmp8
-   92:  jump *label25 always 0 0
-        label *label24
-   93:  set *tmp6 null
-        label *label25
-        label *label17
-   94:  multijump *tmp4 0 0
-        multilabel *label23
-   95:  set :memory :findLinkedBlocks:variable.1
-        label *label18
+   43:  set *tmp1 null
         label *label14
-   96:  jump *label13 always 0 0
+   44:  set *tmp2 0
         label *label15
-   97:  set :findLinkedBlocks:foundAll 1
-   98:  set :findLinkedBlocks:requested.2 @large-logic-display
-   99:  set :findLinkedBlocks:name.2 "Display"
-  100:  set :findLinkedBlocks:variable.2 :display
-  101:  set :findLinkedBlocks:required.2 true
-  102:  setaddr *tmp9 *label31
-  103:  jump *label28 always 0 0
-        multilabel *label31
-  104:  set :display :findLinkedBlocks:variable.2
-  105:  set :findLinkedBlocks:requested.2 @message
-  106:  set :findLinkedBlocks:name.2 "Message"
-  107:  set :findLinkedBlocks:variable.2 :message
-  108:  set :findLinkedBlocks:required.2 false
-  109:  setaddr *tmp9 *label32
-  110:  jump *label28 always 0 0
-        multilabel *label32
-  111:  set :message :findLinkedBlocks:variable.2
-  112:  set :findLinkedBlocks:requested.2 @switch
-  113:  set :findLinkedBlocks:name.2 "Switch"
-  114:  set :findLinkedBlocks:variable.2 :switch
-  115:  set :findLinkedBlocks:required.2 false
-  116:  setaddr *tmp9 *label33
-  117:  jump *label28 always 0 0
-        multilabel *label33
-  118:  set :switch :findLinkedBlocks:variable.2
-  119:  set :findLinkedBlocks:requested.2 @memory-bank
-  120:  set :findLinkedBlocks:name.2 "Memory"
-  121:  set :findLinkedBlocks:variable.2 :memory
-  122:  set :findLinkedBlocks:required.2 true
-  123:  setaddr *tmp9 *label34
-  124:  jump *label28 always 0 0
-        multilabel *label34
-  125:  set :memory :findLinkedBlocks:variable.2
-  126:  set :findLinkedBlocks:requested.2 @memory-cell
-  127:  set :findLinkedBlocks:name.2 "Memory"
-  128:  set :findLinkedBlocks:variable.2 :memory
-  129:  set :findLinkedBlocks:required.2 true
-  130:  setaddr *tmp9 *label35
+   45:  jump *label17 greaterThanEq *tmp2 @links
+   46:  set *tmp3 *tmp2
+   47:  getlink *tmp4 *tmp3
+   48:  set :findLinkedBlocks:block *tmp4
+   49:  op equal *tmp5 :findLinkedBlocks:message :findLinkedBlocks:block
+   50:  jump *label18 equal *tmp5 false
+   51:  jump *label16 always 0 0
+   52:  set *tmp6 null
+   53:  jump *label19 always 0 0
+        label *label18
+   54:  set *tmp6 null
+        label *label19
+   55:  sensor *tmp7 :findLinkedBlocks:block @type
+   56:  set :findLinkedBlocks:type *tmp7
+   57:  set :findLinkedBlocks:found false
+   58:  set :findLinkedBlocks:requested.1 @large-logic-display
+   59:  set :findLinkedBlocks:name.1 "Display"
+   60:  set :findLinkedBlocks:variable.1 :display
+   61:  set :findLinkedBlocks:required.1 true
+   62:  setaddr *tmp8 *label23
+   63:  jump *label20 always 0 0
+        multilabel *label23
+   64:  set :display :findLinkedBlocks:variable.1
+   65:  set :findLinkedBlocks:requested.1 @message
+   66:  set :findLinkedBlocks:name.1 "Message"
+   67:  set :findLinkedBlocks:variable.1 :message
+   68:  set :findLinkedBlocks:required.1 false
+   69:  setaddr *tmp8 *label24
+   70:  jump *label20 always 0 0
+        multilabel *label24
+   71:  set :message :findLinkedBlocks:variable.1
+   72:  set :findLinkedBlocks:requested.1 @switch
+   73:  set :findLinkedBlocks:name.1 "Switch"
+   74:  set :findLinkedBlocks:variable.1 :switch
+   75:  set :findLinkedBlocks:required.1 false
+   76:  setaddr *tmp8 *label25
+   77:  jump *label20 always 0 0
+        multilabel *label25
+   78:  set :switch :findLinkedBlocks:variable.1
+   79:  set :findLinkedBlocks:requested.1 @memory-bank
+   80:  set :findLinkedBlocks:name.1 "Memory"
+   81:  set :findLinkedBlocks:variable.1 :memory
+   82:  set :findLinkedBlocks:required.1 true
+   83:  setaddr *tmp8 *label26
+   84:  jump *label20 always 0 0
+        multilabel *label26
+   85:  set :memory :findLinkedBlocks:variable.1
+   86:  set :findLinkedBlocks:requested.1 @memory-cell
+   87:  set :findLinkedBlocks:name.1 "Memory"
+   88:  set :findLinkedBlocks:variable.1 :memory
+   89:  set :findLinkedBlocks:required.1 true
+   90:  setaddr *tmp8 *label27
+        label *label20
+   91:  jump *label28 equal :findLinkedBlocks:found false
+   92:  jump *label22 always 0 0
+   93:  set *tmp9 null
+   94:  jump *label29 always 0 0
         label *label28
-  131:  print "\n"
-  132:  print :findLinkedBlocks:name.2
-  133:  print ": "
-  134:  print :findLinkedBlocks:variable.2
-  135:  jump *label36 equal :findLinkedBlocks:required.2 false
-  136:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable.2
-  137:  set *tmp10 :findLinkedBlocks:foundAll
-  138:  jump *label37 always 0 0
-        label *label36
-  139:  set *tmp10 null
-        label *label37
+   95:  set *tmp9 null
         label *label29
-  140:  multijump *tmp9 0 0
-        multilabel *label35
-  141:  set :memory :findLinkedBlocks:variable.2
+   96:  op equal *tmp10 :findLinkedBlocks:requested.1 :findLinkedBlocks:type
+   97:  jump *label30 equal *tmp10 false
+        label *label33
+   98:  op equal *tmp11 :findLinkedBlocks:variable.1 null
+   99:  jump *label30 equal *tmp11 false
+  100:  jump *label32 always 0 0
+        label *label32
+  101:  set :findLinkedBlocks:variable.1 :findLinkedBlocks:block
+  102:  set :findLinkedBlocks:found true
+  103:  set *tmp12 :findLinkedBlocks:found
+  104:  jump *label31 always 0 0
         label *label30
-  142:  printflush :findLinkedBlocks:message
+  105:  set *tmp12 null
+        label *label31
+        label *label21
+  106:  multijump *tmp8 0 0
+        multilabel *label27
+  107:  set :memory :findLinkedBlocks:variable.1
+        label *label22
+        label *label16
+  108:  op add *tmp2 *tmp2 1
+  109:  jump *label15 always 0 0
+        label *label17
+  110:  set :findLinkedBlocks:foundAll true
+  111:  set :findLinkedBlocks:requested.2 @large-logic-display
+  112:  set :findLinkedBlocks:name.2 "Display"
+  113:  set :findLinkedBlocks:variable.2 :display
+  114:  set :findLinkedBlocks:required.2 true
+  115:  setaddr *tmp13 *label37
+  116:  jump *label34 always 0 0
+        multilabel *label37
+  117:  set :display :findLinkedBlocks:variable.2
+  118:  set :findLinkedBlocks:requested.2 @message
+  119:  set :findLinkedBlocks:name.2 "Message"
+  120:  set :findLinkedBlocks:variable.2 :message
+  121:  set :findLinkedBlocks:required.2 false
+  122:  setaddr *tmp13 *label38
+  123:  jump *label34 always 0 0
+        multilabel *label38
+  124:  set :message :findLinkedBlocks:variable.2
+  125:  set :findLinkedBlocks:requested.2 @switch
+  126:  set :findLinkedBlocks:name.2 "Switch"
+  127:  set :findLinkedBlocks:variable.2 :switch
+  128:  set :findLinkedBlocks:required.2 false
+  129:  setaddr *tmp13 *label39
+  130:  jump *label34 always 0 0
+        multilabel *label39
+  131:  set :switch :findLinkedBlocks:variable.2
+  132:  set :findLinkedBlocks:requested.2 @memory-bank
+  133:  set :findLinkedBlocks:name.2 "Memory"
+  134:  set :findLinkedBlocks:variable.2 :memory
+  135:  set :findLinkedBlocks:required.2 true
+  136:  setaddr *tmp13 *label40
+  137:  jump *label34 always 0 0
+        multilabel *label40
+  138:  set :memory :findLinkedBlocks:variable.2
+  139:  set :findLinkedBlocks:requested.2 @memory-cell
+  140:  set :findLinkedBlocks:name.2 "Memory"
+  141:  set :findLinkedBlocks:variable.2 :memory
+  142:  set :findLinkedBlocks:required.2 true
+  143:  setaddr *tmp13 *label41
+        label *label34
+  144:  jump *label42 equal :findLinkedBlocks:required.2 false
+  145:  set *tmp14 " (req)"
+  146:  jump *label43 always 0 0
+        label *label42
+  147:  set *tmp14 ""
+        label *label43
+  148:  print :findLinkedBlocks:name.2
+  149:  print ": "
+  150:  print :findLinkedBlocks:variable.2
+  151:  print *tmp14
+  152:  print "\n"
+  153:  jump *label44 equal :findLinkedBlocks:required.2 false
+  154:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable.2
+  155:  set *tmp15 :findLinkedBlocks:foundAll
+  156:  jump *label45 always 0 0
+        label *label44
+  157:  set *tmp15 null
+        label *label45
+        label *label35
+  158:  multijump *tmp13 0 0
+        multilabel *label41
+  159:  set :memory :findLinkedBlocks:variable.2
+        label *label36
+  160:  printflush :findLinkedBlocks:message
         label *label3
-  143:  op equal *tmp11 :findLinkedBlocks:foundAll false
-  144:  jump *label2 notEqual *tmp11 false
+  161:  op equal *tmp16 :findLinkedBlocks:foundAll false
+  162:  jump *label2 notEqual *tmp16 false
         label *label4
         label *label1
-  145:  assertequals :message message1 "Located message1 block"
+  163:  assertequals :message message1 "Located message1 block"
         label *label0
-  146:  end
+  164:  end
