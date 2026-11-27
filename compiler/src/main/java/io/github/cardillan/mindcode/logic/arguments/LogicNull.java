@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public enum LogicNull implements LogicLiteral {
+public enum LogicNull implements LogicLiteral, LogicAddress {
     NULL;
 
     @Override

@@ -130,7 +130,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
                     ? createFormattableErrorOutput(formattable.getParts(), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
 
-            if (call.getProfile().getErrorReporting() == RuntimeErrorReporting.ASSERT) {
+            if (call.getProfile().getErrorReporting() == RuntimeErrorReporting.ASSERT && (call.getProfile().isDebug() || !level.getKeyword().equals("debug"))) {
                 List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
                 for (int index = 0; index < 10; index++) {
                     if (index >= finalArgs.size()) break;

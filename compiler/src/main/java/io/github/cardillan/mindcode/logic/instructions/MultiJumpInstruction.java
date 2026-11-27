@@ -1,7 +1,10 @@
 package io.github.cardillan.mindcode.logic.instructions;
 
 import io.github.cardillan.mindcode.compiler.astcontext.AstContext;
-import io.github.cardillan.mindcode.logic.arguments.*;
+import io.github.cardillan.mindcode.logic.arguments.LogicArgument;
+import io.github.cardillan.mindcode.logic.arguments.LogicLabel;
+import io.github.cardillan.mindcode.logic.arguments.LogicNumber;
+import io.github.cardillan.mindcode.logic.arguments.LogicValue;
 import io.github.cardillan.mindcode.logic.opcodes.InstructionParameterType;
 import io.github.cardillan.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -31,8 +34,8 @@ public class MultiJumpInstruction extends BaseInstruction implements MultiTarget
         return true;
     }
 
-    public final LogicAddress getTarget() {
-        return (LogicAddress) getArg(0);
+    public final LogicArgument getTarget() {
+        return getArg(0);
     }
 
     public final LogicValue getValue() {

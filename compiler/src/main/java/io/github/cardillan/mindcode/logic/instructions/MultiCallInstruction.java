@@ -1,7 +1,6 @@
 package io.github.cardillan.mindcode.logic.instructions;
 
 import io.github.cardillan.mindcode.compiler.astcontext.AstContext;
-import io.github.cardillan.mindcode.logic.arguments.LogicAddress;
 import io.github.cardillan.mindcode.logic.arguments.LogicArgument;
 import io.github.cardillan.mindcode.logic.arguments.LogicValue;
 import io.github.cardillan.mindcode.logic.opcodes.InstructionParameterType;
@@ -32,8 +31,8 @@ public class MultiCallInstruction extends BaseInstruction implements MultiTarget
         return true;
     }
 
-    public final LogicAddress getTarget() {
-        return (LogicAddress) getArg(0);
+    public final LogicArgument getTarget() {
+        return getArg(0);
     }
 
     public final LogicValue getOffset() {

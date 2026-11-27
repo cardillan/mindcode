@@ -110,14 +110,14 @@ The built-in `error()` function serves for logging diagnostic information when t
 > [!NOTE]
 > When the `error-function` option is set to `false`, or the `error-reporting` option is set to `none`, calls to the `error()` function are ignored and not compiled into the final code.
 
-When the first parameter to the error function is a formattable string literal, the string and other function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
+When the first argument to the error function is a formattable string literal, the string and other function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
 
-When the first parameter to the error function is not a formattable string literal, all parameters to the function are simply taken as is.
+When the first argument to the error function is not a formattable string literal, all arguments to the function are simply taken as is.
 
 How the function is compiled depends on the `error-reporting` compiler option:
 
-* when set to `minimal`, `simple` or `described`, the function parameters are stored in variables `*ERROR_n`, where `n` is an index starting at 0. When the formattable string literal was used, the formatted string is stored in `*ERROR_0` and the rest in `*ERROR_1`, `*ERROR_2` etc. After that, a `stop` instruction is emitted.
-* when set to `assert`, an `error` instruction is produced, taking up to 10 of the accumulated parameters as arguments. When the formattable string literal was used, the formatted string is used as the first argument. This instruction is then handled by the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools), which displays the message and stops the processor.
+* when set to `minimal`, `simple` or `described`, the function arguments are stored in variables `*ERROR_n`, where `n` is an index starting at 0. When a formattable string literal was used, the formatted string is stored in `*ERROR_0` and the rest in `*ERROR_1`, `*ERROR_2` etc. After that, a `stop` instruction is emitted.
+* when set to `assert`, an `error` instruction is produced, taking up to 10 of the accumulated arguments. When a formattable string literal was used, the formatted string is used as the first argument. This instruction is then handled by the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools), which displays the message and stops the processor.
 
 Example:
 
@@ -160,28 +160,32 @@ label_4:
 The built-in `emitLog()` function serves for logging diagnostic information with the current processor. The logging data are maintained by and can be inspected using the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools).
 
 > [!NOTE]
-> When the `error-reporting` option is set to a value other than `assert`, calls to the `emitLog()` function are ignored and not compiled into the final code.
+> Calls to the `emitLog()` function are only compiled when these conditions are met:
+> * the `error-reporting` option is set to `assert`,
+> * the log level is different from `:debug`, or the `debug` option is set to `true`.
 
-The first parameter of the function is a logic keyword, one of `:err`, `:warn`, `:info` or `:debug`. It specifies the logging level of the message being generated and is handled by the game's logging system.
+The first arguments of the function is a logic keyword, one of `:err`, `:warn`, `:info` or `:debug`. It specifies the logging level of the message being generated and is handled by the game's logging system.
 
-The second parameter is a category. This value can be used in the processor's log screen, together with level, to filter messages. 
+The second arguments is a category. This value can be used in the processor's log screen, together with level, to filter messages.
 
-When the third parameter to the error function is a formattable string literal, the string and the following function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
+When the third arguments to the error function is a formattable string literal, the string and the following function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
 
-When the third parameter to the error function is not a formattable string literal, all parameters to the function starting at the second one are simply taken as is.
+When the third arguments to the error function is not a formattable string literal, all arguments passed to the function starting at the third one are simply taken as is.
 
 ### The `systemLog()` function
 
 The built-in `systemLog()` function serves for logging diagnostic information into the Mindustry log file. The log file is located in the game's data directory. The function requires the [Mlog Dev Tools mod](https://github.com/cardillan/MlogDevTools) to be installed.
 
 > [!NOTE]
-> When the `error-reporting` option is set to a value other than `assert`, calls to the `emitLog()` function are ignored and not compiled into the final code.
+> Calls to the `systemLog()` function are only compiled when these conditions are met:
+> * the `error-reporting` option is set to `assert`,
+> * the log level is different from `:debug`, or the `debug` option is set to `true`.
 
-The first parameter of the function is a logic keyword, one of `:err`, `:warn`, `:info` or `:debug`. It specifies the logging level of the message being generated and is handled by the game's logging system. Typically, messages at the `:debug` level are ignored, the rest is written to the log file.
+The first argument of the function is a logic keyword, one of `:err`, `:warn`, `:info` or `:debug`. It specifies the logging level of the message being generated and is handled by the game's logging system. Typically, messages at the `:debug` level are ignored, the rest is written to the log file.
 
-When the second parameter to the error function is a formattable string literal, the string and the following function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
+When the second argument to the error function is a formattable string literal, the string and the following function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `{1}`, `{2}`, and so on.
 
-When the second parameter to the error function is not a formattable string literal, all parameters to the function starting at the second one are simply taken as is.
+When the second argument to the error function is not a formattable string literal, all arguments to the function starting at the second one are simply taken as is.
 
 ### Running the compiled code in an emulator
 

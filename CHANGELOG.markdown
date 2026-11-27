@@ -9,11 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed incorrect array access evaluation in unreachable code ([#552](https://github.com/cardillan/mindcode/issues/552)).
+* Fixed a possible internal error when a variable whose value was determined to be `null` was used to access an array element.
 * Fixed the `--no-update-check` command-line option having no effect.
 
 ### Changed
 
-* Changed the `debug` option semantic stability to stable: the global value of hte option is inherited by modules and libraries.
+* Changed the `debug` option semantic stability to stable: the global value of the option is inherited by modules and libraries.
+* Changed the `emitLog()` and `systemLog()` functions emitting messages at the `:debug` level to only be active when the `debug` option is set to `true`.
 
 ## 3.21.1 – 2026-11-21
 
